@@ -23,35 +23,36 @@ repositories {
 	maven { url = uri("https://repo.spring.io/milestone") }
 }
 
-extra["springCloudVersion"] = "Hoxton.BUILD-SNAPSHOT"
+//extra["springCloudVersion"] = "Hoxton.BUILD-SNAPSHOT"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-	implementation("org.springframework.boot:spring-boot-starter-cache")
+//	implementation("org.springframework.boot:spring-boot-starter-cache")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+//	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("com.okta.spring:okta-spring-boot-starter:1.2.0")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	implementation("org.springframework.cloud:spring-cloud-gcp-starter")
-	implementation("org.springframework.cloud:spring-cloud-gcp-starter-storage")
+//	implementation("org.springframework.cloud:spring-cloud-gcp-starter")
+//	implementation("org.springframework.cloud:spring-cloud-gcp-starter-storage")
 	implementation("org.springframework.session:spring-session-core")
-	runtimeOnly("org.springframework.boot:spring-boot-devtools")
+//	runtimeOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
-		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-		exclude(group = "junit", module = "junit")
+//		exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+//		exclude(group = "junit", module = "junit")
 	}
 	testImplementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("com.google.truth:truth:0.44")
 }
 
-dependencyManagement {
-	imports {
-		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
-	}
-}
+//dependencyManagement {
+//	imports {
+//		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+//	}
+//}
 
 tasks.withType<Test> {
 	useJUnitPlatform()

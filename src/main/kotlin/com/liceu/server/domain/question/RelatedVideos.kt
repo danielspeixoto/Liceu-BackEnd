@@ -7,7 +7,7 @@ import com.liceu.server.util.Logging
 class RelatedVideos(
         val videoRepo: VideoBoundary.IRepository,
         val maxResults: Int
-): QuestionBoundary.RelatedVideos {
+): QuestionBoundary.IRelatedVideos {
 
     override fun run(id: String, start: Int, amount: Int): List<Video> {
         Logging.info(

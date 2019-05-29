@@ -1,9 +1,9 @@
 package com.liceu.server.domain.question
 
 import com.liceu.server.util.Logging
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
+import org.springframework.stereotype.Component
 
-class Random(val repo: QuestionBoundary.IRepository, val maxResults: Int): QuestionBoundary.Random {
+class Random(val repo: QuestionBoundary.IRepository, val maxResults: Int): QuestionBoundary.IRandom {
 
     override fun run(tags: List<String>, amount: Int): List<Question> {
         Logging.info(

@@ -6,7 +6,7 @@ import com.liceu.server.util.Logging
 class AddTag(
         val questionRepo: QuestionBoundary.IRepository,
         val tagRepo: TagBoundary.IRepository
-): QuestionBoundary.AddTag {
+): QuestionBoundary.IAddTag {
 
     override fun run(id: String, tag: String) {
         Logging.info(

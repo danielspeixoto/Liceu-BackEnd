@@ -1,5 +1,8 @@
 package com.liceu.server.domain.question
 
+import org.springframework.data.mongodb.core.mapping.Document
+
+@Document(collection = "questions")
 data class Question(
         val id: String,
         val view: List<Byte>,

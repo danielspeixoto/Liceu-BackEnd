@@ -13,21 +13,21 @@ class QuestionBoundary {
 
     }
 
-    interface Random {
+    interface IRandom {
 
         @Throws(Error::class)
         fun run(tags: List<String>, amount: Int): List<Question>
 
     }
 
-    interface AddTag {
+    interface IAddTag {
 
         @Throws(Error::class)
         fun run(id: String, tag: String)
 
     }
 
-    interface RelatedVideos {
+    interface IRelatedVideos {
 
         @Throws(Error::class)
         fun run(id: String, start: Int, count: Int): List<Video>
