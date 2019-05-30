@@ -20,6 +20,9 @@ import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.stereotype.Component
+import org.springframework.web.filter.CommonsRequestLoggingFilter
+
+
 
 
 @Configuration
@@ -65,6 +68,15 @@ class AppConfig: AbstractMongoConfiguration() {
     @Bean
     fun videos(): QuestionBoundary.IVideos {
         return Videos(mongoQuestionRepository, 10)
+    }
+
+    @Bean
+    fun requestLoggingFilter(): CommonsRequestLoggingFilter {
+        val loggingFilter = CommonsRequestLoggingFilter()
+        loggingFilter.setIncludeClientInfo(true)
+        loggingFilter.setIncludeQueryString(true)
+        loggingFilter.setIncludePayload(true)
+        return loggingFilter
     }
 
 }

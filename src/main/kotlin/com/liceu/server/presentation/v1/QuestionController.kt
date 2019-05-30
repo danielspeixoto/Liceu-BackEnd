@@ -1,9 +1,8 @@
-package com.liceu.server
+package com.liceu.server.presentation.v1
 
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -16,10 +15,10 @@ class QuestionController(
 
     @RequestMapping("/")
     fun get(
-            @RequestParam(value="tags[]", defaultValue="") mode: List<String>,
+            @RequestParam(value="tags[]", defaultValue="") tags: List<String>,
             @RequestParam(value="amount", defaultValue="0") amount: Int
-    ): List<String> {
-        return listOf(amount.toString()) + mode
+    ): Response<List<Question>> {
+        return Response(random.run(tags, amount))
     }
 
 }
