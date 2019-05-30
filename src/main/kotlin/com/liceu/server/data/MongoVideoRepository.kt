@@ -19,7 +19,7 @@ class MongoVideoRepository(
     }
 
     override fun questionRelatedVideos(id: String, start: Int, count: Int): List<Video> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return listOf()
     }
 
     @Document(collection = COLLECTION_NAME)

@@ -6,7 +6,7 @@ data class Video(
         val description: String,
         val videoId: String,
         val questionId: String,
-        val aspectRation: Float,
+        val aspectRatio: Float,
         val thumbnail: String,
         val channelTitle: String
 )
