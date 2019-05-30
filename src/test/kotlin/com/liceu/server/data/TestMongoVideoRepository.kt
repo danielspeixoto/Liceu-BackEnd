@@ -37,7 +37,8 @@ class TestMongoVideoRepository {
                 MongoVideoRepository.Channel(
                         "channelTitle",
                         "channelId"
-                )
+                ),
+                3
         )
         item1.id = "id1"
         repo.insert(item1)
@@ -55,7 +56,8 @@ class TestMongoVideoRepository {
                 MongoVideoRepository.Channel(
                         "channelTitle",
                         "channelId"
-                )
+                ),
+                2
         )
         item2.id = "id2"
         repo.insert(item2)
@@ -73,7 +75,8 @@ class TestMongoVideoRepository {
                 MongoVideoRepository.Channel(
                         "channelTitle",
                         "channelId"
-                )
+                ),
+                1
         )
         item3.id = "id3"
         repo.insert(item3)
@@ -86,9 +89,9 @@ class TestMongoVideoRepository {
 
 
     @Test
-    fun questionRelatedVideos_HasRelatedVideos_ReturnsThem() {
+    fun questionRelatedVideos_HasRelatedVideos_ReturnsThemOrdered() {
         val videos = data.questionRelatedVideos("question1", 0, 10).map { it.id }
-        assertThat(videos).containsExactly("id1", "id3")
+        assertThat(videos).containsExactly("id3", "id1")
     }
 
     @Test
