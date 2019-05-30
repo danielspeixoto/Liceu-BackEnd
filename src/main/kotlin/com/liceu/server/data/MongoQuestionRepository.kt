@@ -67,7 +67,7 @@ class MongoQuestionRepository(
         repo.save(doc)
     }
 
-    @Document(collection = "questions")
+    @Document(collection = COLLECTION_NAME)
     data class MongoQuestion(
             var view: List<Byte>,
             var source: String,

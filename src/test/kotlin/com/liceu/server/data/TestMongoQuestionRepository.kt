@@ -1,9 +1,10 @@
 package com.liceu.server.data
 
+import com.google.common.testing.EqualsTester
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.domain.exception.AlreadyExistsException
 import com.liceu.server.domain.exception.ItemNotFoundException
-import org.junit.Assert
+import com.liceu.server.domain.question.Question
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -14,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.lang.Exception
-import java.util.*
 
 @ComponentScan
 @ExtendWith(SpringExtension::class)
@@ -42,7 +42,7 @@ class TestMongoQuestionRepository {
                 2,
                 100,
                 200
-                )
+        )
         q1.id = "id1"
         repo.insert(q1)
         val q2 = MongoQuestionRepository.MongoQuestion(
@@ -139,7 +139,7 @@ class TestMongoQuestionRepository {
     fun randomByTags_requestLessThanExists_returnsExistentRandomly() {
         val ids = arrayListOf<String>()
         var i = 0
-        while(i < 10) {
+        while (i < 10) {
             val questions = data.randomByTags(listOf("segunda"), 1)
             assertThat(questions.size).isEqualTo(1)
             assertThat(questions[0].id).matches("id[12]")
@@ -160,5 +160,31 @@ class TestMongoQuestionRepository {
     fun randomByTags_noOneHasTag_empty() {
         val questions = data.randomByTags(listOf("ultima"), 10)
         assertThat(questions).isEmpty()
+    }
+
+    @Test
+    fun randomByTags_correctRequest_dataIsValid() {
+        val result = data.randomByTags(listOf("primeira"), 10)[0]
+
+        val question = Question(
+                "id1",
+                listOf(Byte.MAX_VALUE, Byte.MIN_VALUE),
+                "ENEM",
+                "AMARELA",
+                2017,
+                3,
+                "matemática",
+                1,
+                arrayListOf("primeira", "segunda"),
+                "12345",
+                "referenceId",
+                2,
+                100,
+                200
+        )
+
+        EqualsTester()
+                .addEqualityGroup(question, result)
+                .testEquals()
     }
 }
