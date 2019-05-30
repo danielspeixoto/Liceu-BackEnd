@@ -1,7 +1,6 @@
 package com.liceu.server.domain.question
 
 import com.liceu.server.util.Logging
-import org.springframework.stereotype.Component
 
 class Random(val repo: QuestionBoundary.IRepository, val maxResults: Int): QuestionBoundary.IRandom {
 

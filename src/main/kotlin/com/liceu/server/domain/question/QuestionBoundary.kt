@@ -1,5 +1,7 @@
 package com.liceu.server.domain.question
 
+import com.liceu.server.domain.exception.AlreadyExistsException
+import com.liceu.server.domain.exception.ItemNotFoundException
 import com.liceu.server.domain.video.Video
 
 class QuestionBoundary {
@@ -8,7 +10,7 @@ class QuestionBoundary {
 
         @Throws(Error::class)
         fun randomByTags(tags: List<String>, amount: Int): List<Question>
-        @Throws(Error::class)
+        @Throws(AlreadyExistsException::class, ItemNotFoundException::class)
         fun addTag(id: String, tag: String)
 
     }
@@ -22,7 +24,7 @@ class QuestionBoundary {
 
     interface IAddTag {
 
-        @Throws(Error::class)
+        @Throws(AlreadyExistsException::class, ItemNotFoundException::class)
         fun run(id: String, tag: String)
 
     }

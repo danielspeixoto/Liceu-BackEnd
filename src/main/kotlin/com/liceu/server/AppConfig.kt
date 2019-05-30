@@ -7,7 +7,8 @@ import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 import com.mongodb.WriteConcern
 import com.mongodb.Mongo
-
+import org.springframework.context.annotation.Bean
+import org.springframework.data.mongodb.core.MongoTemplate
 
 
 @Configuration
@@ -23,6 +24,11 @@ class AppConfig: AbstractMongoConfiguration() {
 
     override fun getDatabaseName(): String {
         return "b"
+    }
+
+    @Bean
+    override fun mongoTemplate(): MongoTemplate {
+        return MongoTemplate(mongoClient(), databaseName)
     }
 
 //    @Autowired
