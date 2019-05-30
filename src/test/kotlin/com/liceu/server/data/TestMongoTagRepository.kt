@@ -23,19 +23,19 @@ class TestMongoTagRepository {
 
     @BeforeEach
     fun dataSetup() {
-        val item1 = MongoTagRepository.MongoTag(
+        val item1 = MongoDatabase.MongoTag(
                 "primeira",
                 0
         )
         item1.id = "id1"
         repo.insert(item1)
-        val item2 = MongoTagRepository.MongoTag(
+        val item2 = MongoDatabase.MongoTag(
                 "segunda",
                 10
         )
         item2.id = "id2"
         repo.insert(item2)
-        val item3 = MongoTagRepository.MongoTag(
+        val item3 = MongoDatabase.MongoTag(
                 "terceira",
                 5
         )

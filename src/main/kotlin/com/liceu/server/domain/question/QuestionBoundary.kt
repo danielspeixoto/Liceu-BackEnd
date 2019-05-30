@@ -12,6 +12,8 @@ class QuestionBoundary {
         fun randomByTags(tags: List<String>, amount: Int): List<Question>
         @Throws(AlreadyExistsException::class, ItemNotFoundException::class)
         fun addTag(id: String, tag: String)
+        @Throws(Error::class)
+        fun videos(id: String, start: Int, count: Int): List<Video>
 
     }
 
@@ -29,7 +31,7 @@ class QuestionBoundary {
 
     }
 
-    interface IRelatedVideos {
+    interface IVideos {
 
         @Throws(Error::class)
         fun run(id: String, start: Int, count: Int): List<Video>

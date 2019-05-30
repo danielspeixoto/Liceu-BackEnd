@@ -4,31 +4,28 @@ import com.liceu.server.domain.exception.AlreadyExistsException
 import com.liceu.server.domain.exception.ItemNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
+import com.liceu.server.domain.video.Video
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.annotation.Id
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
-import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
-import java.lang.Exception
 
 @Repository
 class MongoQuestionRepository(
-        @Autowired val repo: QuestionRepository,
-        @Autowired val template: MongoTemplate
+        val template: MongoTemplate
 ) : QuestionBoundary.IRepository {
 
-    companion object {
-        const val COLLECTION_NAME = "questions"
-    }
+    @Autowired lateinit var repo: QuestionRepository
 
     override fun randomByTags(tags: List<String>, amount: Int): List<Question> {
         val match = Aggregation.match(Criteria("tags").all(tags))
         val sample = Aggregation.sample(amount.toLong())
         val agg = Aggregation.newAggregation(match, sample)
 
-        val results = template.aggregate(agg, COLLECTION_NAME, MongoQuestion::class.java)
+        val results = template.aggregate(agg, MongoDatabase.QUESTION_COLLECTION, MongoDatabase.MongoQuestion::class.java)
         return results.map {
             Question(
                     it.id,
@@ -67,23 +64,25 @@ class MongoQuestionRepository(
         repo.save(doc)
     }
 
-    @Document(collection = COLLECTION_NAME)
-    data class MongoQuestion(
-            var view: List<Byte>,
-            var source: String,
-            var variant: String,
-            var edition: Int,
-            var number: Int,
-            var domain: String,
-            var answer: Int,
-            var tags: List<String>,
-            var itemCode: String,
-            var referenceId: String,
-            var stage: Int,
-            var width: Int,
-            var height: Int
-    ) {
-        @Id
-        lateinit var id: String
+    override fun videos(id: String, start: Int, count: Int): List<Video> {
+        val match = Aggregation.match(Criteria("questionId").isEqualTo(id))
+        val sort = Aggregation.sort(Sort.Direction.DESC, "retrievalPosition")
+        val skip = Aggregation.skip(start.toLong())
+        val limit = Aggregation.limit(count.toLong())
+        val agg = Aggregation.newAggregation(match, sort, skip, limit)
+
+        val results = template.aggregate(agg, MongoDatabase.VIDEO_COLLECTION, MongoDatabase.MongoVideo::class.java)
+        return results.map {
+            Video(
+                    it.id,
+                    it.title,
+                    it.description,
+                    it.videoId,
+                    it.questionId,
+                    it.aspectRation,
+                    it.thumbnails.default,
+                    it.channel.title
+            )
+        }
     }
 }

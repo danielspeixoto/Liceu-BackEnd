@@ -4,16 +4,13 @@ import com.liceu.server.domain.exception.ItemNotFoundException
 import com.liceu.server.domain.tag.Tag
 import com.liceu.server.domain.tag.TagBoundary
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.query.*
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 
 @Repository
 class MongoTagRepository(
-        @Autowired val template: MongoTemplate
+        val template: MongoTemplate
 ): TagBoundary.IRepository {
 
     companion object {
@@ -37,7 +34,7 @@ class MongoTagRepository(
                         Criteria.where("name").regex(query)
                                 .and("amount").gte(minQuestions)
                 ),
-                MongoTag::class.java,
+                MongoDatabase.MongoTag::class.java,
                 COLLECTION_NAME
         )
         return result.map {
@@ -47,14 +44,5 @@ class MongoTagRepository(
                     it.amount
             )
         }
-    }
-
-    @Document(collection = COLLECTION_NAME)
-    data class MongoTag(
-            var name: String,
-            var amount: Int
-    ) {
-        @Id
-        lateinit var id: String
     }
 }

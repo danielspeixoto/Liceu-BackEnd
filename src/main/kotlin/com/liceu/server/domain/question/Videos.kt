@@ -1,37 +1,36 @@
 package com.liceu.server.domain.question
 
 import com.liceu.server.domain.video.Video
-import com.liceu.server.domain.video.VideoBoundary
 import com.liceu.server.util.Logging
 
-class RelatedVideos(
-        val videoRepo: VideoBoundary.IRepository,
+class Videos(
+        val videoRepo: QuestionBoundary.IRepository,
         val maxResults: Int
-): QuestionBoundary.IRelatedVideos {
+): QuestionBoundary.IVideos {
 
-    override fun run(id: String, start: Int, amount: Int): List<Video> {
+    override fun run(id: String, start: Int, count: Int): List<Video> {
         Logging.info(
                 "question_related_videos",
                 listOf("retrieval", "question", "video"),
                 hashMapOf(
-                        "amount" to amount,
+                        "count" to count,
                         "start" to start,
                         "questionId" to id
                 )
         )
-        var finalAmount = amount
-        if(amount > maxResults) {
+        var finalAmount = count
+        if(count > maxResults) {
             finalAmount = maxResults
             Logging.warn(
                     "max_results_overflow",
                     listOf("overflow", "retrieval", "question", "video"),
                     hashMapOf(
                             "action" to "question_related_videos",
-                            "requested" to amount,
+                            "requested" to count,
                             "max_allowed" to maxResults
                     )
             )
         }
-        return videoRepo.questionRelatedVideos(id, start, finalAmount)
+        return videoRepo.videos(id, start, finalAmount)
     }
 }

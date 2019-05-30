@@ -41,6 +41,8 @@ dependencies {
 	testImplementation("com.google.truth:truth:0.44")
 	implementation("com.google.guava:guava:27.1-jre")
 	testCompile(group="com.google.guava", name="guava-testlib", version="27.1-jre")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+")
 
 }
 

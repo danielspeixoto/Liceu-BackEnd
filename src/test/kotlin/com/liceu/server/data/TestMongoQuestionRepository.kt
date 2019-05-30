@@ -5,6 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import com.liceu.server.domain.exception.AlreadyExistsException
 import com.liceu.server.domain.exception.ItemNotFoundException
 import com.liceu.server.domain.question.Question
+import com.liceu.server.domain.video.Video
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -24,11 +25,13 @@ class TestMongoQuestionRepository {
     @Autowired
     lateinit var data: MongoQuestionRepository
     @Autowired
-    lateinit var repo: QuestionRepository
+    lateinit var questionRepo: QuestionRepository
+    @Autowired
+    lateinit var videoRepo: VideoRepository
 
     @BeforeEach
     fun dataSetup() {
-        val q1 = MongoQuestionRepository.MongoQuestion(
+        val q1 = MongoDatabase.MongoQuestion(
                 listOf(Byte.MAX_VALUE, Byte.MIN_VALUE),
                 "ENEM",
                 "AMARELA",
@@ -36,7 +39,7 @@ class TestMongoQuestionRepository {
                 3,
                 "matemática",
                 1,
-                arrayListOf("primeira", "segunda"),
+                listOf("primeira", "segunda"),
                 "12345",
                 "referenceId",
                 2,
@@ -44,8 +47,8 @@ class TestMongoQuestionRepository {
                 200
         )
         q1.id = "id1"
-        repo.insert(q1)
-        val q2 = MongoQuestionRepository.MongoQuestion(
+        questionRepo.insert(q1)
+        val q2 = MongoDatabase.MongoQuestion(
                 listOf(Byte.MAX_VALUE, Byte.MIN_VALUE),
                 "ENEM",
                 "AMARELA",
@@ -53,7 +56,7 @@ class TestMongoQuestionRepository {
                 5,
                 "linguagens",
                 1,
-                arrayListOf("segunda"),
+                listOf("segunda"),
                 "54321",
                 "referenceId2",
                 2,
@@ -61,8 +64,8 @@ class TestMongoQuestionRepository {
                 200
         )
         q2.id = "id2"
-        repo.insert(q2)
-        val q3 = MongoQuestionRepository.MongoQuestion(
+        questionRepo.insert(q2)
+        val q3 = MongoDatabase.MongoQuestion(
                 listOf(Byte.MAX_VALUE, Byte.MIN_VALUE),
                 "ENEM",
                 "AZUL",
@@ -70,7 +73,7 @@ class TestMongoQuestionRepository {
                 15,
                 "linguagens",
                 1,
-                arrayListOf(),
+                listOf(),
                 "54321",
                 "referenceId3",
                 1,
@@ -78,19 +81,78 @@ class TestMongoQuestionRepository {
                 200
         )
         q3.id = "id3"
-        repo.insert(q3)
+        questionRepo.insert(q3)
+
+        val item1 = MongoDatabase.MongoVideo(
+                "primeira",
+                "primeiro video",
+                "videoId1",
+                "id1",
+                1.1f,
+                MongoDatabase.Thumbnails(
+                        "highQuality",
+                        "defaultQuality",
+                        "mediumQuality"
+                ),
+                MongoDatabase.Channel(
+                        "channelTitle",
+                        "channelId"
+                ),
+                3
+        )
+        item1.id = "id1"
+        videoRepo.insert(item1)
+        val item2 = MongoDatabase.MongoVideo(
+                "segundo",
+                "segundo video",
+                "videoId3",
+                "id2",
+                1.1f,
+                MongoDatabase.Thumbnails(
+                        "highQuality",
+                        "defaultQuality",
+                        "mediumQuality"
+                ),
+                MongoDatabase.Channel(
+                        "channelTitle",
+                        "channelId"
+                ),
+                2
+        )
+        item2.id = "id2"
+        videoRepo.insert(item2)
+        val item3 = MongoDatabase.MongoVideo(
+                "terceiro",
+                "terceiro video",
+                "videoId2",
+                "id1",
+                1.3f,
+                MongoDatabase.Thumbnails(
+                        "highQuality",
+                        "defaultQuality",
+                        "mediumQuality"
+                ),
+                MongoDatabase.Channel(
+                        "channelTitle",
+                        "channelId"
+                ),
+                1
+        )
+        item3.id = "id3"
+        videoRepo.insert(item3)
     }
 
     @AfterEach
     fun destroy() {
-        repo.deleteAll()
+        questionRepo.deleteAll()
+        videoRepo.deleteAll()
     }
 
     @Test
     fun addTag_hasDifferentTags_adds() {
         data.addTag("id1", "terceira")
 
-        assertThat(repo.findById("id1").get().tags)
+        assertThat(questionRepo.findById("id1").get().tags)
                 .containsExactly("primeira", "segunda", "terceira")
                 .inOrder()
     }
@@ -99,7 +161,7 @@ class TestMongoQuestionRepository {
     fun addTag_hasNoTags_adds() {
         data.addTag("id3", "terceira")
 
-        assertThat(repo.findById("id3").get().tags)
+        assertThat(questionRepo.findById("id3").get().tags)
                 .containsExactly("terceira")
                 .inOrder()
     }
@@ -113,7 +175,7 @@ class TestMongoQuestionRepository {
             assertThat(e).isInstanceOf(AlreadyExistsException::class.java)
         }
 
-        assertThat(repo.findById("id1").get().tags)
+        assertThat(questionRepo.findById("id1").get().tags)
                 .containsExactly("primeira", "segunda")
                 .inOrder()
     }
@@ -175,7 +237,7 @@ class TestMongoQuestionRepository {
                 3,
                 "matemática",
                 1,
-                arrayListOf("primeira", "segunda"),
+                listOf("primeira", "segunda"),
                 "12345",
                 "referenceId",
                 2,
@@ -186,5 +248,46 @@ class TestMongoQuestionRepository {
         EqualsTester()
                 .addEqualityGroup(question, result)
                 .testEquals()
+    }
+
+    @Test
+    fun videos_HasRelatedVideos_ReturnsThemOrdered() {
+        val videos = data.videos("id1", 0, 10).map { it.id }
+        assertThat(videos).containsExactly("id3", "id1")
+    }
+
+    @Test
+    fun videos_NoRelatedVideos_ReturnsEmpty() {
+        val videos = data.videos("id0", 0, 10).map { it.id }
+        assertThat(videos).isEmpty()
+    }
+
+    @Test
+    fun videos_CountEqualsOne_ReturnsFirst() {
+        val videos = data.videos("id1", 0, 1).map { it.id }
+        assertThat(videos).containsExactly("id1")
+    }
+
+    @Test
+    fun videos_StartEqualsOne_SkipsFirst() {
+        val videos = data.videos("id1", 1, 10).map { it.id }
+        assertThat(videos).containsExactly("id3")
+    }
+
+    @Test
+    fun videos_ValidRequest_DataIsValid() {
+        val result = data.videos("id1", 0, 1)[0]
+        val video = Video(
+                "id1",
+                "primeira",
+                "primeiro video",
+                "videoId1",
+                "id1",
+                1.1f,
+                "defaultQuality",
+                "channelTitle"
+        )
+
+        EqualsTester().addEqualityGroup(result, video).testEquals()
     }
 }
