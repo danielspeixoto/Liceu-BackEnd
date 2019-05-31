@@ -43,7 +43,7 @@ dependencies {
 	testCompile(group="com.google.guava", name="guava-testlib", version="27.1-jre")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+")
-
+    implementation(group="net.logstash.logback", name= "logstash-logback-encoder", version="5.3")
 }
 
 

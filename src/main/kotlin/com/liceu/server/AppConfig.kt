@@ -7,6 +7,7 @@ import com.liceu.server.domain.question.AddTag
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.Random
 import com.liceu.server.domain.question.Videos
+import com.liceu.server.util.Logging
 import com.mongodb.MongoClient
 import org.apache.catalina.connector.Connector
 import org.springframework.context.annotation.ComponentScan
@@ -48,13 +49,6 @@ class AppConfig: AbstractMongoConfiguration() {
     override fun mongoTemplate(): MongoTemplate {
         return mongoTemplate
     }
-
-//    @Autowired
-//    lateinit var mongoQuestionRepository: MongoQuestionRepository
-//
-//    @Autowired
-//    lateinit var mongoTagRepository: MongoTagRepository
-
     @Bean
     fun random(): QuestionBoundary.IRandom {
         return Random(mongoQuestionRepository, 10)
