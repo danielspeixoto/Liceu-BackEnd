@@ -1,9 +1,6 @@
 package com.liceu.server.domain.question
 
-import com.liceu.server.domain.global.MAX_RESULTS_OVERFLOW
-import com.liceu.server.domain.global.OVERFLOW
-import com.liceu.server.domain.global.QUESTION
-import com.liceu.server.domain.global.RETRIEVAL
+import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 import java.lang.Exception
 
@@ -15,6 +12,12 @@ class Random(val repo: QuestionBoundary.IRepository, val maxResults: Int): Quest
     }
 
     override fun run(tags: List<String>, amount: Int): List<Question> {
+        if(amount == 0) {
+            Logging.warn(UNCOMMON_PARAMS, tags, hashMapOf(
+                    "action" to EVENT_NAME,
+                    "value" to amount
+            ))
+        }
         Logging.info(
                 EVENT_NAME,
                 TAGS,

@@ -2,8 +2,8 @@ package com.liceu.server.presentation.v1
 
 data class Response<T>(
         val data: T?=null,
-        val status: String= STATUS_OK,
-        val errorCode: Int=UNKNOWN_ERROR
+        val status: String=STATUS_OK,
+        val errorCode: Int?=null
 )
 
 val STATUS_OK = "ok"

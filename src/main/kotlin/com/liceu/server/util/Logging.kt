@@ -24,36 +24,33 @@ object Logging {
     fun info(eventName: String, tags: List<String> = listOf(), data: HashMap<String, Any> = hashMapOf()) {
         val stack = stack()
         logger.info(null,
-                append("caller_method", stack.first[1]),
-                append("caller_class", stack.first[0]),
-                append("line_number", stack.second),
                 append("event", eventName),
+                append("data", data),
                 append("tags", tags),
-                append("data", data)
+                append("caller_class", stack.first[0]),
+                append("line_number", stack.second)
         )
     }
 
     fun debug(eventName: String, tags: List<String> = listOf(), data: HashMap<String, Any> = hashMapOf()) {
         val stack = stack()
         logger.debug(null,
-                append("caller_method", stack.first[1]),
-                append("caller_class", stack.first[0]),
-                append("line_number", stack.second),
                 append("event", eventName),
+                append("data", data),
                 append("tags", tags),
-                append("data", data)
+                append("caller_class", stack.first[0]),
+                append("line_number", stack.second)
         )
     }
 
     fun warn(eventName: String, tags: List<String> = listOf(), data: HashMap<String, Any> = hashMapOf()) {
         val stack = stack()
         logger.warn(null,
-                append("caller_method", stack.first[1]),
-                append("caller_class", stack.first[0]),
-                append("line_number", stack.second),
                 append("event", eventName),
+                append("data", data),
                 append("tags", tags),
-                append("data", data)
+                append("caller_class", stack.first[0]),
+                append("line_number", stack.second)
         )
     }
 
@@ -62,13 +59,12 @@ object Logging {
 //        TODO: Only when in DEV
         error.printStackTrace()
         logger.error(null,
-                append("caller_method", stack.first[1]),
-                append("caller_class", stack.first[0]),
-                append("line_number", stack.second),
                 append("event", eventName + "_error"),
-                append("tags", tags + listOf("error")),
                 append("data", data),
-                append("error", error)
+                append("tags", tags + listOf("error")),
+                append("error", error),
+                append("caller_class", stack.first[0]),
+                append("line_number", stack.second)
         )
     }
 }

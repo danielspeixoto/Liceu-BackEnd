@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(collection = "questions")
 data class Question(
         val id: String,
-        val view: List<Byte>,
+        val view: String,
         val source: String,
         val variant: String,
         val edition: Int,

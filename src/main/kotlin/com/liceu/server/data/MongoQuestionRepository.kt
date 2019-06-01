@@ -21,6 +21,9 @@ class MongoQuestionRepository(
     @Autowired lateinit var repo: QuestionRepository
 
     override fun randomByTags(tags: List<String>, amount: Int): List<Question> {
+        if(amount == 0) {
+            return emptyList()
+        }
         var match = Aggregation.match(Criteria("tags").all(tags))
         if(tags.isEmpty()) {
            match = Aggregation.match(Criteria())

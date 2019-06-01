@@ -130,7 +130,7 @@ class TestMongoQuestionRepository {
 
         val question = Question(
                 "id1",
-                listOf(Byte.MAX_VALUE, Byte.MIN_VALUE),
+                "ab",
                 "ENEM",
                 "AMARELA",
                 2017,

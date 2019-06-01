@@ -8,7 +8,7 @@ fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository) {
     questionRepo.deleteAll()
     videoRepo.deleteAll()
     val q1 = MongoDatabase.MongoQuestion(
-            listOf(Byte.MAX_VALUE, Byte.MIN_VALUE),
+            "ab",
             "ENEM",
             "AMARELA",
             2017,
@@ -25,7 +25,7 @@ fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository) {
     q1.id = "id1"
     questionRepo.insert(q1)
     val q2 = MongoDatabase.MongoQuestion(
-            listOf(Byte.MAX_VALUE, Byte.MIN_VALUE),
+            "ef",
             "ENEM",
             "AMARELA",
             2016,
@@ -42,7 +42,7 @@ fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository) {
     q2.id = "id2"
     questionRepo.insert(q2)
     val q3 = MongoDatabase.MongoQuestion(
-            listOf(Byte.MAX_VALUE, Byte.MIN_VALUE),
+            "cd",
             "ENEM",
             "AZUL",
             2015,

@@ -39,7 +39,7 @@ class MongoDatabase {
 
     @Document(collection = MongoDatabase.QUESTION_COLLECTION)
     data class MongoQuestion(
-            var view: List<Byte>,
+            var view: String,
             var source: String,
             var variant: String,
             var edition: Int,
