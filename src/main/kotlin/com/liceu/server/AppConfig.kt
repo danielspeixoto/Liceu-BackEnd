@@ -27,10 +27,10 @@ import org.springframework.stereotype.Component
 @EnableMongoRepositories
 class AppConfig: AbstractMongoConfiguration() {
 
-    @Value(("\${mongo.uri:mongodb+srv://serverTest:G97r6PNcrXXMUJgy@cluster0-lf760.mongodb.net/test&retryWrites=true}"))
+    @Value("\${mongo.uri:mongodb://localhost:27017}")
     lateinit var mongoURI: String
 
-    @Value(("\${mongo.dbName:test}"))
+    @Value("\${mongo.dbName:test}")
     lateinit var mongoDBName: String
 
     fun mongoQuestionRepository() = MongoQuestionRepository(mongoTemplate())

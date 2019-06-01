@@ -6,7 +6,7 @@ import com.liceu.server.domain.global.TagAlreadyExistsException
 import com.liceu.server.domain.global.QuestionNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.video.Video
-import com.liceu.server.setup
+import com.liceu.server.util.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,26 +37,20 @@ class TestMongoQuestionRepository {
         setup(questionRepo, videoRepo, tagRepo)
     }
 
-    @AfterEach
-    fun destroy() {
-        questionRepo.deleteAll()
-        videoRepo.deleteAll()
-    }
-
     @Test
     fun addTag_hasDifferentTags_adds() {
-        data.addTag("id1", "terceira")
+        data.addTag(QUESTION_ID_1, "terceira")
 
-        assertThat(questionRepo.findById("id1").get().tags)
+        assertThat(questionRepo.findById(QUESTION_ID_1).get().tags)
                 .containsExactly("primeira", "segunda", "terceira")
                 .inOrder()
     }
 
     @Test
     fun addTag_hasNoTags_adds() {
-        data.addTag("id3", "terceira")
+        data.addTag(QUESTION_ID_3, "terceira")
 
-        assertThat(questionRepo.findById("id3").get().tags)
+        assertThat(questionRepo.findById(QUESTION_ID_3).get().tags)
                 .containsExactly("terceira")
                 .inOrder()
     }
@@ -64,13 +58,13 @@ class TestMongoQuestionRepository {
     @Test
     fun addTag_alreadyHasTag_throwsError() {
         try {
-            data.addTag("id1", "primeira")
+            data.addTag(QUESTION_ID_1, "primeira")
             fail("should throw global")
         } catch (e: Exception) {
             assertThat(e).isInstanceOf(TagAlreadyExistsException::class.java)
         }
 
-        assertThat(questionRepo.findById("id1").get().tags)
+        assertThat(questionRepo.findById(QUESTION_ID_1).get().tags)
                 .containsExactly("primeira", "segunda")
                 .inOrder()
     }
@@ -89,14 +83,14 @@ class TestMongoQuestionRepository {
     fun randomByTags_requestMoreThanExists_returnsExistent() {
         val questions = data.randomByTags(listOf("segunda"), 10)
         val ids = questions.map { it.id }
-        assertThat(ids).containsExactly("id1", "id2")
+        assertThat(ids).containsExactly(QUESTION_ID_1, QUESTION_ID_2)
     }
 
     @Test
     fun randomByTags_emptyTags_returnsAll() {
         val questions = data.randomByTags(listOf(), 10)
         val ids = questions.map { it.id }
-        assertThat(ids).containsExactly("id1", "id2", "id3")
+        assertThat(ids).containsExactly(QUESTION_ID_1, QUESTION_ID_2, QUESTION_ID_3)
     }
 
     @Test
@@ -106,18 +100,18 @@ class TestMongoQuestionRepository {
         while (i < 10) {
             val questions = data.randomByTags(listOf("segunda"), 1)
             assertThat(questions.size).isEqualTo(1)
-            assertThat(questions[0].id).matches("id[12]")
+            assertThat(questions[0].id).isIn(listOf(QUESTION_ID_1, QUESTION_ID_2))
             ids.add(questions[0].id)
             i++
         }
-        assertThat(ids).containsAtLeast("id1", "id2")
+        assertThat(ids).containsAtLeast(QUESTION_ID_1, QUESTION_ID_2)
     }
 
     @Test
     fun randomByTags_notEveryoneHasTag_filters() {
         val questions = data.randomByTags(listOf("primeira"), 10)
         val ids = questions.map { it.id }
-        assertThat(ids).containsExactly("id1")
+        assertThat(ids).containsExactly(QUESTION_ID_1)
     }
 
     @Test
@@ -131,7 +125,7 @@ class TestMongoQuestionRepository {
         val result = data.randomByTags(listOf("primeira"), 10)[0]
 
         val question = Question(
-                "id1",
+                QUESTION_ID_1,
                 "YWI=",
                 "ENEM",
                 "AMARELA",
@@ -154,37 +148,37 @@ class TestMongoQuestionRepository {
 
     @Test
     fun videos_HasRelatedVideos_ReturnsThemOrdered() {
-        val videos = data.videos("id1", 0, 10).map { it.id }
-        assertThat(videos).containsExactly("id3", "id1").inOrder()
+        val videos = data.videos(QUESTION_ID_1, 0, 10).map { it.id }
+        assertThat(videos).containsExactly(VIDEO_ID_3, VIDEO_ID_1).inOrder()
     }
 
     @Test
     fun videos_NoRelatedVideos_ReturnsEmpty() {
-        val videos = data.videos("id0", 0, 10).map { it.id }
+        val videos = data.videos("99c54d325b75357a571d4cc2", 0, 10).map { it.id }
         assertThat(videos).isEmpty()
     }
 
     @Test
     fun videos_CountEqualsOne_ReturnsFirst() {
-        val videos = data.videos("id1", 0, 1).map { it.id }
-        assertThat(videos).containsExactly("id3")
+        val videos = data.videos(QUESTION_ID_1, 0, 1).map { it.id }
+        assertThat(videos).containsExactly(VIDEO_ID_3)
     }
 
     @Test
     fun videos_StartEqualsOne_SkipsFirst() {
-        val videos = data.videos("id1", 1, 10).map { it.id }
-        assertThat(videos).containsExactly("id1")
+        val videos = data.videos(QUESTION_ID_1, 1, 10).map { it.id }
+        assertThat(videos).containsExactly(VIDEO_ID_1)
     }
 
     @Test
     fun videos_ValidRequest_DataIsValid() {
-        val result = data.videos("id1", 1, 1)[0]
+        val result = data.videos(QUESTION_ID_1, 1, 1)[0]
         val video = Video(
-                "id1",
+                VIDEO_ID_1,
                 "primeira",
                 "primeiro video",
                 "videoId1",
-                "id1",
+                QUESTION_ID_1,
                 1.1f,
                 "defaultQuality",
                 "channelTitle"

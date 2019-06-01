@@ -81,7 +81,7 @@ class QuestionController(
             @RequestParam(value = "start", defaultValue = "0") start: Int,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
             request: HttpServletRequest
-    ): Response<List<VideoResponse>> {
+    ): Response<List<Map<String, Any>>> {
         val eventName = "question_videos_get"
         val eventTags = listOf(NETWORK, QUESTION, RETRIEVAL, VIDEO)
         val networkData = networkData(request)
@@ -151,16 +151,20 @@ class QuestionController(
         )
     }
 
-    fun toVideoResponse(video: Video): VideoResponse {
-        return VideoResponse(
-                video.id,
-                video.title,
-                video.description,
-                video.videoId,
-                video.questionId,
-                video.aspectRatio,
-                video.thumbnail,
-                video.channelTitle
+    fun toVideoResponse(video: Video): Map<String, Any> {
+        return hashMapOf<String, Any>(
+                "id" to video.id,
+                "title" to video.title,
+                "description" to video.description,
+                "videoId" to video.videoId,
+                "questionId" to video.questionId,
+                "aspectRatio" to video.aspectRatio,
+                "thumbnails" to hashMapOf(
+                        "default" to video.thumbnail
+                ),
+                "channel" to hashMapOf(
+                        "title" to video.channelTitle
+                )
         )
     }
 

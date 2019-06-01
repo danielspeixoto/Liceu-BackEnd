@@ -34,7 +34,7 @@ class MongoQuestionRepository(
         val results = template.aggregate(agg, MongoDatabase.QUESTION_COLLECTION, MongoDatabase.MongoQuestion::class.java)
         return results.map {
             Question(
-                    it.id,
+                    it.id.toHexString(),
                     Base64.encodeBase64String(it.view),
                     it.source,
                     it.variant,
@@ -76,12 +76,12 @@ class MongoQuestionRepository(
         val results = template.aggregate(agg, MongoDatabase.VIDEO_COLLECTION, MongoDatabase.MongoVideo::class.java)
         return results.map {
             Video(
-                    it.id,
+                    it.id.toHexString(),
                     it.title,
                     it.description,
                     it.videoId,
-                    it.questionId,
-                    it.aspectRation,
+                    it.questionId.toHexString(),
+                    it.aspectRation?: 1.33F,
                     it.thumbnails.default,
                     it.channel.title
             )

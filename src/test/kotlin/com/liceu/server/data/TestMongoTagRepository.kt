@@ -3,7 +3,12 @@ package com.liceu.server.data
 import com.google.common.testing.EqualsTester
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.domain.global.QuestionNotFoundException
+import com.liceu.server.domain.global.TagNotFoundException
 import com.liceu.server.domain.tag.Tag
+import com.liceu.server.util.TAG_ID_1
+import com.liceu.server.util.TAG_ID_2
+import com.liceu.server.util.TAG_ID_3
+import com.liceu.server.util.setup
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,35 +24,15 @@ class TestMongoTagRepository {
     @Autowired
     lateinit var data: MongoTagRepository
     @Autowired
-    lateinit var repo: TagRepository
-
+    lateinit var questionRepo: QuestionRepository
+    @Autowired
+    lateinit var videoRepo: VideoRepository
+    @Autowired
+    lateinit var tagRepo: TagRepository
     @BeforeEach
     fun dataSetup() {
-        val item1 = MongoDatabase.MongoTag(
-                "primeira",
-                0
-        )
-        item1.id = "id1"
-        repo.insert(item1)
-        val item2 = MongoDatabase.MongoTag(
-                "segunda",
-                10
-        )
-        item2.id = "id2"
-        repo.insert(item2)
-        val item3 = MongoDatabase.MongoTag(
-                "terceira",
-                5
-        )
-        item3.id = "id3"
-        repo.insert(item3)
+        setup(questionRepo, videoRepo, tagRepo)
     }
-
-    @AfterEach
-    fun destroy() {
-        repo.deleteAll()
-    }
-
 
     @Test
     fun incrementCount_tagExists_shouldSucceed() {
@@ -58,13 +43,13 @@ class TestMongoTagRepository {
         )
 
         val params = listOf(
-                Param("primeira", "id1", 1),
-                Param("segunda", "id2", 11),
-                Param("terceira", "id3", 6)
+                Param("primeira", TAG_ID_1, 2),
+                Param("segunda", TAG_ID_2, 3),
+                Param("terceira", TAG_ID_3, 1)
         )
         params.forEach {
             data.incrementCount(it.name)
-            val item = repo.findById(it.id).get()
+            val item = tagRepo.findById(it.id).get()
 
             assertThat(item.amount).isEqualTo(it.amount)
         }
@@ -72,7 +57,7 @@ class TestMongoTagRepository {
 
     @Test
     fun incrementCount_tagDoesntExists_throwsErrors() {
-        assertThrows<QuestionNotFoundException> {
+        assertThrows<TagNotFoundException> {
             data.incrementCount("id0")
         }
     }
@@ -80,19 +65,19 @@ class TestMongoTagRepository {
     @Test
     fun suggestions_emptyString_ReturnsAll() {
         val results = data.suggestions("", 0).map { it.id }
-        assertThat(results).containsExactly("id1", "id2", "id3")
+        assertThat(results).containsExactly(TAG_ID_3, TAG_ID_2, TAG_ID_1)
     }
 
     @Test
     fun suggestions_matchesFew_ReturnsThem() {
         val results = data.suggestions("eira", 0).map { it.id }
-        assertThat(results).containsExactly("id1", "id3")
+        assertThat(results).containsExactly(TAG_ID_3, TAG_ID_1)
     }
 
     @Test
     fun suggestions_matchesFewAndFiltersByAmount_ReturnsAboveAmount() {
-        val results = data.suggestions("eira", 3).map { it.id }
-        assertThat(results).containsExactly("id3")
+        val results = data.suggestions("eira", 1).map { it.id }
+        assertThat(results).containsExactly(TAG_ID_1)
     }
 
     @Test
@@ -106,9 +91,9 @@ class TestMongoTagRepository {
         val results = data.suggestions("primeira", 0)
 
         val tag = Tag(
-                "id1",
+                TAG_ID_1,
                 "primeira",
-                0
+                1
         )
 
         EqualsTester().addEqualityGroup(results[0], tag).testEquals()

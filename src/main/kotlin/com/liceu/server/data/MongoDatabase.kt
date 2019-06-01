@@ -1,6 +1,7 @@
 package com.liceu.server.data
 
 import org.bson.types.Binary
+import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -17,14 +18,14 @@ class MongoDatabase {
             var title: String,
             var description: String,
             var videoId: String,
-            var questionId: String,
-            var aspectRation: Float,
+            var questionId: ObjectId,
+            var aspectRation: Float?,
             var thumbnails: Thumbnails,
             var channel: Channel,
             var retrievalPosition: Int
     ) {
         @Id
-        lateinit var id: String
+        lateinit var id: ObjectId
     }
 
     data class Thumbnails(
@@ -35,7 +36,13 @@ class MongoDatabase {
 
     data class Channel(
             var title: String
-    )
+    ) {
+        @Id lateinit var id: String
+
+        constructor(title: String, id: String) : this(title) {
+            this.id = id
+        }
+    }
 
     @Document(collection = MongoDatabase.QUESTION_COLLECTION)
     data class MongoQuestion(
@@ -54,7 +61,7 @@ class MongoDatabase {
             var height: Int
     ) {
         @Id
-        lateinit var id: String
+        lateinit var id: ObjectId
     }
 
     @Document(collection = MongoDatabase.TAG_COLLECTION)
@@ -63,6 +70,6 @@ class MongoDatabase {
             var amount: Int
     ) {
         @Id
-        lateinit var id: String
+        lateinit var id: ObjectId
     }
 }

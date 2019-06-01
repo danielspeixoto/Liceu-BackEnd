@@ -18,14 +18,7 @@ class Random(val repo: QuestionBoundary.IRepository, val maxResults: Int): Quest
                     "value" to amount
             ))
         }
-        Logging.info(
-                EVENT_NAME,
-                TAGS,
-                hashMapOf(
-                        "amount" to amount,
-                        "tagNames" to tags
-                )
-        )
+
         var finalAmount = amount
         if(amount > maxResults) {
             finalAmount = maxResults
@@ -40,7 +33,17 @@ class Random(val repo: QuestionBoundary.IRepository, val maxResults: Int): Quest
             )
         }
         try {
-            return repo.randomByTags(tags, finalAmount)
+            val questions = repo.randomByTags(tags, finalAmount)
+            Logging.info(
+                    EVENT_NAME,
+                    TAGS,
+                    hashMapOf(
+                            "amount" to amount,
+                            "tagNames" to tags,
+                            "retrieved" to questions.size
+                    )
+            )
+            return questions
         } catch (e: Exception) {
             Logging.error(EVENT_NAME, TAGS, e)
             throw Exception()

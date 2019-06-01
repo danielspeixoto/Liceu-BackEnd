@@ -38,7 +38,7 @@ class MongoTagRepository(
         )
         return result.map {
             Tag(
-                    it.id,
+                    it.id.toHexString(),
                     it.name,
                     it.amount
             )
