@@ -10,7 +10,7 @@ fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository, tagRepo:
     videoRepo.deleteAll()
     tagRepo.deleteAll()
     val q1 = MongoDatabase.MongoQuestion(
-            "ab",
+            byteArrayOf('a'.toByte(), 'b'.toByte()),
             "ENEM",
             "AMARELA",
             2017,
@@ -27,7 +27,7 @@ fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository, tagRepo:
     q1.id = "id1"
     questionRepo.insert(q1)
     val q2 = MongoDatabase.MongoQuestion(
-            "ef",
+            byteArrayOf('e'.toByte(), 'f'.toByte()),
             "ENEM",
             "AMARELA",
             2016,
@@ -44,7 +44,7 @@ fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository, tagRepo:
     q2.id = "id2"
     questionRepo.insert(q2)
     val q3 = MongoDatabase.MongoQuestion(
-            "cd",
+            byteArrayOf('c'.toByte(), 'd'.toByte()),
             "ENEM",
             "AZUL",
             2015,

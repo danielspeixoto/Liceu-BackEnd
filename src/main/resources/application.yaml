@@ -1,1 +1,3 @@
-com.google.common.truth.disable_stack_trace_cleaning: true
+mongo:
+  dbName: ${MONGO_DB_NAME}
+  uri: $(MONGO_CONNECTION)

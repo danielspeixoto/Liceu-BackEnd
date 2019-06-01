@@ -123,7 +123,7 @@ class TestQuestionController {
         assertThat(response.errorCode).isEqualTo(null)
         val question = response.data!![0]
         assertThat(question["id"]).isEqualTo("id1")
-        assertThat(question["view"]).isEqualTo("ab")
+        assertThat(question["view"]).isEqualTo("YWI=")
         assertThat(question["source"]).isEqualTo("ENEM")
         assertThat(question["variant"]).isEqualTo("AMARELA")
         assertThat(question["edition"]).isEqualTo(2017)

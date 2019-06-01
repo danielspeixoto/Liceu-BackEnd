@@ -5,6 +5,7 @@ import com.liceu.server.domain.global.QuestionNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.video.Video
+import org.apache.tomcat.util.codec.binary.Base64
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
@@ -33,7 +34,7 @@ class MongoQuestionRepository(
         return results.map {
             Question(
                     it.id,
-                    it.view,
+                    Base64.encodeBase64String(it.view),
                     it.source,
                     it.variant,
                     it.edition,

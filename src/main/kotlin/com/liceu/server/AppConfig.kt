@@ -2,19 +2,17 @@ package com.liceu.server
 
 import com.liceu.server.data.MongoQuestionRepository
 import com.liceu.server.data.MongoTagRepository
-import com.liceu.server.data.QuestionRepository
 import com.liceu.server.domain.question.AddTag
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.Random
 import com.liceu.server.domain.question.Videos
-import com.liceu.server.util.Logging
 import com.mongodb.MongoClient
+import com.mongodb.MongoClientURI
 import org.apache.catalina.connector.Connector
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -22,9 +20,6 @@ import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.stereotype.Component
-import org.springframework.web.filter.CommonsRequestLoggingFilter
-
-
 
 
 @Configuration
@@ -32,56 +27,43 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter
 @EnableMongoRepositories
 class AppConfig: AbstractMongoConfiguration() {
 
-//    @Value(("\${mongo.db.port:27017}"))
-//    lateinit var MONGO_DB_PORT: String
-//
-//    @Value(("\${mongo.db.uri:127.0.0.1}"))
-//    lateinit var MONGO_DB_URI: String
-//
-//    @Value(("\${mongo.db.name:b}"))
-//    lateinit var MONGO_DB_NAME: String
+    @Value(("\${mongo.uri:mongodb+srv://serverTest:G97r6PNcrXXMUJgy@cluster0-lf760.mongodb.net/test&retryWrites=true}"))
+    lateinit var mongoURI: String
 
-    val mongoTemplate = MongoTemplate(MongoClient("127.0.0.1", 27017), "b")
-    val mongoQuestionRepository = MongoQuestionRepository(mongoTemplate)
-    val mongoTagRepository = MongoTagRepository(mongoTemplate)
+    @Value(("\${mongo.dbName:test}"))
+    lateinit var mongoDBName: String
+
+    fun mongoQuestionRepository() = MongoQuestionRepository(mongoTemplate())
+    fun mongoTagRepository() = MongoTagRepository(mongoTemplate())
+
+    fun clientUri() = MongoClientURI(mongoURI)
 
     override fun mongoClient(): MongoClient {
-        val client = MongoClient("127.0.0.1", 27017)
-        return client
+        return MongoClient(clientUri())
     }
 
     override fun getDatabaseName(): String {
-        return "b"
+        return mongoDBName
     }
 
     @Bean
     override fun mongoTemplate(): MongoTemplate {
-        return mongoTemplate
+        return MongoTemplate(mongoClient(), mongoDBName)
     }
     @Bean
     fun random(): QuestionBoundary.IRandom {
-        return Random(mongoQuestionRepository, 10)
+        return Random(mongoQuestionRepository(), 10)
     }
 
     @Bean
     fun addTag(): QuestionBoundary.IAddTag {
-        return AddTag(mongoQuestionRepository, mongoTagRepository)
+        return AddTag(mongoQuestionRepository(), mongoTagRepository())
     }
 
     @Bean
     fun videos(): QuestionBoundary.IVideos {
-        return Videos(mongoQuestionRepository, 10)
+        return Videos(mongoQuestionRepository(), 10)
     }
-
-//    @Bean
-//    fun requestLoggingFilter(): CommonsRequestLoggingFilter {
-//        val loggingFilter = CommonsRequestLoggingFilter()
-//        loggingFilter.setIncludeClientInfo(true)
-//        loggingFilter.setIncludeQueryString(true)
-//        loggingFilter.setIncludePayload(true)
-//        return loggingFilter
-//    }
-
 }
 
 @Component

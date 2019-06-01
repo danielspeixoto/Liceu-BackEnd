@@ -1,5 +1,6 @@
 package com.liceu.server.data
 
+import org.bson.types.Binary
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -39,7 +40,7 @@ class MongoDatabase {
 
     @Document(collection = MongoDatabase.QUESTION_COLLECTION)
     data class MongoQuestion(
-            var view: String,
+            var view: ByteArray,
             var source: String,
             var variant: String,
             var edition: Int,

@@ -132,7 +132,7 @@ class TestMongoQuestionRepository {
 
         val question = Question(
                 "id1",
-                "ab",
+                "YWI=",
                 "ENEM",
                 "AMARELA",
                 2017,
@@ -167,18 +167,18 @@ class TestMongoQuestionRepository {
     @Test
     fun videos_CountEqualsOne_ReturnsFirst() {
         val videos = data.videos("id1", 0, 1).map { it.id }
-        assertThat(videos).containsExactly("id1")
+        assertThat(videos).containsExactly("id3")
     }
 
     @Test
     fun videos_StartEqualsOne_SkipsFirst() {
         val videos = data.videos("id1", 1, 10).map { it.id }
-        assertThat(videos).containsExactly("id3")
+        assertThat(videos).containsExactly("id1")
     }
 
     @Test
     fun videos_ValidRequest_DataIsValid() {
-        val result = data.videos("id1", 0, 1)[0]
+        val result = data.videos("id1", 1, 1)[0]
         val video = Video(
                 "id1",
                 "primeira",
