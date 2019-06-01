@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer
@@ -31,7 +32,15 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter
 @EnableMongoRepositories
 class AppConfig: AbstractMongoConfiguration() {
 
-//    @Autowired lateinit var repo: QuestionRepository
+//    @Value(("\${mongo.db.port:27017}"))
+//    lateinit var MONGO_DB_PORT: String
+//
+//    @Value(("\${mongo.db.uri:127.0.0.1}"))
+//    lateinit var MONGO_DB_URI: String
+//
+//    @Value(("\${mongo.db.name:b}"))
+//    lateinit var MONGO_DB_NAME: String
+
     val mongoTemplate = MongoTemplate(MongoClient("127.0.0.1", 27017), "b")
     val mongoQuestionRepository = MongoQuestionRepository(mongoTemplate)
     val mongoTagRepository = MongoTagRepository(mongoTemplate)
@@ -64,14 +73,14 @@ class AppConfig: AbstractMongoConfiguration() {
         return Videos(mongoQuestionRepository, 10)
     }
 
-    @Bean
-    fun requestLoggingFilter(): CommonsRequestLoggingFilter {
-        val loggingFilter = CommonsRequestLoggingFilter()
-        loggingFilter.setIncludeClientInfo(true)
-        loggingFilter.setIncludeQueryString(true)
-        loggingFilter.setIncludePayload(true)
-        return loggingFilter
-    }
+//    @Bean
+//    fun requestLoggingFilter(): CommonsRequestLoggingFilter {
+//        val loggingFilter = CommonsRequestLoggingFilter()
+//        loggingFilter.setIncludeClientInfo(true)
+//        loggingFilter.setIncludeQueryString(true)
+//        loggingFilter.setIncludePayload(true)
+//        return loggingFilter
+//    }
 
 }
 

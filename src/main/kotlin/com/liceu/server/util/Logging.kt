@@ -2,6 +2,7 @@ package com.liceu.server.util
 
 import net.logstash.logback.marker.Markers.append
 import org.slf4j.LoggerFactory
+import java.lang.Error
 
 object Logging {
 
@@ -56,15 +57,18 @@ object Logging {
         )
     }
 
-    fun error(eventName: String, tags: List<String> = listOf(), data: HashMap<String, Any> = hashMapOf()) {
+    fun error(eventName: String, tags: List<String> = listOf(), error: Exception, data: HashMap<String, Any> = hashMapOf()) {
         val stack = stack()
+//        TODO: Only when in DEV
+        error.printStackTrace()
         logger.error(null,
                 append("caller_method", stack.first[1]),
                 append("caller_class", stack.first[0]),
                 append("line_number", stack.second),
-                append("event", eventName),
-                append("tags", tags),
-                append("data", data)
+                append("event", eventName + "_error"),
+                append("tags", tags + listOf("error")),
+                append("data", data),
+                append("error", error)
         )
     }
 }

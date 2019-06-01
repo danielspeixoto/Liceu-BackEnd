@@ -1,9 +1,8 @@
 package com.liceu.server.data
 
-import com.liceu.server.domain.exception.ItemNotFoundException
+import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.tag.Tag
 import com.liceu.server.domain.tag.TagBoundary
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.*
 import org.springframework.stereotype.Repository

@@ -2,8 +2,8 @@ package com.liceu.server.data
 
 import com.google.common.testing.EqualsTester
 import com.google.common.truth.Truth.assertThat
-import com.liceu.server.domain.exception.AlreadyExistsException
-import com.liceu.server.domain.exception.ItemNotFoundException
+import com.liceu.server.domain.global.AlreadyExistsException
+import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.video.Video
 import org.junit.jupiter.api.AfterEach
@@ -170,7 +170,7 @@ class TestMongoQuestionRepository {
     fun addTag_alreadyHasTag_throwsError() {
         try {
             data.addTag("id1", "primeira")
-            fail("should throw exception")
+            fail("should throw global")
         } catch (e: Exception) {
             assertThat(e).isInstanceOf(AlreadyExistsException::class.java)
         }
@@ -184,7 +184,7 @@ class TestMongoQuestionRepository {
     fun addTag_nonExistentQuestion_throwsError() {
         try {
             data.addTag("id0", "primeira")
-            fail("should throw exception")
+            fail("should throw global")
         } catch (e: Exception) {
             assertThat(e).isInstanceOf(ItemNotFoundException::class.java)
         }
@@ -195,6 +195,13 @@ class TestMongoQuestionRepository {
         val questions = data.randomByTags(listOf("segunda"), 10)
         val ids = questions.map { it.id }
         assertThat(ids).containsExactly("id1", "id2")
+    }
+
+    @Test
+    fun randomByTags_emptyTags_returnsAll() {
+        val questions = data.randomByTags(listOf(), 10)
+        val ids = questions.map { it.id }
+        assertThat(ids).containsExactly("id1", "id2", "id3")
     }
 
     @Test

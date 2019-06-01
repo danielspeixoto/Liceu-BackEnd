@@ -1,7 +1,7 @@
 package com.liceu.server.data
 
-import com.liceu.server.domain.exception.AlreadyExistsException
-import com.liceu.server.domain.exception.ItemNotFoundException
+import com.liceu.server.domain.global.AlreadyExistsException
+import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.video.Video
@@ -21,7 +21,10 @@ class MongoQuestionRepository(
     @Autowired lateinit var repo: QuestionRepository
 
     override fun randomByTags(tags: List<String>, amount: Int): List<Question> {
-        val match = Aggregation.match(Criteria("tags").all(tags))
+        var match = Aggregation.match(Criteria("tags").all(tags))
+        if(tags.isEmpty()) {
+           match = Aggregation.match(Criteria())
+        }
         val sample = Aggregation.sample(amount.toLong())
         val agg = Aggregation.newAggregation(match, sample)
 

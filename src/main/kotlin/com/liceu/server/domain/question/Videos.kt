@@ -1,17 +1,24 @@
 package com.liceu.server.domain.question
 
+import com.liceu.server.domain.global.*
 import com.liceu.server.domain.video.Video
 import com.liceu.server.util.Logging
+import java.lang.Exception
 
 class Videos(
         val videoRepo: QuestionBoundary.IRepository,
         val maxResults: Int
 ): QuestionBoundary.IVideos {
 
+    companion object {
+        const val EVENT_NAME = "question_videos"
+        val TAGS = listOf(RETRIEVAL, QUESTION, VIDEO)
+    }
+
     override fun run(id: String, start: Int, count: Int): List<Video> {
         Logging.info(
-                "question_related_videos",
-                listOf("retrieval", "question", "video"),
+                EVENT_NAME,
+                TAGS,
                 hashMapOf(
                         "count" to count,
                         "start" to start,
@@ -22,15 +29,21 @@ class Videos(
         if(count > maxResults) {
             finalAmount = maxResults
             Logging.warn(
-                    "max_results_overflow",
-                    listOf("overflow", "retrieval", "question", "video"),
+                    MAX_RESULTS_OVERFLOW,
+                    TAGS + listOf(OVERFLOW),
                     hashMapOf(
-                            "action" to "question_related_videos",
+                            "action" to EVENT_NAME,
                             "requested" to count,
                             "max_allowed" to maxResults
                     )
             )
         }
-        return videoRepo.videos(id, start, finalAmount)
+        try {
+            return videoRepo.videos(id, start, finalAmount)
+        } catch (e: Exception) {
+            Logging.error(EVENT_NAME, TAGS, e)
+            throw Exception()
+        }
+
     }
 }

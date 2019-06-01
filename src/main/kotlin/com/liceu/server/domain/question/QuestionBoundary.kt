@@ -1,7 +1,7 @@
 package com.liceu.server.domain.question
 
-import com.liceu.server.domain.exception.AlreadyExistsException
-import com.liceu.server.domain.exception.ItemNotFoundException
+import com.liceu.server.domain.global.AlreadyExistsException
+import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.video.Video
 
 class QuestionBoundary {

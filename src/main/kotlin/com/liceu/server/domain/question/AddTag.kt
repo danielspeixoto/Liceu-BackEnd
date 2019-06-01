@@ -1,7 +1,6 @@
 package com.liceu.server.domain.question
 
-import com.liceu.server.domain.exception.AlreadyExistsException
-import com.liceu.server.domain.exception.ItemNotFoundException
+import com.liceu.server.domain.global.*
 import com.liceu.server.domain.tag.TagBoundary
 import com.liceu.server.util.Logging
 
@@ -13,7 +12,7 @@ class AddTag(
 
     companion object {
         const val EVENT_NAME = "add_tag"
-        val TAGS = listOf("insertion", "tag", "question")
+    val TAGS = listOf(INSERTION, TAG, QUESTION)
     }
 
     override fun run(id: String, tag: String) {
@@ -30,7 +29,7 @@ class AddTag(
             tagRepo.incrementCount(tag)
         } catch (e: ItemNotFoundException) {
             Logging.info(
-                    "question_not_found",
+                    QUESTION + NOT_FOUND,
                     TAGS,
                     hashMapOf(
                             "questionId" to id
@@ -39,7 +38,7 @@ class AddTag(
             )
         } catch (e: AlreadyExistsException) {
             Logging.info(
-                    "tag_already_exists",
+                    TAG + ALREADY_EXISTS,
                     TAGS,
                     hashMapOf(
                             "questionId" to id,
@@ -48,14 +47,8 @@ class AddTag(
 
             )
         } catch (e: Exception) {
-            Logging.error(
-                    EVENT_NAME + "_error",
-                    listOf("unknown", "error") + TAGS,
-                    hashMapOf(
-                            "stackTrace" to e.stackTrace
-                    )
-
-            )
+            Logging.error(EVENT_NAME, TAGS, e)
+            throw Exception()
         }
     }
 

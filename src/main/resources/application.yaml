@@ -1,0 +1,1 @@
+com.google.common.truth.disable_stack_trace_cleaning: true

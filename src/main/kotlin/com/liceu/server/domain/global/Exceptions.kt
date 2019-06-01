@@ -1,4 +1,4 @@
-package com.liceu.server.domain.exception
+package com.liceu.server.domain.global
 
 import java.lang.Exception
 
