@@ -6,6 +6,7 @@ import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.video.Video
 import org.apache.tomcat.util.codec.binary.Base64
+import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
@@ -66,7 +67,7 @@ class MongoQuestionRepository(
     }
 
     override fun videos(id: String, start: Int, count: Int): List<Video> {
-        val match = Aggregation.match(Criteria("questionId").isEqualTo(id))
+        val match = Aggregation.match(Criteria("questionId").isEqualTo(ObjectId(id)))
         val sort = Aggregation.sort(Sort.Direction.ASC, "retrievalPosition")
         val skip = Aggregation.skip(start.toLong())
         val limit = Aggregation.limit(count.toLong())
