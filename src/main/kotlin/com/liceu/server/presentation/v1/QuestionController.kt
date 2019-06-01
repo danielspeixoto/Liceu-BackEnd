@@ -17,7 +17,7 @@ import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/question")
 class QuestionController(
         @Autowired val random: QuestionBoundary.IRandom,
         @Autowired val addTag: QuestionBoundary.IAddTag,
