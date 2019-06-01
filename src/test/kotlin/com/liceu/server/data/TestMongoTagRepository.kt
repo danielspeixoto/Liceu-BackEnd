@@ -2,7 +2,7 @@ package com.liceu.server.data
 
 import com.google.common.testing.EqualsTester
 import com.google.common.truth.Truth.assertThat
-import com.liceu.server.domain.global.ItemNotFoundException
+import com.liceu.server.domain.global.QuestionNotFoundException
 import com.liceu.server.domain.tag.Tag
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.transaction.annotation.Transactional
 
 @ComponentScan
 @ExtendWith(SpringExtension::class)
@@ -73,7 +72,7 @@ class TestMongoTagRepository {
 
     @Test
     fun incrementCount_tagDoesntExists_throwsErrors() {
-        assertThrows<ItemNotFoundException> {
+        assertThrows<QuestionNotFoundException> {
             data.incrementCount("id0")
         }
     }

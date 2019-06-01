@@ -1,6 +1,6 @@
 package com.liceu.server.data
 
-import com.liceu.server.domain.global.ItemNotFoundException
+import com.liceu.server.domain.global.TagNotFoundException
 import com.liceu.server.domain.tag.Tag
 import com.liceu.server.domain.tag.TagBoundary
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -23,7 +23,7 @@ class MongoTagRepository(
                 COLLECTION_NAME
         )
         if(result.matchedCount < 1) {
-            throw ItemNotFoundException()
+            throw TagNotFoundException()
         }
     }
 

@@ -2,8 +2,8 @@ package com.liceu.server.data
 
 import com.google.common.testing.EqualsTester
 import com.google.common.truth.Truth.assertThat
-import com.liceu.server.domain.global.AlreadyExistsException
-import com.liceu.server.domain.global.ItemNotFoundException
+import com.liceu.server.domain.global.TagAlreadyExistsException
+import com.liceu.server.domain.global.QuestionNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.video.Video
 import com.liceu.server.setup
@@ -29,10 +29,12 @@ class TestMongoQuestionRepository {
     lateinit var questionRepo: QuestionRepository
     @Autowired
     lateinit var videoRepo: VideoRepository
+    @Autowired
+    lateinit var tagRepo: TagRepository
 
     @BeforeEach
     fun dataSetup() {
-        setup(questionRepo, videoRepo)
+        setup(questionRepo, videoRepo, tagRepo)
     }
 
     @AfterEach
@@ -65,7 +67,7 @@ class TestMongoQuestionRepository {
             data.addTag("id1", "primeira")
             fail("should throw global")
         } catch (e: Exception) {
-            assertThat(e).isInstanceOf(AlreadyExistsException::class.java)
+            assertThat(e).isInstanceOf(TagAlreadyExistsException::class.java)
         }
 
         assertThat(questionRepo.findById("id1").get().tags)
@@ -79,7 +81,7 @@ class TestMongoQuestionRepository {
             data.addTag("id0", "primeira")
             fail("should throw global")
         } catch (e: Exception) {
-            assertThat(e).isInstanceOf(ItemNotFoundException::class.java)
+            assertThat(e).isInstanceOf(QuestionNotFoundException::class.java)
         }
     }
 
@@ -153,7 +155,7 @@ class TestMongoQuestionRepository {
     @Test
     fun videos_HasRelatedVideos_ReturnsThemOrdered() {
         val videos = data.videos("id1", 0, 10).map { it.id }
-        assertThat(videos).containsExactly("id3", "id1")
+        assertThat(videos).containsExactly("id3", "id1").inOrder()
     }
 
     @Test

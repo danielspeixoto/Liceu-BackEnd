@@ -54,7 +54,7 @@ object Logging {
         )
     }
 
-    fun error(eventName: String, tags: List<String> = listOf(), error: Exception, data: HashMap<String, Any> = hashMapOf()) {
+    fun error(eventName: String, tags: List<String> = listOf(), error: Exception, data: Map<String, *> = mapOf<String, String>()) {
         val stack = stack()
 //        TODO: Only when in DEV
         error.printStackTrace()

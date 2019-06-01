@@ -2,11 +2,13 @@ package com.liceu.server
 
 import com.liceu.server.data.MongoDatabase
 import com.liceu.server.data.QuestionRepository
+import com.liceu.server.data.TagRepository
 import com.liceu.server.data.VideoRepository
 
-fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository) {
+fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository, tagRepo: TagRepository) {
     questionRepo.deleteAll()
     videoRepo.deleteAll()
+    tagRepo.deleteAll()
     val q1 = MongoDatabase.MongoQuestion(
             "ab",
             "ENEM",
@@ -116,4 +118,17 @@ fun setup(questionRepo: QuestionRepository, videoRepo: VideoRepository) {
     )
     item3.id = "id3"
     videoRepo.insert(item3)
+
+    val tag1 = MongoDatabase.MongoTag(
+            "primeira",
+            1
+    )
+    tag1.id = "id1"
+    tagRepo.insert(tag1)
+    val tag2 = MongoDatabase.MongoTag(
+            "segunda",
+            2
+    )
+    tag2.id = "id2"
+    tagRepo.insert(tag2)
 }
