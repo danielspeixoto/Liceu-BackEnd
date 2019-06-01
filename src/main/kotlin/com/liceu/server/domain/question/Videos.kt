@@ -42,7 +42,7 @@ class Videos(
             return videoRepo.videos(id, start, finalAmount)
         } catch (e: Exception) {
             Logging.error(EVENT_NAME, TAGS, e)
-            throw Exception()
+            throw e
         }
 
     }

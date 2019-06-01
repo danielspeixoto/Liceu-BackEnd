@@ -34,8 +34,7 @@ class MongoDatabase {
     )
 
     data class Channel(
-            var title: String,
-            var id: String
+            var title: String
     )
 
     @Document(collection = MongoDatabase.QUESTION_COLLECTION)
