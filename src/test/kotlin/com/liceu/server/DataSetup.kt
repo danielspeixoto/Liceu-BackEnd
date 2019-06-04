@@ -1,31 +1,31 @@
-package com.liceu.server.util
+package com.liceu.server
 
 import com.liceu.server.data.MongoDatabase
 import com.liceu.server.data.QuestionRepository
 import com.liceu.server.data.TagRepository
 import com.liceu.server.data.VideoRepository
 import org.bson.types.ObjectId
-import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-
-const val QUESTION_ID_1 = "0a1449a4bdb40abd5ae1e431"
-const val QUESTION_ID_2 = "09c54d325b75357a571d4cc2"
-const val QUESTION_ID_3 = "07235b2a67c76abebce3f6e6"
-
-const val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
-const val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
-const val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
-
-const val TAG_ID_1 = "2a1449a4bdb40abd5ae1e431"
-const val TAG_ID_2 = "29c54d325b75357a571d4cc2"
-const val TAG_ID_3 = "27235b2a67c76abebce3f6e6"
-
-const val INVALID_ID = "99235b2a67c76abebce3f6e6"
-
 @Component
 class TestSetup {
+
+    companion object {
+        const val QUESTION_ID_1 = "0a1449a4bdb40abd5ae1e431"
+        const val QUESTION_ID_2 = "09c54d325b75357a571d4cc2"
+        const val QUESTION_ID_3 = "07235b2a67c76abebce3f6e6"
+
+        const val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
+        const val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
+        const val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
+
+        const val TAG_ID_1 = "2a1449a4bdb40abd5ae1e431"
+        const val TAG_ID_2 = "29c54d325b75357a571d4cc2"
+        const val TAG_ID_3 = "27235b2a67c76abebce3f6e6"
+
+        const val INVALID_ID = "99235b2a67c76abebce3f6e6"
+    }
 
     @Autowired
     lateinit var questionRepo: QuestionRepository

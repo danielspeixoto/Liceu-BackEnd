@@ -3,38 +3,11 @@ package com.liceu.server.system.v1
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.*
 import com.liceu.server.presentation.v1.Response.Companion.STATUS_OK
+import com.liceu.server.system.TestSystem
 import com.liceu.server.util.*
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes=[TestConfiguration::class])
-@ActiveProfiles("test")
-@EnableMongoRepositories
-class TestQuestionController {
-
-    @LocalServerPort
-    private var port: Int = 0
-    private var baseUrl: String = ""
-
-    @Autowired
-    private lateinit var restTemplate: TestRestTemplate
-
-    @Autowired
-    lateinit var testSetup: TestSetup
-
-    @BeforeEach
-    fun setup() {
-        testSetup.setup()
-        baseUrl = "http://localhost:$port/question/"
-    }
+class TestQuestion : TestSystem("question") {
 
     @Test
     fun randomQuestion_WhenNoTagsSpecified_ReturnsAnyRandomly() {
@@ -46,7 +19,7 @@ class TestQuestionController {
             val data = response.data!!
             ids.add(data[0]["id"] as String)
         }
-        assertThat(ids).containsAtLeast(TestSetup.QUESTION_ID_1, TestSetup.QUESTION_ID_2, TestSetup.QUESTION_ID_3)
+        assertThat(ids).containsAtLeast(DataSetup.QUESTION_ID_1, DataSetup.QUESTION_ID_2, DataSetup.QUESTION_ID_3)
     }
 
     @Test
@@ -55,7 +28,7 @@ class TestQuestionController {
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!
-        assertThat(data[0]["id"]).isEqualTo(TestSetup.QUESTION_ID_1)
+        assertThat(data[0]["id"]).isEqualTo(DataSetup.QUESTION_ID_1)
     }
 
     @Test
@@ -64,7 +37,7 @@ class TestQuestionController {
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!
-        assertThat(data.map { it["id"] }).containsExactly(TestSetup.QUESTION_ID_1, TestSetup.QUESTION_ID_2)
+        assertThat(data.map { it["id"] }).containsExactly(DataSetup.QUESTION_ID_1, DataSetup.QUESTION_ID_2)
     }
 
     @Test
@@ -111,7 +84,7 @@ class TestQuestionController {
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val question = response.data!![0]
-        assertThat(question["id"]).isEqualTo(TestSetup.QUESTION_ID_1)
+        assertThat(question["id"]).isEqualTo(DataSetup.QUESTION_ID_1)
         assertThat(question["view"]).isEqualTo("YWI=")
         assertThat(question["source"]).isEqualTo("ENEM")
         assertThat(question["variant"]).isEqualTo("AMARELA")
@@ -127,16 +100,16 @@ class TestQuestionController {
 
     @Test
     fun videos_QuestionHasVideos_ReturnsThem() {
-        val response = getListResponse(restTemplate, "$baseUrl/${TestSetup.QUESTION_ID_1}/relatedVideos?amount=10")
+        val response = getListResponse(restTemplate, "$baseUrl/${DataSetup.QUESTION_ID_1}/relatedVideos?amount=10")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val videos = response.data!!.map { it["id"] }
-        assertThat(videos).containsExactly(TestSetup.VIDEO_ID_3, TestSetup.VIDEO_ID_1).inOrder()
+        assertThat(videos).containsExactly(DataSetup.VIDEO_ID_3, DataSetup.VIDEO_ID_1).inOrder()
     }
 
     @Test
     fun videos_QuestionHasNoVideos_Empty() {
-        val response = getListResponse(restTemplate, "$baseUrl/${TestSetup.INVALID_ID}/relatedVideos?amount=10")
+        val response = getListResponse(restTemplate, "$baseUrl/${DataSetup.INVALID_ID}/relatedVideos?amount=10")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         assertThat(response.data).isEmpty()
@@ -144,25 +117,25 @@ class TestQuestionController {
 
     @Test
     fun videos_QuestionHasManyVideos_Paginates() {
-        val response = getListResponse(restTemplate, "$baseUrl/${TestSetup.QUESTION_ID_1}/relatedVideos?start=1&amount=10")
+        val response = getListResponse(restTemplate, "$baseUrl/${DataSetup.QUESTION_ID_1}/relatedVideos?start=1&amount=10")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!
-        assertThat(data[0]["id"]).isEqualTo(TestSetup.VIDEO_ID_1)
+        assertThat(data[0]["id"]).isEqualTo(DataSetup.VIDEO_ID_1)
     }
 
     @Test
     fun videos_QuestionHasManyVideos_LimitsAmount() {
-        val response = getListResponse(restTemplate, "$baseUrl/${TestSetup.QUESTION_ID_1}/relatedVideos?amount=1")
+        val response = getListResponse(restTemplate, "$baseUrl/${DataSetup.QUESTION_ID_1}/relatedVideos?amount=1")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!.map { it["id"] }
-        assertThat(data).containsExactly(TestSetup.VIDEO_ID_3)
+        assertThat(data).containsExactly(DataSetup.VIDEO_ID_3)
     }
 
     @Test
     fun videos_NonExistentQuestion_Empty() {
-        val response = getListResponse(restTemplate, "$baseUrl/${TestSetup.INVALID_ID}/relatedVideos?amount=10")
+        val response = getListResponse(restTemplate, "$baseUrl/${DataSetup.INVALID_ID}/relatedVideos?amount=10")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!
