@@ -6,6 +6,7 @@ import com.liceu.server.domain.question.AddTag
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.Random
 import com.liceu.server.domain.question.Videos
+import com.liceu.server.presentation.v2.JWTAuthenticationFilter
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
 import org.apache.catalina.connector.Connector
@@ -19,11 +20,14 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
+import org.springframework.boot.web.servlet.FilterRegistrationBean
+import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.stereotype.Component
 
 
 @Configuration
-@ComponentScan
+//@ComponentScan
+@ServletComponentScan
 @EnableMongoRepositories
 class AppConfig: AbstractMongoConfiguration() {
 
@@ -64,6 +68,15 @@ class AppConfig: AbstractMongoConfiguration() {
     fun videos(): QuestionBoundary.IVideos {
         return Videos(mongoQuestionRepository(), 10)
     }
+
+//    @Bean
+//    fun jwtFilter(): FilterRegistrationBean<JWTAuthenticationFilter> {
+//        println("filter bean")
+//        val reg = FilterRegistrationBean<JWTAuthenticationFilter>()
+//        reg.filter = JWTAuthenticationFilter()
+//        reg.addUrlPatterns("/v2/*")
+//        return reg
+//    }
 }
 
 @Component

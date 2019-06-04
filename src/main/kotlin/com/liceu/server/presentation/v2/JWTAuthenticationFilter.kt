@@ -1,35 +1,32 @@
 package com.liceu.server.presentation.v2
 
-import java.io.IOException
-
-import javax.servlet.FilterChain
-import javax.servlet.ServletException
-import javax.servlet.ServletRequest
-import javax.servlet.ServletResponse
+import com.liceu.server.presentation.util.JWTAuth
 import javax.servlet.http.HttpServletRequest
 
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.filter.GenericFilterBean
+import javax.servlet.*
+import javax.servlet.annotation.WebFilter
+import javax.servlet.http.HttpFilter
+import javax.servlet.http.HttpServletResponse
 
-class JWTAuthenticationFilter : GenericFilterBean() {
+@WebFilter(urlPatterns = ["/v2/*"])
+class JWTAuthenticationFilter : HttpFilter() {
 
-    @Throws(IOException::class, ServletException::class)
-    override fun doFilter(request: ServletRequest, response: ServletResponse, filterChain: FilterChain) {
+    override fun doFilter(request: HttpServletRequest?, response: HttpServletResponse?, chain: FilterChain?) {
+        request!!
+        if(request.servletPath == "/v2/login" && request.method == "POST") {
+            chain!!.doFilter(request, response)
+            return
+        }
+        val token = request.getHeader(JWTAuth.HEADER_STRING)
+        val authentication = JWTAuth
+                .authentication(token)
 
-        val authentication = TokenAuthenticationService
-                .getAuthentication(request as HttpServletRequest)
-
-
-
-        println("auth")
-        println(authentication)
-//        println(request.)
-        println()
-
-
-        SecurityContextHolder.getContext().authentication = authentication
-        filterChain.doFilter(request, response)
+        if (authentication == null) {
+            (response as HttpServletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED)
+            return
+        }
+        request.setAttribute("userId", authentication)
+        chain!!.doFilter(request, response)
     }
 
 }

@@ -1,4 +1,4 @@
-package com.liceu.server.presentation.v1
+package com.liceu.server.presentation
 
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
