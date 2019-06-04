@@ -10,6 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken
+import java.lang.Exception
 import java.util.*
 
 object TokenAuthenticationService {
@@ -20,10 +21,12 @@ object TokenAuthenticationService {
     val TOKEN_PREFIX = "12345678901234567890123456789012"
     val HEADER_STRING = "Authorization"
 
+    val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256
+
     internal fun addAuthentication(response: HttpServletResponse, username: String) {
         println("add auth")
         val jwt = Jwts.builder()
-                .signWith(Keys.hmacShaKeyFor(SECRET.toByteArray()), SignatureAlgorithm.HS256)
+                .signWith(Keys.hmacShaKeyFor(SECRET.toByteArray()), SIGNATURE_ALGORITHM)
                 .setSubject(username)
                 .setExpiration(Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .compact()
@@ -41,11 +44,15 @@ object TokenAuthenticationService {
         println(token)
         println()
         if (token != null) {
-            val userId = Jwts.parser()
+            val claim = Jwts.parser()
                     .setSigningKey(SECRET.toByteArray())
                     .parseClaimsJws(token)
-                    .body
-                    .subject
+
+            if(!claim.header.getAlgorithm().equals(SIGNATURE_ALGORITHM.value)) {
+               throw Exception()
+            }
+
+            val userId = claim.body.subject
 
             println(userId)
 
