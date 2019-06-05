@@ -1,16 +1,14 @@
-server:
-  port : ${PORT:7000}
-
 auth:
-  secret: ${AUTH_SECRET:1234567890123456789012345678901212345678901234567890123456789012}
-  prefix:
+  secret: 1234567890123456789012345678901212345678901234567890123456789012
+  prefix: 12345678901234567890123456789012
 
 client:
-  api_key: ${API_KEY:#{"apikey"}}
-
-spring.mvc.favicon.enabled: false
+  api_key: apikey
 
 mongo:
-  dbName: ${MONGO_DB_NAME:#{"test"}}
-  uri: ${MONGO_CONNECTION:#{"mongodb://localhost:27017"}}
+  dbName: test
+  uri:  mongodb://localhost:27017
 
+dev: true
+
+spring.mvc.favicon.enabled: false

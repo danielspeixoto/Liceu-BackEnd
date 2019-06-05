@@ -10,8 +10,4 @@ class TagBoundary {
         fun suggestions(query: String, minQuestions: Int): List<Tag>
     }
 
-    interface ISuggestions {
-        @Throws(Error::class)
-        fun run(query: String, minQuestions: Int): List<Tag>
-    }
 }

@@ -2,10 +2,13 @@ package com.liceu.server
 
 import com.liceu.server.data.MongoQuestionRepository
 import com.liceu.server.data.MongoTagRepository
+import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.question.AddTag
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.Random
 import com.liceu.server.domain.question.Videos
+import com.liceu.server.domain.user.Authenticate
+import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.presentation.v2.JWTAuthenticationFilter
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
@@ -24,26 +27,33 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.stereotype.Component
 
-
 @Configuration
-//@ComponentScan
 @ServletComponentScan
 @EnableMongoRepositories
-class AppConfig: AbstractMongoConfiguration() {
+class AppConfig : AbstractMongoConfiguration() {
 
-    @Value("\${mongo.uri:mongodb://localhost:27017}")
+    @Value("\${mongo.uri}")
     lateinit var mongoURI: String
 
-    @Value("\${mongo.dbName:test}")
+    @Value("\${mongo.dbName}")
     lateinit var mongoDBName: String
 
-    fun mongoQuestionRepository() = MongoQuestionRepository(mongoTemplate())
-    fun mongoTagRepository() = MongoTagRepository(mongoTemplate())
+    val mongoQuestionRepository by lazy {
+        MongoQuestionRepository(mongoTemplate())
+    }
+    val mongoTagRepository by lazy {
+        MongoTagRepository(mongoTemplate())
+    }
+    val mongoUserRepository by lazy {
+        MongoUserRepository(mongoTemplate())
+    }
 
-    fun clientUri() = MongoClientURI(mongoURI)
+    val clientUri by lazy {
+        MongoClientURI(mongoURI)
+    }
 
     override fun mongoClient(): MongoClient {
-        return MongoClient(clientUri())
+        return MongoClient(clientUri)
     }
 
     override fun getDatabaseName(): String {
@@ -54,39 +64,34 @@ class AppConfig: AbstractMongoConfiguration() {
     override fun mongoTemplate(): MongoTemplate {
         return MongoTemplate(mongoClient(), mongoDBName)
     }
+
     @Bean
     fun random(): QuestionBoundary.IRandom {
-        return Random(mongoQuestionRepository(), 10)
+        return Random(mongoQuestionRepository, 10)
     }
 
     @Bean
     fun addTag(): QuestionBoundary.IAddTag {
-        return AddTag(mongoQuestionRepository(), mongoTagRepository())
+        return AddTag(mongoQuestionRepository, mongoTagRepository)
     }
 
     @Bean
     fun videos(): QuestionBoundary.IVideos {
-        return Videos(mongoQuestionRepository(), 10)
+        return Videos(mongoQuestionRepository, 10)
     }
 
-//    @Bean
-//    fun jwtFilter(): FilterRegistrationBean<JWTAuthenticationFilter> {
-//        println("filter bean")
-//        val reg = FilterRegistrationBean<JWTAuthenticationFilter>()
-//        reg.filter = JWTAuthenticationFilter()
-//        reg.addUrlPatterns("/v2/*")
-//        return reg
-//    }
+    @Bean
+    fun authenticate(): UserBoundary.IAuthenticate {
+        return Authenticate(mongoUserRepository)
+    }
 }
 
 @Component
 class MyTomcatWebServerCustomizer : WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
 
     override fun customize(factory: TomcatServletWebServerFactory) {
-        factory.addConnectorCustomizers(object : TomcatConnectorCustomizer {
-            override fun customize(connector: Connector) {
-                connector.setAttribute("relaxedQueryChars", "[]")
-            }
+        factory.addConnectorCustomizers(TomcatConnectorCustomizer {
+            connector -> connector.setAttribute("relaxedQueryChars", "[]")
         })
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class TestSetup {
+class DataSetup {
 
     companion object {
         const val QUESTION_ID_1 = "0a1449a4bdb40abd5ae1e431"

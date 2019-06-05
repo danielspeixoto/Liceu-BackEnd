@@ -1,20 +1,15 @@
 server:
-  port : ${PORT:7000}
+  port : ${PORT}
 
-spring.mvc.favicon.enabled: false
+auth:
+  secret: ${AUTH_SECRET}
+  prefix: ${AUTH_PREFIX}
+
+client:
+  api_key: ${API_KEY}
 
 mongo:
-  dbName: ${MONGO_DB_NAME:#{"test"}}
-  uri: ${MONGO_CONNECTION:#{"mongodb://localhost:27017"}}
+  dbName: ${MONGO_DB_NAME}
+  uri: ${MONGO_CONNECTION}
 
-facebook:
-  client:
-    clientId: 233668646673605
-    clientSecret: 33b17e044ee6a4fa383f46ec6e28ea1d
-    accessTokenUri: https://graph.facebook.com/oauth/access_token
-    userAuthorizationUri: https://www.facebook.com/dialog/oauth
-    tokenName: oauth_token
-    authenticationScheme: query
-    clientAuthenticationScheme: form
-  resource:
-    userInfoUri: https://graph.facebook.com/me
+spring.mvc.favicon.enabled: false

@@ -3,15 +3,18 @@ package com.liceu.server.presentation.util
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import java.util.*
 
-object JWTAuth {
+@Component
+class JWTAuth {
 
-    // EXPIRATION_TIME = 10 dias
     val EXPIRATION_TIME: Long = 860000000
-    val SECRET = "1234567890123456789012345678901212345678901234567890123456789012"
-    val TOKEN_PREFIX = "12345678901234567890123456789012"
-    val HEADER_STRING = "Authorization"
+    @Value("\${auth.secret}")
+    lateinit var SECRET: String
+    @Value("\${auth.prefix}")
+    lateinit var TOKEN_PREFIX: String
 
     val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256
 

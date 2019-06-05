@@ -1,5 +1,10 @@
 package com.liceu.server.presentation.v2
 
+import com.liceu.server.domain.global.AUTH
+import com.liceu.server.domain.global.AuthenticationException
+import com.liceu.server.domain.global.NETWORK
+import com.liceu.server.presentation.util.networkData
+import com.liceu.server.util.Logging
 import org.springframework.beans.factory.annotation.Value
 import javax.servlet.FilterChain
 import javax.servlet.annotation.WebFilter
@@ -21,7 +26,15 @@ class ApiKeyAuthorizationFilter : HttpFilter() {
         request!!
         val key = request.getHeader(HEADER_API_KEY)
         if (key != apiKey) {
-            response!!.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+            Logging.error(
+                    "api_key_auth",
+                    listOf(NETWORK, AUTH),
+                    AuthenticationException("client sent wrong api key"),
+                    data = networkData(request) + hashMapOf(
+                            "apiKeySent" to key
+                    )
+            )
+            response!!.status = 401
             return
         }
         chain!!.doFilter(request, response)

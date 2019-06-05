@@ -13,28 +13,24 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ComponentScan(basePackages = ["com.liceu.server"])
 @ExtendWith(SpringExtension::class)
+@ActiveProfiles("staging")
 @DataMongoTest
-class TestMongoQuestionRepositoryIntegration {
+class TestMongoQuestionRepositoryRegression {
 
     @Autowired
     lateinit var data: MongoQuestionRepository
-
     @Autowired
     lateinit var template: MongoTemplate
     @Autowired
     lateinit var questionRepo: QuestionRepository
-    @Autowired
-    lateinit var videoRepo: VideoRepository
-    @Autowired
-    lateinit var tagRepo: TagRepository
 
     val sampleAmount = 200L
     var questionsList = listOf<MongoDatabase.MongoQuestion>()
-    var videosList = listOf<MongoDatabase.MongoVideo>()
 
     @BeforeEach
     fun dataSetup() {

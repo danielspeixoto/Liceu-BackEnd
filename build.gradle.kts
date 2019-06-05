@@ -49,6 +49,8 @@ dependencies {
     runtime("io.jsonwebtoken:jjwt-jackson:0.10.5")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+")
     implementation(group="org.springframework.security.oauth.boot", name="spring-security-oauth2-autoconfigure", version="2.1.5.RELEASE")
+    implementation(group="com.restfb", name="restfb", version="2.21.0")
+
 }
 
 

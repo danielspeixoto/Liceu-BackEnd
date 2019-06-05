@@ -37,7 +37,8 @@ class MongoDatabase {
     data class Channel(
             var title: String
     ) {
-        @Id lateinit var id: String
+        @Id
+        lateinit var id: String
 
         constructor(title: String, id: String) : this(title) {
             this.id = id
@@ -72,4 +73,11 @@ class MongoDatabase {
         @Id
         lateinit var id: ObjectId
     }
+
+    data class MongoUser(
+            var name: String,
+            var email: String,
+            var profilePicture: String,
+            var facebookId: String
+    )
 }

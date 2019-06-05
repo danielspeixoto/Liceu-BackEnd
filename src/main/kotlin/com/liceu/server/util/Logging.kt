@@ -2,14 +2,11 @@ package com.liceu.server.util
 
 import net.logstash.logback.marker.Markers.append
 import org.slf4j.LoggerFactory
-import java.lang.Error
+import org.springframework.beans.factory.annotation.Value
+import java.io.PrintWriter
+import java.io.StringWriter
 
 object Logging {
-
-    const val INFO = "info"
-    const val DEBUG = "debug"
-    const val WARN = "warn"
-    const val ERROR = "error"
 
     val logger = LoggerFactory.getLogger(this.javaClass)!!
     private fun stack(): Pair<List<String>, Int> {
@@ -56,13 +53,14 @@ object Logging {
 
     fun error(eventName: String, tags: List<String> = listOf(), error: Exception, data: Map<String, *> = mapOf<String, String>()) {
         val stack = stack()
-//        TODO: Only when in DEV
-        error.printStackTrace()
+        val errors = StringWriter()
+        error.printStackTrace(PrintWriter(errors))
+        val formatted = errors.toString()
         logger.error(null,
                 append("event", eventName + "_error"),
                 append("data", data),
                 append("tags", tags + listOf("error")),
-                append("error", error),
+                append("error", formatted),
                 append("caller_class", stack.first[0]),
                 append("line_number", stack.second)
         )

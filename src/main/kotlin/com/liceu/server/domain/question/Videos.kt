@@ -16,15 +16,6 @@ class Videos(
     }
 
     override fun run(id: String, start: Int, count: Int): List<Video> {
-        Logging.info(
-                EVENT_NAME,
-                TAGS,
-                hashMapOf(
-                        "count" to count,
-                        "start" to start,
-                        "questionId" to id
-                )
-        )
         var finalAmount = count
         if(count > maxResults) {
             finalAmount = maxResults
@@ -39,7 +30,18 @@ class Videos(
             )
         }
         try {
-            return videoRepo.videos(id, start, finalAmount)
+            val result =  videoRepo.videos(id, start, finalAmount)
+            Logging.info(
+                    EVENT_NAME,
+                    TAGS,
+                    hashMapOf(
+                            "count" to count,
+                            "start" to start,
+                            "questionId" to id,
+                            "retrieved" to result.size
+                    )
+            )
+            return result
         } catch (e: Exception) {
             Logging.error(EVENT_NAME, TAGS, e)
             throw e
