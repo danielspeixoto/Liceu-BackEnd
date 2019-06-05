@@ -36,10 +36,10 @@ class LoginController(
 
         val accessToken = body["accessToken"] ?: ""
         return try {
-//            val userId = authUser.run(accessToken)
+            val userId = authUser.run(accessToken)
             val headers = HttpHeaders()
             val beforeJWT = System.currentTimeMillis()
-            headers[JWTAuthenticationFilter.HEADER_STRING] = jwtAuth.sign(accessToken)
+            headers[JWTAuthenticationFilter.HEADER_STRING] = jwtAuth.sign(userId)
             val timeSpent = hashMapOf<String, Any>(
                     "time" to System.currentTimeMillis() - beforeJWT
             )

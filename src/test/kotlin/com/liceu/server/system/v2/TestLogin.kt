@@ -23,7 +23,7 @@ class TestLogin : TestSystem("/v2/login") {
     @Autowired
     lateinit var jwtAuth: JWTAuth
 
-    val validAccessToken = "EAAf4pgUyFpsBAPO6PS3iO8dycZCy6DBuZCS8nnxmYby0Evc3Qw4PaXwVcalPmYp5CRD0fOT4ovCITH0c2wG2ySXSyAGJH5OXzCHpzZAYM2AA05FMdQDQ0vhKb1ZBZCGe5kDa82XRSLKKhtFtimd63xRfLKLmxVogEze1k48vTnNsZBN2dNDJIalj0CTai5q2IsrntWYLiaVZBjSAYTImKfGM3EHxKVhWLta9USTdOJTggZDZD"
+    val validAccessToken = "EAAf4pgUyFpsBACivxMMHar1zH1sfNxYOEO9VYLZCMPvmvJ7ZAyYhw8BfZCl5MR1QA0JhBhoeYB4f455CP1VHtnz2OwXlYYq8W9eQOXtQzsbFDUxwmFE7RlsfqabsXi5cMJ4k6iXdhMDEfXSJEF6Y7KoZBmZCHLw1mrZA0dZAgAm7O1GetwtZBim2IkVHfM2cAqlGwqybeQRZAagZDZD"
 
     @Test
     fun login_ValidAccessToken_CreatesUserOrLogsIn() {
@@ -49,6 +49,7 @@ class TestLogin : TestSystem("/v2/login") {
 
             assertThat(userRepo.findById(userId).get()).isNotNull()
         }
+        assertThat(userIds.size).isGreaterThan(2)
         userIds.forEach {
             assertThat(it).isEqualTo(lastUserId)
         }

@@ -3,6 +3,7 @@ package com.liceu.server.integration
 import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.DataSetup
+import com.liceu.server.DataSetup.Companion.USER_ID_1
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.UserRepository
@@ -58,7 +59,7 @@ class TestMongoUserRepositoryIntegration {
     @Test
     fun save_UserExists_Updates() {
         val countBefore = userRepository.count()
-        data.save(UserForm(
+        val id = data.save(UserForm(
                 "updatedName",
                 "user1@g.com",
                 Picture(
@@ -68,6 +69,7 @@ class TestMongoUserRepositoryIntegration {
                 "oldId"
         ))
         val user = userRepository.findByEmail("user1@g.com")
+        assertThat(id).isEqualTo(USER_ID_1)
         assertThat(userRepository.count()).isEqualTo(countBefore)
         assertThat(user).isNotNull()
         assertThat(user.name).isEqualTo("updatedName")

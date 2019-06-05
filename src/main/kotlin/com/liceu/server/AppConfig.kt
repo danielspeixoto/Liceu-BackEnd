@@ -1,5 +1,6 @@
 package com.liceu.server
 
+import com.liceu.server.data.FacebookAPI
 import com.liceu.server.data.MongoQuestionRepository
 import com.liceu.server.data.MongoTagRepository
 import com.liceu.server.data.MongoUserRepository
@@ -48,6 +49,10 @@ class AppConfig : AbstractMongoConfiguration() {
         MongoUserRepository(mongoTemplate())
     }
 
+    val facebookAPI by lazy {
+        FacebookAPI()
+    }
+
     val clientUri by lazy {
         MongoClientURI(mongoURI)
     }
@@ -82,7 +87,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun authenticate(): UserBoundary.IAuthenticate {
-        return Authenticate(mongoUserRepository)
+        return Authenticate(mongoUserRepository, facebookAPI)
     }
 }
 

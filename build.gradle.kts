@@ -27,7 +27,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 //	implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.okta.spring:okta-spring-boot-starter:1.2.0")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -48,8 +48,9 @@ dependencies {
     runtime("io.jsonwebtoken:jjwt-impl:0.10.5")
     runtime("io.jsonwebtoken:jjwt-jackson:0.10.5")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+")
-    implementation(group="org.springframework.security.oauth.boot", name="spring-security-oauth2-autoconfigure", version="2.1.5.RELEASE")
-    implementation(group="com.restfb", name="restfb", version="2.21.0")
+    implementation(group = "org.springframework.security.oauth.boot", name = "spring-security-oauth2-autoconfigure", version = "2.1.5.RELEASE")
+    implementation(group = "com.restfb", name = "restfb", version = "2.21.0")
+    implementation(group = "com.maxmind.geoip2", name = "geoip2", version = "2.3.1")
 
 }
 

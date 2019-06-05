@@ -41,7 +41,8 @@ class FacebookAPI : UserBoundary.IAccessTokenResolver {
                     userMap["id"].toString()
             )
         } catch (e: FacebookOAuthException) {
-//            Logging.error("oauth", listOf(AUTH, THIRD_PARTY), e)
+            throw AuthenticationException(e.message)
+        } catch (e: javax.naming.AuthenticationException) {
             throw AuthenticationException(e.message)
         } catch (e: Exception) {
             throw e

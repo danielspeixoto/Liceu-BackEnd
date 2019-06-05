@@ -6,6 +6,7 @@ import com.liceu.server.domain.user.UserForm
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.exists
+import org.springframework.data.mongodb.core.findOne
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
@@ -20,9 +21,6 @@ class MongoUserRepository(
 
     override fun save(user: UserForm): String {
         val query = Query(Criteria("email").isEqualTo(user.email))
-        val userExists = template.exists<MongoDatabase.MongoUser>(
-                query
-        )
         val mongoUser = MongoDatabase.MongoUser(
                 user.name, user.email,
                 MongoDatabase.MongoPicture(
@@ -32,16 +30,11 @@ class MongoUserRepository(
                 ),
                 user.facebookId
         )
-        return if (!userExists) {
-            template.insert(mongoUser).id.toHexString()
-        } else {
-            template.updateFirst<MongoDatabase.MongoUser>(query,
-                    Update.update("name", user.name)
-                            .set("email", user.email)
-                            .set("picture", user.picture)
-                            .set("facebookId", user.facebookId)
-            ).upsertedId.toString()
+        val user = template.findOne<MongoDatabase.MongoUser>(query)
+        if(user != null) {
+            mongoUser.id = user.id
         }
+        return template.save(mongoUser).id.toHexString()
     }
 
 }
