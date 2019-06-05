@@ -41,48 +41,6 @@ class TestMongoQuestionRepositoryIntegration {
     }
 
     @Test
-    fun addTag_hasDifferentTags_adds() {
-        data.addTag(DataSetup.QUESTION_ID_1, "terceira")
-
-        assertThat(questionRepo.findById(DataSetup.QUESTION_ID_1).get().tags)
-                .containsExactly("primeira", "segunda", "terceira")
-                .inOrder()
-    }
-
-    @Test
-    fun addTag_hasNoTags_adds() {
-        data.addTag(DataSetup.QUESTION_ID_3, "terceira")
-
-        assertThat(questionRepo.findById(DataSetup.QUESTION_ID_3).get().tags)
-                .containsExactly("terceira")
-                .inOrder()
-    }
-
-    @Test
-    fun addTag_alreadyHasTag_throwsError() {
-        try {
-            data.addTag(DataSetup.QUESTION_ID_1, "primeira")
-            fail("should throw global")
-        } catch (e: Exception) {
-            assertThat(e).isInstanceOf(TagAlreadyExistsException::class.java)
-        }
-
-        assertThat(questionRepo.findById(DataSetup.QUESTION_ID_1).get().tags)
-                .containsExactly("primeira", "segunda")
-                .inOrder()
-    }
-
-    @Test
-    fun addTag_nonExistentQuestion_throwsError() {
-        try {
-            data.addTag("id0", "primeira")
-            fail("should throw global")
-        } catch (e: Exception) {
-            assertThat(e).isInstanceOf(QuestionNotFoundException::class.java)
-        }
-    }
-
-    @Test
     fun randomByTags_requestMoreThanExists_returnsExistent() {
         val questions = data.randomByTags(listOf("segunda"), 10)
         val ids = questions.map { it.id }

@@ -1,11 +1,19 @@
 package com.liceu.server.domain.user
 
+import com.liceu.server.data.FacebookAPI
+
 class Authenticate(
-        val userRepo: UserBoundary.IRepository
+        val userRepo: UserBoundary.IRepository,
+        val facebookApi: FacebookAPI
 ): UserBoundary.IAuthenticate {
 
     override fun run(facebookAccessToken: String): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        try {
+            val user = facebookApi.data(facebookAccessToken)
+            val id = userRepo.save(user)
+        } catch (e: Exception) {
+
+        }
     }
 
 }

@@ -1,9 +1,6 @@
 package com.liceu.server
 
-import com.liceu.server.data.MongoDatabase
-import com.liceu.server.data.QuestionRepository
-import com.liceu.server.data.TagRepository
-import com.liceu.server.data.VideoRepository
+import com.liceu.server.data.*
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -24,6 +21,10 @@ class DataSetup {
         const val TAG_ID_2 = "29c54d325b75357a571d4cc2"
         const val TAG_ID_3 = "27235b2a67c76abebce3f6e6"
 
+        const val USER_ID_1 = "3a1449a4bdb40abd5ae1e431"
+        const val USER_ID_2 = "39c54d325b75357a571d4cc2"
+        const val USER_ID_3 = "37235b2a67c76abebce3f6e6"
+
         const val INVALID_ID = "99235b2a67c76abebce3f6e6"
     }
 
@@ -33,11 +34,21 @@ class DataSetup {
     lateinit var videoRepo: VideoRepository
     @Autowired
     lateinit var tagRepo: TagRepository
+    @Autowired
+    lateinit var userRepo: UserRepository
 
     fun setup() {
         questionRepo.deleteAll()
         videoRepo.deleteAll()
         tagRepo.deleteAll()
+        userRepo.deleteAll()
+        questions()
+        videos()
+        tags()
+        users()
+    }
+
+    fun questions() {
         val q1 = MongoDatabase.MongoQuestion(
                 byteArrayOf('a'.toByte(), 'b'.toByte()),
                 "ENEM",
@@ -90,6 +101,9 @@ class DataSetup {
         q3.id = ObjectId(QUESTION_ID_3)
         questionRepo.insert(q3)
 
+    }
+
+    fun videos() {
         val item1 = MongoDatabase.MongoVideo(
                 "primeira",
                 "primeiro video",
@@ -147,7 +161,9 @@ class DataSetup {
         )
         item3.id = ObjectId(VIDEO_ID_3)
         videoRepo.insert(item3)
+    }
 
+    fun tags() {
         val tag1 = MongoDatabase.MongoTag(
                 "primeira",
                 1
@@ -167,6 +183,33 @@ class DataSetup {
         )
         tag3.id = ObjectId(TAG_ID_3)
         tagRepo.insert(tag3)
+    }
+
+    fun users() {
+        val user1 = MongoDatabase.MongoUser(
+                "user1",
+                "user1@g.com",
+                MongoDatabase.MongoPicture(
+                        "https://picture1.jpg",
+                        200,
+                        200
+                ),
+                "facebookId1"
+        )
+        user1.id = ObjectId(USER_ID_1)
+        userRepo.insert(user1)
+        val user2 = MongoDatabase.MongoUser(
+                "user2",
+                "user2@g.com",
+                MongoDatabase.MongoPicture(
+                        "https://picture2.jpg",
+                        200,
+                        200
+                ),
+                "facebookId2"
+        )
+        user2.id = ObjectId(USER_ID_2)
+        userRepo.insert(user2)
     }
 }
 

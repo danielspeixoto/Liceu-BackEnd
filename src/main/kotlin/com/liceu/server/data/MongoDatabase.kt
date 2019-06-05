@@ -3,6 +3,7 @@ package com.liceu.server.data
 import org.bson.types.Binary
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 
 class MongoDatabase {
@@ -11,6 +12,7 @@ class MongoDatabase {
         const val QUESTION_COLLECTION = "questions"
         const val VIDEO_COLLECTION = "relatedVideos"
         const val TAG_COLLECTION = "tag"
+        const val USER_COLLECTION = "user"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -74,10 +76,22 @@ class MongoDatabase {
         lateinit var id: ObjectId
     }
 
+    data class MongoPicture(
+            var url: String,
+            var width: Int,
+            var height: Int
+    )
+
+    @Document(collection = MongoDatabase.USER_COLLECTION)
     data class MongoUser(
             var name: String,
-            var email: String,
-            var profilePicture: String,
+            @Indexed(unique=true) var email: String,
+            var picture: MongoPicture,
             var facebookId: String
-    )
+    ) {
+        @Id
+        lateinit var id: ObjectId
+
+
+    }
 }
