@@ -2,10 +2,10 @@ package com.liceu.server.presentation.v2
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.user.UserBoundary
-import com.liceu.server.presentation.util.JWTAuth
-import com.liceu.server.presentation.util.networkData
+import com.liceu.server.util.JWTAuth
 import com.liceu.server.presentation.v1.Response
 import com.liceu.server.util.Logging
+import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping("/v2/login")
@@ -24,6 +23,9 @@ class LoginController(
     @Autowired
     lateinit var jwtAuth: JWTAuth
 
+    @Autowired
+    lateinit var netUtils: NetworkUtils
+
     @PostMapping
     fun login(
             @RequestBody body: HashMap<String, String>,
@@ -31,7 +33,7 @@ class LoginController(
     ): ResponseEntity<Response<Void>> {
         val eventName = "login_post"
         val eventTags = listOf(NETWORK, AUTH)
-        val networkData = networkData(request)
+        val networkData = netUtils.networkData(request)
         Logging.info(eventName, eventTags, data = networkData)
 
         val accessToken = body["accessToken"] ?: ""

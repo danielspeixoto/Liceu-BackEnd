@@ -3,8 +3,9 @@ package com.liceu.server.presentation.v2
 import com.liceu.server.domain.global.AUTH
 import com.liceu.server.domain.global.AuthenticationException
 import com.liceu.server.domain.global.NETWORK
-import com.liceu.server.presentation.util.networkData
 import com.liceu.server.util.Logging
+import com.liceu.server.util.NetworkUtils
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import javax.servlet.FilterChain
 import javax.servlet.annotation.WebFilter
@@ -21,6 +22,9 @@ class ApiKeyAuthorizationFilter : HttpFilter() {
 
     @Value("\${client.api_key}")
     lateinit var apiKey: String
+    @Autowired
+    lateinit var netUtils: NetworkUtils
+
 
     override fun doFilter(request: HttpServletRequest?, response: HttpServletResponse?, chain: FilterChain?) {
         request!!
@@ -30,7 +34,7 @@ class ApiKeyAuthorizationFilter : HttpFilter() {
                     "api_key_auth",
                     listOf(NETWORK, AUTH),
                     AuthenticationException("client sent wrong api key"),
-                    data = networkData(request) + hashMapOf(
+                    data = netUtils.networkData(request) + hashMapOf(
                             "apiKeySent" to key
                     )
             )

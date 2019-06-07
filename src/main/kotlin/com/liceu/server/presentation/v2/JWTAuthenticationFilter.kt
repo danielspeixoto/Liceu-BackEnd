@@ -4,9 +4,9 @@ import com.liceu.server.domain.global.AUTH
 import com.liceu.server.domain.global.AuthenticationException
 import com.liceu.server.domain.global.DECRYPTION
 import com.liceu.server.domain.global.NETWORK
-import com.liceu.server.presentation.util.JWTAuth
-import com.liceu.server.presentation.util.networkData
+import com.liceu.server.util.JWTAuth
 import com.liceu.server.util.Logging
+import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
 import javax.servlet.http.HttpServletRequest
 
@@ -20,6 +20,8 @@ class JWTAuthenticationFilter : HttpFilter() {
 
     @Autowired
     lateinit var jwtAuth: JWTAuth
+    @Autowired
+    lateinit var netUtils: NetworkUtils
 
     companion object {
         const val HEADER_STRING = "Authorization"
@@ -43,7 +45,7 @@ class JWTAuthenticationFilter : HttpFilter() {
                     "user_auth",
                     listOf(AUTH, NETWORK, DECRYPTION),
                     AuthenticationException("user sent invalid JWT"),
-                    networkData(request) + timeSpent
+                    netUtils.networkData(request) + timeSpent
             )
             response!!.status = 401
             return

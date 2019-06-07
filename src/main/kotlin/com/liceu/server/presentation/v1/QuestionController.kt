@@ -4,13 +4,13 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.video.Video
-import com.liceu.server.presentation.util.networkData
 import com.liceu.server.presentation.v1.Response.Companion.ALREADY_EXISTS_ERROR_CODE
 import com.liceu.server.presentation.v1.Response.Companion.NOT_FOUND_ERROR_CODE
 import com.liceu.server.presentation.v1.Response.Companion.STATUS_ERROR
 import com.liceu.server.presentation.v1.Response.Companion.UNKNOWN_ERROR_CODE
 import com.liceu.server.presentation.v1.Response.Companion.VALIDATION_ERROR_CODE
 import com.liceu.server.util.Logging
+import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.lang.Exception
@@ -23,6 +23,9 @@ class QuestionController(
         @Autowired val addTag: QuestionBoundary.IAddTag,
         @Autowired val videos: QuestionBoundary.IVideos
 ) {
+
+    @Autowired
+    lateinit var netUtils: NetworkUtils
 
     data class QuestionResponse(
             val id: String,
@@ -59,9 +62,9 @@ class QuestionController(
     ): Response<List<QuestionResponse>> {
         val eventName = "question_get"
         val eventTags = listOf(NETWORK, QUESTION, RETRIEVAL)
-        val networkData = networkData(request)
+        val networkData = netUtils.networkData(request)
 
-        Logging.info(eventName, eventTags, data = networkData)
+        Logging.info(eventName, eventTags, data =networkData)
         return try {
             val result = random.run(tagNames, amount)
             Response(result.map { toQuestionResponse(it) })
@@ -84,7 +87,7 @@ class QuestionController(
     ): Response<List<Map<String, Any>>> {
         val eventName = "question_videos_get"
         val eventTags = listOf(NETWORK, QUESTION, RETRIEVAL, VIDEO)
-        val networkData = networkData(request)
+        val networkData =  netUtils.networkData(request)
 
         Logging.info(eventName, eventTags, data = networkData)
         return try {
@@ -108,7 +111,7 @@ class QuestionController(
     ): Response<HashMap<String,Any>> {
         val eventName = "question_tags_post"
         val eventTags = listOf(NETWORK, QUESTION, INSERTION, TAG)
-        val networkData = networkData(request)
+        val networkData =  netUtils.networkData(request)
 
         Logging.info(eventName, eventTags, data = networkData)
 

@@ -18,7 +18,7 @@ object Logging {
         return listOf(className, methodName) to lineNumber
     }
 
-    fun info(eventName: String, tags: List<String> = listOf(), data: HashMap<String, Any> = hashMapOf()) {
+    fun info(eventName: String, tags: List<String> = listOf(), data: Map<String, Any> = hashMapOf()) {
         val stack = stack()
         logger.info(null,
                 append("event", eventName),
@@ -29,7 +29,7 @@ object Logging {
         )
     }
 
-    fun debug(eventName: String, tags: List<String> = listOf(), data: HashMap<String, Any> = hashMapOf()) {
+    fun debug(eventName: String, tags: List<String> = listOf(), data: Map<String, Any> = hashMapOf()) {
         val stack = stack()
         logger.debug(null,
                 append("event", eventName),
@@ -40,7 +40,7 @@ object Logging {
         )
     }
 
-    fun warn(eventName: String, tags: List<String> = listOf(), data: HashMap<String, Any> = hashMapOf()) {
+    fun warn(eventName: String, tags: List<String> = listOf(), data: Map<String, Any> = hashMapOf()) {
         val stack = stack()
         logger.warn(null,
                 append("event", eventName),

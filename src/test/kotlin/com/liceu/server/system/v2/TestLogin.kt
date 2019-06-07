@@ -1,16 +1,12 @@
 package com.liceu.server.system.v2
 
 import com.google.common.truth.Truth.assertThat
-import com.liceu.server.data.QuestionRepository
 import com.liceu.server.data.UserRepository
-import com.liceu.server.domain.user.UserBoundary
-import com.liceu.server.presentation.util.JWTAuth
+import com.liceu.server.util.JWTAuth
 import com.liceu.server.system.TestSystem
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
-import org.springframework.boot.test.web.client.postForEntity
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
