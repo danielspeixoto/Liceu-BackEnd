@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 import java.io.File
 import java.net.InetAddress
 
-@Component
 class GeoLocator {
 
     val dbReader = DatabaseReader.Builder(ClassPathResource("GeoLite2-City.mmdb").file).build()
