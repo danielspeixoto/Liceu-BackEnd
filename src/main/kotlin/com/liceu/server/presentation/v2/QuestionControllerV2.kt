@@ -1,4 +1,4 @@
-package com.liceu.server.presentation.v1
+package com.liceu.server.presentation.v2
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.question.Question
@@ -18,10 +18,9 @@ import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
 
 @RestController
-@RequestMapping("/question")
-class QuestionController(
+@RequestMapping("/v2/question")
+class QuestionControllerV2(
         @Autowired val random: QuestionBoundary.IRandom,
-        @Autowired val addTag: QuestionBoundary.IAddTag,
         @Autowired val videos: QuestionBoundary.IVideos
 ) {
 
@@ -43,20 +42,9 @@ class QuestionController(
             val height: Int
     )
 
-    data class VideoResponse(
-            val id: String,
-            val title: String,
-            val description: String,
-            val videoId: String,
-            val questionId: String,
-            val aspectRatio: Float,
-            val thumbnail: String,
-            val channelTitle: String
-    )
-
     @GetMapping
     fun questions(
-            @RequestParam(value = "tags[]", defaultValue = "") tagNames: List<String>,
+            @RequestParam(value = "tags", defaultValue = "") tagNames: List<String>,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
             request: HttpServletRequest
 
@@ -66,7 +54,7 @@ class QuestionController(
         val networkData = netUtils.networkData(request)
 
         Logging.info(eventName, eventTags, data =networkData + hashMapOf<String, Any>(
-                "version" to 1
+                "version" to 2
         ))
         return try {
             val result = random.run(tagNames, amount)
@@ -81,7 +69,7 @@ class QuestionController(
         }
     }
 
-    @GetMapping("/{questionId}/relatedVideos")
+    @GetMapping("/{questionId}/videos")
     fun videos(
             @PathVariable("questionId") questionId: String,
             @RequestParam(value = "start", defaultValue = "0") start: Int,
@@ -93,7 +81,7 @@ class QuestionController(
         val networkData =  netUtils.networkData(request)
 
         Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
-                "version" to 1
+                "version" to 2
         ))
         return try {
             val result = videos.run(questionId, start, amount)
@@ -108,46 +96,10 @@ class QuestionController(
         }
     }
 
-    @PostMapping("/{questionId}/tags")
-    fun tags(
-            @PathVariable("questionId") questionId: String,
-            @RequestBody body: HashMap<String, Any>,
-            request: HttpServletRequest
-    ): Response<HashMap<String, Any>> {
-        val eventName = "question_tags_post"
-        val eventTags = listOf(NETWORK, QUESTION, INSERTION, TAG)
-        val networkData =  netUtils.networkData(request)
-
-        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
-                "version" to 1
-        ))
-
-        return try {
-            if (!body.containsKey("name") || body["name"] !is String) {
-                throw InputValidationException()
-            }
-            addTag.run(questionId, body["name"] as String)
-            Response()
-        } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            val errorCode = when (e) {
-                is ItemNotFoundException -> NOT_FOUND_ERROR_CODE
-                is TagAlreadyExistsException -> ALREADY_EXISTS_ERROR_CODE
-                is InputValidationException -> VALIDATION_ERROR_CODE
-                else -> UNKNOWN_ERROR_CODE
-            }
-            Response(hashMapOf(), status = STATUS_ERROR, errorCode = errorCode)
-        }
-    }
-
     fun toQuestionResponse(question: Question): QuestionResponse {
         return QuestionResponse(
                 question.id,
-                question.view,
+                question.imageURL,
                 question.source,
                 question.variant,
                 question.edition,

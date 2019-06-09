@@ -1,4 +1,4 @@
-package com.liceu.server.presentation.v1
+package com.liceu.server.presentation
 
 data class Response<T>(
         val data: T? = null,

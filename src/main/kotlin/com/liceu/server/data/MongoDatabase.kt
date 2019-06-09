@@ -61,7 +61,8 @@ class MongoDatabase {
             var referenceId: String,
             var stage: Int,
             var width: Int,
-            var height: Int
+            var height: Int,
+            var imageURL: String
     ) {
         @Id
         lateinit var id: ObjectId

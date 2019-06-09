@@ -47,7 +47,8 @@ class MongoQuestionRepository(
                     it.referenceId,
                     it.stage,
                     it.width,
-                    it.height
+                    it.height,
+                    it.imageURL
             )
         }
     }

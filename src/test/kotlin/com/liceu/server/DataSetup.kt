@@ -62,7 +62,8 @@ class DataSetup {
                 "referenceId",
                 2,
                 100,
-                200
+                200,
+                "https://url1.com"
         )
         q1.id = ObjectId(QUESTION_ID_1)
         questionRepo.insert(q1)
@@ -79,7 +80,8 @@ class DataSetup {
                 "referenceId2",
                 2,
                 100,
-                200
+                200,
+                "https://url2.com"
         )
         q2.id = ObjectId(QUESTION_ID_2)
         questionRepo.insert(q2)
@@ -96,7 +98,8 @@ class DataSetup {
                 "referenceId3",
                 1,
                 100,
-                200
+                200,
+                "https://url3.com"
         )
         q3.id = ObjectId(QUESTION_ID_3)
         questionRepo.insert(q3)

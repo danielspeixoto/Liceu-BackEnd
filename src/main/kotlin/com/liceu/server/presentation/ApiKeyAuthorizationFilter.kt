@@ -1,4 +1,4 @@
-package com.liceu.server.presentation.v2
+package com.liceu.server.presentation
 
 import com.liceu.server.domain.global.AUTH
 import com.liceu.server.domain.global.AuthenticationException

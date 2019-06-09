@@ -17,5 +17,6 @@ data class Question(
         val referenceId: String,
         val stage: Int,
         val width: Int,
-        val height: Int
+        val height: Int,
+        val imageURL: String
 )

@@ -99,7 +99,8 @@ class TestMongoQuestionRepositoryIntegration {
                 "referenceId",
                 2,
                 100,
-                200
+                200,
+                "https://url1.com"
         )
 
         EqualsTester()

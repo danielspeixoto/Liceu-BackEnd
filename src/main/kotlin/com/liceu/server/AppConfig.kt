@@ -10,11 +10,8 @@ import com.liceu.server.domain.question.Random
 import com.liceu.server.domain.question.Videos
 import com.liceu.server.domain.user.Authenticate
 import com.liceu.server.domain.user.UserBoundary
-import com.liceu.server.presentation.v2.JWTAuthenticationFilter
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
-import org.apache.catalina.connector.Connector
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
@@ -24,7 +21,6 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
-import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.stereotype.Component
 

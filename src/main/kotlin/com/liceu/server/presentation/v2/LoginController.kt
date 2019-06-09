@@ -2,8 +2,9 @@ package com.liceu.server.presentation.v2
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.user.UserBoundary
+import com.liceu.server.presentation.JWTAuthenticationFilter
 import com.liceu.server.util.JWTAuth
-import com.liceu.server.presentation.v1.Response
+import com.liceu.server.presentation.Response
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,9 +33,11 @@ class LoginController(
             request: HttpServletRequest
     ): ResponseEntity<Response<Void>> {
         val eventName = "login_post"
-        val eventTags = listOf(NETWORK, AUTH)
+        val eventTags = listOf(CONTROLLER, NETWORK, AUTH)
         val networkData = netUtils.networkData(request)
-        Logging.info(eventName, eventTags, data = networkData)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
 
         val accessToken = body["accessToken"] ?: ""
         return try {

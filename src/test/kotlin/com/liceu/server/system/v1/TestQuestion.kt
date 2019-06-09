@@ -2,12 +2,12 @@ package com.liceu.server.system.v1
 
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.*
-import com.liceu.server.presentation.v1.Response.Companion.STATUS_OK
+import com.liceu.server.presentation.Response.Companion.STATUS_OK
 import com.liceu.server.system.TestSystem
 import com.liceu.server.util.*
 import org.junit.jupiter.api.Test
 
-class TestQuestion : TestSystem("question") {
+class TestQuestion : TestSystem("/question") {
 
     @Test
     fun randomQuestion_WhenNoTagsSpecified_ReturnsAnyRandomly() {
@@ -66,17 +66,6 @@ class TestQuestion : TestSystem("question") {
         val data = response.data!!
         assertThat(data).isEmpty()
     }
-
-//    @Test
-//    fun randomQuestion_AmountTooBig_ReturnsMax() {
-////        TODO Change Property
-//        val response = getListResponse(restTemplate, "$baseUrl?amount=2tags[]=segunda")
-//        assertThat(response.status).isEqualTo(STATUS_OK)
-//        assertThat(response.errorCode).isEqualTo(null)
-//        val data = response.data!!
-//        assertThat(data.size).isEqualTo(1)
-//    }
-
 
     @Test
     fun randomQuestion_ValidRequest_ValidData() {

@@ -1,4 +1,4 @@
-package com.liceu.server.presentation.v2
+package com.liceu.server.presentation
 
 import com.liceu.server.domain.global.AUTH
 import com.liceu.server.domain.global.AuthenticationException
@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpFilter
 import javax.servlet.http.HttpServletResponse
 
-@WebFilter(urlPatterns = ["/v2/*"])
+@WebFilter(urlPatterns = ["/v2/game*"])
 class JWTAuthenticationFilter : HttpFilter() {
 
     @Autowired
@@ -33,27 +33,38 @@ class JWTAuthenticationFilter : HttpFilter() {
             chain!!.doFilter(request, response)
             return
         }
-        val token = request.getHeader(HEADER_STRING)
-        val beforeJWT = System.currentTimeMillis()
-        val authentication = jwtAuth.authentication(token)
-        val timeSpent = hashMapOf<String, Any>(
-                "time" to System.currentTimeMillis() - beforeJWT
-        )
-
-        if (authentication == null) {
+        try {
+            val token = request.getHeader(HEADER_STRING) ?: ""
+            val beforeJWT = System.currentTimeMillis()
+            val authentication = jwtAuth.authentication(token)
+            val timeSpent = hashMapOf<String, Any>(
+                    "time" to System.currentTimeMillis() - beforeJWT
+            )
+            if (authentication == null) {
+                Logging.error(
+                        "user_auth",
+                        listOf(AUTH, NETWORK, DECRYPTION),
+                        AuthenticationException("user sent invalid JWT"),
+                        netUtils.networkData(request) + timeSpent
+                )
+                response!!.status = 401
+                return
+            } else {
+                Logging.info("jwt_parsing", listOf(AUTH, DECRYPTION), timeSpent)
+            }
+            request.setAttribute("userId", authentication)
+            chain!!.doFilter(request, response)
+        } catch (e: Exception) {
             Logging.error(
                     "user_auth",
                     listOf(AUTH, NETWORK, DECRYPTION),
-                    AuthenticationException("user sent invalid JWT"),
-                    netUtils.networkData(request) + timeSpent
+                    e,
+                    netUtils.networkData(request)
             )
             response!!.status = 401
             return
-        } else {
-            Logging.info("jwt_parsing", listOf(AUTH, DECRYPTION), timeSpent)
         }
-        request.setAttribute("userId", authentication)
-        chain!!.doFilter(request, response)
+
     }
 
 }
