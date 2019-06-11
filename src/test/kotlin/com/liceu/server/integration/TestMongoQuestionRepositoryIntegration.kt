@@ -2,23 +2,20 @@ package com.liceu.server.integration
 
 import com.google.common.testing.EqualsTester
 import com.google.common.truth.Truth.assertThat
-import com.liceu.server.*
+import com.liceu.server.DataSetup
+import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoQuestionRepository
 import com.liceu.server.data.QuestionRepository
-import com.liceu.server.domain.global.TagAlreadyExistsException
-import com.liceu.server.domain.global.QuestionNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.video.Video
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.api.fail
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
-import java.lang.Exception
 
 
 @ExtendWith(SpringExtension::class)

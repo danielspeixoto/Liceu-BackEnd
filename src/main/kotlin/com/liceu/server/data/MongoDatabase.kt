@@ -1,10 +1,12 @@
 package com.liceu.server.data
 
+import com.liceu.server.domain.game.Answer
 import org.bson.types.Binary
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
+import java.util.*
 
 class MongoDatabase {
 
@@ -13,6 +15,7 @@ class MongoDatabase {
         const val VIDEO_COLLECTION = "relatedVideos"
         const val TAG_COLLECTION = "tag"
         const val USER_COLLECTION = "user"
+        const val GAME_COLLECTION = "game"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -94,5 +97,21 @@ class MongoDatabase {
         lateinit var id: ObjectId
 
 
+    }
+
+    data class MongoAnswer(
+            val questionId: String,
+            val correctAnswer: Int,
+            val selectedAnswer: Int
+    )
+
+    @Document(collection = MongoDatabase.GAME_COLLECTION)
+    data class MongoGame(
+            val userId: ObjectId,
+            val answers: List<MongoAnswer>,
+            @Indexed val submissionDate: Date
+    ) {
+        @Id
+        lateinit var id: ObjectId
     }
 }

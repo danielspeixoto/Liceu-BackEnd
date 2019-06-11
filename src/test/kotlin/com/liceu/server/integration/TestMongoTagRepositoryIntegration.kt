@@ -2,12 +2,15 @@ package com.liceu.server.integration
 
 import com.google.common.testing.EqualsTester
 import com.google.common.truth.Truth.assertThat
-import com.liceu.server.*
+import com.liceu.server.DataSetup
+import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoTagRepository
 import com.liceu.server.data.TagRepository
 import com.liceu.server.domain.global.TagNotFoundException
 import com.liceu.server.domain.tag.Tag
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest

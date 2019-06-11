@@ -4,6 +4,8 @@ import com.liceu.server.data.*
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.time.Instant
+import java.util.*
 
 @Component
 class DataSetup {
@@ -25,6 +27,10 @@ class DataSetup {
         const val USER_ID_2 = "39c54d325b75357a571d4cc2"
         const val USER_ID_3 = "37235b2a67c76abebce3f6e6"
 
+        const val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
+        const val GAME_ID_2 = "49c54d325b75357a571d4cc2"
+        const val GAME_ID_3 = "47235b2a67c76abebce3f6e6"
+
         const val INVALID_ID = "99235b2a67c76abebce3f6e6"
     }
 
@@ -36,16 +42,20 @@ class DataSetup {
     lateinit var tagRepo: TagRepository
     @Autowired
     lateinit var userRepo: UserRepository
+    @Autowired
+    lateinit var gameRepo: GameRepository
 
     fun setup() {
         questionRepo.deleteAll()
         videoRepo.deleteAll()
         tagRepo.deleteAll()
         userRepo.deleteAll()
+        gameRepo.deleteAll()
         questions()
         videos()
         tags()
         users()
+        games()
     }
 
     fun questions() {
@@ -92,7 +102,7 @@ class DataSetup {
                 2015,
                 15,
                 "linguagens",
-                1,
+                3,
                 listOf(),
                 "54321",
                 "referenceId3",
@@ -213,6 +223,45 @@ class DataSetup {
         )
         user2.id = ObjectId(USER_ID_2)
         userRepo.insert(user2)
+    }
+
+    fun games() {
+        val game1 = MongoDatabase.MongoGame(
+                ObjectId( USER_ID_1),
+                listOf(
+                        MongoDatabase.MongoAnswer(
+                                QUESTION_ID_1,
+                                1,
+                                2
+                        ),
+                        MongoDatabase.MongoAnswer(
+                                QUESTION_ID_3,
+                                3,
+                                3
+                        )
+                ),
+                Date.from(Instant.parse("2019-10-10T10:10:10.00Z"))
+        )
+        game1.id = ObjectId(GAME_ID_1)
+        gameRepo.insert(game1)
+        val game2 = MongoDatabase.MongoGame(
+                ObjectId(USER_ID_2),
+                listOf(
+                        MongoDatabase.MongoAnswer(
+                                QUESTION_ID_1,
+                                1,
+                                2
+                        ),
+                        MongoDatabase.MongoAnswer(
+                                QUESTION_ID_3,
+                                3,
+                                2
+                        )
+                ),
+                Date.from(Instant.parse("2019-11-11T11:20:20.00Z"))
+        )
+        game2.id = ObjectId(GAME_ID_2)
+        gameRepo.insert(game2)
     }
 }
 
