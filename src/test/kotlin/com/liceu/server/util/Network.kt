@@ -21,28 +21,3 @@ fun getListResponse(restTemplate: TestRestTemplate, url: String): Response<List<
             errorCode as Int?
     )
 }
-
-
-fun postResponse(restTemplate: TestRestTemplate, url: String, req: HashMap<String, Any>): Response<HashMap<String, Any>> {
-    val result = restTemplate.postForObject<HashMap<String, *>>(url, req)!!
-    val status = result["status"]
-    val errorCode = result["errorCode"]
-    val data = result["data"]
-    return Response(
-            data as HashMap<String, Any>?,
-            status as String,
-            errorCode as Int?
-    )
-}
-
-fun <T>TestRestTemplate.danielRequest(headers: HttpHeaders, body: Map<String, Any>, method: HttpMethod, url: String): Response<T> {
-    val headers = HttpHeaders()
-    headers["API_KEY"] = "apikey"
-    val entity = HttpEntity<Void>(headers)
-    val response = restTemplate.exchange<HashMap<String,Any>>(url, HttpMethod.POST, entity)
-    return Response(
-//            data as T,
-//            status as String,
-//            errorCode as Int?
-    )
-}

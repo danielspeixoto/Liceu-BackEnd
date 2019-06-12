@@ -17,7 +17,7 @@ class MongoGameRepository(
         val result = template.insert(MongoDatabase.MongoGame(
                 ObjectId(game.userId),
                 game.answers.map { MongoDatabase.MongoAnswer(
-                        it.questionId,
+                        ObjectId(it.questionId),
                         it.correctAnswer,
                         it.selectedAnswer
                 ) },
@@ -31,7 +31,7 @@ class MongoGameRepository(
                 doc.id.toHexString(),
                 doc.userId.toHexString(),
                 doc.answers.map { Answer(
-                        it.questionId,
+                        it.questionId.toHexString(),
                         it.correctAnswer,
                         it.selectedAnswer
                 ) },

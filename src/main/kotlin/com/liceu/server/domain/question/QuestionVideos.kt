@@ -5,7 +5,7 @@ import com.liceu.server.domain.video.Video
 import com.liceu.server.util.Logging
 import java.lang.Exception
 
-class Videos(
+class QuestionVideos(
         val videoRepo: QuestionBoundary.IRepository,
         val maxResults: Int
 ): QuestionBoundary.IVideos {

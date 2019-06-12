@@ -1,45 +1,51 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.util.JWTAuth
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import org.springframework.test.context.ContextConfiguration
 import java.time.Instant
 import java.util.*
 
 @Component
+@ContextConfiguration(classes=[TestConfiguration::class])
 class DataSetup {
 
-    companion object {
-        const val QUESTION_ID_1 = "0a1449a4bdb40abd5ae1e431"
-        const val QUESTION_ID_2 = "09c54d325b75357a571d4cc2"
-        const val QUESTION_ID_3 = "07235b2a67c76abebce3f6e6"
+    @Autowired
+    lateinit var jwtAuth: JWTAuth
 
-        const val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
-        const val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
-        const val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
+    val QUESTION_ID_1 = "0a1449a4bdb40abd5ae1e431"
+    val QUESTION_ID_2 = "09c54d325b75357a571d4cc2"
+    val QUESTION_ID_3 = "07235b2a67c76abebce3f6e6"
 
-        const val TAG_ID_1 = "2a1449a4bdb40abd5ae1e431"
-        const val TAG_ID_2 = "29c54d325b75357a571d4cc2"
-        const val TAG_ID_3 = "27235b2a67c76abebce3f6e6"
+    val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
+    val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
+    val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
 
-        const val USER_ID_1 = "3a1449a4bdb40abd5ae1e431"
-        const val USER_ID_2 = "39c54d325b75357a571d4cc2"
-        const val USER_ID_3 = "37235b2a67c76abebce3f6e6"
+    val TAG_ID_1 = "2a1449a4bdb40abd5ae1e431"
+    val TAG_ID_2 = "29c54d325b75357a571d4cc2"
+    val TAG_ID_3 = "27235b2a67c76abebce3f6e6"
 
-        const val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
-        const val GAME_ID_2 = "49c54d325b75357a571d4cc2"
-        const val GAME_ID_3 = "47235b2a67c76abebce3f6e6"
-
-        const val INVALID_ID = "99235b2a67c76abebce3f6e6"
+    val USER_ID_1 = "3a1449a4bdb40abd5ae1e431"
+    val USER_1_ACCESS_TOKEN by lazy {
+        jwtAuth.sign(USER_ID_1)
     }
+
+    val USER_ID_2 = "39c54d325b75357a571d4cc2"
+    val USER_ID_3 = "37235b2a67c76abebce3f6e6"
+
+    val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
+    val GAME_ID_2 = "49c54d325b75357a571d4cc2"
+    val GAME_ID_3 = "47235b2a67c76abebce3f6e6"
+
+    val INVALID_ID = "99235b2a67c76abebce3f6e6"
 
     @Autowired
     lateinit var questionRepo: QuestionRepository
     @Autowired
     lateinit var videoRepo: VideoRepository
-    @Autowired
-    lateinit var tagRepo: TagRepository
     @Autowired
     lateinit var userRepo: UserRepository
     @Autowired
@@ -48,12 +54,10 @@ class DataSetup {
     fun setup() {
         questionRepo.deleteAll()
         videoRepo.deleteAll()
-        tagRepo.deleteAll()
         userRepo.deleteAll()
         gameRepo.deleteAll()
         questions()
         videos()
-        tags()
         users()
         games()
     }
@@ -176,28 +180,6 @@ class DataSetup {
         videoRepo.insert(item3)
     }
 
-    fun tags() {
-        val tag1 = MongoDatabase.MongoTag(
-                "primeira",
-                1
-        )
-        tag1.id = ObjectId(TAG_ID_1)
-        tagRepo.insert(tag1)
-        val tag2 = MongoDatabase.MongoTag(
-                "segunda",
-                2
-        )
-        tag2.id = ObjectId(TAG_ID_2)
-        tagRepo.insert(tag2)
-
-        val tag3 = MongoDatabase.MongoTag(
-                "terceira",
-                0
-        )
-        tag3.id = ObjectId(TAG_ID_3)
-        tagRepo.insert(tag3)
-    }
-
     fun users() {
         val user1 = MongoDatabase.MongoUser(
                 "user1",
@@ -230,12 +212,12 @@ class DataSetup {
                 ObjectId( USER_ID_1),
                 listOf(
                         MongoDatabase.MongoAnswer(
-                                QUESTION_ID_1,
+                                ObjectId(QUESTION_ID_1),
                                 1,
                                 2
                         ),
                         MongoDatabase.MongoAnswer(
-                                QUESTION_ID_3,
+                                ObjectId(QUESTION_ID_3),
                                 3,
                                 3
                         )
@@ -248,12 +230,12 @@ class DataSetup {
                 ObjectId(USER_ID_2),
                 listOf(
                         MongoDatabase.MongoAnswer(
-                                QUESTION_ID_1,
+                                ObjectId(QUESTION_ID_1),
                                 1,
                                 2
                         ),
                         MongoDatabase.MongoAnswer(
-                                QUESTION_ID_3,
+                                ObjectId(QUESTION_ID_3),
                                 3,
                                 2
                         )

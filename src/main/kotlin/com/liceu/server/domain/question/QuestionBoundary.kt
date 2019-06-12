@@ -10,8 +10,6 @@ class QuestionBoundary {
 
         @Throws(Error::class)
         fun randomByTags(tags: List<String>, amount: Int): List<Question>
-        @Throws(TagAlreadyExistsException::class, QuestionNotFoundException::class)
-        fun addTag(id: String, tag: String)
         @Throws(Error::class)
         fun videos(id: String, start: Int, count: Int): List<Video>
 
@@ -21,13 +19,6 @@ class QuestionBoundary {
 
         @Throws(Error::class)
         fun run(tags: List<String>, amount: Int): List<Question>
-
-    }
-
-    interface IAddTag {
-
-        @Throws(TagAlreadyExistsException::class, QuestionNotFoundException::class)
-        fun run(id: String, tag: String)
 
     }
 

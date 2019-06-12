@@ -31,7 +31,7 @@ class LoginController(
     fun login(
             @RequestBody body: HashMap<String, String>,
             request: HttpServletRequest
-    ): ResponseEntity<Response<Void>> {
+    ): ResponseEntity<Void> {
         val eventName = "login_post"
         val eventTags = listOf(CONTROLLER, NETWORK, AUTH)
         val networkData = netUtils.networkData(request)
@@ -49,8 +49,9 @@ class LoginController(
                     "time" to System.currentTimeMillis() - beforeJWT
             )
             Logging.info("jwt_sign", listOf(AUTH, ENCRYPTION), timeSpent)
-            ResponseEntity(Response(), headers, HttpStatus.OK)
+            ResponseEntity(null, headers, HttpStatus.OK)
         } catch (e: Exception) {
+//            TODO Check for another types of exceptions for custom handling
             Logging.error(
                     eventName,
                     eventTags,

@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("/question")
 class QuestionController(
         @Autowired val random: QuestionBoundary.IRandom,
-        @Autowired val addTag: QuestionBoundary.IAddTag,
         @Autowired val videos: QuestionBoundary.IVideos
 ) {
 
@@ -108,41 +107,7 @@ class QuestionController(
         }
     }
 
-    @PostMapping("/{questionId}/tags")
-    fun tags(
-            @PathVariable("questionId") questionId: String,
-            @RequestBody body: HashMap<String, Any>,
-            request: HttpServletRequest
-    ): Response<HashMap<String, Any>> {
-        val eventName = "question_tags_post"
-        val eventTags = listOf(NETWORK, QUESTION, INSERTION, TAG)
-        val networkData =  netUtils.networkData(request)
 
-        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
-                "version" to 1
-        ))
-
-        return try {
-            if (!body.containsKey("name") || body["name"] !is String) {
-                throw InputValidationException()
-            }
-            addTag.run(questionId, body["name"] as String)
-            Response()
-        } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            val errorCode = when (e) {
-                is ItemNotFoundException -> NOT_FOUND_ERROR_CODE
-                is TagAlreadyExistsException -> ALREADY_EXISTS_ERROR_CODE
-                is InputValidationException -> VALIDATION_ERROR_CODE
-                else -> UNKNOWN_ERROR_CODE
-            }
-            Response(hashMapOf(), status = STATUS_ERROR, errorCode = errorCode)
-        }
-    }
 
     fun toQuestionResponse(question: Question): QuestionResponse {
         return QuestionResponse(

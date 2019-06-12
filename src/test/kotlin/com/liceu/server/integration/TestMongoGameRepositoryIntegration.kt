@@ -2,9 +2,6 @@ package com.liceu.server.integration
 
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.DataSetup
-import com.liceu.server.DataSetup.Companion.QUESTION_ID_1
-import com.liceu.server.DataSetup.Companion.QUESTION_ID_2
-import com.liceu.server.DataSetup.Companion.USER_ID_1
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoGameRepository
 import com.liceu.server.data.GameRepository
@@ -47,15 +44,15 @@ class TestMongoGameRepositoryIntegration {
         val now = Date.from(Instant.now())
 
         val id = data.insert(GameToInsert(
-                USER_ID_1,
+                testSetup.USER_ID_1,
                 listOf(
                         Answer(
-                                QUESTION_ID_1,
+                                testSetup.QUESTION_ID_1,
                                 1,
                                 2
                         ),
                         Answer(
-                                QUESTION_ID_2,
+                                testSetup.QUESTION_ID_2,
                                 1,
                                 1
                         )
@@ -67,15 +64,15 @@ class TestMongoGameRepositoryIntegration {
 
         assertThat(game).isEqualTo(Game(
                 id,
-                USER_ID_1,
+                testSetup.USER_ID_1,
                 listOf(
                         Answer(
-                                QUESTION_ID_1,
+                                testSetup.QUESTION_ID_1,
                                 1,
                                 2
                         ),
                         Answer(
-                                QUESTION_ID_2,
+                                testSetup.QUESTION_ID_2,
                                 1,
                                 1
                         )

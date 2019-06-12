@@ -15,7 +15,7 @@ import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpFilter
 import javax.servlet.http.HttpServletResponse
 
-@WebFilter(urlPatterns = ["/v2/game*"])
+@WebFilter(urlPatterns = ["/v2/*"])
 class JWTAuthenticationFilter : HttpFilter() {
 
     @Autowired
@@ -27,9 +27,13 @@ class JWTAuthenticationFilter : HttpFilter() {
         const val HEADER_STRING = "Authorization"
     }
 
+    val unprotected = listOf(
+            "/v2/question"
+    )
+
     override fun doFilter(request: HttpServletRequest?, response: HttpServletResponse?, chain: FilterChain?) {
         request!!
-        if (request.servletPath == "/v2/login" && request.method == "POST") {
+        if ((request.servletPath == "/v2/login" && request.method == "POST") || unprotected.contains(request.servletPath)) {
             chain!!.doFilter(request, response)
             return
         }

@@ -4,17 +4,12 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.video.Video
-import com.liceu.server.presentation.Response
-import com.liceu.server.presentation.Response.Companion.ALREADY_EXISTS_ERROR_CODE
-import com.liceu.server.presentation.Response.Companion.NOT_FOUND_ERROR_CODE
-import com.liceu.server.presentation.Response.Companion.STATUS_ERROR
-import com.liceu.server.presentation.Response.Companion.UNKNOWN_ERROR_CODE
-import com.liceu.server.presentation.Response.Companion.VALIDATION_ERROR_CODE
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
 
 @RestController
@@ -48,24 +43,24 @@ class QuestionControllerV2(
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
             request: HttpServletRequest
 
-    ): Response<List<QuestionResponse>> {
+    ): ResponseEntity<List<QuestionResponse>> {
         val eventName = "question_get"
         val eventTags = listOf(CONTROLLER, NETWORK, QUESTION, RETRIEVAL)
         val networkData = netUtils.networkData(request)
 
-        Logging.info(eventName, eventTags, data =networkData + hashMapOf<String, Any>(
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
                 "version" to 2
         ))
         return try {
             val result = random.run(tagNames, amount)
-            Response(result.map { toQuestionResponse(it) })
+            ResponseEntity(result.map { toQuestionResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
             Logging.error(
                     eventName,
                     eventTags,
                     e, data = networkData
             )
-            Response(listOf(), status = STATUS_ERROR, errorCode = UNKNOWN_ERROR_CODE)
+            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -75,24 +70,25 @@ class QuestionControllerV2(
             @RequestParam(value = "start", defaultValue = "0") start: Int,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
             request: HttpServletRequest
-    ): Response<List<Map<String, Any>>> {
+    ): ResponseEntity<List<Map<String, Any>>> {
         val eventName = "question_videos_get"
         val eventTags = listOf(CONTROLLER, NETWORK, QUESTION, RETRIEVAL, VIDEO)
-        val networkData =  netUtils.networkData(request)
+        val networkData = netUtils.networkData(request)
 
         Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
                 "version" to 2
         ))
         return try {
             val result = videos.run(questionId, start, amount)
-            Response(result.map { toVideoResponse(it) })
+            result.map { toVideoResponse(it) }
+            ResponseEntity(result.map { toVideoResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
             Logging.error(
                     eventName,
                     eventTags + listOf(TAG),
                     e, data = networkData
             )
-            Response(listOf(), status = STATUS_ERROR, errorCode = UNKNOWN_ERROR_CODE)
+            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 

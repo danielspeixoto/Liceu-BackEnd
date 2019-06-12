@@ -4,7 +4,7 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 import java.lang.Exception
 
-class Random(val repo: QuestionBoundary.IRepository, val maxResults: Int): QuestionBoundary.IRandom {
+class RandomQuestions(val repo: QuestionBoundary.IRepository, val maxResults: Int): QuestionBoundary.IRandom {
 
     companion object {
         const val EVENT_NAME = "random_questions"

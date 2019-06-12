@@ -41,14 +41,14 @@ class TestMongoQuestionRepositoryIntegration {
     fun randomByTags_requestMoreThanExists_returnsExistent() {
         val questions = data.randomByTags(listOf("segunda"), 10)
         val ids = questions.map { it.id }
-        assertThat(ids).containsExactly(DataSetup.QUESTION_ID_1, DataSetup.QUESTION_ID_2)
+        assertThat(ids).containsExactly(testSetup.QUESTION_ID_1, testSetup.QUESTION_ID_2)
     }
 
     @Test
     fun randomByTags_emptyTags_returnsAll() {
         val questions = data.randomByTags(listOf(), 10)
         val ids = questions.map { it.id }
-        assertThat(ids).containsExactly(DataSetup.QUESTION_ID_1, DataSetup.QUESTION_ID_2, DataSetup.QUESTION_ID_3)
+        assertThat(ids).containsExactly(testSetup.QUESTION_ID_1, testSetup.QUESTION_ID_2, testSetup.QUESTION_ID_3)
     }
 
     @Test
@@ -58,18 +58,18 @@ class TestMongoQuestionRepositoryIntegration {
         while (i < 10) {
             val questions = data.randomByTags(listOf("segunda"), 1)
             assertThat(questions.size).isEqualTo(1)
-            assertThat(questions[0].id).isIn(listOf(DataSetup.QUESTION_ID_1, DataSetup.QUESTION_ID_2))
+            assertThat(questions[0].id).isIn(listOf(testSetup.QUESTION_ID_1, testSetup.QUESTION_ID_2))
             ids.add(questions[0].id)
             i++
         }
-        assertThat(ids).containsAtLeast(DataSetup.QUESTION_ID_1, DataSetup.QUESTION_ID_2)
+        assertThat(ids).containsAtLeast(testSetup.QUESTION_ID_1, testSetup.QUESTION_ID_2)
     }
 
     @Test
     fun randomByTags_notEveryoneHasTag_filters() {
         val questions = data.randomByTags(listOf("primeira"), 10)
         val ids = questions.map { it.id }
-        assertThat(ids).containsExactly(DataSetup.QUESTION_ID_1)
+        assertThat(ids).containsExactly(testSetup.QUESTION_ID_1)
     }
 
     @Test
@@ -83,7 +83,7 @@ class TestMongoQuestionRepositoryIntegration {
         val result = data.randomByTags(listOf("primeira"), 10)[0]
 
         val question = Question(
-                DataSetup.QUESTION_ID_1,
+                testSetup.QUESTION_ID_1,
                 "YWI=",
                 "ENEM",
                 "AMARELA",
@@ -107,8 +107,8 @@ class TestMongoQuestionRepositoryIntegration {
 
     @Test
     fun videos_HasRelatedVideos_ReturnsThemOrdered() {
-        val videos = data.videos(DataSetup.QUESTION_ID_1, 0, 10).map { it.id }
-        assertThat(videos).containsExactly(DataSetup.VIDEO_ID_3, DataSetup.VIDEO_ID_1).inOrder()
+        val videos = data.videos(testSetup.QUESTION_ID_1, 0, 10).map { it.id }
+        assertThat(videos).containsExactly(testSetup.VIDEO_ID_3, testSetup.VIDEO_ID_1).inOrder()
     }
 
     @Test
@@ -119,25 +119,25 @@ class TestMongoQuestionRepositoryIntegration {
 
     @Test
     fun videos_CountEqualsOne_ReturnsFirst() {
-        val videos = data.videos(DataSetup.QUESTION_ID_1, 0, 1).map { it.id }
-        assertThat(videos).containsExactly(DataSetup.VIDEO_ID_3)
+        val videos = data.videos(testSetup.QUESTION_ID_1, 0, 1).map { it.id }
+        assertThat(videos).containsExactly(testSetup.VIDEO_ID_3)
     }
 
     @Test
     fun videos_StartEqualsOne_SkipsFirst() {
-        val videos = data.videos(DataSetup.QUESTION_ID_1, 1, 10).map { it.id }
-        assertThat(videos).containsExactly(DataSetup.VIDEO_ID_1)
+        val videos = data.videos(testSetup.QUESTION_ID_1, 1, 10).map { it.id }
+        assertThat(videos).containsExactly(testSetup.VIDEO_ID_1)
     }
 
     @Test
     fun videos_ValidRequest_DataIsValid() {
-        val result = data.videos(DataSetup.QUESTION_ID_1, 1, 1)[0]
+        val result = data.videos(testSetup.QUESTION_ID_1, 1, 1)[0]
         val video = Video(
-                DataSetup.VIDEO_ID_1,
+                testSetup.VIDEO_ID_1,
                 "primeira",
                 "primeiro video",
                 "videoId1",
-                DataSetup.QUESTION_ID_1,
+                testSetup.QUESTION_ID_1,
                 1.1f,
                 "defaultQuality",
                 "channelTitle"

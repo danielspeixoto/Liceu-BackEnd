@@ -1,8 +1,6 @@
 package com.liceu.server.domain.user
 
-import com.liceu.server.data.FacebookAPI
 import com.liceu.server.domain.global.*
-import com.liceu.server.domain.question.Random
 import com.liceu.server.util.Logging
 
 class Authenticate(

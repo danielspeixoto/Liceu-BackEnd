@@ -71,15 +71,6 @@ class MongoDatabase {
         lateinit var id: ObjectId
     }
 
-    @Document(collection = MongoDatabase.TAG_COLLECTION)
-    data class MongoTag(
-            var name: String,
-            var amount: Int
-    ) {
-        @Id
-        lateinit var id: ObjectId
-    }
-
     data class MongoPicture(
             var url: String,
             var width: Int,
@@ -100,7 +91,7 @@ class MongoDatabase {
     }
 
     data class MongoAnswer(
-            val questionId: String,
+            val questionId: ObjectId,
             val correctAnswer: Int,
             val selectedAnswer: Int
     )

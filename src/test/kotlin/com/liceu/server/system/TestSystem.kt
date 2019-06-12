@@ -4,6 +4,7 @@ import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
@@ -25,11 +26,14 @@ class TestSystem(val endpoint: String) {
     lateinit var restTemplate: TestRestTemplate
 
     @Autowired
-    lateinit var testSetup: DataSetup
+    lateinit var dataSetup: DataSetup
+
+    @Value("\${client.api_key}")
+    lateinit var apiKey: String
 
     @BeforeEach
     fun setup() {
-        testSetup.setup()
-        baseUrl = "http://localhost:$port/$endpoint"
+        dataSetup.setup()
+        baseUrl = "http://localhost:$port$endpoint"
     }
 }

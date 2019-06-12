@@ -53,20 +53,6 @@ class MongoQuestionRepository(
         }
     }
 
-    override fun addTag(id: String, tag: String) {
-        val result = template.findById<MongoDatabase.MongoQuestion>(id) ?: throw QuestionNotFoundException()
-        if (result.tags.contains(tag)) {
-            throw TagAlreadyExistsException()
-        }
-        val newTags = arrayListOf<String>()
-        result.tags.forEach {
-            newTags.add(it)
-        }
-        newTags.add(tag)
-        result.tags = newTags
-        template.save(result)
-    }
-
     override fun videos(id: String, start: Int, count: Int): List<Video> {
         val match = Aggregation.match(Criteria("questionId").isEqualTo(ObjectId(id)))
         val sort = Aggregation.sort(Sort.Direction.ASC, "retrievalPosition")

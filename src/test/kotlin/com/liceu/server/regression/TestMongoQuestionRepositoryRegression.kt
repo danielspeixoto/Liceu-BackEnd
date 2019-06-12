@@ -43,40 +43,6 @@ class TestMongoQuestionRepositoryRegression {
     }
 
     @Test
-    fun addTag_hasDifferentTags_adds() {
-        val tagToAdd = System.currentTimeMillis().toString()
-        questionsList.forEach {
-            val expectedTags = it.tags + listOf(tagToAdd)
-
-            data.addTag(it.id.toHexString(), tagToAdd)
-
-            assertThat(questionRepo.findById(it.id.toHexString()).get().tags)
-                    .containsExactlyElementsIn(expectedTags)
-                    .inOrder()
-        }
-    }
-
-    @Test
-    fun addTag_alreadyHasTag_throwsError() {
-        questionsList.forEach {
-            val questionTag = it.tags[0]
-            assertThrows<TagAlreadyExistsException> {
-                data.addTag(it.id.toHexString(), questionTag)
-            }
-            assertThat(questionRepo.findById(it.id.toHexString()).get().tags)
-                    .containsExactlyElementsIn(it.tags)
-                    .inOrder()
-        }
-    }
-
-    @Test
-    fun addTag_nonExistentQuestion_throwsError() {
-        assertThrows<QuestionNotFoundException> {
-            data.addTag("id0", "primeira")
-        }
-    }
-
-    @Test
     fun randomByTags_atLeastOneQuestionHasTag_ReturnsAtLeastOne() {
         questionsList.forEach { question ->
             val questions = data.randomByTags(question.tags, 1)

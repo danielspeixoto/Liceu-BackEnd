@@ -1,13 +1,11 @@
 package com.liceu.server
 
-import com.liceu.server.data.FacebookAPI
-import com.liceu.server.data.MongoQuestionRepository
-import com.liceu.server.data.MongoTagRepository
-import com.liceu.server.data.MongoUserRepository
-import com.liceu.server.domain.question.AddTag
+import com.liceu.server.data.*
+import com.liceu.server.domain.game.GameBoundary
+import com.liceu.server.domain.game.SubmitGame
 import com.liceu.server.domain.question.QuestionBoundary
-import com.liceu.server.domain.question.Random
-import com.liceu.server.domain.question.Videos
+import com.liceu.server.domain.question.RandomQuestions
+import com.liceu.server.domain.question.QuestionVideos
 import com.liceu.server.domain.user.Authenticate
 import com.liceu.server.domain.user.UserBoundary
 import com.mongodb.MongoClient
@@ -38,11 +36,12 @@ class AppConfig : AbstractMongoConfiguration() {
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
-    val mongoTagRepository by lazy {
-        MongoTagRepository(mongoTemplate())
-    }
     val mongoUserRepository by lazy {
         MongoUserRepository(mongoTemplate())
+    }
+
+    val mongoGameRepository by lazy {
+        MongoGameRepository(mongoTemplate())
     }
 
     val facebookAPI by lazy {
@@ -68,22 +67,22 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun random(): QuestionBoundary.IRandom {
-        return Random(mongoQuestionRepository, 10)
-    }
-
-    @Bean
-    fun addTag(): QuestionBoundary.IAddTag {
-        return AddTag(mongoQuestionRepository, mongoTagRepository)
+        return RandomQuestions(mongoQuestionRepository, 30)
     }
 
     @Bean
     fun videos(): QuestionBoundary.IVideos {
-        return Videos(mongoQuestionRepository, 10)
+        return QuestionVideos(mongoQuestionRepository, 30)
     }
 
     @Bean
     fun authenticate(): UserBoundary.IAuthenticate {
         return Authenticate(mongoUserRepository, facebookAPI)
+    }
+
+    @Bean
+    fun submitGame(): GameBoundary.ISubmit {
+        return SubmitGame(mongoGameRepository)
     }
 }
 

@@ -1,10 +1,7 @@
 package com.liceu.server.system.v2.question
 
 import com.google.common.truth.Truth
-import com.liceu.server.DataSetup
-import com.liceu.server.presentation.Response
 import com.liceu.server.system.TestSystem
-import com.liceu.server.util.getListResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.web.client.exchange
@@ -21,19 +18,15 @@ class TestRandom : TestSystem("/v2/question") {
     override fun setup() {
         super.setup()
         headers = HttpHeaders()
-        headers["API_KEY"] = "apikey"
+        headers["API_KEY"] = apiKey
     }
 
     fun questions(url: String): List<HashMap<String, Any>> {
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<HashMap<String, Any>>(url, HttpMethod.GET, entity)
+        val response = restTemplate.exchange< List<HashMap<String, Any>>>(url, HttpMethod.GET, entity)
         val body = response.body!!
-        val data = body["data"]!! as List<HashMap<String, Any>>
-
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        Truth.assertThat(body["errorCode"]).isEqualTo(null)
-
-        return data
+        return body
     }
 
     @Test
@@ -44,19 +37,19 @@ class TestRandom : TestSystem("/v2/question") {
 
             ids.add(data[0]["id"] as String)
         }
-        Truth.assertThat(ids).containsAtLeast(DataSetup.QUESTION_ID_1, DataSetup.QUESTION_ID_2, DataSetup.QUESTION_ID_3)
+        Truth.assertThat(ids).containsAtLeast(dataSetup.QUESTION_ID_1, dataSetup.QUESTION_ID_2, dataSetup.QUESTION_ID_3)
     }
 
     @Test
     fun randomQuestion_TagsSpecified_Filters() {
         val data = questions("$baseUrl?amount=10&tags=primeira")
-        Truth.assertThat(data[0]["id"]).isEqualTo(DataSetup.QUESTION_ID_1)
+        Truth.assertThat(data[0]["id"]).isEqualTo(dataSetup.QUESTION_ID_1)
     }
 
     @Test
     fun randomQuestion_TagRecurrent_ReturnsAllWithTags() {
         val data = questions("$baseUrl?amount=10&tags=segunda")
-        Truth.assertThat(data.map { it["id"] }).containsExactly(DataSetup.QUESTION_ID_1, DataSetup.QUESTION_ID_2)
+        Truth.assertThat(data.map { it["id"] }).containsExactly(dataSetup.QUESTION_ID_1, dataSetup.QUESTION_ID_2)
     }
 
     @Test
@@ -78,7 +71,7 @@ class TestRandom : TestSystem("/v2/question") {
         val data = questions("$baseUrl?amount=10&tags=primeira")
         val question = data[0]
 
-        Truth.assertThat(question["id"]).isEqualTo(DataSetup.QUESTION_ID_1)
+        Truth.assertThat(question["id"]).isEqualTo(dataSetup.QUESTION_ID_1)
         Truth.assertThat(question["view"]).isEqualTo("https://url1.com")
         Truth.assertThat(question["source"]).isEqualTo("ENEM")
         Truth.assertThat(question["variant"]).isEqualTo("AMARELA")
