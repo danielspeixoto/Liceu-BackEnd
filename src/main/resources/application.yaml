@@ -12,4 +12,7 @@ mongo:
   dbName: ${MONGO_DB_NAME}
   uri: ${MONGO_CONNECTION}
 
-spring.mvc.favicon.enabled: false
+spring:
+  mvc.favicon.enabled: false
+  main:
+    banner-mode: "off"

@@ -11,4 +11,7 @@ mongo:
 
 dev: true
 
-spring.mvc.favicon.enabled: false
+spring:
+  mvc.favicon.enabled: false
+  main:
+    banner-mode: "off"
