@@ -20,7 +20,8 @@ class SubmitGame(
             val id = gameRepository.insert(GameToInsert(
                     game.userId,
                     game.answers,
-                    Date.from(Instant.now())
+                    Date.from(Instant.now()),
+                    game.timeSpent
             ))
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to game.userId,

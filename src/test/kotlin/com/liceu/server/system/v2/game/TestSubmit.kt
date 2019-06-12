@@ -38,7 +38,8 @@ class TestSubmit: TestSystem("/v2/game") {
                                 "selectedAnswer" to 1,
                                 "correctAnswer" to 3
                         )
-                )
+                ),
+                "timeSpent" to 10
         ), headers)
         val before = Date.from(Instant.now())
         val response =
@@ -53,6 +54,7 @@ class TestSubmit: TestSystem("/v2/game") {
 
         assertThat(insertedGame).isNotNull()
         assertThat(insertedGame.userId.toHexString()).isEqualTo(dataSetup.USER_ID_1)
+        assertThat(insertedGame.timeSpent).isEqualTo(10)
         assertThat(insertedGame.answers.size).isEqualTo(2)
         assertThat(insertedGame.answers[0].questionId.toHexString()).isEqualTo(dataSetup.QUESTION_ID_1)
         assertThat(insertedGame.answers[0].selectedAnswer).isEqualTo(2)
@@ -80,7 +82,8 @@ class TestSubmit: TestSystem("/v2/game") {
                                 "selectedAnswer" to 1,
                                 "correctAnswer" to 3
                         )
-                )
+                ),
+                "timeSpent" to 10
         ), headers)
 
         val response =
@@ -106,7 +109,8 @@ class TestSubmit: TestSystem("/v2/game") {
                                 "selectedAnswer" to 1,
                                 "correctAnswer" to 3
                         )
-                )
+                ),
+                "timeSpent" to 10
         ), headers)
 
         val response =
@@ -123,8 +127,8 @@ class TestSubmit: TestSystem("/v2/game") {
         val entity = HttpEntity(hashMapOf<String, Any>(
                 "answers" to listOf(
                         hashMapOf(
-                                "questionIds" to dataSetup.QUESTION_ID_1,
-                                "selectedAnswer" to 2,
+                                "questionId" to dataSetup.QUESTION_ID_1,
+                                "sel" to 2,
                                 "correctAnswer" to 1
                         ),
                         hashMapOf(
@@ -132,7 +136,8 @@ class TestSubmit: TestSystem("/v2/game") {
                                 "selectedAnswer" to 1,
                                 "correctAnswer" to 3
                         )
-                )
+                ),
+                "timeSpent" to 10
         ), headers)
 
         val response =

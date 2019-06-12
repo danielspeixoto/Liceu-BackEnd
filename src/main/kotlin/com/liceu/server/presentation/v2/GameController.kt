@@ -55,7 +55,8 @@ class GameController(
 
             val id = submit.run(GameSubmission(
                     userId,
-                    answers
+                    answers,
+                    body["timeSpent"] as Int? ?: throw ValidationException()
             ))
             ResponseEntity(hashMapOf<String,Any>(
                     "id" to id

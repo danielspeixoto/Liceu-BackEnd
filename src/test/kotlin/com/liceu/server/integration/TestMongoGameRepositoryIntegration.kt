@@ -57,7 +57,8 @@ class TestMongoGameRepositoryIntegration {
                                 1
                         )
                 ),
-                now
+                now,
+                10
         ))
 
         val game = data.toGame(gameRepo.findById(id).get())
@@ -77,7 +78,8 @@ class TestMongoGameRepositoryIntegration {
                                 1
                         )
                 ),
-                now
+                now,
+                10
         ))
     }
 }

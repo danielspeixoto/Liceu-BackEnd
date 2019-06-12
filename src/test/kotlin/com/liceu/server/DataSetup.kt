@@ -222,7 +222,8 @@ class DataSetup {
                                 3
                         )
                 ),
-                Date.from(Instant.parse("2019-10-10T10:10:10.00Z"))
+                Date.from(Instant.parse("2019-10-10T10:10:10.00Z")),
+                1
         )
         game1.id = ObjectId(GAME_ID_1)
         gameRepo.insert(game1)
@@ -240,7 +241,8 @@ class DataSetup {
                                 2
                         )
                 ),
-                Date.from(Instant.parse("2019-11-11T11:20:20.00Z"))
+                Date.from(Instant.parse("2019-11-11T11:20:20.00Z")),
+                2
         )
         game2.id = ObjectId(GAME_ID_2)
         gameRepo.insert(game2)

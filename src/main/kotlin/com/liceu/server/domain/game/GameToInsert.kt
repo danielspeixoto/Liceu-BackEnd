@@ -4,7 +4,8 @@ import java.util.*
 
 data class GameSubmission(
         val userId: String,
-        val answers: List<Answer>
+        val answers: List<Answer>,
+        val timeSpent: Int
 )
 
 data class Answer(
@@ -23,14 +24,16 @@ data class Answer(
 data class GameToInsert(
         val userId: String,
         val answers: List<Answer>,
-        val submissionDate: Date
+        val submissionDate: Date,
+        val timeSpent: Int
 ) {
 
     override fun equals(other: Any?): Boolean {
         return other is GameToInsert &&
                 other.userId == userId &&
                 other.answers.toTypedArray().contentEquals(answers.toTypedArray()) &&
-                other.submissionDate == submissionDate
+                other.submissionDate.time == submissionDate.time &&
+                other.timeSpent == timeSpent
     }
 
 }
@@ -39,13 +42,15 @@ data class Game(
         val id: String,
         val userId: String,
         val answers: List<Answer>,
-        val submissionDate: Date
+        val submissionDate: Date,
+        val timeSpent: Int
 ) {
     override fun equals(other: Any?): Boolean {
         return other is Game &&
                 other.id == id &&
                 other.userId == userId &&
                 other.answers.toTypedArray().contentEquals(answers.toTypedArray()) &&
-                other.submissionDate == submissionDate
+                other.submissionDate.time == submissionDate.time &&
+                other.timeSpent == timeSpent
     }
 }

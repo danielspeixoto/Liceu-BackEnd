@@ -100,7 +100,8 @@ class MongoDatabase {
     data class MongoGame(
             val userId: ObjectId,
             val answers: List<MongoAnswer>,
-            @Indexed val submissionDate: Date
+            @Indexed val submissionDate: Date,
+            val timeSpent: Int
     ) {
         @Id
         lateinit var id: ObjectId
