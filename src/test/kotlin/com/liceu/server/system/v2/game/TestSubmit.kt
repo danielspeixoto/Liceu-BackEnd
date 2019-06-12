@@ -17,20 +17,14 @@ import java.util.*
 
 class TestSubmit: TestSystem("/v2/game") {
 
-    private var headers = HttpHeaders()
-
     @Autowired
     lateinit var gameRepo: GameRepository
 
-    @BeforeEach
-    override fun setup() {
-        super.setup()
-        headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-    }
 
     @Test
     fun submitGame_Valid_Success() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
         headers["Authorization"] = dataSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf<String, Any>(
                 "answers" to listOf(
@@ -68,6 +62,83 @@ class TestSubmit: TestSystem("/v2/game") {
         assertThat(insertedGame.answers[1].correctAnswer).isEqualTo(3)
         assertThat(insertedGame.submissionDate).isGreaterThan(before)
         assertThat(insertedGame.submissionDate).isLessThan(after)
+    }
+
+    @Test
+    fun submitGame_NoAccessTokenSupplied_Unauthorized() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        val entity = HttpEntity(hashMapOf<String, Any>(
+                "answers" to listOf(
+                        hashMapOf(
+                                "questionId" to dataSetup.QUESTION_ID_1,
+                                "selectedAnswer" to 2,
+                                "correctAnswer" to 1
+                        ),
+                        hashMapOf(
+                                "questionId" to dataSetup.QUESTION_ID_3,
+                                "selectedAnswer" to 1,
+                                "correctAnswer" to 3
+                        )
+                )
+        ), headers)
+
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun submitGame_InvalidKey_BadRequest() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = dataSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf<String, Any>(
+                "answer" to listOf(
+                        hashMapOf(
+                                "questionId" to dataSetup.QUESTION_ID_1,
+                                "selectedAnswer" to 2,
+                                "correctAnswer" to 1
+                        ),
+                        hashMapOf(
+                                "questionId" to dataSetup.QUESTION_ID_3,
+                                "selectedAnswer" to 1,
+                                "correctAnswer" to 3
+                        )
+                )
+        ), headers)
+
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun submitGame_InvalidAnswerKey_BadRequest() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = dataSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf<String, Any>(
+                "answers" to listOf(
+                        hashMapOf(
+                                "questionIds" to dataSetup.QUESTION_ID_1,
+                                "selectedAnswer" to 2,
+                                "correctAnswer" to 1
+                        ),
+                        hashMapOf(
+                                "questionId" to dataSetup.QUESTION_ID_3,
+                                "selectedAnswer" to 1,
+                                "correctAnswer" to 3
+                        )
+                )
+        ), headers)
+
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
 }
