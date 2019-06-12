@@ -33,7 +33,15 @@ class JWTAuthenticationFilter : HttpFilter() {
 
     override fun doFilter(request: HttpServletRequest?, response: HttpServletResponse?, chain: FilterChain?) {
         request!!
-        if ((request.servletPath == "/v2/login" && request.method == "POST") || unprotected.contains(request.servletPath)) {
+
+        unprotected.forEach {
+            if(request.servletPath.startsWith(it)) {
+                chain!!.doFilter(request, response)
+                return
+            }
+        }
+
+        if ((request.servletPath == "/v2/login" && request.method == "POST")) {
             chain!!.doFilter(request, response)
             return
         }
