@@ -4,6 +4,7 @@ import com.liceu.server.domain.global.GAME
 import com.liceu.server.domain.global.INSERTION
 import com.liceu.server.util.Logging
 import java.time.Instant
+import java.time.ZoneOffset
 import java.util.*
 
 class SubmitGame(
@@ -20,7 +21,7 @@ class SubmitGame(
             val id = gameRepository.insert(GameToInsert(
                     game.userId,
                     game.answers,
-                    Date.from(Instant.now()),
+                    Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()),
                     game.timeSpent
             ))
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
