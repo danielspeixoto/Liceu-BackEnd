@@ -10,7 +10,7 @@ import java.util.*
 @Component
 class JWTAuth {
 
-    val EXPIRATION_TIME: Long = 860000000
+    val EXPIRATION_TIME: Long = 8600000000
     @Value("\${auth.secret}")
     lateinit var SECRET: String
     @Value("\${auth.prefix}")
