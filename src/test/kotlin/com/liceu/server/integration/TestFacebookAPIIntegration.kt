@@ -14,7 +14,7 @@ class TestFacebookAPIIntegration {
 
     @Test
     fun data_ValidAccessToken_ReturnsInfo() {
-        val user = facebook.data("EAAf4pgUyFpsBACivxMMHar1zH1sfNxYOEO9VYLZCMPvmvJ7ZAyYhw8BfZCl5MR1QA0JhBhoeYB4f455CP1VHtnz2OwXlYYq8W9eQOXtQzsbFDUxwmFE7RlsfqabsXi5cMJ4k6iXdhMDEfXSJEF6Y7KoZBmZCHLw1mrZA0dZAgAm7O1GetwtZBim2IkVHfM2cAqlGwqybeQRZAagZDZD")
+        val user = facebook.data("EAAf4pgUyFpsBAPWr0WehvKnwgAA1LpZB1o727vaNxRVxq3PIhZC27zFJ5vdpi7fhnMOiGnRnYVyHSmlTwfDm3vGW1rBjddFHM1IBziyVsaS79zIE9WVVmimTNcaUlUjknJAM6TKZB4wrGYwZATadp8vk4r2tHNp2XSZCuNuT7H9dJvt8ZBayOhc3P7IvhYfZCuwg30j3xBVQwZDZD")
         assertThat(user.name).isEqualTo("Open Graph Test User")
         assertThat(user.email).isEqualTo("open_imoeavk_user@tfbnw.net")
         assertThat(ImageIO.read(URL(user.picture.url))).isNotNull()

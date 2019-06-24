@@ -30,9 +30,13 @@ class FacebookAPI : UserBoundary.IAccessTokenResolver {
                     JsonObject::class.java,
                     Parameter.with("redirect", "false"),
                     Parameter.with("type", "large"))["data"] as JsonObject
+            var email = ""
+            if(userMap.contains("email")) {
+                email = userMap["email"].toString().substring(1).dropLast(1)
+            }
             return UserForm(
                     userMap["name"].toString().substring(1).dropLast(1),
-                    userMap["email"].toString().substring(1).dropLast(1),
+                    email,
                     Picture(
                             pictureData["url"].asString(),
                             pictureData["width"].asInt(),
