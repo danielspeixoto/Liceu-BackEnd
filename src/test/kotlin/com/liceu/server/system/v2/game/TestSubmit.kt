@@ -26,7 +26,7 @@ class TestSubmit: TestSystem("/v2/game") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = dataSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf<String, Any>(
+        val entity = HttpEntity(hashMapOf(
                 "answers" to listOf(
                         hashMapOf(
                                 "questionId" to dataSetup.QUESTION_ID_1,

@@ -84,7 +84,6 @@ class TestMongoQuestionRepositoryIntegration {
 
         val question = Question(
                 testSetup.QUESTION_ID_1,
-                "YWI=",
                 "ENEM",
                 "AMARELA",
                 2017,

@@ -52,7 +52,6 @@ class MongoDatabase {
 
     @Document(collection = MongoDatabase.QUESTION_COLLECTION)
     data class MongoQuestion(
-            var view: ByteArray,
             var source: String,
             var variant: String,
             var edition: Int,

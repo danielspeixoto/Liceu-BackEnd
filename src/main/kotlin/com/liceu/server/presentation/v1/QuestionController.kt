@@ -112,7 +112,7 @@ class QuestionController(
     fun toQuestionResponse(question: Question): QuestionResponse {
         return QuestionResponse(
                 question.id,
-                question.view,
+                "",
                 question.source,
                 question.variant,
                 question.edition,

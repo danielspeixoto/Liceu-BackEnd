@@ -35,7 +35,6 @@ class MongoQuestionRepository(
         return results.map {
             Question(
                     it.id.toHexString(),
-                    Base64.encodeBase64String(it.view),
                     it.source,
                     it.variant,
                     it.edition,

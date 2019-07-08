@@ -64,7 +64,6 @@ class DataSetup {
 
     fun questions() {
         val q1 = MongoDatabase.MongoQuestion(
-                byteArrayOf('a'.toByte(), 'b'.toByte()),
                 "ENEM",
                 "AMARELA",
                 2017,
@@ -82,7 +81,6 @@ class DataSetup {
         q1.id = ObjectId(QUESTION_ID_1)
         questionRepo.insert(q1)
         val q2 = MongoDatabase.MongoQuestion(
-                byteArrayOf('e'.toByte(), 'f'.toByte()),
                 "ENEM",
                 "AMARELA",
                 2016,
@@ -100,7 +98,6 @@ class DataSetup {
         q2.id = ObjectId(QUESTION_ID_2)
         questionRepo.insert(q2)
         val q3 = MongoDatabase.MongoQuestion(
-                byteArrayOf('c'.toByte(), 'd'.toByte()),
                 "ENEM",
                 "AZUL",
                 2015,
