@@ -73,7 +73,6 @@ class TestQuestion : TestSystem("/question") {
         assertThat(response.errorCode).isEqualTo(null)
         val question = response.data!![0]
         assertThat(question["id"]).isEqualTo(dataSetup.QUESTION_ID_1)
-        assertThat(question["view"]).isEqualTo("YWI=")
         assertThat(question["source"]).isEqualTo("ENEM")
         assertThat(question["variant"]).isEqualTo("AMARELA")
         assertThat(question["edition"]).isEqualTo(2017)

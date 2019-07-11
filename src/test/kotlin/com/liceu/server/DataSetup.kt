@@ -35,10 +35,15 @@ class DataSetup {
 
     val USER_ID_2 = "39c54d325b75357a571d4cc2"
     val USER_ID_3 = "37235b2a67c76abebce3f6e6"
+    val USER_ID_4 = "37235b2a67c76abebce3f6e3"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
     val GAME_ID_2 = "49c54d325b75357a571d4cc2"
     val GAME_ID_3 = "47235b2a67c76abebce3f6e6"
+    val GAME_ID_4 = "47235b2a67c76abebce3f6e9"
+    val GAME_ID_5 = "47235b2a67c76abebce3f6e3"
+    val GAME_ID_6 = "47235b2a67c76abebce3f6e2"
+    val GAME_ID_7 = "47235b2a67c76abebce3f6e1"
 
     val INVALID_ID = "99235b2a67c76abebce3f6e6"
 
@@ -202,6 +207,30 @@ class DataSetup {
         )
         user2.id = ObjectId(USER_ID_2)
         userRepo.insert(user2)
+        val user3 = MongoDatabase.MongoUser(
+                "user3",
+                "user3@g.com",
+                MongoDatabase.MongoPicture(
+                        "https://picture3.jpg",
+                        200,
+                        200
+                ),
+                "facebookId3"
+        )
+        user3.id = ObjectId(USER_ID_3)
+        userRepo.insert(user3)
+        val user4 = MongoDatabase.MongoUser(
+                "user4",
+                "user4@g.com",
+                MongoDatabase.MongoPicture(
+                        "https://picture4.jpg",
+                        200,
+                        200
+                ),
+                "facebookId4"
+        )
+        user4.id = ObjectId(USER_ID_4)
+        userRepo.insert(user4)
     }
 
     fun games() {
@@ -238,11 +267,106 @@ class DataSetup {
                                 2
                         )
                 ),
-                Date.from(Instant.parse("2019-11-11T11:20:20.00Z")),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
                 2
         )
         game2.id = ObjectId(GAME_ID_2)
         gameRepo.insert(game2)
+        val game3 = MongoDatabase.MongoGame(
+                ObjectId(USER_ID_3),
+                listOf(
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_1),
+                                2,
+                                2
+                        ),
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_3),
+                                3,
+                                3
+                        )
+                ),
+                Date.from(Instant.parse("2019-10-12T11:20:20.00Z")),
+                3
+        )
+        game3.id = ObjectId(GAME_ID_3)
+        gameRepo.insert(game3)
+        val game4 = MongoDatabase.MongoGame(
+                ObjectId(USER_ID_3),
+                listOf(
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_1),
+                                2,
+                                1
+                        ),
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_3),
+                                3,
+                                1
+                        )
+                ),
+                Date.from(Instant.parse("2019-10-13T11:20:20.00Z")),
+                1
+        )
+        game4.id = ObjectId(GAME_ID_4)
+        gameRepo.insert(game4)
+        val game5 = MongoDatabase.MongoGame(
+                ObjectId(USER_ID_4),
+                listOf(
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_1),
+                                2,
+                                2
+                        ),
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_3),
+                                3,
+                                3
+                        )
+                ),
+                Date.from(Instant.parse("2019-10-14T11:20:20.00Z")),
+                1
+        )
+        game5.id = ObjectId(GAME_ID_5)
+        gameRepo.insert(game5)
+        val game6 = MongoDatabase.MongoGame(
+                ObjectId(USER_ID_4),
+                listOf(
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_1),
+                                2,
+                                2
+                        ),
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_3),
+                                3,
+                                3
+                        )
+                ),
+                Date.from(Instant.parse("2019-09-14T11:20:20.00Z")),
+                2
+        )
+        game6.id = ObjectId(GAME_ID_6)
+        gameRepo.insert(game6)
+        val game7 = MongoDatabase.MongoGame(
+                ObjectId(USER_ID_4),
+                listOf(
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_1),
+                                2,
+                                2
+                        ),
+                        MongoDatabase.MongoAnswer(
+                                ObjectId(QUESTION_ID_3),
+                                3,
+                                3
+                        )
+                ),
+                Date.from(Instant.parse("2019-05-23T10:30:50.00Z")),
+                2
+        )
+        game7.id = ObjectId(GAME_ID_7)
+        gameRepo.insert(game7)
     }
 }
 
