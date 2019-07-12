@@ -36,7 +36,7 @@ class MongoGameRepository(
         return result.id.toHexString()
     }
 
-    override fun ranking(month: Int, year: Int): List<Game> {
+    override fun ranking(month: Int, year: Int, amount: Int): List<Game> {
         val mFormat = DecimalFormat("00")
         val monthFormated = mFormat.format(month)
         val yearMonthObject = YearMonth.of(year, month);
@@ -57,7 +57,7 @@ class MongoGameRepository(
         lastRequest = arrayListOf()
         val userIdList = arrayListOf<ObjectId>()
         for(item in resultList){
-            if(lastRequest.size >= 20){
+            if(lastRequest.size >= amount){
                 break
             }
             if(!userIdList.contains(item.userId)){

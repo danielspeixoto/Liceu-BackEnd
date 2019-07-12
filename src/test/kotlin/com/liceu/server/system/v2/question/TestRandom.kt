@@ -37,19 +37,19 @@ class TestRandom : TestSystem("/v2/question") {
 
             ids.add(data[0]["id"] as String)
         }
-        Truth.assertThat(ids).containsAtLeast(dataSetup.QUESTION_ID_1, dataSetup.QUESTION_ID_2, dataSetup.QUESTION_ID_3)
+        Truth.assertThat(ids).containsAtLeast(testSetup.QUESTION_ID_1, testSetup.QUESTION_ID_2, testSetup.QUESTION_ID_3)
     }
 
     @Test
     fun randomQuestion_TagsSpecified_Filters() {
         val data = questions("$baseUrl?amount=10&tags=primeira")
-        Truth.assertThat(data[0]["id"]).isEqualTo(dataSetup.QUESTION_ID_1)
+        Truth.assertThat(data[0]["id"]).isEqualTo(testSetup.QUESTION_ID_1)
     }
 
     @Test
     fun randomQuestion_TagRecurrent_ReturnsAllWithTags() {
         val data = questions("$baseUrl?amount=10&tags=segunda")
-        Truth.assertThat(data.map { it["id"] }).containsExactly(dataSetup.QUESTION_ID_1, dataSetup.QUESTION_ID_2)
+        Truth.assertThat(data.map { it["id"] }).containsExactly(testSetup.QUESTION_ID_1, testSetup.QUESTION_ID_2)
     }
 
     @Test
@@ -71,7 +71,7 @@ class TestRandom : TestSystem("/v2/question") {
         val data = questions("$baseUrl?amount=10&tags=primeira")
         val question = data[0]
 
-        Truth.assertThat(question["id"]).isEqualTo(dataSetup.QUESTION_ID_1)
+        Truth.assertThat(question["id"]).isEqualTo(testSetup.QUESTION_ID_1)
         Truth.assertThat(question["view"]).isEqualTo("https://url1.com")
         Truth.assertThat(question["source"]).isEqualTo("ENEM")
         Truth.assertThat(question["variant"]).isEqualTo("AMARELA")

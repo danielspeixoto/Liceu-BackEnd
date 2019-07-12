@@ -1,10 +1,8 @@
 package com.liceu.server.system.v2.game
 
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.data.GameRepository
 import com.liceu.server.system.TestSystem
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
@@ -25,16 +23,16 @@ class TestSubmit: TestSystem("/v2/game") {
     fun submitGame_Valid_Success() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
-        headers["Authorization"] = dataSetup.USER_1_ACCESS_TOKEN
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "answers" to listOf(
                         hashMapOf(
-                                "questionId" to dataSetup.QUESTION_ID_1,
+                                "questionId" to testSetup.QUESTION_ID_1,
                                 "selectedAnswer" to 2,
                                 "correctAnswer" to 1
                         ),
                         hashMapOf(
-                                "questionId" to dataSetup.QUESTION_ID_3,
+                                "questionId" to testSetup.QUESTION_ID_3,
                                 "selectedAnswer" to 1,
                                 "correctAnswer" to 3
                         )
@@ -53,13 +51,13 @@ class TestSubmit: TestSystem("/v2/game") {
         val insertedGame = gameRepo.findById(id).get()
 
         assertThat(insertedGame).isNotNull()
-        assertThat(insertedGame.userId.toHexString()).isEqualTo(dataSetup.USER_ID_1)
+        assertThat(insertedGame.userId.toHexString()).isEqualTo(testSetup.USER_ID_1)
         assertThat(insertedGame.timeSpent).isEqualTo(10)
         assertThat(insertedGame.answers.size).isEqualTo(2)
-        assertThat(insertedGame.answers[0].questionId.toHexString()).isEqualTo(dataSetup.QUESTION_ID_1)
+        assertThat(insertedGame.answers[0].questionId.toHexString()).isEqualTo(testSetup.QUESTION_ID_1)
         assertThat(insertedGame.answers[0].selectedAnswer).isEqualTo(2)
         assertThat(insertedGame.answers[0].correctAnswer).isEqualTo(1)
-        assertThat(insertedGame.answers[1].questionId.toHexString()).isEqualTo(dataSetup.QUESTION_ID_3)
+        assertThat(insertedGame.answers[1].questionId.toHexString()).isEqualTo(testSetup.QUESTION_ID_3)
         assertThat(insertedGame.answers[1].selectedAnswer).isEqualTo(1)
         assertThat(insertedGame.answers[1].correctAnswer).isEqualTo(3)
         assertThat(insertedGame.submissionDate).isGreaterThan(before)
@@ -73,12 +71,12 @@ class TestSubmit: TestSystem("/v2/game") {
         val entity = HttpEntity(hashMapOf<String, Any>(
                 "answers" to listOf(
                         hashMapOf(
-                                "questionId" to dataSetup.QUESTION_ID_1,
+                                "questionId" to testSetup.QUESTION_ID_1,
                                 "selectedAnswer" to 2,
                                 "correctAnswer" to 1
                         ),
                         hashMapOf(
-                                "questionId" to dataSetup.QUESTION_ID_3,
+                                "questionId" to testSetup.QUESTION_ID_3,
                                 "selectedAnswer" to 1,
                                 "correctAnswer" to 3
                         )
@@ -96,16 +94,16 @@ class TestSubmit: TestSystem("/v2/game") {
     fun submitGame_InvalidKey_BadRequest() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
-        headers["Authorization"] = dataSetup.USER_1_ACCESS_TOKEN
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf<String, Any>(
                 "answer" to listOf(
                         hashMapOf(
-                                "questionId" to dataSetup.QUESTION_ID_1,
+                                "questionId" to testSetup.QUESTION_ID_1,
                                 "selectedAnswer" to 2,
                                 "correctAnswer" to 1
                         ),
                         hashMapOf(
-                                "questionId" to dataSetup.QUESTION_ID_3,
+                                "questionId" to testSetup.QUESTION_ID_3,
                                 "selectedAnswer" to 1,
                                 "correctAnswer" to 3
                         )
@@ -123,16 +121,16 @@ class TestSubmit: TestSystem("/v2/game") {
     fun submitGame_InvalidAnswerKey_BadRequest() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
-        headers["Authorization"] = dataSetup.USER_1_ACCESS_TOKEN
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf<String, Any>(
                 "answers" to listOf(
                         hashMapOf(
-                                "questionId" to dataSetup.QUESTION_ID_1,
+                                "questionId" to testSetup.QUESTION_ID_1,
                                 "sel" to 2,
                                 "correctAnswer" to 1
                         ),
                         hashMapOf(
-                                "questionId" to dataSetup.QUESTION_ID_3,
+                                "questionId" to testSetup.QUESTION_ID_3,
                                 "selectedAnswer" to 1,
                                 "correctAnswer" to 3
                         )

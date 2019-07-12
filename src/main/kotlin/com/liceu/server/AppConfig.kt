@@ -2,6 +2,7 @@ package com.liceu.server
 
 import com.liceu.server.data.*
 import com.liceu.server.domain.game.GameBoundary
+import com.liceu.server.domain.game.GameRanking
 import com.liceu.server.domain.game.SubmitGame
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.RandomQuestions
@@ -83,6 +84,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun submitGame(): GameBoundary.ISubmit {
         return SubmitGame(mongoGameRepository)
+    }
+
+    @Bean
+    fun ranking(): GameBoundary.IGameRanking{
+        return GameRanking(mongoGameRepository,20)
     }
 }
 

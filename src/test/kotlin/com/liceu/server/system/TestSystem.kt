@@ -26,14 +26,14 @@ class TestSystem(val endpoint: String) {
     lateinit var restTemplate: TestRestTemplate
 
     @Autowired
-    lateinit var dataSetup: DataSetup
+    lateinit var testSetup: DataSetup
 
     @Value("\${client.api_key}")
     lateinit var apiKey: String
 
     @BeforeEach
     fun setup() {
-        dataSetup.setup()
+        testSetup.setup()
         baseUrl = "http://localhost:$port$endpoint"
     }
 }

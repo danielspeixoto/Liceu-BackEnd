@@ -18,7 +18,7 @@ class TestQuestion : TestSystem("/question") {
             val data = response.data!!
             ids.add(data[0]["id"] as String)
         }
-        assertThat(ids).containsAtLeast(dataSetup.QUESTION_ID_1, dataSetup.QUESTION_ID_2, dataSetup.QUESTION_ID_3)
+        assertThat(ids).containsAtLeast(testSetup.QUESTION_ID_1, testSetup.QUESTION_ID_2, testSetup.QUESTION_ID_3)
     }
 
     @Test
@@ -27,7 +27,7 @@ class TestQuestion : TestSystem("/question") {
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!
-        assertThat(data[0]["id"]).isEqualTo(dataSetup.QUESTION_ID_1)
+        assertThat(data[0]["id"]).isEqualTo(testSetup.QUESTION_ID_1)
     }
 
     @Test
@@ -36,7 +36,7 @@ class TestQuestion : TestSystem("/question") {
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!
-        assertThat(data.map { it["id"] }).containsExactly(dataSetup.QUESTION_ID_1, dataSetup.QUESTION_ID_2)
+        assertThat(data.map { it["id"] }).containsExactly(testSetup.QUESTION_ID_1, testSetup.QUESTION_ID_2)
     }
 
     @Test
@@ -72,7 +72,7 @@ class TestQuestion : TestSystem("/question") {
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val question = response.data!![0]
-        assertThat(question["id"]).isEqualTo(dataSetup.QUESTION_ID_1)
+        assertThat(question["id"]).isEqualTo(testSetup.QUESTION_ID_1)
         assertThat(question["source"]).isEqualTo("ENEM")
         assertThat(question["variant"]).isEqualTo("AMARELA")
         assertThat(question["edition"]).isEqualTo(2017)
@@ -87,16 +87,16 @@ class TestQuestion : TestSystem("/question") {
 
     @Test
     fun videos_QuestionHasVideos_ReturnsThem() {
-        val response = getListResponse(restTemplate, "$baseUrl/${dataSetup.QUESTION_ID_1}/relatedVideos?amount=10")
+        val response = getListResponse(restTemplate, "$baseUrl/${testSetup.QUESTION_ID_1}/relatedVideos?amount=10")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val videos = response.data!!.map { it["id"] }
-        assertThat(videos).containsExactly(dataSetup.VIDEO_ID_3, dataSetup.VIDEO_ID_1).inOrder()
+        assertThat(videos).containsExactly(testSetup.VIDEO_ID_3, testSetup.VIDEO_ID_1).inOrder()
     }
 
     @Test
     fun videos_QuestionHasNoVideos_Empty() {
-        val response = getListResponse(restTemplate, "$baseUrl/${dataSetup.INVALID_ID}/relatedVideos?amount=10")
+        val response = getListResponse(restTemplate, "$baseUrl/${testSetup.INVALID_ID}/relatedVideos?amount=10")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         assertThat(response.data).isEmpty()
@@ -104,25 +104,25 @@ class TestQuestion : TestSystem("/question") {
 
     @Test
     fun videos_QuestionHasManyVideos_Paginates() {
-        val response = getListResponse(restTemplate, "$baseUrl/${dataSetup.QUESTION_ID_1}/relatedVideos?start=1&amount=10")
+        val response = getListResponse(restTemplate, "$baseUrl/${testSetup.QUESTION_ID_1}/relatedVideos?start=1&amount=10")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!
-        assertThat(data[0]["id"]).isEqualTo(dataSetup.VIDEO_ID_1)
+        assertThat(data[0]["id"]).isEqualTo(testSetup.VIDEO_ID_1)
     }
 
     @Test
     fun videos_QuestionHasManyVideos_LimitsAmount() {
-        val response = getListResponse(restTemplate, "$baseUrl/${dataSetup.QUESTION_ID_1}/relatedVideos?amount=1")
+        val response = getListResponse(restTemplate, "$baseUrl/${testSetup.QUESTION_ID_1}/relatedVideos?amount=1")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!.map { it["id"] }
-        assertThat(data).containsExactly(dataSetup.VIDEO_ID_3)
+        assertThat(data).containsExactly(testSetup.VIDEO_ID_3)
     }
 
     @Test
     fun videos_NonExistentQuestion_Empty() {
-        val response = getListResponse(restTemplate, "$baseUrl/${dataSetup.INVALID_ID}/relatedVideos?amount=10")
+        val response = getListResponse(restTemplate, "$baseUrl/${testSetup.INVALID_ID}/relatedVideos?amount=10")
         assertThat(response.status).isEqualTo(STATUS_OK)
         assertThat(response.errorCode).isEqualTo(null)
         val data = response.data!!

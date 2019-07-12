@@ -38,7 +38,7 @@ class RandomQuestions(val repo: QuestionBoundary.IRepository, val maxResults: In
                     EVENT_NAME,
                     TAGS,
                     hashMapOf(
-                            "amount" to amount,
+                            "amount" to finalAmount,
                             "tagNames" to tags,
                             "retrieved" to questions.size
                     )

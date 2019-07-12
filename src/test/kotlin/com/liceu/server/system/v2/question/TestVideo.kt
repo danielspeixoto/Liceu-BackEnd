@@ -33,31 +33,31 @@ class TestVideo : TestSystem("/v2/question") {
 
     @Test
     fun videos_QuestionHasVideos_ReturnsThem() {
-        val videos = videos("$baseUrl/${dataSetup.QUESTION_ID_1}/videos?amount=10").map { it["id"] }
-        Truth.assertThat(videos).containsExactly(dataSetup.VIDEO_ID_3, dataSetup.VIDEO_ID_1).inOrder()
+        val videos = videos("$baseUrl/${testSetup.QUESTION_ID_1}/videos?amount=10").map { it["id"] }
+        Truth.assertThat(videos).containsExactly(testSetup.VIDEO_ID_3, testSetup.VIDEO_ID_1).inOrder()
     }
 
     @Test
     fun videos_QuestionHasNoVideos_Empty() {
-        val videos = videos("$baseUrl/${dataSetup.INVALID_ID}/videos?amount=10")
+        val videos = videos("$baseUrl/${testSetup.INVALID_ID}/videos?amount=10")
         Truth.assertThat(videos).isEmpty()
     }
 
     @Test
     fun videos_QuestionHasManyVideos_Paginates() {
-        val data = videos("$baseUrl/${dataSetup.QUESTION_ID_1}/videos?start=1&amount=10")
-        Truth.assertThat(data[0]["id"]).isEqualTo(dataSetup.VIDEO_ID_1)
+        val data = videos("$baseUrl/${testSetup.QUESTION_ID_1}/videos?start=1&amount=10")
+        Truth.assertThat(data[0]["id"]).isEqualTo(testSetup.VIDEO_ID_1)
     }
 
     @Test
     fun videos_QuestionHasManyVideos_LimitsAmount() {
-        val data = videos("$baseUrl/${dataSetup.QUESTION_ID_1}/videos?amount=1").map { it["id"] }
-        Truth.assertThat(data).containsExactly(dataSetup.VIDEO_ID_3)
+        val data = videos("$baseUrl/${testSetup.QUESTION_ID_1}/videos?amount=1").map { it["id"] }
+        Truth.assertThat(data).containsExactly(testSetup.VIDEO_ID_3)
     }
 
     @Test
     fun videos_NonExistentQuestion_Empty() {
-        val data = videos("$baseUrl/${dataSetup.INVALID_ID}/videos?amount=10")
+        val data = videos("$baseUrl/${testSetup.INVALID_ID}/videos?amount=10")
         Truth.assertThat(data).isEmpty()
     }
 
