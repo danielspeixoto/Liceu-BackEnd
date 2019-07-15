@@ -20,7 +20,7 @@ class TestRanking: TestSystem("/v2/ranking") {
 
 
     @Test
-    fun submitGame_Valid_Success() {
+    fun getRanking_Exists_returnTopGames() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN

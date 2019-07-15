@@ -9,6 +9,7 @@ import com.liceu.server.domain.question.RandomQuestions
 import com.liceu.server.domain.question.QuestionVideos
 import com.liceu.server.domain.user.Authenticate
 import com.liceu.server.domain.user.UserBoundary
+import com.liceu.server.domain.user.UserById
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
 import org.springframework.context.annotation.Configuration
@@ -89,6 +90,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun ranking(): GameBoundary.IGameRanking{
         return GameRanking(mongoGameRepository,20)
+    }
+
+    @Bean
+    fun getUserById(): UserBoundary.IUserById{
+        return UserById(mongoUserRepository)
     }
 }
 

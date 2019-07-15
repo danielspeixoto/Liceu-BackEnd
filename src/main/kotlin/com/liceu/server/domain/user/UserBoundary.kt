@@ -1,5 +1,6 @@
 package com.liceu.server.domain.user
 
+
 class UserBoundary {
 
     interface IAccessTokenResolver {
@@ -8,6 +9,14 @@ class UserBoundary {
 
     interface IRepository {
         fun save(user: UserForm): String
+        fun getUserById(userId: String): User
+    }
+
+    interface IUserById {
+
+        @Throws(Error::class)
+        fun run(userId: String): User
+
     }
 
     interface IAuthenticate {

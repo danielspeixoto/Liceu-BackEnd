@@ -71,4 +71,22 @@ class TestMongoUserRepositoryIntegration {
         assertThat(user.name).isEqualTo("updatedName")
         assertThat(user.facebookId).isEqualTo("oldId")
     }
+
+    @Test
+    fun userId_UserExists_returnUser(){
+        val result = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        assertThat(result.name).isEqualTo("user1")
+        assertThat(result.email).isEqualTo("user1@g.com")
+        assertThat(result.picture.url).isEqualTo("https://picture1.jpg")
+        assertThat(result.picture.width).isEqualTo(200)
+        assertThat(result.picture.height).isEqualTo(200)
+
+        val result4 = data.getUserById("37235b2a67c76abebce3f6e3")
+        assertThat(result4.name).isEqualTo("user4")
+        assertThat(result4.email).isEqualTo("user4@g.com")
+        assertThat(result4.picture.url).isEqualTo("https://picture4.jpg")
+        assertThat(result4.picture.width).isEqualTo(200)
+        assertThat(result4.picture.height).isEqualTo(200)
+    }
+
 }
