@@ -5,6 +5,7 @@ import com.liceu.server.domain.game.GameBoundary
 import com.liceu.server.domain.game.GameRanking
 import com.liceu.server.domain.game.SubmitGame
 import com.liceu.server.domain.question.QuestionBoundary
+import com.liceu.server.domain.question.QuestionById
 import com.liceu.server.domain.question.RandomQuestions
 import com.liceu.server.domain.question.QuestionVideos
 import com.liceu.server.domain.user.Authenticate
@@ -95,6 +96,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun getUserById(): UserBoundary.IUserById{
         return UserById(mongoUserRepository)
+    }
+
+    @Bean
+    fun getQuestionById(): QuestionBoundary.IQuestionById{
+        return QuestionById(mongoQuestionRepository)
     }
 }
 

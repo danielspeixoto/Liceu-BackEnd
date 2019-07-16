@@ -1,5 +1,6 @@
 package com.liceu.server.data
 
+import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.global.TagAlreadyExistsException
 import com.liceu.server.domain.global.QuestionNotFoundException
 import com.liceu.server.domain.question.Question
@@ -71,6 +72,35 @@ class MongoQuestionRepository(
                     it.thumbnails.default,
                     it.channel.title
             )
+        }
+    }
+
+    override fun getQuestionById(questionId: String): Question {
+        val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(questionId)))
+        val agg = Aggregation.newAggregation(match)
+        val results = template.aggregate(agg, MongoDatabase.QUESTION_COLLECTION, MongoDatabase.MongoQuestion::class.java)
+        val questionRetrieved = results.map {
+            Question(
+                    it.id.toHexString(),
+                    it.source,
+                    it.variant,
+                    it.edition,
+                    it.number,
+                    it.domain,
+                    it.answer,
+                    it.tags,
+                    it.itemCode,
+                    it.referenceId,
+                    it.stage,
+                    it.width,
+                    it.height,
+                    it.imageURL
+            )
+        }
+        if(questionRetrieved.isNotEmpty()){
+            return questionRetrieved[0]
+        }else{
+            throw ItemNotFoundException()
         }
     }
 }

@@ -92,7 +92,7 @@ class TestMongoUserRepositoryIntegration {
     }
 
     @Test
-    fun userId_UserDoesNotExists_returnUser(){
+    fun userId_UserDoesNotExists_returnError(){
         assertThrows<ItemNotFoundException> {
             data.getUserById("88235b2a67c76abebce3f6e3")
         }

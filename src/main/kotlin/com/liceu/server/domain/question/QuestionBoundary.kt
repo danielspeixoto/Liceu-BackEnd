@@ -12,6 +12,14 @@ class QuestionBoundary {
         fun randomByTags(tags: List<String>, amount: Int): List<Question>
         @Throws(Error::class)
         fun videos(id: String, start: Int, count: Int): List<Video>
+        fun getQuestionById(questionId: String): Question
+
+    }
+
+    interface IQuestionById {
+
+        @Throws(Error::class)
+        fun run(questionId: String): Question
 
     }
 

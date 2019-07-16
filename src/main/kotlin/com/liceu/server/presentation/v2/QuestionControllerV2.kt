@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("/v2/question")
 class QuestionControllerV2(
         @Autowired val random: QuestionBoundary.IRandom,
-        @Autowired val videos: QuestionBoundary.IVideos
+        @Autowired val videos: QuestionBoundary.IVideos,
+        @Autowired val question: QuestionBoundary.IQuestionById
+
 ) {
 
     @Autowired
@@ -89,6 +91,44 @@ class QuestionControllerV2(
                     e, data = networkData
             )
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+    }
+
+    @GetMapping("/{questionId}")
+    fun getUserById(
+            @PathVariable("questionId") questionId: String,
+            request: HttpServletRequest
+    ): ResponseEntity<QuestionResponse> {
+        val eventName = "get_question_by_id"
+        val eventTags = listOf(CONTROLLER, NETWORK, RETRIEVAL, QUESTION, ID)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val result = question.run(questionId)
+            val desiredQuestion = toQuestionResponse(result)
+            ResponseEntity(desiredQuestion, HttpStatus.OK)
+        } catch (e: Exception) {
+            when(e) {
+                is ItemNotFoundException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.NOT_FOUND)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
         }
     }
 

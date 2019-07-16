@@ -6,10 +6,13 @@ import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoQuestionRepository
 import com.liceu.server.data.QuestionRepository
+import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.video.Video
+import org.junit.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
@@ -144,4 +147,32 @@ class TestMongoQuestionRepositoryIntegration {
 
         EqualsTester().addEqualityGroup(result, video).testEquals()
     }
+
+    @Test
+    fun questionById_QuestionExits_ReturnQuestion(){
+        val result1 = data.getQuestionById(testSetup.QUESTION_ID_1)
+        assertThat(result1.source).isEqualTo("ENEM")
+        assertThat(result1.variant).isEqualTo("AMARELA")
+        assertThat(result1.edition).isEqualTo(2017)
+        assertThat(result1.number).isEqualTo(3)
+        assertThat(result1.domain).isEqualTo("matemática")
+        assertThat(result1.answer).isEqualTo(1)
+        assertThat(result1.tags[0]).isEqualTo("primeira")
+        assertThat(result1.tags[1]).isEqualTo("segunda")
+        assertThat(result1.itemCode).isEqualTo("12345")
+        assertThat(result1.referenceId).isEqualTo("referenceId")
+        assertThat(result1.stage).isEqualTo(2)
+        assertThat(result1.width).isEqualTo(100)
+        assertThat(result1.height).isEqualTo(200)
+        assertThat(result1.imageURL).isEqualTo("https://url1.com")
+
+    }
+
+    @Test
+    fun questionById_QuestionDontExists_ReturnError(){
+        assertThrows<ItemNotFoundException> {
+            data.getQuestionById("0a1449a4bdb40abd5ae1e432")
+        }
+    }
+
 }
