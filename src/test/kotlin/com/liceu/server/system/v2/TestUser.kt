@@ -55,7 +55,7 @@ class TestUser: TestSystem("/v2/user") {
         val entity = HttpEntity(null,headers)
 
         val response = restTemplate
-                .exchange<List<HashMap<String, Any>>>(baseUrl + "/222225357a571d4cc2", HttpMethod.GET,entity)
+                .exchange<List<HashMap<String, Any>>>(baseUrl + "/88235b2a67c76abebce3f6e3", HttpMethod.GET,entity)
 
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
 

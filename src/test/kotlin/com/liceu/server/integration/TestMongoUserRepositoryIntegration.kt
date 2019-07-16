@@ -6,9 +6,11 @@ import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.UserRepository
 import com.liceu.server.domain.aggregates.Picture
+import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.user.UserForm
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
@@ -74,19 +76,26 @@ class TestMongoUserRepositoryIntegration {
 
     @Test
     fun userId_UserExists_returnUser(){
-        val result = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        val result = data.getUserById(testSetup.USER_ID_1)
         assertThat(result.name).isEqualTo("user1")
         assertThat(result.email).isEqualTo("user1@g.com")
         assertThat(result.picture.url).isEqualTo("https://picture1.jpg")
         assertThat(result.picture.width).isEqualTo(200)
         assertThat(result.picture.height).isEqualTo(200)
 
-        val result4 = data.getUserById("37235b2a67c76abebce3f6e3")
+        val result4 = data.getUserById(testSetup.USER_ID_4)
         assertThat(result4.name).isEqualTo("user4")
         assertThat(result4.email).isEqualTo("user4@g.com")
         assertThat(result4.picture.url).isEqualTo("https://picture4.jpg")
         assertThat(result4.picture.width).isEqualTo(200)
         assertThat(result4.picture.height).isEqualTo(200)
+    }
+
+    @Test
+    fun userId_UserDoesNotExists_returnUser(){
+        assertThrows<ItemNotFoundException> {
+            data.getUserById("88235b2a67c76abebce3f6e3")
+        }
     }
 
 }
