@@ -8,3 +8,4 @@ interface UserRepository : MongoRepository<MongoDatabase.MongoUser, String> {
 }
 interface VideoRepository : MongoRepository<MongoDatabase.MongoVideo, String>
 interface GameRepository: MongoRepository<MongoDatabase.MongoGame, String>
+//interface ReportRepository: MongoRepository<MongoDatabase.MongoReport, String>

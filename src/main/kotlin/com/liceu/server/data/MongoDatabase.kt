@@ -16,6 +16,7 @@ class MongoDatabase {
         const val TAG_COLLECTION = "tag"
         const val USER_COLLECTION = "user"
         const val GAME_COLLECTION = "game"
+        const val REPORTA_COLLECTION = "report"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)

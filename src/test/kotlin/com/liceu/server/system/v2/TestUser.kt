@@ -14,13 +14,13 @@ import java.util.HashMap
 
 class TestUser: TestSystem("/v2/user") {
 
-//    @Autowired
-//    lateinit var userRepo = UserRepository
+    @Autowired
+    lateinit var userRepo : UserRepository
 
 
     @Test
     fun userID_exists_returnUser(){
-
+        
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
