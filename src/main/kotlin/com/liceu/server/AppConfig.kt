@@ -1,6 +1,8 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.domain.report.ReportBoundary
+import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.domain.game.GameBoundary
 import com.liceu.server.domain.game.GameRanking
 import com.liceu.server.domain.game.SubmitGame
@@ -45,6 +47,10 @@ class AppConfig : AbstractMongoConfiguration() {
 
     val mongoGameRepository by lazy {
         MongoGameRepository(mongoTemplate())
+    }
+
+    val mongoReportRepository by lazy{
+        MongoReportRepository(mongoTemplate())
     }
 
     val facebookAPI by lazy {
@@ -102,6 +108,12 @@ class AppConfig : AbstractMongoConfiguration() {
     fun getQuestionById(): QuestionBoundary.IQuestionById{
         return QuestionById(mongoQuestionRepository)
     }
+
+    @Bean
+    fun SubmitReport(): ReportBoundary.ISubmit{
+        return SubmitReport(mongoReportRepository)
+    }
+
 }
 
 @Component

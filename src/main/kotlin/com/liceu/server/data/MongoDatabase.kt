@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
+import kotlin.collections.HashMap
 
 class MongoDatabase {
 
@@ -16,7 +17,7 @@ class MongoDatabase {
         const val TAG_COLLECTION = "tag"
         const val USER_COLLECTION = "user"
         const val GAME_COLLECTION = "game"
-        const val REPORTA_COLLECTION = "report"
+        const val REPORT_COLLECTION = "report"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -127,4 +128,19 @@ class MongoDatabase {
         lateinit var id: ObjectId
 
     }
+
+    data class MongoReport(
+            val userId: ObjectId,
+            val message: String,
+            val tags: List<String>,
+            val params: HashMap<String,Any>,
+            val submissionDate: Date
+    ) {
+        @Id
+        lateinit var id: ObjectId
+    }
+
+    data class MongoTags(
+            val tag: String
+    )
 }
