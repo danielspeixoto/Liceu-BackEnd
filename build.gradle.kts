@@ -51,6 +51,7 @@ dependencies {
     implementation(group = "org.springframework.security.oauth.boot", name = "spring-security-oauth2-autoconfigure", version = "2.1.5.RELEASE")
     implementation(group = "com.restfb", name = "restfb", version = "2.21.0")
     implementation(group = "com.maxmind.geoip2", name = "geoip2", version = "2.3.1")
+    implementation ("com.google.code.gson:gson:2.8.5")
 
 }
 
