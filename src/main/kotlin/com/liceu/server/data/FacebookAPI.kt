@@ -48,7 +48,10 @@ class FacebookAPI : UserBoundary.IAccessTokenResolver {
             "\\u0169" to "ũ",
 
             "\\u00c3" to "Ã",
-            "\\u00d5" to "Õ"
+            "\\u00d5" to "Õ",
+
+            "\\u00e7" to "ç",
+            "\\u00c7" to "Ç"
     )
 
     override fun data(accessToken: String): UserForm {
