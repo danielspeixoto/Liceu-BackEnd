@@ -1,9 +1,8 @@
 package com.liceu.server.data
 
-import com.liceu.server.domain.game.Answer
-import com.liceu.server.domain.game.Game
-import com.liceu.server.domain.game.GameToInsert
-import com.liceu.server.domain.game.GameBoundary
+import com.liceu.server.domain.game.*
+import com.liceu.server.domain.global.*
+import com.liceu.server.util.Logging
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
@@ -15,10 +14,13 @@ import java.text.DecimalFormat
 import java.time.YearMonth
 
 
+
+
 @Repository
 class MongoGameRepository(
         val template: MongoTemplate
 ): GameBoundary.IRepository {
+
     private var lastRequest = arrayListOf<Game>()
     private var lastMonthRequest = -1
 
@@ -37,6 +39,7 @@ class MongoGameRepository(
     }
 
     override fun ranking(month: Int, year: Int, amount: Int): List<Game> {
+        val startFunction = System.currentTimeMillis()
         val mFormat = DecimalFormat("00")
         val monthFormated = mFormat.format(month)
         val yearMonthObject = YearMonth.of(year, month);
@@ -66,7 +69,17 @@ class MongoGameRepository(
             }
         }
         //resultList -> ordenado -> pegar os 20 primeiros usuarios diferentes e salvar no lastRequest
+        val endFunction = System.currentTimeMillis()
+        val duration = endFunction-startFunction
 
+        Logging.info(
+                "game_ranking_benchmark",
+                listOf(GAME, RANKING, BENCHMARK),
+                hashMapOf(
+                        "amount" to amount,
+                        "duration" to duration
+                )
+        )
         return lastRequest
     }
 
