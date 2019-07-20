@@ -27,6 +27,7 @@ class ReportController (
 
     @PostMapping
     fun submit(
+            @RequestAttribute("userId") userId: String,
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
     ): ResponseEntity<HashMap<String, Any>> {
@@ -38,13 +39,12 @@ class ReportController (
         ))
 
         return try{
-            val userReq = body["userId"] as String? ?: throw ValidationException()
             val messageReq = body["message"] as String? ?: throw ValidationException()
             val tagsReq = body["tags"] as List<String>
             val paramsReq = body["params"] as HashMap<String,Any>
 
             val id = submit.run(ReportSubmission(
-                    userReq,
+                    userId,
                     messageReq,
                     tagsReq,
                     paramsReq

@@ -23,7 +23,6 @@ class TestReport: TestSystem("/v2/report") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
-                "userId" to testSetup.USER_ID_1,
                 "message" to "esse e um teste ahahahah",
                 "tags" to listOf(
                     "teste1",
