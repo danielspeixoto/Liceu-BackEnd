@@ -129,6 +129,7 @@ class MongoDatabase {
 
     }
 
+    @Document(collection = MongoDatabase.REPORT_COLLECTION)
     data class MongoReport(
             val userId: ObjectId,
             val message: String,
