@@ -18,6 +18,7 @@ class MongoDatabase {
         const val USER_COLLECTION = "user"
         const val GAME_COLLECTION = "game"
         const val REPORT_COLLECTION = "report"
+        const val TRIVIA_COLLECTION = "trivia"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -141,7 +142,14 @@ class MongoDatabase {
         lateinit var id: ObjectId
     }
 
-    data class MongoTags(
-            val tag: String
-    )
+    @Document(collection = MongoDatabase.TRIVIA_COLLECTION)
+    data class MongoTriviaQuestion(
+            val question: String,
+            val correctAnswer: String,
+            val wrongAnswer: String
+    ) {
+        @Id
+        lateinit var id: ObjectId
+    }
+
 }

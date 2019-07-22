@@ -1,16 +1,19 @@
 package com.liceu.server.presentation.v2
 
-import com.liceu.server.domain.report.ReportBoundary
-import com.liceu.server.domain.report.ReportSubmission
 import com.liceu.server.domain.global.CONTROLLER
 import com.liceu.server.domain.global.NETWORK
 import com.liceu.server.domain.global.REPORT
+import com.liceu.server.domain.trivia.TriviaBoundary
+import com.liceu.server.domain.trivia.TriviaQuestionSubmission
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.lang.ClassCastException
 import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
@@ -18,36 +21,33 @@ import javax.validation.ValidationException
 
 
 @RestController
-@RequestMapping("/v2/report")
-class ReportController (
-        @Autowired val submit: ReportBoundary.ISubmit
+@RequestMapping("/v2/trivia")
+class TriviaController(
+        @Autowired val submit: TriviaBoundary.ISubmit
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
 
     @PostMapping
     fun submit(
-            @RequestAttribute("userId") userId: String,
-            @RequestBody body: HashMap<String, Any>,
-            request: HttpServletRequest
-    ): ResponseEntity<HashMap<String, Any>> {
-        val eventName = "report_post"
+        @RequestBody body: HashMap<String, Any>,
+        request: HttpServletRequest
+    ): ResponseEntity<HashMap<String,Any>>{
+        val eventName = "trivia_question_post"
         val eventTags = listOf(CONTROLLER, NETWORK, REPORT)
         val networkData = netUtils.networkData(request)
         Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
                 "version" to 2
         ))
-
         return try{
-            val messageReq = body["message"] as String? ?: throw ValidationException()
-            val tagsReq = body["tags"] as List<String>
-            val paramsReq = body["params"] as HashMap<String,Any>
+            val messageReq = body["question"] as String? ?: throw ValidationException()
+            val answerReq = body["correctAnswer"] as String? ?: throw ValidationException()
+            val wrongReq = body["wrongAnswer"] as String? ?: throw ValidationException()
 
-            val id = submit.run(ReportSubmission(
-                    userId,
+            val id = submit.run(TriviaQuestionSubmission(
                     messageReq,
-                    tagsReq,
-                    paramsReq
+                    answerReq,
+                    wrongReq
             ))
             ResponseEntity(hashMapOf<String,Any>(
                     "id" to id
@@ -73,6 +73,10 @@ class ReportController (
             }
         }
 
+
     }
+
+
+
 
 }

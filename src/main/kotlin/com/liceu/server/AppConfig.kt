@@ -10,6 +10,8 @@ import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.QuestionById
 import com.liceu.server.domain.question.RandomQuestions
 import com.liceu.server.domain.question.QuestionVideos
+import com.liceu.server.domain.trivia.SubmitTriviaQuestion
+import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.user.Authenticate
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserById
@@ -51,6 +53,10 @@ class AppConfig : AbstractMongoConfiguration() {
 
     val mongoReportRepository by lazy{
         MongoReportRepository(mongoTemplate())
+    }
+
+    val mongoTriviaRepository by lazy{
+        MongoTriviaRepository(mongoTemplate())
     }
 
     val facebookAPI by lazy {
@@ -112,6 +118,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun SubmitReport(): ReportBoundary.ISubmit{
         return SubmitReport(mongoReportRepository)
+    }
+
+    @Bean
+    fun SubmitTriviaQuestion(): TriviaBoundary.ISubmit{
+        return SubmitTriviaQuestion(mongoTriviaRepository)
     }
 
 }
