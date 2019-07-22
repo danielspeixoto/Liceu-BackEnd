@@ -30,11 +30,13 @@ class SubmitTriviaQuestion(
                 throw OverflowSizeException("Too many characters in wrong answer")
             }
             val id = TriviaRepository.insert(TriviaQuestionToInsert(
+                    triviaQuestion.userId,
                     triviaQuestion.question,
                     triviaQuestion.correctAnswer,
                     triviaQuestion.wrongAnswer
             ))
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
+                    "triviaQuestionUserId" to triviaQuestion.userId,
                     "triviaQuestion" to triviaQuestion.question,
                     "triviaQuestionCorrectAnswer" to triviaQuestion.correctAnswer,
                     "triviaQuestionWrongAnswer" to triviaQuestion.wrongAnswer,

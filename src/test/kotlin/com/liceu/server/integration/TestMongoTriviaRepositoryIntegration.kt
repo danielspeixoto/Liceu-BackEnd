@@ -38,12 +38,14 @@ class TestMongoTriviaRepositoryIntegration {
     fun insert_Valid_CanBeRetrieved() {
 
         val id = data.insert(TriviaQuestionToInsert(
+                testSetup.USER_ID_1,
                 "essa e uma questao de teste sobre matematica: Seno de 0?",
                 "0",
                 "1"
         ))
 
         val report = data.toTriviaQuestion(reportRepo.findById(id).get())
+        Truth.assertThat(report.userId).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(report.question).isEqualTo("essa e uma questao de teste sobre matematica: Seno de 0?")
         Truth.assertThat(report.correctAnswer).isEqualTo("0")
         Truth.assertThat(report.wrongAnswer).isEqualTo("1")

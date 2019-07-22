@@ -144,6 +144,7 @@ class MongoDatabase {
 
     @Document(collection = MongoDatabase.TRIVIA_COLLECTION)
     data class MongoTriviaQuestion(
+            val userId: ObjectId,
             val question: String,
             val correctAnswer: String,
             val wrongAnswer: String

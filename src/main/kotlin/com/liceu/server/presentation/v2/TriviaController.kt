@@ -10,10 +10,7 @@ import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.lang.ClassCastException
 import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
@@ -30,6 +27,7 @@ class TriviaController(
 
     @PostMapping
     fun submit(
+        @RequestAttribute("userId") userId: String,
         @RequestBody body: HashMap<String, Any>,
         request: HttpServletRequest
     ): ResponseEntity<HashMap<String,Any>>{
@@ -45,6 +43,7 @@ class TriviaController(
             val wrongReq = body["wrongAnswer"] as String? ?: throw ValidationException()
 
             val id = submit.run(TriviaQuestionSubmission(
+                    userId,
                     messageReq,
                     answerReq,
                     wrongReq
