@@ -57,5 +57,29 @@ class TestMongoTriviaRepositoryIntegration {
     }
 
 
+    @Test
+    fun randomQuestions_requestOnlyOne_returnsExistent() {
+        val questions = data.randomQuestions(listOf("historia"), 5)
+        val ids = questions.map { it.id }
+        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_5)
+    }
+
+    @Test
+    fun randomQuestions_requestMajoraty_returnsExistent() {
+        val questions = data.randomQuestions(listOf("matematica"), 5)
+        val ids = questions.map { it.id }
+        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_1, testSetup.QUESTION_TRIVIA_ID_2, testSetup.QUESTION_TRIVIA_ID_3,
+                testSetup.QUESTION_TRIVIA_ID_4)
+    }
+
+    @Test
+    fun randomQuestions_emptyTags_returnsAll() {
+        val questions = data.randomQuestions(listOf(), 5)
+        val ids = questions.map { it.id }
+        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_1, testSetup.QUESTION_TRIVIA_ID_2, testSetup.QUESTION_TRIVIA_ID_3,
+                testSetup.QUESTION_TRIVIA_ID_4,testSetup.QUESTION_TRIVIA_ID_5)
+    }
+
+
 
 }

@@ -12,6 +12,7 @@ import com.liceu.server.domain.question.RandomQuestions
 import com.liceu.server.domain.question.QuestionVideos
 import com.liceu.server.domain.trivia.SubmitTriviaQuestion
 import com.liceu.server.domain.trivia.TriviaBoundary
+import com.liceu.server.domain.trivia.TriviaRandomQuestions
 import com.liceu.server.domain.user.Authenticate
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserById
@@ -116,13 +117,18 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
-    fun SubmitReport(): ReportBoundary.ISubmit{
+    fun submitReport(): ReportBoundary.ISubmit{
         return SubmitReport(mongoReportRepository)
     }
 
     @Bean
-    fun SubmitTriviaQuestion(): TriviaBoundary.ISubmit{
+    fun submitTriviaQuestion(): TriviaBoundary.ISubmit{
         return SubmitTriviaQuestion(mongoTriviaRepository)
+    }
+
+    @Bean
+    fun randomTriviaQuestions(): TriviaBoundary.IRandomQuestions{
+        return TriviaRandomQuestions(mongoTriviaRepository, 5)
     }
 
 }

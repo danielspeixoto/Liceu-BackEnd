@@ -4,6 +4,7 @@ import com.google.common.truth.Truth
 import com.liceu.server.data.TriviaRepository
 import com.liceu.server.domain.trivia.TriviaQuestionToInsert
 import com.liceu.server.system.TestSystem
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
@@ -13,7 +14,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import java.util.HashMap
 
-class TestTrivia: TestSystem ("/v2/trivia"){
+class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     @Autowired
     lateinit var triviaRepo: TriviaRepository
 
@@ -262,8 +263,5 @@ class TestTrivia: TestSystem ("/v2/trivia"){
 
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
-
-
-
 
 }

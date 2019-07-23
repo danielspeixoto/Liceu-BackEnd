@@ -20,7 +20,7 @@ class DataSetup {
     val QUESTION_ID_2 = "09c54d325b75357a571d4cc2"
     val QUESTION_ID_3 = "07235b2a67c76abebce3f6e6"
 
-    val QUESTION_TRIVIA_ID_1 = "0a1449a4bdb40abd5ae1e401"
+    val QUESTION_TRIVIA_ID_1 = "0a1449a4bdb40abd5ae1e461"
     val QUESTION_TRIVIA_ID_2 = "0a1449a4bdb40abd5ae1e411"
     val QUESTION_TRIVIA_ID_3 = "0a1449a4bdb40abd5ae1e421"
     val QUESTION_TRIVIA_ID_4 = "0a1449a4bdb40abd5ae1e432"
@@ -69,10 +69,12 @@ class DataSetup {
         videoRepo.deleteAll()
         userRepo.deleteAll()
         gameRepo.deleteAll()
+        triviaRepo.deleteAll()
         questions()
         videos()
         users()
         games()
+        trivia()
     }
 
     fun questions() {

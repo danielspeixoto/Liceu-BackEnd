@@ -19,6 +19,7 @@ data class TriviaQuestionToInsert(
     )
 
     data class TriviaQuestion(
+        val id: String,
         val userId: String,
         val question: String,
         val correctAnswer: String,
