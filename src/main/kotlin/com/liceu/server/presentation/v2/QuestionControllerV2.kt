@@ -95,7 +95,7 @@ class QuestionControllerV2(
     }
 
     @GetMapping("/{questionId}")
-    fun getUserById(
+    fun getVideoById(
             @PathVariable("questionId") questionId: String,
             request: HttpServletRequest
     ): ResponseEntity<QuestionResponse> {

@@ -25,7 +25,13 @@ class TestTrivia: TestSystem ("/v2/trivia"){
         val entity = HttpEntity(hashMapOf(
                "question" to "essa e uma questao de teste sobre matematica: Seno de 0?",
                 "correctAnswer" to "0",
-                "wrongAnswer" to "1"
+                "wrongAnswer" to "1",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -55,7 +61,13 @@ class TestTrivia: TestSystem ("/v2/trivia"){
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "correctAnswer" to "0",
-                "wrongAnswer" to "1"
+                "wrongAnswer" to "1",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -75,7 +87,13 @@ class TestTrivia: TestSystem ("/v2/trivia"){
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                         "aaaaaaaaaaaaaaaaaaaaaaaa",
-                "wrongAnswer" to "1"
+                "wrongAnswer" to "1",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -95,7 +113,13 @@ class TestTrivia: TestSystem ("/v2/trivia"){
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                        "aaaaaaaaaaaaa"
+                        "aaaaaaaaaaaaa",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -103,6 +127,52 @@ class TestTrivia: TestSystem ("/v2/trivia"){
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
+    @Test
+    fun submitTrivia_overflowTagsSize_Invalid(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "question" to "oi? 1+1=?",
+                "correctAnswer" to "2",
+                "wrongAnswer" to "aaaaaa",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra",
+                        "contas",
+                        "quebrou-se"
+                )
+        ), headers)
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun submitTrivia_missMatchTypeTags_Invalid(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "question" to "oi? 1+1=?",
+                "correctAnswer" to "2",
+                "wrongAnswer" to "aaaaaa",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra",
+                        1
+                )
+        ), headers)
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
 
     @Test
     fun submitTrivia_emptyQuestionCharacters_Invalid(){
@@ -112,7 +182,13 @@ class TestTrivia: TestSystem ("/v2/trivia"){
         val entity = HttpEntity(hashMapOf(
                 "question" to  null,
                 "correctAnswer" to "0",
-                "wrongAnswer" to "1"
+                "wrongAnswer" to "1",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -128,7 +204,13 @@ class TestTrivia: TestSystem ("/v2/trivia"){
         val entity = HttpEntity(hashMapOf(
                 "question" to  null,
                 "correctAnswer" to "0",
-                "wrongAnswer" to "1"
+                "wrongAnswer" to "1",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -145,7 +227,13 @@ class TestTrivia: TestSystem ("/v2/trivia"){
         val entity = HttpEntity(hashMapOf(
                 "question" to  null,
                 "correctAnswer" to "0",
-                "wrongAnswer" to "1"
+                "wrongAnswer" to "1",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -161,7 +249,13 @@ class TestTrivia: TestSystem ("/v2/trivia"){
         val entity = HttpEntity(hashMapOf(
                 "question" to 1,
                 "correctAnswer" to "2",
-                "wrongAnswer" to "0"
+                "wrongAnswer" to "0",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)

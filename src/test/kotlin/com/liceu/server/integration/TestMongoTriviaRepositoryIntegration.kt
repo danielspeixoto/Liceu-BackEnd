@@ -41,7 +41,12 @@ class TestMongoTriviaRepositoryIntegration {
                 testSetup.USER_ID_1,
                 "essa e uma questao de teste sobre matematica: Seno de 0?",
                 "0",
-                "1"
+                "1",
+                listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria"
+                )
         ))
 
         val report = data.toTriviaQuestion(reportRepo.findById(id).get())
@@ -50,5 +55,7 @@ class TestMongoTriviaRepositoryIntegration {
         Truth.assertThat(report.correctAnswer).isEqualTo("0")
         Truth.assertThat(report.wrongAnswer).isEqualTo("1")
     }
+
+
 
 }

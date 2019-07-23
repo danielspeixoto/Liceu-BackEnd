@@ -19,17 +19,23 @@ class MongoTriviaRepository(
             ObjectId(triviaQuestion.userId),
             triviaQuestion.question,
             triviaQuestion.correctAnswer,
-            triviaQuestion.wrongAnswer
+            triviaQuestion.wrongAnswer,
+            triviaQuestion.tags
         ))
         return result.id.toHexString()
     }
+
+//    override fun randomQuestions(amount: Int): List<TriviaQuestion> {
+//        return
+//    }
 
     fun toTriviaQuestion(answer: MongoDatabase.MongoTriviaQuestion): TriviaQuestion{
         return TriviaQuestion(
                 answer.userId.toString(),
                 answer.question,
                 answer.correctAnswer,
-                answer.wrongAnswer
+                answer.wrongAnswer,
+                answer.tags
         )
     }
 

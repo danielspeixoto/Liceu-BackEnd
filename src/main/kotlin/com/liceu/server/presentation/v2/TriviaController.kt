@@ -41,12 +41,15 @@ class TriviaController(
             val messageReq = body["question"] as String? ?: throw ValidationException()
             val answerReq = body["correctAnswer"] as String? ?: throw ValidationException()
             val wrongReq = body["wrongAnswer"] as String? ?: throw ValidationException()
+            val tags = body["tags"] as List<String>? ?: throw ValidationException()
+
 
             val id = submit.run(TriviaQuestionSubmission(
                     userId,
                     messageReq,
                     answerReq,
-                    wrongReq
+                    wrongReq,
+                    tags
             ))
             ResponseEntity(hashMapOf<String,Any>(
                     "id" to id

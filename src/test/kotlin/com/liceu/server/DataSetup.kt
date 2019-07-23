@@ -20,6 +20,12 @@ class DataSetup {
     val QUESTION_ID_2 = "09c54d325b75357a571d4cc2"
     val QUESTION_ID_3 = "07235b2a67c76abebce3f6e6"
 
+    val QUESTION_TRIVIA_ID_1 = "0a1449a4bdb40abd5ae1e401"
+    val QUESTION_TRIVIA_ID_2 = "0a1449a4bdb40abd5ae1e411"
+    val QUESTION_TRIVIA_ID_3 = "0a1449a4bdb40abd5ae1e421"
+    val QUESTION_TRIVIA_ID_4 = "0a1449a4bdb40abd5ae1e432"
+    val QUESTION_TRIVIA_ID_5 = "0a1449a4bdb40abd5ae1e433"
+
     val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
     val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
     val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
@@ -55,6 +61,8 @@ class DataSetup {
     lateinit var userRepo: UserRepository
     @Autowired
     lateinit var gameRepo: GameRepository
+    @Autowired
+    lateinit var triviaRepo: TriviaRepository
 
     fun setup() {
         questionRepo.deleteAll()
@@ -367,6 +375,77 @@ class DataSetup {
         )
         game7.id = ObjectId(GAME_ID_7)
         gameRepo.insert(game7)
+    }
+
+    fun trivia(){
+        val q1 = MongoDatabase.MongoTriviaQuestion(
+                ObjectId(USER_ID_1),
+                "1+1 = ?",
+                "2",
+                "0",
+                listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria"
+                )
+        )
+        q1.id = ObjectId(QUESTION_TRIVIA_ID_1)
+        triviaRepo.insert(q1)
+
+        val q2 = MongoDatabase.MongoTriviaQuestion(
+                    ObjectId(USER_ID_2),
+                    "1+1+1 = ?",
+                    "3",
+                    "1",
+                    listOf(
+                            "matematica",
+                            "angulos",
+                            "trigonometria"
+                    )
+            )
+            q2.id = ObjectId(QUESTION_TRIVIA_ID_2)
+            triviaRepo.insert(q2)
+
+        val q3 = MongoDatabase.MongoTriviaQuestion(
+                    ObjectId(USER_ID_3),
+                    "1+1+2= ?",
+                    "4",
+                    "3",
+                    listOf(
+                            "matematica",
+                            "angulos",
+                            "trigonometria"
+                    )
+            )
+            q3.id = ObjectId(QUESTION_TRIVIA_ID_3)
+            triviaRepo.insert(q3)
+
+        val q4 = MongoDatabase.MongoTriviaQuestion(
+                    ObjectId(USER_ID_4),
+                    "1+1+3 = ?",
+                    "5",
+                    "2",
+                    listOf(
+                            "matematica",
+                            "angulos",
+                            "trigonometria"
+                    )
+            )
+            q4.id = ObjectId(QUESTION_TRIVIA_ID_4)
+            triviaRepo.insert(q4)
+
+        val q5 = MongoDatabase.MongoTriviaQuestion(
+                ObjectId(USER_ID_3),
+                "Quem descobriu o Brasil?",
+                "Pedro Alvares Cabral",
+                "Geralt",
+                listOf(
+                        "historia",
+                        "descoberta"
+                )
+        )
+        q5.id = ObjectId(QUESTION_TRIVIA_ID_5)
+        triviaRepo.insert(q5)
     }
 }
 

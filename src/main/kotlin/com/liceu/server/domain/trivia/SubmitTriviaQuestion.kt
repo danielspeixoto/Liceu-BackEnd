@@ -29,17 +29,36 @@ class SubmitTriviaQuestion(
             if(triviaQuestion.wrongAnswer.length > 200){
                 throw OverflowSizeException("Too many characters in wrong answer")
             }
+            if(triviaQuestion.tags.isEmpty()){
+                throw OverflowSizeTagsException("No tags given in trivia question")
+            }
+            if(triviaQuestion.tags.size > 5){
+                throw OverflowSizeTagsException("Too many tags in trivia question")
+            }
+            triviaQuestion.tags.forEach {
+                if(it is String){
+                    if(it.length > 100){
+                        throw OverflowSizeException("Too many characters in tags")
+                    }
+                }else{
+                    throw TypeMismatchException("Wrong type in trivia tags")
+                }
+            }
+
             val id = TriviaRepository.insert(TriviaQuestionToInsert(
                     triviaQuestion.userId,
                     triviaQuestion.question,
                     triviaQuestion.correctAnswer,
-                    triviaQuestion.wrongAnswer
+                    triviaQuestion.wrongAnswer,
+                    triviaQuestion.tags
             ))
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "triviaQuestionUserId" to triviaQuestion.userId,
                     "triviaQuestion" to triviaQuestion.question,
                     "triviaQuestionCorrectAnswer" to triviaQuestion.correctAnswer,
                     "triviaQuestionWrongAnswer" to triviaQuestion.wrongAnswer,
+                    "triviaQuestionTags" to triviaQuestion.tags,
+                    "triviaQuestionTagsSize" to triviaQuestion.tags.size,
                     "triviaQuestionBodySize" to triviaQuestion.question.length
                     ))
             return id
