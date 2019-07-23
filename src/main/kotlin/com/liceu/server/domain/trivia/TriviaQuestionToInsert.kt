@@ -25,5 +25,4 @@ data class TriviaQuestionToInsert(
         val correctAnswer: String,
         val wrongAnswer: String,
         val tags: List<String>
-
     )

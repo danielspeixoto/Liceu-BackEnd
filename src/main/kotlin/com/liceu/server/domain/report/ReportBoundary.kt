@@ -7,7 +7,7 @@ class ReportBoundary {
         fun insert(report: ReportToInsert): String
     }
 
-    interface  ISubmit{
+    interface ISubmit{
         fun run(report: ReportSubmission): String
     }
 
