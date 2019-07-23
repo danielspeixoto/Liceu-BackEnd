@@ -38,7 +38,7 @@ class MongoChallengeRepository(
 
     override fun updateChallenge(): Challenge {
         //rever
-        val match = Aggregation.match(Criteria.where("challenged").isEqualTo(null))
+        val match = Aggregation.match(Criteria.where("challenged").ne(null))
         val agg = Aggregation.newAggregation(match)
         val result= template.aggregate(agg,MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
         val challengerRetrieved = result.map {
