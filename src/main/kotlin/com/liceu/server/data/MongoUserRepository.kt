@@ -1,7 +1,9 @@
 package com.liceu.server.data
 
 import com.liceu.server.domain.aggregates.Picture
+import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.global.ItemNotFoundException
+import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
@@ -59,5 +61,41 @@ class MongoUserRepository(
             throw ItemNotFoundException()
         }
     }
+
+    override fun getChallengesFromUserById(userId: String): List<Challenge> {
+        val match = Aggregation.match(Criteria().orOperator(Criteria.where("challenger").isEqualTo(userId) , Criteria.where("challenged").isEqualTo(userId)))
+        val agg = Aggregation.newAggregation(match)
+        val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
+        val challengesRetrieved = results.map {
+            Challenge(
+                    it.id.toHexString(),
+                    it.challenger,
+                    it.challenged,
+                    it.answersChallenger,
+                    it.answersChallenged,
+                    it.scoreChallenger,
+                    it.scoreChallenged,
+                    it.triviaQuestionsUsed.map { triviaQuestion ->
+                        TriviaQuestion(
+                                triviaQuestion.id.toHexString(),
+                                triviaQuestion.userId.toHexString(),
+                                triviaQuestion.question,
+                                triviaQuestion.correctAnswer,
+                                triviaQuestion.wrongAnswer,
+                                triviaQuestion.tags
+                        )
+                    }
+            )
+        }
+        if(challengesRetrieved.isNotEmpty()){
+            return challengesRetrieved
+        }else{
+            throw ItemNotFoundException()
+        }
+    }
+
+
+
+
 }
 

@@ -16,6 +16,7 @@ import com.liceu.server.domain.trivia.SubmitTriviaQuestion
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.trivia.TriviaRandomQuestions
 import com.liceu.server.domain.user.Authenticate
+import com.liceu.server.domain.user.ChallengesFromUserId
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserById
 import com.mongodb.MongoClient
@@ -115,6 +116,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun getUserById(): UserBoundary.IUserById{
         return UserById(mongoUserRepository)
+    }
+
+    @Bean
+    fun getChallengesFromUserById(): UserBoundary.IChallengesFromUserById{
+        return ChallengesFromUserId(mongoUserRepository)
     }
 
     @Bean

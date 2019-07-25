@@ -57,12 +57,37 @@ class TestUser: TestSystem("/v2/user") {
         val response = restTemplate
                 .exchange<HashMap<String, Any>>(baseUrl + "/88235b2a67c76abebce3f6e3", HttpMethod.GET,entity)
 
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
-
-
 
     }
 
+    @Test
+    fun challengeFromUser_Exists_returnChallenges(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
 
+        val entity = HttpEntity(null,headers)
 
+        val response = restTemplate
+                .exchange<List<HashMap<String, Any>>>(baseUrl + "/39c54d325b75357a571d4cc2/challenge", HttpMethod.GET,entity)
+
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val body = response.body!!
+        Truth.assertThat(body[0]["id"]).isEqualTo("09c54d325b75357a571d4ca2")
+        Truth.assertThat(body[1]["id"]).isEqualTo("09c54d325b75357a571d4cb2")
+    }
+
+    @Test
+    fun challengeFromUser_userDontExists_returnError() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(null, headers)
+
+        val response = restTemplate
+                .exchange<List<HashMap<String, Any>>>(baseUrl + "/88235b2a67c76abebce3f6e3/challenge", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+    }
 }

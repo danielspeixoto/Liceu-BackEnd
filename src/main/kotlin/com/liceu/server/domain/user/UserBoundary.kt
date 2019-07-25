@@ -1,5 +1,7 @@
 package com.liceu.server.domain.user
 
+import com.liceu.server.domain.challenge.Challenge
+
 
 class UserBoundary {
 
@@ -10,6 +12,7 @@ class UserBoundary {
     interface IRepository {
         fun save(user: UserForm): String
         fun getUserById(userId: String): User
+        fun getChallengesFromUserById(userId: String): List<Challenge>
     }
 
     interface IUserById {
@@ -17,6 +20,10 @@ class UserBoundary {
         @Throws(Error::class)
         fun run(userId: String): User
 
+    }
+
+    interface IChallengesFromUserById{
+        fun run(userId: String): List<Challenge>
     }
 
     interface IAuthenticate {
