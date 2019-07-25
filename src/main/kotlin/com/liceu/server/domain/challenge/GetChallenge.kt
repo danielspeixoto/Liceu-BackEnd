@@ -17,6 +17,7 @@ class GetChallenge(
     }
 
     override fun run(userId: String): Challenge {
+        try {
             challengeRepository.matchMaking(userId)?.let {
                 Logging.info(
                         EVENT_NAME, TAGS ,
@@ -25,10 +26,7 @@ class GetChallenge(
                                 "challengerId" to it.challenger,
                                 "challengedId" to it.challenged,
                                 "answersChallengerSize" to it.answersChallenger.size,
-                                "answersChallengedSize" to it.answersChallenged.size,
-                                "scoreChallenger" to it.scoreChallenger,
-                                "scoreChallenger" to it.scoreChallenged,
-                                "questionsUsedSize" to it.triviaQuestionsUsed.size
+                                "answersChallengedSize" to it.answersChallenged.size
                         )
                 )
                 return it
@@ -43,23 +41,22 @@ class GetChallenge(
                     null,
                     trivias
             ))
-            challengeRepository.findById(challengeId)?.let {
-                Logging.info(
-                        EVENT_NAME, TAGS ,
-                        hashMapOf(
-                                "challengeId" to it.id,
-                                "challengerId" to it.challenger,
-                                "challengedId" to it.challenged,
-                                "answersChallengerSize" to it.answersChallenger.size,
-                                "answersChallengedSize" to it.answersChallenged.size,
-                                "scoreChallenger" to it.scoreChallenger,
-                                "scoreChallenger" to it.scoreChallenged,
-                                "questionsUsedSize" to it.triviaQuestionsUsed.size
-                        )
-                )
-                return it
-            }
+            //challengeRepository.findById(challengeId)?.let {
+            Logging.info(
+                    EVENT_NAME, TAGS ,
+                    hashMapOf(
+                            "challengeId" to challengeId.id,
+                            "challengerId" to challengeId.challenger,
+                            "challengedId" to challengeId.challenged,
+                            "answersChallengerSize" to challengeId.answersChallenger.size,
+                            "answersChallengedSize" to challengeId.answersChallenged.size
+                    )
+            )
+            return challengeId
+            //}
+        }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS, Exception())
             throw Exception()
+        }
     }
 }

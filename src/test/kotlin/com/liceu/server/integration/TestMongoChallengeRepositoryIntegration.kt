@@ -39,7 +39,7 @@ class TestMongoChallengeRepositoryIntegration {
     @Test
     fun insert_Valid_CanBeRetrieved(){
 
-        val id = data.createChallenge(ChallengeToInsert(
+        val report = data.createChallenge(ChallengeToInsert(
                 testSetup.USER_ID_1,
                 testSetup.USER_ID_2,
                 listOf(
@@ -71,7 +71,7 @@ class TestMongoChallengeRepositoryIntegration {
                 )
         ))
 
-        val report = data.toChallenge(repo.findById(id).get())
+        //val report = data.toChallenge(repo.findById(id).get())
 
         Truth.assertThat(report.challenger).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(report.challenged).isEqualTo(testSetup.USER_ID_2)
@@ -98,7 +98,7 @@ class TestMongoChallengeRepositoryIntegration {
     @Test
     fun insert_nullChallenged_CanBeRetrieved(){
 
-        val id = data.createChallenge(ChallengeToInsert(
+        val report = data.createChallenge(ChallengeToInsert(
                 testSetup.USER_ID_3,
                 null,
                 listOf(
@@ -130,10 +130,10 @@ class TestMongoChallengeRepositoryIntegration {
                 )
         ))
 
-        val report = data.toChallenge(repo.findById(id).get())
+        //val report = data.toChallenge(repo.findById(id).get())
 
         Truth.assertThat(report.challenger).isEqualTo(testSetup.USER_ID_3)
-        Truth.assertThat(report.challenged).isEqualTo("null")
+        Truth.assertThat(report.challenged).isEqualTo(null)
         Truth.assertThat(report.answersChallenger[0]).isEqualTo("oaai")
         Truth.assertThat(report.answersChallenger[1]).isEqualTo("aaabriu")
         Truth.assertThat(report.answersChallenger[2]).isEqualTo("taaestando")
@@ -157,7 +157,7 @@ class TestMongoChallengeRepositoryIntegration {
     fun retrieve_validChallenge_returnChallenge(){
 
         val resultRetrieved = data.matchMaking("0a1449a4bdb40abd5ae1e333")
-        Truth.assertThat(resultRetrieved?.id).isEqualTo("09c54d325b75357a571d4ca2")
+        Truth.assertThat(resultRetrieved?.id).isEqualTo("09c54d325b75357a571d4cc1")
         Truth.assertThat(resultRetrieved?.challenger).isEqualTo("37235b2a67c76abebce3f6e6")
         Truth.assertThat(resultRetrieved?.challenged).isEqualTo("0a1449a4bdb40abd5ae1e333")
         Truth.assertThat(resultRetrieved?.answersChallenger?.get(0)).isEqualTo("oi")
@@ -177,7 +177,8 @@ class TestMongoChallengeRepositoryIntegration {
 
     @Test
     fun retrieve_notValidChallenge_returnChallenge(){
-        //testSetup.challengeRepo.deleteById("09c54d325b75357a571d4cc1")
+        testSetup.challengeRepo.deleteById("09c54d325b75357a571d4cc1")
+        testSetup.challengeRepo.deleteById("09c54d325b75357a571d4cd2")
 
         val resultRetrieved = data.matchMaking("0a1449a4bdb40abd5ae1e333")
         Truth.assertThat(resultRetrieved).isNull()

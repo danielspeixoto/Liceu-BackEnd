@@ -37,8 +37,7 @@ class TestChallenge: TestSystem ("v2/challenge") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val body = response.body!!
-
-        Truth.assertThat(body["id"]).isEqualTo("09c54d325b75357a571d4ca2")
+        Truth.assertThat(body["id"]).isEqualTo("09c54d325b75357a571d4cc1")
         Truth.assertThat(body["challenger"]).isEqualTo("37235b2a67c76abebce3f6e6")
         Truth.assertThat(body["challenged"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
         val answersChallenger = (body["answersChallenger"] as List<String>)
@@ -47,10 +46,7 @@ class TestChallenge: TestSystem ("v2/challenge") {
         Truth.assertThat(answersChallenger[2]).isEqualTo("testando")
         Truth.assertThat(answersChallenger[3]).isEqualTo("4")
         val answersChallenged = (body["answersChallenged"] as List<String>)
-        Truth.assertThat(answersChallenged[0]).isEqualTo("oi2")
-        Truth.assertThat(answersChallenged[1]).isEqualTo("abriu2")
-        Truth.assertThat(answersChallenged[2]).isEqualTo("testando2")
-        Truth.assertThat(answersChallenged[3]).isEqualTo("2")
+        answersChallenged.isEmpty()
         Truth.assertThat(body["scoreChallenger"]).isEqualTo(10)
         Truth.assertThat(body["scoreChallenged"]).isEqualTo(9)
         val triviaQuestionsUsed = (body["triviaQuestionsUsed"] as List<HashMap<String, Any>>)[0]
@@ -66,7 +62,7 @@ class TestChallenge: TestSystem ("v2/challenge") {
 
     @Test
     fun getChallenge_notExists_returnChallenge(){
-        //testSetup.challengeRepo.deleteAll()
+        testSetup.challengeRepo.deleteAll()
 
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
@@ -81,8 +77,37 @@ class TestChallenge: TestSystem ("v2/challenge") {
 
         val body = response.body!!
 
-        Truth.assertThat(body["challenger"]).isEqualTo("37235b2a67c76abebce3f6e6")
-        Truth.assertThat(body["challenged"]).isEqualTo("null")
+        Truth.assertThat(body["challenger"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(body["challenged"]).isEqualTo(null)
+        val answersChallenger = (body["answersChallenger"] as List<String>)
+        answersChallenger.isEmpty()
+        val answersChallenged = (body["answersChallenged"] as List<String>)
+        answersChallenged.isEmpty()
+        Truth.assertThat(body["scoreChallenger"]).isNull()
+        Truth.assertThat(body["scoreChallenged"]).isNull()
+        val triviaQuestionsUsed = (body["triviaQuestionsUsed"] as List<HashMap<String, Any>>)
+        Truth.assertThat(triviaQuestionsUsed).hasSize(5)
+    }
+
+    @Test
+    fun getChallenge_existsSameUser_returnChallenge(){
+        testSetup.challengeRepo.deleteById("09c54d325b75357a571d4cc1")
+
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(null,headers)
+
+        val response = restTemplate
+                .exchange<HashMap<String, Any>>(baseUrl, HttpMethod.GET,entity)
+
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val body = response.body!!
+
+        Truth.assertThat(body["challenger"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(body["challenged"]).isEqualTo(null)
         val answersChallenger = (body["answersChallenger"] as List<String>)
         answersChallenger.isEmpty()
         val answersChallenged = (body["answersChallenged"] as List<String>)

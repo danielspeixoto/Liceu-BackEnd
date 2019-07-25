@@ -531,34 +531,63 @@ class DataSetup {
         ch2.id = ObjectId(CHALLENGE_TRIVIA_ID_2)
         challengeRepo.insert(ch2)
 
-//        val ch3 = MongoDatabase.MongoChallenge(
-//                USER_ID_3,
-//                null,
-//                listOf(
-//                        "oi",
-//                        "abriu",
-//                        "testando",
-//                        "4"
-//                ),
-//                listOf(),
-//                10,
-//                9,
-//                listOf(
-//                        MongoDatabase.MongoChallengeTrivia(
-//                                ObjectId(QUESTION_TRIVIA_ID_2),
-//                                ObjectId(USER_ID_3),
-//                                "1+1?",
-//                                "2",
-//                                "1",
-//                                listOf(
-//                                        "matematica",
-//                                        "algebra"
-//                                )
-//                        )
-//                )
-//        )
-//        ch3.id = ObjectId(CHALLENGE_TRIVIA_ID_3)
-//        challengeRepo.insert(ch3)
+        val ch3 = MongoDatabase.MongoChallenge(
+                USER_ID_3,
+                null,
+                listOf(
+                        "oi",
+                        "abriu",
+                        "testando",
+                        "4"
+                ),
+                listOf(),
+                10,
+                9,
+                listOf(
+                        MongoDatabase.MongoChallengeTrivia(
+                                ObjectId(QUESTION_TRIVIA_ID_2),
+                                ObjectId(USER_ID_3),
+                                "1+1?",
+                                "2",
+                                "1",
+                                listOf(
+                                        "matematica",
+                                        "algebra"
+                                )
+                        )
+                )
+        )
+        ch3.id = ObjectId(CHALLENGE_TRIVIA_ID_3)
+        challengeRepo.insert(ch3)
+
+        val ch4 = MongoDatabase.MongoChallenge(
+                USER_ID_1,
+                null,
+                listOf(
+                        "oi",
+                        "abriu",
+                        "testando",
+                        "4"
+                ),
+                listOf(),
+                10,
+                9,
+                listOf(
+                        MongoDatabase.MongoChallengeTrivia(
+                                ObjectId(QUESTION_TRIVIA_ID_2),
+                                ObjectId(USER_ID_3),
+                                "1+1?",
+                                "2",
+                                "1",
+                                listOf(
+                                        "matematica",
+                                        "algebra"
+                                )
+                        )
+                )
+        )
+        ch4.id = ObjectId(CHALLENGE_TRIVIA_ID_4)
+        challengeRepo.insert(ch4)
     }
 }
 
