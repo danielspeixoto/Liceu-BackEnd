@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class MongoTriviaRepository(
-    private val template: MongoTemplate
+     val template: MongoTemplate
 ): TriviaBoundary.IRepository {
 
 
@@ -52,7 +52,7 @@ class MongoTriviaRepository(
     }
 
 
-    private fun toTriviaQuestion(answer: MongoDatabase.MongoTriviaQuestion): TriviaQuestion{
+    fun toTriviaQuestion(answer: MongoDatabase.MongoTriviaQuestion): TriviaQuestion{
         return TriviaQuestion(
                 answer.id.toString(),
                 answer.userId.toString(),

@@ -26,6 +26,12 @@ class DataSetup {
     val QUESTION_TRIVIA_ID_4 = "0a1449a4bdb40abd5ae1e432"
     val QUESTION_TRIVIA_ID_5 = "0a1449a4bdb40abd5ae1e433"
 
+    val CHALLENGE_TRIVIA_ID_1 = "09c54d325b75357a571d4ca2"
+    val CHALLENGE_TRIVIA_ID_2 = "09c54d325b75357a571d4cb2"
+    val CHALLENGE_TRIVIA_ID_3 = "09c54d325b75357a571d4cc1"
+    val CHALLENGE_TRIVIA_ID_4 = "09c54d325b75357a571d4cd2"
+    val CHALLENGE_TRIVIA_ID_5 = "09c54d325b75357a571d4ce2"
+
     val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
     val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
     val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
@@ -63,6 +69,8 @@ class DataSetup {
     lateinit var gameRepo: GameRepository
     @Autowired
     lateinit var triviaRepo: TriviaRepository
+    @Autowired
+    lateinit var challengeRepo: ChallengeRepository
 
     fun setup() {
         questionRepo.deleteAll()
@@ -70,11 +78,13 @@ class DataSetup {
         userRepo.deleteAll()
         gameRepo.deleteAll()
         triviaRepo.deleteAll()
+        challengeRepo.deleteAll()
         questions()
         videos()
         users()
         games()
         trivia()
+        challenge()
     }
 
     fun questions() {
@@ -448,6 +458,78 @@ class DataSetup {
         )
         q5.id = ObjectId(QUESTION_TRIVIA_ID_5)
         triviaRepo.insert(q5)
+    }
+
+    fun challenge() {
+        val ch1 = MongoDatabase.MongoChallenge(
+                ObjectId(USER_ID_1),
+                //ObjectId(USER_ID_2),
+                null,
+                listOf(
+                        "oi",
+                        "abriu",
+                        "testando",
+                        "4"
+                ),
+                //listOf(),
+                listOf(
+                        "oi2",
+                        "abriu2",
+                        "testando2",
+                        "2"
+                ),
+                10,
+                9,
+                listOf(
+                        MongoDatabase.MongoChallengeTrivia(
+                                ObjectId(QUESTION_TRIVIA_ID_2),
+                                ObjectId(USER_ID_3),
+                                "1+1?",
+                                "2",
+                                "1",
+                                listOf(
+                                        "matematica",
+                                        "algebra"
+                                )
+                        )
+                )
+        )
+        ch1.id = ObjectId(CHALLENGE_TRIVIA_ID_1)
+        challengeRepo.insert(ch1)
+
+        val ch2 = MongoDatabase.MongoChallenge(
+                ObjectId(USER_ID_2),
+                ObjectId(USER_ID_1),
+                listOf(
+                        "oaai",
+                        "aaabriu",
+                        "taaestando",
+                        "4aa"
+                ),
+                listOf(
+                        "oaai2",
+                        "abaariu2",
+                        "teaastando2",
+                        "2aa"
+                ),
+                6,
+                3,
+                listOf(
+                        MongoDatabase.MongoChallengeTrivia(
+                                ObjectId(QUESTION_TRIVIA_ID_1),
+                                ObjectId(USER_ID_4),
+                                "1+2?",
+                                "3",
+                                "0",
+                                listOf(
+                                        "graficos",
+                                        "algebra"
+                                )
+                        )
+                )
+        )
+        ch2.id = ObjectId(CHALLENGE_TRIVIA_ID_2)
+        challengeRepo.insert(ch2)
     }
 }
 

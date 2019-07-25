@@ -26,7 +26,8 @@ class MongoChallengeRepository(
                 matchmaking.scoreChallenger,
                 matchmaking.scoreChallenged,
                 matchmaking.triviaQuestionsUsed.map {
-                    MongoDatabase.MongoTriviaQuestion(
+                    MongoDatabase.MongoChallengeTrivia(
+                            ObjectId(it.id),
                             ObjectId(it.userId),
                             it.question,
                             it.correctAnswer,
@@ -38,18 +39,21 @@ class MongoChallengeRepository(
         return result.id.toHexString()
     }
 
+    override fun findById(id: String): Challenge? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun matchMaking(challengedId: String): Challenge? {
         val result = template.findAndModify(
-//                TODO Check if challenger has answered their questions
-                Query.query(Criteria.where("challenged").ne(null)),
-                Update.update("challenged", challengedId),
+                Query.query(Criteria.where("challenged").`is`(null) .and("answersChallenger").not().size(0)),
+                Update.update("challenged", ObjectId(challengedId)),
                 MongoDatabase.MongoChallenge::class.java
         )
         result?.let {
             return Challenge(
                     it.id.toHexString(),
                     it.challenger.toHexString(),
-                    it.challenged?.toHexString(),
+                    challengedId,
                     it.answersChallenger,
                     it.answersChallenged,
                     it.scoreChallenger,
@@ -67,5 +71,29 @@ class MongoChallengeRepository(
             )
         }
         return null
+    }
+
+    fun toChallenge(answer: MongoDatabase.MongoChallenge): Challenge {
+        return Challenge(
+                answer.id.toString(),
+                answer.challenger.toString(),
+                answer.challenged.toString(),
+                answer.answersChallenger,
+                answer.answersChallenged,
+                answer.scoreChallenger,
+                answer.scoreChallenged,
+                answer.triviaQuestionsUsed.map { toChallengeTrivia(it) }
+        )
+    }
+
+    fun toChallengeTrivia(answer: MongoDatabase.MongoChallengeTrivia): TriviaQuestion{
+        return TriviaQuestion(
+                answer.id.toString(),
+                answer.userId.toString(),
+                answer.question,
+                answer.correctAnswer,
+                answer.wrongAnswer,
+                answer.tags
+        )
     }
 }

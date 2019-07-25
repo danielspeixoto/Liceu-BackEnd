@@ -5,11 +5,8 @@ import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.video.Video
 import com.liceu.server.presentation.Response
-import com.liceu.server.presentation.Response.Companion.ALREADY_EXISTS_ERROR_CODE
-import com.liceu.server.presentation.Response.Companion.NOT_FOUND_ERROR_CODE
 import com.liceu.server.presentation.Response.Companion.STATUS_ERROR
 import com.liceu.server.presentation.Response.Companion.UNKNOWN_ERROR_CODE
-import com.liceu.server.presentation.Response.Companion.VALIDATION_ERROR_CODE
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired

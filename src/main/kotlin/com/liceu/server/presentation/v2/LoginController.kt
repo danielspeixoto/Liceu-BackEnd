@@ -4,7 +4,6 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.presentation.JWTAuthenticationFilter
 import com.liceu.server.util.JWTAuth
-import com.liceu.server.presentation.Response
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired

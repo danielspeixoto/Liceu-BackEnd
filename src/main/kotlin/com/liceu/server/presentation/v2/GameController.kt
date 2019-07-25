@@ -1,14 +1,11 @@
 package com.liceu.server.presentation.v2
 
 import com.liceu.server.domain.game.Answer
-import com.liceu.server.domain.game.Game
 import com.liceu.server.domain.game.GameBoundary
 import com.liceu.server.domain.game.GameSubmission
-import com.liceu.server.domain.global.AUTH
 import com.liceu.server.domain.global.CONTROLLER
 import com.liceu.server.domain.global.GAME
 import com.liceu.server.domain.global.NETWORK
-import com.liceu.server.presentation.Response
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired

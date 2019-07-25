@@ -155,6 +155,19 @@ class MongoDatabase {
         lateinit var id: ObjectId
     }
 
+
+
+    data class MongoChallengeTrivia(
+            val id: ObjectId,
+            val userId: ObjectId,
+            val question: String,
+            val correctAnswer: String,
+            val wrongAnswer: String,
+            val tags: List<String>
+    )
+
+
+
     @Document(collection = MongoDatabase.CHALLENGE_COLLECTION)
     data class MongoChallenge(
             val challenger: ObjectId,
@@ -163,7 +176,7 @@ class MongoDatabase {
             val answersChallenged: List<String>,
             val scoreChallenger: Int?,
             val scoreChallenged: Int?,
-            val triviaQuestionsUsed: List<MongoTriviaQuestion>
+            val triviaQuestionsUsed: List<MongoChallengeTrivia>
     ){
         @Id
         lateinit var id: ObjectId

@@ -1,6 +1,5 @@
 package com.liceu.server.domain.user
 
-import com.liceu.server.domain.game.GameRanking
 import com.liceu.server.domain.global.ID
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.global.USER

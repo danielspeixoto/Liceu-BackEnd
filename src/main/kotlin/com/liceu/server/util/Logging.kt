@@ -2,7 +2,6 @@ package com.liceu.server.util
 
 import net.logstash.logback.marker.Markers.append
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import java.io.PrintWriter
 import java.io.StringWriter
 
@@ -18,7 +17,7 @@ object Logging {
         return listOf(className, methodName) to lineNumber
     }
 
-    fun info(eventName: String, tags: List<String> = listOf(), data: Map<String, Any> = hashMapOf()) {
+    fun info(eventName: String, tags: List<String> = listOf(), data: Map<String, Any?> = hashMapOf()) {
         val stack = stack()
         logger.info(null,
                 append("event", eventName),
