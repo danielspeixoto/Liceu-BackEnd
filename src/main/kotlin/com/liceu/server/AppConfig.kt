@@ -1,6 +1,8 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.domain.challenge.ChallengeBoundary
+import com.liceu.server.domain.challenge.GetChallenge
 import com.liceu.server.domain.report.ReportBoundary
 import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.domain.game.GameBoundary
@@ -58,6 +60,10 @@ class AppConfig : AbstractMongoConfiguration() {
 
     val mongoTriviaRepository by lazy{
         MongoTriviaRepository(mongoTemplate())
+    }
+
+    val mongoChallengeRepository by lazy{
+        MongoChallengeRepository(mongoTemplate())
     }
 
     val facebookAPI by lazy {
@@ -129,6 +135,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun randomTriviaQuestions(): TriviaBoundary.IRandomQuestions{
         return TriviaRandomQuestions(mongoTriviaRepository, 5)
+    }
+
+    @Bean
+    fun getChallenge(): ChallengeBoundary.IGetChallenge{
+        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository)
     }
 
 }

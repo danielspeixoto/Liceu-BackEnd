@@ -17,7 +17,6 @@ class GetChallenge(
     }
 
     override fun run(userId: String): Challenge {
-        //try {
             challengeRepository.matchMaking(userId)?.let {
                 Logging.info(
                         EVENT_NAME, TAGS ,
