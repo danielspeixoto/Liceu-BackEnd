@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
+import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
 
 
@@ -19,8 +20,8 @@ class MongoChallengeRepository(
 
     override fun createChallenge(matchmaking: ChallengeToInsert): String {
         val result = template.insert(MongoDatabase.MongoChallenge(
-                ObjectId(matchmaking.challenger),
-                ObjectId(matchmaking.challenged),
+                matchmaking.challenger,
+                matchmaking.challenged,
                 matchmaking.answersChallenger,
                 matchmaking.answersChallenged,
                 matchmaking.scoreChallenger,
@@ -46,13 +47,14 @@ class MongoChallengeRepository(
     override fun matchMaking(challengedId: String): Challenge? {
         val result = template.findAndModify(
                 Query.query(Criteria.where("challenged").`is`(null) .and("answersChallenger").not().size(0)),
+                        //.and("challenger").not().isEqualTo(challengedId)),
                 Update.update("challenged", ObjectId(challengedId)),
                 MongoDatabase.MongoChallenge::class.java
         )
         result?.let {
             return Challenge(
                     it.id.toHexString(),
-                    it.challenger.toHexString(),
+                    it.challenger,
                     challengedId,
                     it.answersChallenger,
                     it.answersChallenged,

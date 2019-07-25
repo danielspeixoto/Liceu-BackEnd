@@ -170,8 +170,8 @@ class MongoDatabase {
 
     @Document(collection = MongoDatabase.CHALLENGE_COLLECTION)
     data class MongoChallenge(
-            val challenger: ObjectId,
-            val challenged: ObjectId?,
+            val challenger: String,
+            val challenged: String?,
             val answersChallenger: List<String>,
             val answersChallenged: List<String>,
             val scoreChallenger: Int?,

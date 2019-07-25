@@ -1,6 +1,7 @@
 package com.liceu.server.system.v2.challenge
 
 import com.google.common.truth.Truth
+import com.liceu.server.DataSetup
 import com.liceu.server.data.ChallengeRepository
 import com.liceu.server.system.TestSystem
 import org.junit.jupiter.api.Test
@@ -18,6 +19,10 @@ class TestChallenge: TestSystem ("v2/challenge") {
     @Autowired
     lateinit var challengeRepo: ChallengeRepository
 
+
+    @Autowired
+    override lateinit var testSetup: DataSetup
+
     @Test
     fun getChallenge_exists_returnChallenge(){
         val headers = HttpHeaders()
@@ -27,18 +32,68 @@ class TestChallenge: TestSystem ("v2/challenge") {
         val entity = HttpEntity(null,headers)
 
         val response = restTemplate
-                .exchange<List<HashMap<String, Any>>>(baseUrl, HttpMethod.GET,entity)
+                .exchange<HashMap<String, Any>>(baseUrl, HttpMethod.GET,entity)
 
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val body = response.body!!
 
-        Truth.assertThat(body[0]["id"]).isEqualTo("09c54d325b75357a571d4ca2")
-        Truth.assertThat(body[0]["challenger"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
-        Truth.assertThat(body[0]["challenged"]).isEqualTo("37235b2a67c76abebce3f6e3")
-        //Truth.assertThat(body[0]["answersChallenger"]).isEqualTo("")
-
+        Truth.assertThat(body["id"]).isEqualTo("09c54d325b75357a571d4ca2")
+        Truth.assertThat(body["challenger"]).isEqualTo("37235b2a67c76abebce3f6e6")
+        Truth.assertThat(body["challenged"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
+        val answersChallenger = (body["answersChallenger"] as List<String>)
+        Truth.assertThat(answersChallenger[0]).isEqualTo("oi")
+        Truth.assertThat(answersChallenger[1]).isEqualTo("abriu")
+        Truth.assertThat(answersChallenger[2]).isEqualTo("testando")
+        Truth.assertThat(answersChallenger[3]).isEqualTo("4")
+        val answersChallenged = (body["answersChallenged"] as List<String>)
+        Truth.assertThat(answersChallenged[0]).isEqualTo("oi2")
+        Truth.assertThat(answersChallenged[1]).isEqualTo("abriu2")
+        Truth.assertThat(answersChallenged[2]).isEqualTo("testando2")
+        Truth.assertThat(answersChallenged[3]).isEqualTo("2")
+        Truth.assertThat(body["scoreChallenger"]).isEqualTo(10)
+        Truth.assertThat(body["scoreChallenged"]).isEqualTo(9)
+        val triviaQuestionsUsed = (body["triviaQuestionsUsed"] as List<HashMap<String, Any>>)[0]
+        Truth.assertThat(triviaQuestionsUsed["id"]).isEqualTo("0a1449a4bdb40abd5ae1e411")
+        Truth.assertThat(triviaQuestionsUsed["userId"]).isEqualTo("37235b2a67c76abebce3f6e6")
+        Truth.assertThat(triviaQuestionsUsed["question"]).isEqualTo("1+1?")
+        Truth.assertThat(triviaQuestionsUsed["correctAnswer"]).isEqualTo("2")
+        Truth.assertThat(triviaQuestionsUsed["wrongAnswer"]).isEqualTo("1")
+        val tags = triviaQuestionsUsed["tags"] as List<String>
+        Truth.assertThat(tags[0]).isEqualTo("matematica")
+        Truth.assertThat(tags[1]).isEqualTo("algebra")
     }
+
+    @Test
+    fun getChallenge_notExists_returnChallenge(){
+        //testSetup.challengeRepo.deleteAll()
+
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(null,headers)
+
+        val response = restTemplate
+                .exchange<HashMap<String, Any>>(baseUrl, HttpMethod.GET,entity)
+
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val body = response.body!!
+
+        Truth.assertThat(body["challenger"]).isEqualTo("37235b2a67c76abebce3f6e6")
+        Truth.assertThat(body["challenged"]).isEqualTo("null")
+        val answersChallenger = (body["answersChallenger"] as List<String>)
+        answersChallenger.isEmpty()
+        val answersChallenged = (body["answersChallenged"] as List<String>)
+        answersChallenged.isEmpty()
+        Truth.assertThat(body["scoreChallenger"]).isNull()
+        Truth.assertThat(body["scoreChallenged"]).isNull()
+        val triviaQuestionsUsed = (body["triviaQuestionsUsed"] as List<HashMap<String, Any>>)
+        Truth.assertThat(triviaQuestionsUsed).hasSize(5)
+    }
+
+
 
 
 }

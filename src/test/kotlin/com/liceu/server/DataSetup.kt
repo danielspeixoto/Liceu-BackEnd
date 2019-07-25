@@ -462,9 +462,9 @@ class DataSetup {
 
     fun challenge() {
         val ch1 = MongoDatabase.MongoChallenge(
-                ObjectId(USER_ID_1),
-                //ObjectId(USER_ID_2),
-                null,
+                USER_ID_3,
+                USER_ID_2,
+                //null,
                 listOf(
                         "oi",
                         "abriu",
@@ -498,8 +498,8 @@ class DataSetup {
         challengeRepo.insert(ch1)
 
         val ch2 = MongoDatabase.MongoChallenge(
-                ObjectId(USER_ID_2),
-                ObjectId(USER_ID_1),
+                USER_ID_2,
+                USER_ID_1,
                 listOf(
                         "oaai",
                         "aaabriu",
@@ -530,6 +530,35 @@ class DataSetup {
         )
         ch2.id = ObjectId(CHALLENGE_TRIVIA_ID_2)
         challengeRepo.insert(ch2)
+
+//        val ch3 = MongoDatabase.MongoChallenge(
+//                USER_ID_3,
+//                null,
+//                listOf(
+//                        "oi",
+//                        "abriu",
+//                        "testando",
+//                        "4"
+//                ),
+//                listOf(),
+//                10,
+//                9,
+//                listOf(
+//                        MongoDatabase.MongoChallengeTrivia(
+//                                ObjectId(QUESTION_TRIVIA_ID_2),
+//                                ObjectId(USER_ID_3),
+//                                "1+1?",
+//                                "2",
+//                                "1",
+//                                listOf(
+//                                        "matematica",
+//                                        "algebra"
+//                                )
+//                        )
+//                )
+//        )
+//        ch3.id = ObjectId(CHALLENGE_TRIVIA_ID_3)
+//        challengeRepo.insert(ch3)
     }
 }
 
