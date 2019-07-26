@@ -71,7 +71,6 @@ class TestMongoChallengeRepositoryIntegration {
                 )
         ))
 
-        //val report = data.toChallenge(repo.findById(id).get())
 
         Truth.assertThat(report.challenger).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(report.challenged).isEqualTo(testSetup.USER_ID_2)
@@ -130,7 +129,6 @@ class TestMongoChallengeRepositoryIntegration {
                 )
         ))
 
-        //val report = data.toChallenge(repo.findById(id).get())
 
         Truth.assertThat(report.challenger).isEqualTo(testSetup.USER_ID_3)
         Truth.assertThat(report.challenged).isEqualTo(null)
@@ -184,5 +182,38 @@ class TestMongoChallengeRepositoryIntegration {
         Truth.assertThat(resultRetrieved).isNull()
     }
 
+    @Test
+    fun findById_validChallenge_returnChallenge(){
+        val resultRetrieved = data.findById("09c54d325b75357a571d4cb2")
+        Truth.assertThat(resultRetrieved.id).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_2)
+    }
+
+    @Test
+    fun updateChallenge_validChallengeChallengerChange_return(){
+        val answers = listOf(
+                "oi-trocado","alo-trocado","aahah-trocado","its me-trocado"
+        )
+        data.updateAnswers("09c54d325b75357a571d4cb2",true,answers,8)
+        val resultRetrieved = data.findById("09c54d325b75357a571d4cb2")
+        Truth.assertThat(resultRetrieved.answersChallenger[0]).isEqualTo("oi-trocado")
+        Truth.assertThat(resultRetrieved.answersChallenger[1]).isEqualTo("alo-trocado")
+        Truth.assertThat(resultRetrieved.answersChallenger[2]).isEqualTo("aahah-trocado")
+        Truth.assertThat(resultRetrieved.answersChallenger[3]).isEqualTo("its me-trocado")
+        Truth.assertThat(resultRetrieved.scoreChallenger).isEqualTo(8)
+    }
+
+    @Test
+    fun updateChallenge_validChallengeChallengedChange_return(){
+        val answers = listOf(
+                "oi-trocadod","alo-trocadod","aahah-trocadod","its me-trocadod"
+        )
+        data.updateAnswers("09c54d325b75357a571d4cb2",false,answers,0)
+        val resultRetrieved = data.findById("09c54d325b75357a571d4cb2")
+        Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("oi-trocadod")
+        Truth.assertThat(resultRetrieved.answersChallenged[1]).isEqualTo("alo-trocadod")
+        Truth.assertThat(resultRetrieved.answersChallenged[2]).isEqualTo("aahah-trocadod")
+        Truth.assertThat(resultRetrieved.answersChallenged[3]).isEqualTo("its me-trocadod")
+        Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(0)
+    }
 
 }

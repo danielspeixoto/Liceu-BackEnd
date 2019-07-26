@@ -525,6 +525,17 @@ class DataSetup {
                                         "graficos",
                                         "algebra"
                                 )
+                        ),
+                        MongoDatabase.MongoChallengeTrivia(
+                                ObjectId(QUESTION_TRIVIA_ID_1),
+                                ObjectId(USER_ID_4),
+                                "1+3?",
+                                "4",
+                                "0",
+                                listOf(
+                                        "graficos",
+                                        "algebra"
+                                )
                         )
                 )
         )

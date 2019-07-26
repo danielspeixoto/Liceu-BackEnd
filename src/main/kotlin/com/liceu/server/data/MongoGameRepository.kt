@@ -23,6 +23,7 @@ class MongoGameRepository(
 
     private var lastRequest = arrayListOf<Game>()
     private var lastMonthRequest = -1
+    private var lastTimeStampRequest = -1
 
     override fun insert(game: GameToInsert): String {
         val result = template.insert(MongoDatabase.MongoGame(
@@ -80,6 +81,7 @@ class MongoGameRepository(
                         "duration" to duration
                 )
         )
+
         return lastRequest
     }
 

@@ -1,12 +1,10 @@
 package com.liceu.server.data
 
-import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.ChallengeToInsert
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.trivia.TriviaQuestion
-import com.liceu.server.domain.user.User
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
@@ -73,6 +71,54 @@ class MongoChallengeRepository(
         }
         return null
     }
+
+    override fun updateAnswers(challengeId: String, isChallenger: Boolean, answers: List<String>, score: Int): Long {
+        var player = "Challenger"
+        if(!isChallenger){
+            player = "Challenged"
+        }
+        val update = Update()
+        update.set("answers" + player,answers)
+        update.set("score" + player,score)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(challengeId))),
+                update,
+                MongoDatabase.MongoChallenge::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun findById(challengeId: String): Challenge {
+            val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(challengeId)))
+            val agg = Aggregation.newAggregation(match)
+            val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
+            val challengeRetrieved = results.map {
+                return Challenge(
+                        it.id.toHexString(),
+                        it.challenger,
+                        it.challenged,
+                        it.answersChallenger,
+                        it.answersChallenged,
+                        it.scoreChallenger,
+                        it.scoreChallenged,
+                        it.triviaQuestionsUsed.map { triviaQuestion ->
+                            TriviaQuestion(
+                                    triviaQuestion.id.toHexString(),
+                                    triviaQuestion.userId.toHexString(),
+                                    triviaQuestion.question,
+                                    triviaQuestion.correctAnswer,
+                                    triviaQuestion.wrongAnswer,
+                                    triviaQuestion.tags
+                            )
+                        }
+                )
+            }
+            if(challengeRetrieved.isNotEmpty()){
+                return challengeRetrieved[0]
+            }else{
+                throw ItemNotFoundException()
+            }
+        }
 
     fun toChallenge(answer: MongoDatabase.MongoChallenge): Challenge {
         return Challenge(

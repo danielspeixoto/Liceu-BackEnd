@@ -41,7 +41,6 @@ class GetChallenge(
                     null,
                     trivias
             ))
-            //challengeRepository.findById(challengeId)?.let {
             Logging.info(
                     EVENT_NAME, TAGS ,
                     hashMapOf(
@@ -53,7 +52,6 @@ class GetChallenge(
                     )
             )
             return challengeId
-            //}
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS, Exception())
             throw Exception()

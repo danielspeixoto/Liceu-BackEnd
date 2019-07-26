@@ -3,6 +3,7 @@ package com.liceu.server
 import com.liceu.server.data.*
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.GetChallenge
+import com.liceu.server.domain.challenge.UpdateAnswers
 import com.liceu.server.domain.report.ReportBoundary
 import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.domain.game.GameBoundary
@@ -146,6 +147,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun getChallenge(): ChallengeBoundary.IGetChallenge{
         return GetChallenge(mongoChallengeRepository,mongoTriviaRepository)
+    }
+
+    @Bean
+    fun UpdateAnswers(): ChallengeBoundary.IUpdateAnswers{
+        return UpdateAnswers(mongoChallengeRepository)
     }
 
 }

@@ -4,6 +4,7 @@ import com.google.common.truth.Truth
 import com.liceu.server.DataSetup
 import com.liceu.server.data.ChallengeRepository
 import com.liceu.server.system.TestSystem
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
@@ -14,7 +15,7 @@ import org.springframework.http.HttpStatus
 import java.util.HashMap
 
 
-class TestChallenge: TestSystem ("v2/challenge") {
+class TestChallenge: TestSystem ("/v2/challenge/") {
 
     @Autowired
     lateinit var challengeRepo: ChallengeRepository
@@ -116,6 +117,36 @@ class TestChallenge: TestSystem ("v2/challenge") {
         Truth.assertThat(body["scoreChallenged"]).isNull()
         val triviaQuestionsUsed = (body["triviaQuestionsUsed"] as List<HashMap<String, Any>>)
         Truth.assertThat(triviaQuestionsUsed).hasSize(5)
+    }
+
+    
+    @Test
+    fun updateChallenge_existsChallenge_returnVoid(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "answers" to listOf(
+                                "3",
+                                "4"
+                        )
+                )
+                ,headers)
+
+        val response = restTemplate
+                .exchange<Void>(baseUrl+testSetup.CHALLENGE_TRIVIA_ID_2, HttpMethod.PUT,entity)
+
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+
+
+        val resultRetrieved = challengeRepo.findById(testSetup.CHALLENGE_TRIVIA_ID_2).get()
+        Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId("09c54d325b75357a571d4cb2"))
+        Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
+        Truth.assertThat(resultRetrieved.answersChallenged[1]).isEqualTo("4")
+        Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(2)
     }
 
 
