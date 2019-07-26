@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.UserRepository
 import com.liceu.server.util.JWTAuth
+import org.junit.Ignore
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -59,22 +60,24 @@ class TestHeroku  {
         Truth.assertThat(auth.length).isGreaterThan(10)
     }
 
-    @Test
-    fun getRanking_Exists_returnTopGames() {
-        val url = URL("https://liceu-dev.herokuapp.com/v2/ranking/?year=2019&month=7&amount=5")
-        val con = url.openConnection() as HttpURLConnection
-        con.doOutput = true
-        con.setRequestMethod("GET")
-        con.setRequestProperty("API_KEY","2VsYHwfQKtjiAdLs8Z2fTLwuLpofSXWy")
-        con.setRequestProperty("Authorization", auth)
-        Truth.assertThat(con.responseCode).isEqualTo(200)
-
-        val result = this.read(con.inputStream)
-        val first = result[0].toMap()
-
-        Truth.assertThat(result.size).isEqualTo(5)
-        Truth.assertThat(first["id"].toString().isNotEmpty()).isTrue()
-    }
+//
+//    @Ignore
+//    @Test
+//    fun getRanking_Exists_returnTopGames() {
+//        val url = URL("https://liceu-dev.herokuapp.com/v2/ranking/?year=2019&month=7&amount=5")
+//        val con = url.openConnection() as HttpURLConnection
+//        con.doOutput = true
+//        con.setRequestMethod("GET")
+//        con.setRequestProperty("API_KEY","2VsYHwfQKtjiAdLs8Z2fTLwuLpofSXWy")
+//        con.setRequestProperty("Authorization", auth)
+//        Truth.assertThat(con.responseCode).isEqualTo(200)
+//
+//        val result = this.read(con.inputStream)
+//        val first = result[0].toMap()
+//
+//        Truth.assertThat(result.size).isEqualTo(5)
+//        Truth.assertThat(first["id"].toString().isNotEmpty()).isTrue()
+//    }
 
 
     fun read(istr: InputStream): List<HashMap<String, Any>> {
