@@ -7,9 +7,11 @@ import com.liceu.server.data.ChallengeRepository
 import com.liceu.server.data.MongoChallengeRepository
 import com.liceu.server.data.MongoDatabase
 import com.liceu.server.domain.challenge.ChallengeToInsert
+import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.trivia.TriviaQuestion
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
@@ -186,6 +188,13 @@ class TestMongoChallengeRepositoryIntegration {
     fun findById_validChallenge_returnChallenge(){
         val resultRetrieved = data.findById("09c54d325b75357a571d4cb2")
         Truth.assertThat(resultRetrieved.id).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_2)
+    }
+
+    @Test
+    fun findById_invalidChallenge_returnError(){
+        assertThrows<ItemNotFoundException> {
+            data.findById("09c54d325b75357a531d4cb2")
+        }
     }
 
     @Test

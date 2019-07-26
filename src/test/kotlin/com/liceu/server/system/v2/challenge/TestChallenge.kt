@@ -119,7 +119,7 @@ class TestChallenge: TestSystem ("/v2/challenge/") {
         Truth.assertThat(triviaQuestionsUsed).hasSize(5)
     }
 
-    
+
     @Test
     fun updateChallenge_existsChallenge_returnVoid(){
         val headers = HttpHeaders()
