@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus
 import java.util.HashMap
 
 
-class TestChallenge: TestSystem ("/v2/challenge/") {
+class TestChallenge: TestSystem ("/v2/challenge") {
 
     @Autowired
     lateinit var challengeRepo: ChallengeRepository
@@ -136,7 +136,7 @@ class TestChallenge: TestSystem ("/v2/challenge/") {
                 ,headers)
 
         val response = restTemplate
-                .exchange<Void>(baseUrl+testSetup.CHALLENGE_TRIVIA_ID_2, HttpMethod.PUT,entity)
+                .exchange<Void>(baseUrl+"/"+testSetup.CHALLENGE_TRIVIA_ID_2, HttpMethod.PUT,entity)
 
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 

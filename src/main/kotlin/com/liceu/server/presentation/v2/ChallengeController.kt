@@ -17,7 +17,7 @@ import javax.validation.ValidationException
 
 
 @RestController
-@RequestMapping("/v2/challenge/")
+@RequestMapping("/v2/challenge")
 class ChallengeController(
         @Autowired val challenge: ChallengeBoundary.IGetChallenge,
         @Autowired val updateChallenge: ChallengeBoundary.IUpdateAnswers
