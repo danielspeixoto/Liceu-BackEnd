@@ -98,7 +98,6 @@ class TestMongoChallengeRepositoryIntegration {
 
     @Test
     fun insert_nullChallenged_CanBeRetrieved(){
-
         val report = data.createChallenge(ChallengeToInsert(
                 testSetup.USER_ID_3,
                 null,
@@ -155,7 +154,6 @@ class TestMongoChallengeRepositoryIntegration {
 
     @Test
     fun retrieve_validChallenge_returnChallenge(){
-
         val resultRetrieved = data.matchMaking("0a1449a4bdb40abd5ae1e333")
         Truth.assertThat(resultRetrieved?.id).isEqualTo("09c54d325b75357a571d4cc1")
         Truth.assertThat(resultRetrieved?.challenger).isEqualTo("37235b2a67c76abebce3f6e6")

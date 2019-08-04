@@ -45,7 +45,7 @@ class MongoChallengeRepository(
     override fun matchMaking(challengedId: String): Challenge? {
         val result = template.findAndModify(
                 Query.query(Criteria.where("challenged").`is`(null) .and("answersChallenger").not().size(0).and("challenger").ne(challengedId)),
-                Update.update("challenged", ObjectId(challengedId)),
+                Update.update("challenged", challengedId),
                 MongoDatabase.MongoChallenge::class.java
         )
         result?.let {
