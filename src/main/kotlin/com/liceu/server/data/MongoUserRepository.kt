@@ -33,7 +33,7 @@ class MongoUserRepository(
                 user.facebookId
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
-        if(user != null) {
+        if (user != null) {
             mongoUser.id = user.id
         }
         return template.save(mongoUser).id.toHexString()
@@ -55,15 +55,15 @@ class MongoUserRepository(
                     )
             )
         }
-        if(userRetrieved.isNotEmpty()){
+        if (userRetrieved.isNotEmpty()) {
             return userRetrieved[0]
-        }else{
+        } else {
             throw ItemNotFoundException()
         }
     }
 
     override fun getChallengesFromUserById(userId: String): List<Challenge> {
-        val match = Aggregation.match(Criteria().orOperator(Criteria.where("challenger").isEqualTo(userId) , Criteria.where("challenged").isEqualTo(userId)))
+        val match = Aggregation.match(Criteria().orOperator(Criteria.where("challenger").isEqualTo(userId), Criteria.where("challenged").isEqualTo(userId)))
         val agg = Aggregation.newAggregation(match)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
         val challengesRetrieved = results.map {
@@ -87,14 +87,8 @@ class MongoUserRepository(
                     }
             )
         }
-        if(challengesRetrieved.isNotEmpty()){
-            return challengesRetrieved
-        }else{
-            throw ItemNotFoundException()
-        }
+        return challengesRetrieved
     }
-
-
 
 
 }
