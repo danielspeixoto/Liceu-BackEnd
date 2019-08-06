@@ -88,6 +88,9 @@ class TestUser: TestSystem("/v2/user") {
 
         val response = restTemplate
                 .exchange<List<HashMap<String, Any>>>(baseUrl + "/88235b2a67c76abebce3f6e3/challenge", HttpMethod.GET, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+
+        Truth.assertThat(body.size).isEqualTo(0)
     }
 }

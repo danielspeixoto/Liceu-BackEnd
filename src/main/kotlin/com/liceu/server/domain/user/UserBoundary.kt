@@ -9,6 +9,10 @@ class UserBoundary {
         fun data(accessToken: String): UserForm
     }
 
+    interface IAccessTokenGoogleResolver{
+        fun data(accessToken: String): UserForm
+    }
+
     interface IRepository {
         fun save(user: UserForm): String
         fun getUserById(userId: String): User
@@ -16,10 +20,8 @@ class UserBoundary {
     }
 
     interface IUserById {
-
         @Throws(Error::class)
         fun run(userId: String): User
-
     }
 
     interface IChallengesFromUserById{
@@ -27,8 +29,6 @@ class UserBoundary {
     }
 
     interface IAuthenticate {
-
         fun run(facebookAccessToken: String): String
-
     }
 }

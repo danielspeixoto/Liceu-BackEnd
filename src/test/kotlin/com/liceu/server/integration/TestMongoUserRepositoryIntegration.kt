@@ -110,8 +110,7 @@ class TestMongoUserRepositoryIntegration {
 
     @Test
     fun challengesFromUser_challengeDontExists_returnError(){
-        assertThrows<ItemNotFoundException> {
-            data.getChallengesFromUserById(testSetup.USER_ID_4)
-        }
+        val result = data.getChallengesFromUserById(testSetup.USER_ID_4)
+        assertThat(result.size).isEqualTo(0)
     }
 }

@@ -18,12 +18,15 @@ configurations {
 }
 
 repositories {
+    google()
     mavenCentral()
     maven { url = uri("https://repo.spring.io/snapshot") }
     maven { url = uri("https://repo.spring.io/milestone") }
 }
 
 dependencies {
+    implementation(group = "com.google.auth", name = "google-auth-library-credentials", version = "0.16.2")
+    implementation(group = "com.google.apis", name = "google-api-services-oauth2", version = "v2-rev151-1.25.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 //	implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
