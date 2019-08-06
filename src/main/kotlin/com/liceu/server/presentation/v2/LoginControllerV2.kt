@@ -1,6 +1,9 @@
 package com.liceu.server.presentation.v2
 
-import com.liceu.server.domain.global.*
+import com.liceu.server.domain.global.AUTH
+import com.liceu.server.domain.global.CONTROLLER
+import com.liceu.server.domain.global.ENCRYPTION
+import com.liceu.server.domain.global.NETWORK
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.presentation.JWTAuthenticationFilter
 import com.liceu.server.util.JWTAuth
@@ -10,16 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
 
-@Deprecated("To be removed in next update")
+
 @RestController
-@RequestMapping("/v2/login")
-class LoginController(
-        @Autowired val authUser: UserBoundary.IAuthenticate
-) {
+//@RequestMapping("/v2/login") -> commented to avoid errors in tests
+class LoginControllerV2 (
+        @Autowired val authUser: UserBoundary.IMultipleAuthenticate
+){
 
     @Autowired
     lateinit var jwtAuth: JWTAuth
@@ -38,10 +44,10 @@ class LoginController(
         Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
                 "version" to 2
         ))
-
         val accessToken = body["accessToken"] ?: ""
+        val method = body["method"] ?: ""
         return try {
-            val userId = authUser.run(accessToken)
+            val userId = authUser.run(accessToken,method)
             val headers = HttpHeaders()
             val beforeJWT = System.currentTimeMillis()
             headers[JWTAuthenticationFilter.HEADER_STRING] = jwtAuth.sign(userId)
@@ -51,7 +57,6 @@ class LoginController(
             Logging.info("jwt_sign", listOf(AUTH, ENCRYPTION), timeSpent)
             ResponseEntity(null, headers, HttpStatus.OK)
         } catch (e: Exception) {
-//            TODO Check for another types of exceptions for custom handling
             Logging.error(
                     eventName,
                     eventTags,
@@ -60,4 +65,6 @@ class LoginController(
             ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
     }
+
+
 }

@@ -16,10 +16,7 @@ import com.liceu.server.domain.question.QuestionVideos
 import com.liceu.server.domain.trivia.SubmitTriviaQuestion
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.trivia.TriviaRandomQuestions
-import com.liceu.server.domain.user.Authenticate
-import com.liceu.server.domain.user.ChallengesFromUserId
-import com.liceu.server.domain.user.UserBoundary
-import com.liceu.server.domain.user.UserById
+import com.liceu.server.domain.user.*
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
 import org.springframework.context.annotation.Configuration
@@ -72,6 +69,10 @@ class AppConfig : AbstractMongoConfiguration() {
         FacebookAPI()
     }
 
+    val googleAPI by lazy {
+        GoogleAPI()
+    }
+
     val clientUri by lazy {
         MongoClientURI(mongoURI)
     }
@@ -102,6 +103,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun authenticate(): UserBoundary.IAuthenticate {
         return Authenticate(mongoUserRepository, facebookAPI)
+    }
+
+    @Bean
+    fun multipleAuthenticate(): UserBoundary.IMultipleAuthenticate{
+        return MultipleAuthenticate(mongoUserRepository,facebookAPI,googleAPI)
     }
 
     @Bean

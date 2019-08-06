@@ -3,6 +3,7 @@ package com.liceu.server.domain.user
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 
+@Deprecated("To be removed in next update")
 class Authenticate(
         val userRepo: UserBoundary.IRepository,
         val facebookApi: UserBoundary.IAccessTokenResolver

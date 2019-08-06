@@ -28,6 +28,11 @@ class UserBoundary {
         fun run(userId: String): List<Challenge>
     }
 
+    interface IMultipleAuthenticate {
+        fun run(accessToken: String, method: String): String
+    }
+
+    @Deprecated("To be removed in next update")
     interface IAuthenticate {
         fun run(facebookAccessToken: String): String
     }
