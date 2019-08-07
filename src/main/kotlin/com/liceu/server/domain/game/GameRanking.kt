@@ -48,7 +48,7 @@ class GameRanking(val repo: GameBoundary.IRepository, val maxResults: Int): Game
             return games
         } catch (e: Exception) {
             Logging.error(EVENT_NAME, TAGS, e)
-            throw Exception()
+            throw e
         }
     }
 

@@ -46,7 +46,7 @@ class RandomQuestions(val repo: QuestionBoundary.IRepository, val maxResults: In
             return questions
         } catch (e: Exception) {
             Logging.error(EVENT_NAME, TAGS, e)
-            throw Exception()
+            throw e
         }
     }
 }

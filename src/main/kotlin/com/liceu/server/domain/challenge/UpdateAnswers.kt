@@ -29,7 +29,7 @@ class UpdateAnswers(
             challengeRepository.updateAnswers(challengeId,isChallenger,answers,result)
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS, e)
-            throw (e)
+            throw e
         }
 
     }
