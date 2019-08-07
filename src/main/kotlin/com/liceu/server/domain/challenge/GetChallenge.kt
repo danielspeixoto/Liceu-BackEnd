@@ -52,9 +52,9 @@ class GetChallenge(
                     )
             )
             return challengeId
-        }catch (e: Exception){
-            Logging.error(EVENT_NAME, TAGS, Exception())
-            throw Exception()
+        } catch (e: Exception){
+            Logging.error(EVENT_NAME, TAGS, e)
+            throw e
         }
     }
 }
