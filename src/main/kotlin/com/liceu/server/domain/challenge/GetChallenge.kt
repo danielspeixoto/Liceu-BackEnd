@@ -12,7 +12,7 @@ class GetChallenge(
 ) : ChallengeBoundary.IGetChallenge {
 
     companion object {
-        const val EVENT_NAME = "game_ranking"
+        const val EVENT_NAME = "get_challenge"
         val TAGS = listOf(RETRIEVAL, CHALLENGE)
     }
 
@@ -31,7 +31,7 @@ class GetChallenge(
                 )
                 return it
             }
-            val trivias = triviaRepository.randomQuestions(listOf(), 5)
+            val trivias = triviaRepository.randomQuestions(listOf(), 3)
             val challengeId = challengeRepository.createChallenge(ChallengeToInsert(
                     userId,
                     null,
