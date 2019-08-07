@@ -48,6 +48,7 @@ class DataSetup {
     val USER_ID_2 = "39c54d325b75357a571d4cc2"
     val USER_ID_3 = "37235b2a67c76abebce3f6e6"
     val USER_ID_4 = "37235b2a67c76abebce3f6e3"
+    val USER_ID_5 = "37235b2a67c76abebce3h6e3"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
     val GAME_ID_2 = "49c54d325b75357a571d4cc2"
@@ -599,6 +600,31 @@ class DataSetup {
         )
         ch4.id = ObjectId(CHALLENGE_TRIVIA_ID_4)
         challengeRepo.insert(ch4)
+
+
+        val ch5 = MongoDatabase.MongoChallenge(
+                USER_ID_5,
+                null,
+                listOf(),
+                listOf(),
+                null,
+                null,
+                listOf(
+                        MongoDatabase.MongoChallengeTrivia(
+                                ObjectId(QUESTION_TRIVIA_ID_2),
+                                ObjectId(USER_ID_3),
+                                "1+1?",
+                                "2",
+                                "1",
+                                listOf(
+                                        "matematica",
+                                        "algebra"
+                                )
+                        )
+                )
+        )
+        ch5.id = ObjectId(CHALLENGE_TRIVIA_ID_5)
+        challengeRepo.insert(ch5)
     }
 }
 

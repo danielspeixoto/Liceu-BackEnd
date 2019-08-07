@@ -113,4 +113,13 @@ class TestMongoUserRepositoryIntegration {
         val result = data.getChallengesFromUserById(testSetup.USER_ID_4)
         assertThat(result.size).isEqualTo(0)
     }
+
+    @Test
+    fun challengesFromUser_challengerWithNoAnswers_returnNull(){
+        val result = data.getChallengesFromUserById(testSetup.USER_ID_5)
+        assertThat(result.size).isEqualTo(0)
+    }
+
+
+
 }

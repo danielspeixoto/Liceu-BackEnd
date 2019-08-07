@@ -63,7 +63,7 @@ class MongoUserRepository(
     }
 
     override fun getChallengesFromUserById(userId: String): List<Challenge> {
-        val match = Aggregation.match(Criteria().orOperator(Criteria.where("challenger").isEqualTo(userId), Criteria.where("challenged").isEqualTo(userId)))
+        val match = Aggregation.match(Criteria().orOperator(Criteria.where("challenger").isEqualTo(userId) .and("answersChallenger").not().size(0), Criteria.where("challenged").isEqualTo(userId)))
         val agg = Aggregation.newAggregation(match)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
         val challengesRetrieved = results.map {
