@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 import javax.servlet.http.HttpServletRequest
 
-@Deprecated("To be removed in next update")
-@RestController
-@RequestMapping("/v2/login")
+@Deprecated("Use LoginControllerV2 instead")
 class LoginController(
         @Autowired val authUser: UserBoundary.IAuthenticate
 ) {

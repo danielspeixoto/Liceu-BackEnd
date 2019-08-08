@@ -9,7 +9,7 @@ class MultipleAuthenticate(
         val userRepo: UserBoundary.IRepository,
         val facebookApi: UserBoundary.IAccessTokenResolver,
         val googleApi: UserBoundary.IAccessTokenGoogleResolver
-): UserBoundary.IMultipleAuthenticate {
+) : UserBoundary.IMultipleAuthenticate {
 
     companion object {
         const val EVENT_NAME = "login"
@@ -18,27 +18,29 @@ class MultipleAuthenticate(
 
     override fun run(accessToken: String, method: String): String {
         try {
-            lateinit var id: String
             val timeBefore = System.currentTimeMillis()
-            id = if(method == "facebook"){
-                val user = facebookApi.data(accessToken)
-                userRepo.save(user)
-            }else{
-                val user = googleApi.data(accessToken)
-                userRepo.save(user)
+            val user = if (method == "google") {
+                googleApi.data(accessToken)
+            } else {
+                facebookApi.data(accessToken)
             }
-            Logging.info(Authenticate.EVENT_NAME, Authenticate.TAGS, hashMapOf(
+            val id = userRepo.save(user)
+            Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "time" to System.currentTimeMillis() - timeBefore,
                     "userId" to id
             ))
             return id
-        }catch (e: AuthenticationException) {
+        } catch (e: AuthenticationException) {
             Logging.error("oauth", listOf(AUTH, THIRD_PARTY), e, hashMapOf(
-                    "accessToken" to accessToken
+                    "accessToken" to accessToken,
+                    "method" to method
             ))
             throw e
         } catch (e: Exception) {
-            Logging.error(EVENT_NAME, TAGS, e)
+            Logging.error(EVENT_NAME, TAGS, e, hashMapOf(
+                    "accessToken" to accessToken,
+                    "method" to method
+            ))
             throw e
         }
     }

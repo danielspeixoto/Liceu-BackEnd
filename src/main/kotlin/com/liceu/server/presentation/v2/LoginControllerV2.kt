@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest
 
 
 @RestController
-//@RequestMapping("/v2/login") -> commented to avoid errors in tests
+@RequestMapping("/v2/login")
 class LoginControllerV2 (
         @Autowired val authUser: UserBoundary.IMultipleAuthenticate
 ){

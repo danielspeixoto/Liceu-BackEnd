@@ -69,8 +69,13 @@ class AppConfig : AbstractMongoConfiguration() {
         FacebookAPI()
     }
 
+    @Value("\${google.clientId}")
+    lateinit var googleClientId: String
+    @Value("\${google.clientSecret}")
+    lateinit var googleClientSecret: String
+
     val googleAPI by lazy {
-        GoogleAPI()
+        GoogleAPI(googleClientId, googleClientSecret)
     }
 
     val clientUri by lazy {

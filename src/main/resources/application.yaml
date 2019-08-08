@@ -5,6 +5,10 @@ auth:
   secret: ${AUTH_SECRET}
   prefix: ${AUTH_PREFIX}
 
+google:
+  clientId: ${GOOGLE_CLIENT_ID}
+  clientSecret: ${GOOGLE_CLIENT_SECRET}
+
 client:
   api_key: ${API_KEY}
 

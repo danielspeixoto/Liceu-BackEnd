@@ -30,7 +30,7 @@ class MongoUserRepository(
                         user.picture.width,
                         user.picture.height
                 ),
-                user.facebookId
+                user.socialId
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
         if (user != null) {

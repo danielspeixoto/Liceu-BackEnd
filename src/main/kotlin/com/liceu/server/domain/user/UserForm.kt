@@ -6,5 +6,5 @@ data class UserForm(
         val name: String,
         val email: String,
         val picture: Picture,
-        val facebookId: String
+        val socialId: String
 )
