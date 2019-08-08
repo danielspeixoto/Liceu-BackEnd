@@ -31,11 +31,11 @@ class MongoTriviaRepository(
         if(amount == 0){
             return emptyList()
         }
-//        var match = Aggregation.match(Criteria("tags").all(tags))
-//        if(tags.isEmpty()){
-//            match = Aggregation.match(Criteria())
-//        }
-        val sample = Aggregation.sample(amount.toLong())
+        var match = Aggregation.match(Criteria("tags").all(tags))
+        if(tags.isEmpty()){
+            match = Aggregation.match(Criteria())
+        }
+        val sample = Aggregation.sample(amount.toLong() + 5)
         val agg = Aggregation.newAggregation(sample)
 
         val results = template.aggregate(agg, MongoDatabase.TRIVIA_COLLECTION, MongoDatabase.MongoTriviaQuestion::class.java)
