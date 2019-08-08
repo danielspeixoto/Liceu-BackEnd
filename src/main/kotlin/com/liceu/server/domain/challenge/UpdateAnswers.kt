@@ -21,7 +21,7 @@ class UpdateAnswers(
         var isChallenger = challenge.challenger == player
         try {
             var result = 0
-            for(i in 0..(challenge.triviaQuestionsUsed.size-1)){
+            for(i in 0..(answers.size - 1)){
                 if(challenge.triviaQuestionsUsed[i].correctAnswer == answers[i]){
                     result++
                 }

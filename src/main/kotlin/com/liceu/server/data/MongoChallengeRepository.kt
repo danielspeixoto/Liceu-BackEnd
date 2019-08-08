@@ -44,7 +44,11 @@ class MongoChallengeRepository(
 
     override fun matchMaking(challengedId: String): Challenge? {
         val result = template.findAndModify(
-                Query.query(Criteria.where("challenged").`is`(null) .and("answersChallenger").not().size(0).and("challenger").ne(challengedId)),
+                Query.query(Criteria
+                        .where("challenged").`is`(null)
+                        .and("challenger").ne(challengedId)
+                        .and("answersChallenger").not().size(0)
+                ),
                 Update.update("challenged", challengedId),
                 MongoDatabase.MongoChallenge::class.java
         )
@@ -74,12 +78,12 @@ class MongoChallengeRepository(
 
     override fun updateAnswers(challengeId: String, isChallenger: Boolean, answers: List<String>, score: Int): Long {
         var player = "Challenger"
-        if(!isChallenger){
+        if (!isChallenger) {
             player = "Challenged"
         }
         val update = Update()
-        update.set("answers" + player,answers)
-        update.set("score" + player,score)
+        update.set("answers" + player, answers)
+        update.set("score" + player, score)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(challengeId))),
                 update,
@@ -89,36 +93,36 @@ class MongoChallengeRepository(
     }
 
     override fun findById(challengeId: String): Challenge {
-            val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(challengeId)))
-            val agg = Aggregation.newAggregation(match)
-            val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
-            val challengeRetrieved = results.map {
-                return Challenge(
-                        it.id.toHexString(),
-                        it.challenger,
-                        it.challenged,
-                        it.answersChallenger,
-                        it.answersChallenged,
-                        it.scoreChallenger,
-                        it.scoreChallenged,
-                        it.triviaQuestionsUsed.map { triviaQuestion ->
-                            TriviaQuestion(
-                                    triviaQuestion.id.toHexString(),
-                                    triviaQuestion.userId.toHexString(),
-                                    triviaQuestion.question,
-                                    triviaQuestion.correctAnswer,
-                                    triviaQuestion.wrongAnswer,
-                                    triviaQuestion.tags
-                            )
-                        }
-                )
-            }
-            if(challengeRetrieved.isNotEmpty()){
-                return challengeRetrieved[0]
-            }else{
-                throw ItemNotFoundException()
-            }
+        val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(challengeId)))
+        val agg = Aggregation.newAggregation(match)
+        val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
+        val challengeRetrieved = results.map {
+            return Challenge(
+                    it.id.toHexString(),
+                    it.challenger,
+                    it.challenged,
+                    it.answersChallenger,
+                    it.answersChallenged,
+                    it.scoreChallenger,
+                    it.scoreChallenged,
+                    it.triviaQuestionsUsed.map { triviaQuestion ->
+                        TriviaQuestion(
+                                triviaQuestion.id.toHexString(),
+                                triviaQuestion.userId.toHexString(),
+                                triviaQuestion.question,
+                                triviaQuestion.correctAnswer,
+                                triviaQuestion.wrongAnswer,
+                                triviaQuestion.tags
+                        )
+                    }
+            )
         }
+        if (challengeRetrieved.isNotEmpty()) {
+            return challengeRetrieved[0]
+        } else {
+            throw ItemNotFoundException()
+        }
+    }
 
     fun toChallenge(answer: MongoDatabase.MongoChallenge): Challenge {
         return Challenge(
@@ -133,7 +137,7 @@ class MongoChallengeRepository(
         )
     }
 
-    fun toChallengeTrivia(answer: MongoDatabase.MongoChallengeTrivia): TriviaQuestion{
+    fun toChallengeTrivia(answer: MongoDatabase.MongoChallengeTrivia): TriviaQuestion {
         return TriviaQuestion(
                 answer.id.toString(),
                 answer.userId.toString(),
