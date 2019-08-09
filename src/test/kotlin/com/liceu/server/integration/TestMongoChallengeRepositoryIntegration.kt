@@ -18,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.Instant
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes=[TestConfiguration::class])
@@ -70,7 +72,8 @@ class TestMongoChallengeRepositoryIntegration {
                                         "algebra"
                                 )
                         )
-                )
+                ),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
         ))
 
 
@@ -127,7 +130,8 @@ class TestMongoChallengeRepositoryIntegration {
                                         "algebra"
                                 )
                         )
-                )
+                ),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
         ))
 
 

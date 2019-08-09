@@ -37,7 +37,8 @@ class MongoChallengeRepository(
                             it.wrongAnswer,
                             it.tags
                     )
-                }
+                },
+                matchmaking.submissionDate
         ))
         return toChallenge(result)
     }
@@ -70,7 +71,8 @@ class MongoChallengeRepository(
                                 triviaQuestion.wrongAnswer,
                                 triviaQuestion.tags
                         )
-                    }
+                    },
+                    it.submissionDate
             )
         }
         return null
@@ -114,7 +116,8 @@ class MongoChallengeRepository(
                                 triviaQuestion.wrongAnswer,
                                 triviaQuestion.tags
                         )
-                    }
+                    },
+                    it.submissionDate
             )
         }
         if (challengeRetrieved.isNotEmpty()) {
@@ -133,7 +136,8 @@ class MongoChallengeRepository(
                 answer.answersChallenged,
                 answer.scoreChallenger,
                 answer.scoreChallenged,
-                answer.triviaQuestionsUsed.map { toChallengeTrivia(it) }
+                answer.triviaQuestionsUsed.map { toChallengeTrivia(it) },
+                answer.submissionDate
         )
     }
 

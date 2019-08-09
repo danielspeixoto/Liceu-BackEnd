@@ -493,7 +493,8 @@ class DataSetup {
                                         "algebra"
                                 )
                         )
-                )
+                ),
+                Date.from(Instant.parse("2019-10-11T19:20:20.00Z"))
         )
         ch1.id = ObjectId(CHALLENGE_TRIVIA_ID_1)
         challengeRepo.insert(ch1)
@@ -538,7 +539,9 @@ class DataSetup {
                                         "algebra"
                                 )
                         )
-                )
+                ),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+                //Date.from(Instant.parse("2019-10-11T19:20:20.00Z"))
         )
         ch2.id = ObjectId(CHALLENGE_TRIVIA_ID_2)
         challengeRepo.insert(ch2)
@@ -567,7 +570,8 @@ class DataSetup {
                                         "algebra"
                                 )
                         )
-                )
+                ),
+                Date.from(Instant.parse("2019-06-11T11:20:20.00Z"))
         )
         ch3.id = ObjectId(CHALLENGE_TRIVIA_ID_3)
         challengeRepo.insert(ch3)
@@ -596,7 +600,8 @@ class DataSetup {
                                         "algebra"
                                 )
                         )
-                )
+                ),
+                Date.from(Instant.parse("2019-10-11T19:20:20.00Z"))
         )
         ch4.id = ObjectId(CHALLENGE_TRIVIA_ID_4)
         challengeRepo.insert(ch4)
@@ -621,7 +626,8 @@ class DataSetup {
                                         "algebra"
                                 )
                         )
-                )
+                ),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
         )
         ch5.id = ObjectId(CHALLENGE_TRIVIA_ID_5)
         challengeRepo.insert(ch5)

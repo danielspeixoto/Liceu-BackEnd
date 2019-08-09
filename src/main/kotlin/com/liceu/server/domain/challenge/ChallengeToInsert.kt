@@ -1,6 +1,7 @@
 package com.liceu.server.domain.challenge
 
 import com.liceu.server.domain.trivia.TriviaQuestion
+import java.util.*
 
 
 data class ChallengeToInsert (
@@ -10,7 +11,8 @@ data class ChallengeToInsert (
         val answersChallenged: List<String>,
         val scoreChallenger: Int?,
         val scoreChallenged: Int?,
-        val triviaQuestionsUsed: List<TriviaQuestion>
+        val triviaQuestionsUsed: List<TriviaQuestion>,
+        val submissionDate: Date
 )
 
 data class Challenge(
@@ -21,5 +23,6 @@ data class Challenge(
         val answersChallenged: List<String>,
         val scoreChallenger: Int?,
         val scoreChallenged: Int?,
-        val triviaQuestionsUsed: List<TriviaQuestion>
+        val triviaQuestionsUsed: List<TriviaQuestion>,
+        val submissionDate: Date
 )

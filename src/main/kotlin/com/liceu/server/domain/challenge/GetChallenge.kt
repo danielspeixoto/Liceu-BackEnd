@@ -5,6 +5,9 @@ import com.liceu.server.data.MongoTriviaRepository
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.util.Logging
+import java.time.Instant
+import java.time.ZoneOffset
+import java.util.*
 
 class GetChallenge(
         private val challengeRepository: MongoChallengeRepository,
@@ -39,7 +42,9 @@ class GetChallenge(
                     listOf(),
                     null,
                     null,
-                    trivias
+                    trivias,
+                    Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant())
+
             ))
             Logging.info(
                     EVENT_NAME, TAGS ,

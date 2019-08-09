@@ -8,13 +8,20 @@ import com.liceu.server.domain.user.User
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
 import org.bson.types.ObjectId
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
+import org.springframework.data.mongodb.core.aggregation.Aggregation.limit
+import org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 import org.springframework.data.mongodb.core.findOne
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
+
+
+
+
 
 @Repository
 class MongoUserRepository(
@@ -69,7 +76,10 @@ class MongoUserRepository(
                         Criteria.where("challenged").isEqualTo(userId)
                 )
                 .and("answersChallenger").not().size(0))
-        val agg = Aggregation.newAggregation(match)
+        val sortByDate = sort(Sort.Direction.DESC, "submissionDate")
+        val limitOfReturnedChallenges = limit(25)
+
+        val agg = Aggregation.newAggregation(match,sortByDate,limitOfReturnedChallenges)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
         val challengesRetrieved = results.map {
             Challenge(
@@ -89,7 +99,8 @@ class MongoUserRepository(
                                 triviaQuestion.wrongAnswer,
                                 triviaQuestion.tags
                         )
-                    }
+                    },
+                    it.submissionDate
             )
         }
         return challengesRetrieved

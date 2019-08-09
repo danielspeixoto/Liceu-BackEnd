@@ -103,9 +103,9 @@ class TestMongoUserRepositoryIntegration {
     fun challengesFromUser_challengeExists_returnChallenges(){
         val result = data.getChallengesFromUserById(testSetup.USER_ID_1)
         val ids = result.map { it.id }
-        assertThat(ids).containsExactly(testSetup.CHALLENGE_TRIVIA_ID_4, testSetup.CHALLENGE_TRIVIA_ID_2)
-        assertThat(result[0].challenged).isEqualTo(testSetup.USER_ID_1)
-        assertThat(result[1].challenger).isEqualTo(testSetup.USER_ID_1)
+        assertThat(ids).containsExactly(testSetup.CHALLENGE_TRIVIA_ID_4, testSetup.CHALLENGE_TRIVIA_ID_2).inOrder()
+        assertThat(result[0].challenger).isEqualTo(testSetup.USER_ID_1)
+        assertThat(result[1].challenged).isEqualTo(testSetup.USER_ID_1)
     }
 
     @Test
