@@ -177,7 +177,7 @@ class MongoDatabase {
             val scoreChallenger: Int?,
             val scoreChallenged: Int?,
             val triviaQuestionsUsed: List<MongoChallengeTrivia>,
-            val submissionDate: Date
+            val submissionDate: Date?
     ){
         @Id
         lateinit var id: ObjectId
