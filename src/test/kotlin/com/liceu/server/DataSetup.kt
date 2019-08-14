@@ -48,7 +48,7 @@ class DataSetup {
     val USER_ID_2 = "39c54d325b75357a571d4cc2"
     val USER_ID_3 = "37235b2a67c76abebce3f6e6"
     val USER_ID_4 = "37235b2a67c76abebce3f6e3"
-    val USER_ID_5 = "37235b2a67c76abebce3h6e3"
+    val USER_ID_5 = "37235b2a67c76abebce3h6e8"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
     val GAME_ID_2 = "49c54d325b75357a571d4cc2"
@@ -212,7 +212,8 @@ class DataSetup {
                         200,
                         200
                 ),
-                "facebookId1"
+                "facebookId1",
+                null
         )
         user1.id = ObjectId(USER_ID_1)
         userRepo.insert(user1)
@@ -224,7 +225,8 @@ class DataSetup {
                         200,
                         200
                 ),
-                "facebookId2"
+                "facebookId2",
+                null
         )
         user2.id = ObjectId(USER_ID_2)
         userRepo.insert(user2)
@@ -236,7 +238,8 @@ class DataSetup {
                         200,
                         200
                 ),
-                "facebookId3"
+                "facebookId3",
+                null
         )
         user3.id = ObjectId(USER_ID_3)
         userRepo.insert(user3)
@@ -248,10 +251,12 @@ class DataSetup {
                         200,
                         200
                 ),
-                "facebookId4"
+                "facebookId4",
+                null
         )
         user4.id = ObjectId(USER_ID_4)
         userRepo.insert(user4)
+
     }
 
     fun games() {

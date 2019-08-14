@@ -7,6 +7,10 @@ import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
+import com.mongodb.client.model.geojson.CoordinateReferenceSystem
+import com.mongodb.client.model.geojson.GeoJsonObjectType
+import com.mongodb.client.model.geojson.Point
+import com.mongodb.client.model.geojson.Position
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -14,12 +18,14 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.Aggregation.limit
 import org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 import org.springframework.data.mongodb.core.findOne
+import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
-
-
+import java.io.StringReader
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 
 
 
@@ -37,7 +43,8 @@ class MongoUserRepository(
                         user.picture.width,
                         user.picture.height
                 ),
-                user.socialId
+                user.socialId,
+                user.location
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
         if (user != null) {
@@ -59,7 +66,8 @@ class MongoUserRepository(
                             it.picture.url,
                             it.picture.width,
                             it.picture.height
-                    )
+                    ),
+                    it.location
             )
         }
         if (userRetrieved.isNotEmpty()) {
@@ -67,6 +75,18 @@ class MongoUserRepository(
         } else {
             throw ItemNotFoundException()
         }
+    }
+
+    override fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double): Long {
+        val location = GeoJsonPoint(longitude,latitude)
+        val update = Update()
+        update.set("location", location)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
     }
 
     override fun getChallengesFromUserById(userId: String): List<Challenge> {

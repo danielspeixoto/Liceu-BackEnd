@@ -1,9 +1,8 @@
 package com.liceu.server.data
 
-import com.liceu.server.domain.game.Answer
-import org.bson.types.Binary
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
@@ -85,7 +84,8 @@ class MongoDatabase {
             var name: String,
             @Indexed(unique=true) var email: String,
             var picture: MongoPicture,
-            var facebookId: String
+            var facebookId: String,
+            var location: GeoJsonPoint?
     ) {
         @Id
         lateinit var id: ObjectId

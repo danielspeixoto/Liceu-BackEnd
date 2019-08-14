@@ -136,6 +136,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateLocationFromUser(): UserBoundary.IUpdateLocation{
+        return UpdateLocation(mongoUserRepository)
+    }
+
+    @Bean
     fun getQuestionById(): QuestionBoundary.IQuestionById{
         return QuestionById(mongoQuestionRepository)
     }

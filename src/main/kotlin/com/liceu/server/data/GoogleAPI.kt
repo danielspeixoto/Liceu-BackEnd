@@ -47,7 +47,8 @@ class GoogleAPI(
                             200,
                             200
                     ),
-                    userId
+                    userId,
+                    null
             )
         } catch (e: AuthenticationException) {
             throw AuthenticationException(e.message)

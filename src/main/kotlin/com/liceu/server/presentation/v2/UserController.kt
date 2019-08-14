@@ -12,13 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.lang.ClassCastException
+import java.util.HashMap
 import javax.servlet.http.HttpServletRequest
+import javax.validation.ValidationException
 
 @RestController
 @RequestMapping("/v2/user")
 class UserController (
         @Autowired val user: UserBoundary.IUserById,
-        @Autowired val challengesFromUser: UserBoundary.IChallengesFromUserById
+        @Autowired val challengesFromUser: UserBoundary.IChallengesFromUserById,
+        @Autowired val updateLocation: UserBoundary.IUpdateLocation
 ) {
 
     data class UserResponse(
@@ -103,6 +107,48 @@ class UserController (
                             e, data = networkData
                     )
                     ResponseEntity(HttpStatus.NOT_FOUND)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
+    @PutMapping("/{userId}/locale")
+    fun updateAnswers(
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "update_location"
+        val eventTags = listOf(CONTROLLER, NETWORK, LOCATION , UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+
+            val longitude = body["longitude"] as Double? ?: throw ValidationException()
+            val latitude = body["latitude"] as Double? ?: throw ValidationException()
+            updateLocation.run(userId,longitude,latitude)
+            ResponseEntity(HttpStatus.OK)
+
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
                 }
                 else -> {
                     Logging.error(

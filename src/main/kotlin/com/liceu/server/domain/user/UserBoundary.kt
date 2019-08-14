@@ -1,6 +1,7 @@
 package com.liceu.server.domain.user
 
 import com.liceu.server.domain.challenge.Challenge
+import com.mongodb.client.model.geojson.GeoJsonObjectType
 
 
 class UserBoundary {
@@ -17,6 +18,11 @@ class UserBoundary {
         fun save(user: UserForm): String
         fun getUserById(userId: String): User
         fun getChallengesFromUserById(userId: String): List<Challenge>
+        fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double): Long
+    }
+
+    interface IUpdateLocation {
+        fun run (userId: String,longitude: Double,latitude: Double)
     }
 
     interface IUserById {
