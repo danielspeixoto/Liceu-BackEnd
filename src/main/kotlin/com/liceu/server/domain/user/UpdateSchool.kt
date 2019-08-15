@@ -23,6 +23,9 @@ class UpdateSchool(
                 "SAO PAULO" to "SAOPAULO"
         )
         try {
+            if(school.length > 300){
+                throw OverflowSizeMessageException("Too many characters in school name")
+            }
             var schoolNormalized = Normalizer.normalize(school, Normalizer.Form.NFD)
             schoolNormalized = REGEX_UNACCENT.replace(schoolNormalized, "").toUpperCase().trim()
             if(schoolNormalized.substring(0,7) == "COLEGIO"){
