@@ -8,5 +8,6 @@ data class UserForm(
         val email: String,
         val picture: Picture,
         val socialId: String,
-        val location: GeoJsonPoint?
+        val location: GeoJsonPoint?,
+        val school: String?
 )

@@ -1,6 +1,7 @@
-package com.liceu.server.system.v2
+package com.liceu.server.system.v2.user
 
 import com.google.common.truth.Truth
+import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.UserRepository
 import com.liceu.server.system.TestSystem
 import org.junit.jupiter.api.Test
@@ -17,6 +18,8 @@ class TestUser: TestSystem("/v2/user") {
     @Autowired
     lateinit var userRepo : UserRepository
 
+    @Autowired
+    lateinit var data: MongoUserRepository
 
     @Test
     fun userID_exists_returnUser(){
@@ -92,5 +95,41 @@ class TestUser: TestSystem("/v2/user") {
         val body = response.body!!
 
         Truth.assertThat(body.size).isEqualTo(0)
+    }
+
+    @Test
+    fun updateSchool_userExists_noReturn(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "school" to " CURSO MARístá PatãmarEs "
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/school", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(userUpdated.school).isEqualTo("MARISTA")
+
+    }
+
+    @Test
+    fun updateSchool_mismatchVariable_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "school" to 1
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/school", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+
+
     }
 }

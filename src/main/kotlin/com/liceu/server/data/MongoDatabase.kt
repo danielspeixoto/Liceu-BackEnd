@@ -85,7 +85,8 @@ class MongoDatabase {
             @Indexed(unique=true) var email: String,
             var picture: MongoPicture,
             var facebookId: String,
-            var location: GeoJsonPoint?
+            var location: GeoJsonPoint?,
+            var school: String?
     ) {
         @Id
         lateinit var id: ObjectId

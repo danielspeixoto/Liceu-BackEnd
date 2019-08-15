@@ -85,6 +85,7 @@ class FacebookAPI : UserBoundary.IAccessTokenResolver {
                             pictureData["height"].asInt()
                             ),
                     userMap["id"].toString().substring(1).dropLast(1),
+                    null,
                     null
             )
         } catch (e: FacebookOAuthException) {

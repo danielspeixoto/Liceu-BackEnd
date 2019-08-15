@@ -44,7 +44,8 @@ class MongoUserRepository(
                         user.picture.height
                 ),
                 user.socialId,
-                user.location
+                user.location,
+                user.school
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
         if (user != null) {
@@ -67,7 +68,8 @@ class MongoUserRepository(
                             it.picture.width,
                             it.picture.height
                     ),
-                    it.location
+                    it.location,
+                    it.school
             )
         }
         if (userRetrieved.isNotEmpty()) {
@@ -81,6 +83,17 @@ class MongoUserRepository(
         val location = GeoJsonPoint(longitude,latitude)
         val update = Update()
         update.set("location", location)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateSchoolFromUser(userId: String, school: String): Long {
+        val update = Update()
+        update.set("school",school)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,

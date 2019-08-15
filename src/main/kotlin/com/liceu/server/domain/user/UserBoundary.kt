@@ -19,6 +19,11 @@ class UserBoundary {
         fun getUserById(userId: String): User
         fun getChallengesFromUserById(userId: String): List<Challenge>
         fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double): Long
+        fun updateSchoolFromUser(userId: String, school: String): Long
+    }
+
+    interface IUpdateSchool{
+        fun run (userId: String, school: String)
     }
 
     interface IUpdateLocation {
