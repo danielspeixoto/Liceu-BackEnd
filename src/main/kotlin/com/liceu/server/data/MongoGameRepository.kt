@@ -34,7 +34,8 @@ class MongoGameRepository(
                         it.selectedAnswer
                 ) },
                 game.submissionDate,
-                game.timeSpent
+                game.timeSpent,
+                game.score
         ))
         return result.id.toHexString()
     }
@@ -97,7 +98,8 @@ class MongoGameRepository(
                         it.selectedAnswer
                 ) },
                 doc.submissionDate,
-                doc.timeSpent
+                doc.timeSpent,
+                doc.score
         )
     }
 }

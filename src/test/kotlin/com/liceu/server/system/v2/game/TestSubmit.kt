@@ -60,8 +60,43 @@ class TestSubmit: TestSystem("/v2/game") {
         assertThat(insertedGame.answers[1].questionId.toHexString()).isEqualTo(testSetup.QUESTION_ID_3)
         assertThat(insertedGame.answers[1].selectedAnswer).isEqualTo(1)
         assertThat(insertedGame.answers[1].correctAnswer).isEqualTo(3)
+        assertThat(insertedGame.score).isEqualTo(0)
         assertThat(insertedGame.submissionDate).isGreaterThan(before)
         assertThat(insertedGame.submissionDate).isLessThan(after)
+    }
+
+    @Test
+    fun submitGame_CheckScore_Success() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "answers" to listOf(
+                        hashMapOf(
+                                "questionId" to testSetup.QUESTION_ID_1,
+                                "selectedAnswer" to 2,
+                                "correctAnswer" to 2
+                        ),
+                        hashMapOf(
+                                "questionId" to testSetup.QUESTION_ID_3,
+                                "selectedAnswer" to 3,
+                                "correctAnswer" to 3
+                        )
+                ),
+                "timeSpent" to 10
+        ), headers)
+        val before = Date.from(Instant.now())
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        val after = Date.from(Instant.now())
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val body = response.body!!
+        val id = body["id"] as String
+        val insertedGame = gameRepo.findById(id).get()
+
+        assertThat(insertedGame.score).isEqualTo(2)
     }
 
     @Test

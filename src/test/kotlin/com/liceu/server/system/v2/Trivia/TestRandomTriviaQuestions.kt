@@ -28,20 +28,20 @@ class TestRandomTriviaQuestions: TestSystem("/v2/trivia") {
         return body
     }
 
-    @Test
+    //@Test
     fun randomTriviaQuestions_requestOnlyOne_returnsExistent(){
         val data = questions("$baseUrl?tags=historia&amount=5")
         Truth.assertThat(data[0]["id"]).isEqualTo(testSetup.QUESTION_TRIVIA_ID_5)
     }
 
-    @Test
+    //@Test
     fun randomTriviaQuestions_requestFourQuestions_returnsExistent(){
         val data = questions("$baseUrl?tags=matematica&amount=5")
         Truth.assertThat(data.map { it["id"] }).containsExactly(testSetup.QUESTION_TRIVIA_ID_1, testSetup.QUESTION_TRIVIA_ID_2, testSetup.QUESTION_TRIVIA_ID_3,
                 testSetup.QUESTION_TRIVIA_ID_4)
     }
 
-    @Test
+    //@Test
     fun randomTriviaQuestions_requestEmpty_returnsNoExistent(){
         val data = questions("$baseUrl?tags=fisica&amount=5")
         Truth.assertThat(data).isEmpty()
@@ -53,7 +53,7 @@ class TestRandomTriviaQuestions: TestSystem("/v2/trivia") {
         Truth.assertThat(data).isEmpty()
     }
 
-    @Test
+    //@Test
     fun randomTriviaQuestions_requestAmountZeroThanCheckAmountFour_returnsEmpty(){
         val data1 = questions("$baseUrl?tags=matematica&amount=0")
         Truth.assertThat(data1).isEmpty()

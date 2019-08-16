@@ -105,7 +105,8 @@ class MongoDatabase {
             val userId: ObjectId,
             val answers: List<MongoAnswer>,
             @Indexed val submissionDate: Date,
-            val timeSpent: Int
+            val timeSpent: Int,
+            val score: Int?
     ) :Comparable<MongoGame>{
         override fun compareTo(other: MongoGame): Int {
             //funcao de comparacao - answers, lista de resposta - timespent, tempo de jogo -

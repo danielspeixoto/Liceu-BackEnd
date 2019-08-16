@@ -25,7 +25,8 @@ data class GameToInsert(
         val userId: String,
         val answers: List<Answer>,
         val submissionDate: Date,
-        val timeSpent: Int
+        val timeSpent: Int,
+        val score: Int?
 ) {
 
     override fun equals(other: Any?): Boolean {
@@ -43,7 +44,8 @@ data class Game(
         val userId: String,
         val answers: List<Answer>,
         val submissionDate: Date,
-        val timeSpent: Int
+        val timeSpent: Int,
+        val score: Int?
 ) {
     override fun equals(other: Any?): Boolean {
         return other is Game &&
@@ -51,6 +53,7 @@ data class Game(
                 other.userId == userId &&
                 other.answers.toTypedArray().contentEquals(answers.toTypedArray()) &&
                 other.submissionDate.time == submissionDate.time &&
-                other.timeSpent == timeSpent
+                other.timeSpent == timeSpent &&
+                other.score == score
     }
 }

@@ -18,11 +18,18 @@ class SubmitGame(
 
     override fun run(game: GameSubmission): String {
         try {
+            var score = 0
+            for(i in 0..(game.answers.size-1)){
+                if(game.answers[i].selectedAnswer == game.answers[i].correctAnswer){
+                    score++
+                }
+            }
             val id = gameRepository.insert(GameToInsert(
                     game.userId,
                     game.answers,
                     Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()),
-                    game.timeSpent
+                    game.timeSpent,
+                    score
             ))
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to game.userId,

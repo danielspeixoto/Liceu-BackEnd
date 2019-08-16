@@ -279,6 +279,7 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-10-10T10:10:10.00Z")),
+                1,
                 1
         )
         game1.id = ObjectId(GAME_ID_1)
@@ -298,7 +299,8 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
-                2
+                2,
+                0
         )
         game2.id = ObjectId(GAME_ID_2)
         gameRepo.insert(game2)
@@ -317,7 +319,8 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-10-12T11:20:20.00Z")),
-                3
+                3,
+                2
         )
         game3.id = ObjectId(GAME_ID_3)
         gameRepo.insert(game3)
@@ -336,7 +339,8 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-10-13T11:20:20.00Z")),
-                1
+                1,
+                0
         )
         game4.id = ObjectId(GAME_ID_4)
         gameRepo.insert(game4)
@@ -355,7 +359,8 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-10-14T11:20:20.00Z")),
-                1
+                1,
+                2
         )
         game5.id = ObjectId(GAME_ID_5)
         gameRepo.insert(game5)
@@ -374,6 +379,7 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-09-14T11:20:20.00Z")),
+                2,
                 2
         )
         game6.id = ObjectId(GAME_ID_6)
@@ -393,6 +399,7 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-05-23T10:30:50.00Z")),
+                2,
                 2
         )
         game7.id = ObjectId(GAME_ID_7)
