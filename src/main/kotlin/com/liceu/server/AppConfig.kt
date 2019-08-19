@@ -146,6 +146,31 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateAge(): UserBoundary.IUpdateAge{
+        return UpdateAge(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateYoutubeChannel(): UserBoundary.IUpdateYoutubeChannel{
+        return UpdateYoutubeChannel(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateInstagramProfile(): UserBoundary.IUpdateInstagramProfile{
+        return UpdateInstagramProfile(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateDescription(): UserBoundary.IUpdateDescription{
+        return UpdateDescription(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateWebsite(): UserBoundary.IUpdateWebsite{
+        return UpdateWebsite(mongoUserRepository)
+    }
+
+    @Bean
     fun getQuestionById(): QuestionBoundary.IQuestionById{
         return QuestionById(mongoQuestionRepository)
     }

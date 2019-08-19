@@ -48,6 +48,11 @@ class TestMongoUserRepositoryIntegration {
                 ),
                 "id",
                 null,
+                null,
+                null,
+                null,
+                null,
+                null,
                 null
         ))
         val user = userRepository.findByEmail("newuser@gmail.com")
@@ -67,6 +72,11 @@ class TestMongoUserRepositoryIntegration {
                         200, 200
                 ),
                 "oldId",
+                null,
+                null,
+                null,
+                null,
+                null,
                 null,
                 null
         ))
@@ -142,6 +152,44 @@ class TestMongoUserRepositoryIntegration {
         assertThat(getUser.school).isEqualTo("Imt")
     }
 
+    @Test
+    fun updateAge_userExist_returnUserWithAge(){
+        val result = data.updateAgeFromUser(testSetup.USER_ID_1,30)
+        assertThat(result).isEqualTo(1)
+        val user = data.getUserById(testSetup.USER_ID_1)
+        assertThat(user.age).isEqualTo(30)
+    }
 
+    @Test
+    fun updateYoutubeChannel_userExist_returnUserWithYoutubeChannel(){
+        val result = data.updateYoutubeChannelFromUser(testSetup.USER_ID_1,"www.youtube.com/liceu.co")
+        assertThat(result).isEqualTo(1)
+        val user = data.getUserById(testSetup.USER_ID_1)
+        assertThat(user.youtubeChannel).isEqualTo("www.youtube.com/liceu.co")
+    }
+
+    @Test
+    fun updateInstagramProfile_userExist_returnUserWithInstagramProfile(){
+        val result = data.updateInstagramProfileFromUser(testSetup.USER_ID_1,"@liceu.co")
+        assertThat(result).isEqualTo(1)
+        val user = data.getUserById(testSetup.USER_ID_1)
+        assertThat(user.instagramProfile).isEqualTo("@liceu.co")
+    }
+
+    @Test
+    fun updateDescription_userExist_returnUserWithDescription(){
+        val result = data.updateDescriptionFromUser(testSetup.USER_ID_1,"Eu sou o liceu, prazer")
+        assertThat(result).isEqualTo(1)
+        val user = data.getUserById(testSetup.USER_ID_1)
+        assertThat(user.description).isEqualTo("Eu sou o liceu, prazer")
+    }
+
+    @Test
+    fun updateWebsite_userExist_returnUserWithWebsite(){
+        val result = data.updateDescriptionFromUser(testSetup.USER_ID_1,"Eu sou o liceu, prazer")
+        assertThat(result).isEqualTo(1)
+        val user = data.getUserById(testSetup.USER_ID_1)
+        assertThat(user.description).isEqualTo("Eu sou o liceu, prazer")
+    }
 
 }

@@ -45,7 +45,12 @@ class MongoUserRepository(
                 ),
                 user.socialId,
                 user.location,
-                user.school
+                user.school,
+                user.age,
+                user.youtubeChannel,
+                user.instagramProfile,
+                user.description,
+                user.website
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
         if (user != null) {
@@ -54,29 +59,59 @@ class MongoUserRepository(
         return template.save(mongoUser).id.toHexString()
     }
 
-    override fun getUserById(userId: String): User {
-        val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
-        val agg = Aggregation.newAggregation(match)
-        val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
-        val userRetrieved = results.map {
-            User(
-                    it.id.toHexString(),
-                    it.name,
-                    it.email,
-                    Picture(
-                            it.picture.url,
-                            it.picture.width,
-                            it.picture.height
-                    ),
-                    it.location,
-                    it.school
-            )
-        }
-        if (userRetrieved.isNotEmpty()) {
-            return userRetrieved[0]
-        } else {
-            throw ItemNotFoundException()
-        }
+    override fun updateAgeFromUser(userId: String, age: Int): Long {
+        val update = Update()
+        update.set("age", age)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateYoutubeChannelFromUser(userId: String, youtubeChannel: String): Long {
+        val update = Update()
+        update.set("youtubeChannel", youtubeChannel)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateInstagramProfileFromUser(userId: String, instagramProfile: String): Long {
+        val update = Update()
+        update.set("instagramProfile", instagramProfile)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateDescriptionFromUser(userId: String, description: String): Long {
+        val update = Update()
+        update.set("description", description)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateWebsiteFromUser(userId: String, website: String): Long {
+        val update = Update()
+        update.set("website", website)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
     }
 
     override fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double): Long {
@@ -100,6 +135,36 @@ class MongoUserRepository(
                 MongoDatabase.MongoUser::class.java
         )
         return result.modifiedCount
+    }
+
+    override fun getUserById(userId: String): User {
+        val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
+        val agg = Aggregation.newAggregation(match)
+        val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
+        val userRetrieved = results.map {
+            User(
+                    it.id.toHexString(),
+                    it.name,
+                    it.email,
+                    Picture(
+                            it.picture.url,
+                            it.picture.width,
+                            it.picture.height
+                    ),
+                    it.location,
+                    it.school,
+                    it.age,
+                    it.youtubeChannel,
+                    it.instagramProfile,
+                    it.description,
+                    it.website
+            )
+        }
+        if (userRetrieved.isNotEmpty()) {
+            return userRetrieved[0]
+        } else {
+            throw ItemNotFoundException()
+        }
     }
 
     override fun getChallengesFromUserById(userId: String): List<Challenge> {

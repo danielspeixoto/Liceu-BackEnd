@@ -86,7 +86,13 @@ class MongoDatabase {
             var picture: MongoPicture,
             var facebookId: String,
             var location: GeoJsonPoint?,
-            var school: String?
+            var school: String?,
+            var age: Int?,
+            var youtubeChannel: String?,
+            var instagramProfile: String?,
+            var description: String?,
+            var website: String?
+
     ) {
         @Id
         lateinit var id: ObjectId

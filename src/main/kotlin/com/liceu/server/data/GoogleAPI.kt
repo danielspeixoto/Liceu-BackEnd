@@ -49,6 +49,11 @@ class GoogleAPI(
                     ),
                     userId,
                     null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
                     null
             )
         } catch (e: AuthenticationException) {

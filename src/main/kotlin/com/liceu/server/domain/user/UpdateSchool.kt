@@ -2,6 +2,7 @@ package com.liceu.server.domain.user
 
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.global.*
+import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.util.Logging
 import java.text.Normalizer
 
@@ -43,6 +44,10 @@ class UpdateSchool(
             changeSchoolsName.forEach {
                 schoolNormalized = schoolNormalized.replace(it.key,it.value)
             }
+            Logging.info(SubmitReport.EVENT_NAME, SubmitReport.TAGS, hashMapOf(
+                    "userId" to userId,
+                    "school" to school
+            ))
             userRepository.updateSchoolFromUser(userId,schoolNormalized)
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)

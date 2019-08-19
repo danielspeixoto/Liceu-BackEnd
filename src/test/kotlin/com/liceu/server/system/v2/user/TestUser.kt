@@ -3,8 +3,10 @@ package com.liceu.server.system.v2.user
 import com.google.common.truth.Truth
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.UserRepository
+import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.system.TestSystem
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
@@ -113,7 +115,98 @@ class TestUser: TestSystem("/v2/user") {
 
         val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
         Truth.assertThat(userUpdated.school).isEqualTo("MARISTA")
+    }
 
+    @Test
+    fun updateAge_userExists_noReturn(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "day" to 1,
+                        "month" to 4,
+                        "year" to 1998
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/age", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(userUpdated.age).isEqualTo(21)
+    }
+
+    @Test
+    fun updateYoutubeChannel_userExists_noReturn(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "youtubeChannel" to "www.youtube.com/liceu"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/youtube", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(userUpdated.youtubeChannel).isEqualTo("www.youtube.com/liceu")
+    }
+
+    @Test
+    fun updateInstagramProfile_userExists_noReturn(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "instagramProfile" to "@liceu.co"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/instagram", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(userUpdated.instagramProfile).isEqualTo("@liceu.co")
+    }
+
+    @Test
+    fun updateDescription_userExists_noReturn(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "description" to "O liceu e muito legal po"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/description", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(userUpdated.description).isEqualTo("O liceu e muito legal po")
+    }
+
+    @Test
+    fun updateWebsite_userExists_noReturn(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "website" to "www.liceu.co.com.br"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/website", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(userUpdated.website).isEqualTo("www.liceu.co.com.br")
     }
 
     @Test
@@ -129,7 +222,100 @@ class TestUser: TestSystem("/v2/user") {
         val response = restTemplate
                 .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/school", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
 
+    @Test
+    fun updateAge_mismatchVariable_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "age" to "1"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/age", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateYoutubeChannel_mismatchVariable_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "youtubeChannel" to 123123
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/youtube", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateInstagramProfile_mismatchVariable_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "instagramProfile" to 123123
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/instagram", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateDescription_mismatchVariable_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "description" to 123123
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/description", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateWebsite_mismatchVariable_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "website" to 123123.2332
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/website", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateYoutubeChannel_overFlowChannelName_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "youtubeChannel" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/youtube", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
 
     }
+
 }

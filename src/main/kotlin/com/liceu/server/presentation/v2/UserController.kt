@@ -4,10 +4,10 @@ import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.trivia.TriviaQuestion
-import com.liceu.server.domain.user.User
-import com.liceu.server.domain.user.UserBoundary
+import com.liceu.server.domain.user.*
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
+import com.mongodb.client.model.geojson.GeoJsonObjectType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,15 +23,29 @@ class UserController (
         @Autowired val user: UserBoundary.IUserById,
         @Autowired val challengesFromUser: UserBoundary.IChallengesFromUserById,
         @Autowired val updateLocation: UserBoundary.IUpdateLocation,
-        @Autowired val updateSchool: UserBoundary.IUpdateSchool
+        @Autowired val updateSchool: UserBoundary.IUpdateSchool,
+        @Autowired val updateAge: UserBoundary.IUpdateAge,
+        @Autowired val updateYoutubeChannel: UserBoundary.IUpdateYoutubeChannel,
+        @Autowired val updateInstagramProfile: UserBoundary.IUpdateInstagramProfile,
+        @Autowired val updateDescription: UserBoundary.IUpdateDescription,
+        @Autowired val updateWebsite: UserBoundary.IUpdateWebsite
 ) {
+
 
     data class UserResponse(
             val id: String,
             val name: String,
             val email: String,
-            val picture: Picture
+            val picture: Picture,
+            val school: String?,
+            val age: Int?,
+            val youtubeChannel: String?,
+            val instagramProfile: String?,
+            val description: String?,
+            val website: String?
+
     )
+
 
 
     @Autowired
@@ -169,8 +183,8 @@ class UserController (
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
     ): ResponseEntity<Void>{
-        val eventName = "update_location"
-        val eventTags = listOf(CONTROLLER, NETWORK, LOCATION , UPDATE)
+        val eventName = "update_school"
+        val eventTags = listOf(CONTROLLER, NETWORK, SCHOOL , UPDATE)
         val networkData = netUtils.networkData(request)
 
         Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
@@ -204,12 +218,224 @@ class UserController (
         }
     }
 
+    @PutMapping("/{userId}/age")
+    fun updateAge(
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "update_age"
+        val eventTags = listOf(CONTROLLER, NETWORK, AGE , UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+
+            val day = body["day"] as Int? ?: throw ValidationException()
+            val month = body["month"] as Int? ?: throw ValidationException()
+            val year = body["year"] as Int? ?: throw ValidationException()
+            updateAge.run(userId,day,month,year)
+            ResponseEntity(HttpStatus.OK)
+
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
+    @PutMapping("/{userId}/youtube")
+    fun updateYoutubeChannel(
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "update_youtube_channel"
+        val eventTags = listOf(CONTROLLER, NETWORK, YOUTUBE , UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+            val youtubeChannel = body["youtubeChannel"] as String? ?: throw ValidationException()
+            updateYoutubeChannel.run(userId,youtubeChannel)
+            ResponseEntity(HttpStatus.OK)
+
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
+    @PutMapping("/{userId}/instagram")
+    fun updateInstagramProfile(
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "update_instagram_profile"
+        val eventTags = listOf(CONTROLLER, NETWORK, INSTAGRAM , UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+
+            val instagramProfile = body["instagramProfile"] as String? ?: throw ValidationException()
+            updateInstagramProfile.run(userId,instagramProfile)
+            ResponseEntity(HttpStatus.OK)
+
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
+    @PutMapping("/{userId}/description")
+    fun updateDescription(
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "update_description"
+        val eventTags = listOf(CONTROLLER, NETWORK, DESCRIPTION , UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+
+            val description = body["description"] as String? ?: throw ValidationException()
+            updateDescription.run(userId,description)
+            ResponseEntity(HttpStatus.OK)
+
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
+    @PutMapping("/{userId}/website")
+    fun updateWebsite(
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "update_website"
+        val eventTags = listOf(CONTROLLER, NETWORK, WEBSITE , UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+
+            val website = body["website"] as String? ?: throw ValidationException()
+            updateWebsite.run(userId,website)
+            ResponseEntity(HttpStatus.OK)
+
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
     fun toUserResponse(user: User): UserResponse {
         return UserResponse (
                 user.id,
                 user.name,
                 user.email,
-                user.picture
+                user.picture,
+                user.school,
+                user.age,
+                user.youtubeChannel,
+                user.instagramProfile,
+                user.description,
+                user.website
         )
     }
     fun toChallengeResponse(challenge: Challenge): ChallengeResponse {

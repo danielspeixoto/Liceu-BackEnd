@@ -86,6 +86,11 @@ class FacebookAPI : UserBoundary.IAccessTokenResolver {
                             ),
                     userMap["id"].toString().substring(1).dropLast(1),
                     null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
                     null
             )
         } catch (e: FacebookOAuthException) {
