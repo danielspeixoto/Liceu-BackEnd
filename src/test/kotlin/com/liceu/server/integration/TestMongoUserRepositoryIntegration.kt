@@ -53,6 +53,7 @@ class TestMongoUserRepositoryIntegration {
                 null,
                 null,
                 null,
+                null,
                 null
         ))
         val user = userRepository.findByEmail("newuser@gmail.com")
@@ -72,6 +73,7 @@ class TestMongoUserRepositoryIntegration {
                         200, 200
                 ),
                 "oldId",
+                null,
                 null,
                 null,
                 null,
@@ -136,12 +138,13 @@ class TestMongoUserRepositoryIntegration {
 
     @Test
     fun updateLocation_userExist_returnUserWithLocation(){
-        val result = data.updateLocationFromUser(testSetup.USER_ID_1,71.233,67.898)
+        val result = data.updateLocationFromUser(testSetup.USER_ID_1,71.233,67.898,"RJ")
         assertThat(result).isEqualTo(1)
         val getUser2 = data.getUserById(testSetup.USER_ID_1)
         assertThat(getUser2.location).isNotNull()
         assertThat(getUser2.location?.x).isEqualTo(71.233)
         assertThat(getUser2.location?.y).isEqualTo(67.898)
+        assertThat(getUser2.state).isEqualTo("RJ")
     }
 
     @Test

@@ -18,7 +18,7 @@ class UserBoundary {
         fun save(user: UserForm): String
         fun getUserById(userId: String): User
         fun getChallengesFromUserById(userId: String): List<Challenge>
-        fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double): Long
+        fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double, state: String): Long
         fun updateSchoolFromUser(userId: String, school: String): Long
         fun updateAgeFromUser(userId: String, age: Int): Long
         fun updateYoutubeChannelFromUser(userId: String, youtubeChannel: String): Long

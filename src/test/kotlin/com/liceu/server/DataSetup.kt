@@ -219,6 +219,7 @@ class DataSetup {
                 null,
                 null,
                 null,
+                null,
                 null
         )
         user1.id = ObjectId(USER_ID_1)
@@ -232,6 +233,7 @@ class DataSetup {
                         200
                 ),
                 "facebookId2",
+                null,
                 null,
                 null,
                 null,
@@ -257,6 +259,7 @@ class DataSetup {
                 null,
                 null,
                 null,
+                null,
                 null
         )
         user3.id = ObjectId(USER_ID_3)
@@ -270,6 +273,7 @@ class DataSetup {
                         200
                 ),
                 "facebookId4",
+                null,
                 null,
                 null,
                 null,

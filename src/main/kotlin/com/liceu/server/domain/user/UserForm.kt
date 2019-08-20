@@ -9,6 +9,7 @@ data class UserForm(
         val picture: Picture,
         val socialId: String,
         val location: GeoJsonPoint?,
+        val state: String?,
         val school: String?,
         val age: Int?,
         val youtubeChannel: String?,

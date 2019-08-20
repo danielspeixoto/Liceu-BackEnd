@@ -91,6 +91,7 @@ class FacebookAPI : UserBoundary.IAccessTokenResolver {
                     null,
                     null,
                     null,
+                    null,
                     null
             )
         } catch (e: FacebookOAuthException) {

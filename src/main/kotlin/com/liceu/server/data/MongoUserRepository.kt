@@ -45,6 +45,7 @@ class MongoUserRepository(
                 ),
                 user.socialId,
                 user.location,
+                user.state,
                 user.school,
                 user.age,
                 user.youtubeChannel,
@@ -114,10 +115,11 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
-    override fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double): Long {
+    override fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double,state: String): Long {
         val location = GeoJsonPoint(longitude,latitude)
         val update = Update()
         update.set("location", location)
+        update.set("state", state)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -152,6 +154,7 @@ class MongoUserRepository(
                             it.picture.height
                     ),
                     it.location,
+                    it.state,
                     it.school,
                     it.age,
                     it.youtubeChannel,

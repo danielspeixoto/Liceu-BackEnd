@@ -87,6 +87,7 @@ class MongoDatabase {
             var picture: MongoPicture,
             var facebookId: String,
             var location: GeoJsonPoint?,
+            var state: String?,
             var school: String?,
             var age: Int?,
             var youtubeChannel: String?,

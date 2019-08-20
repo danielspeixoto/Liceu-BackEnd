@@ -26,8 +26,8 @@ class TestUserLocation: TestSystem("/v2/user") {
 
         val entity = HttpEntity(
                 hashMapOf(
-                        "longitude" to 123.923,
-                        "latitude" to 90.233
+                        "longitude" to -38.527639,
+                        "latitude" to -12.997278
                 )
                 ,headers)
 
@@ -35,8 +35,9 @@ class TestUserLocation: TestSystem("/v2/user") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val result = userRepo.findById(testSetup.USER_ID_1).get()
-        Truth.assertThat(result.location?.x).isEqualTo(123.923)
-        Truth.assertThat(result.location?.y).isEqualTo(90.233)
+        Truth.assertThat(result.location?.x).isEqualTo(-38.527639)
+        Truth.assertThat(result.location?.y).isEqualTo(-12.997278)
+        Truth.assertThat(result.state).isEqualTo("BA")
     }
 
     @Test
