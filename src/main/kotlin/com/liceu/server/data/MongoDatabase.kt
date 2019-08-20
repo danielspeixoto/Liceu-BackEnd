@@ -3,6 +3,9 @@ package com.liceu.server.data
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed
+import org.springframework.data.mongodb.core.index.GeospatialIndex
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import java.sql.Timestamp
@@ -86,7 +89,7 @@ class MongoDatabase {
             @Indexed(unique=true) var email: String,
             var picture: MongoPicture,
             var facebookId: String,
-            var location: GeoJsonPoint?,
+            @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE) var location: GeoJsonPoint?,
             var state: String?,
             var school: String?,
             var age: Int?,

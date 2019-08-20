@@ -195,4 +195,21 @@ class TestMongoUserRepositoryIntegration {
         assertThat(user.description).isEqualTo("Eu sou o liceu, prazer")
     }
 
+    @Test
+    fun getUsersByNameWithoutLocation_userExist_returnListOfUsers(){
+        val result = data.getUsersByNameUsingLocation("user",null,null)
+        assertThat(result.size).isEqualTo(4)
+        val ids = result.map { it.id }
+        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_3,testSetup.USER_ID_4)
+    }
+
+    @Test
+    fun getUsersByNameUsingLocation_userExist_returnListOfUsers(){
+        val result = data.getUsersByNameUsingLocation("user",-18.83,-42.86)
+        assertThat(result.size).isEqualTo(4)
+        val ids = result.map { it.id }
+        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_3,testSetup.USER_ID_4)
+    }
+
+
 }

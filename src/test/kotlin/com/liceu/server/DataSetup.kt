@@ -4,6 +4,7 @@ import com.liceu.server.data.*
 import com.liceu.server.util.JWTAuth
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration
 import java.time.Instant
@@ -213,7 +214,8 @@ class DataSetup {
                         200
                 ),
                 "facebookId1",
-                null,
+                GeoJsonPoint(-12.83, -44.86),
+                //null,
                 null,
                 null,
                 null,
@@ -233,7 +235,8 @@ class DataSetup {
                         200
                 ),
                 "facebookId2",
-                null,
+                GeoJsonPoint(-15.83, -47.86),
+                //null,
                 null,
                 null,
                 null,
@@ -253,7 +256,8 @@ class DataSetup {
                         200
                 ),
                 "facebookId3",
-                null,
+                GeoJsonPoint(-11.83, -49.86),
+                //null,
                 null,
                 null,
                 null,
@@ -273,7 +277,8 @@ class DataSetup {
                         200
                 ),
                 "facebookId4",
-                null,
+                GeoJsonPoint(-20.83, -57.86),
+                //null,
                 null,
                 null,
                 null,

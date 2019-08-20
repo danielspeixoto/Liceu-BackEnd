@@ -209,6 +209,23 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(userUpdated.website).isEqualTo("www.liceu.co.com.br")
     }
 
+
+    @Test
+    fun getUsersByNameUsingLocation_userExists_returnListOfUsers(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate
+                .exchange<List<HashMap<String,Any>>>("$baseUrl/3a1449a4bdb40abd5ae1e431/search?nameRequired=user1", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body.size).isEqualTo(4)
+        Truth.assertThat(body[0]["name"]).isEqualTo("user1")
+        //Truth.assertThat(body[0]["id"]).isEqualTo(testSetup.GAME_ID_5)
+    }
+
     @Test
     fun updateSchool_mismatchVariable_throwException(){
         val headers = HttpHeaders()

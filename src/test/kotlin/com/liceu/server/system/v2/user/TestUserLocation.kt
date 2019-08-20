@@ -40,6 +40,7 @@ class TestUserLocation: TestSystem("/v2/user") {
         Truth.assertThat(result.state).isEqualTo("BA")
     }
 
+
     @Test
     fun updateLocationFromUser_userExist_throwValidationException() {
         val headers = HttpHeaders()

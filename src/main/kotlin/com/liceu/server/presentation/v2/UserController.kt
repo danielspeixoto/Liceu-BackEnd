@@ -28,7 +28,8 @@ class UserController (
         @Autowired val updateYoutubeChannel: UserBoundary.IUpdateYoutubeChannel,
         @Autowired val updateInstagramProfile: UserBoundary.IUpdateInstagramProfile,
         @Autowired val updateDescription: UserBoundary.IUpdateDescription,
-        @Autowired val updateWebsite: UserBoundary.IUpdateWebsite
+        @Autowired val updateWebsite: UserBoundary.IUpdateWebsite,
+        @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation
 ) {
 
 
@@ -74,6 +75,44 @@ class UserController (
         return try {
             val result = user.run(userId)
             val desiredUser = toUserResponse(result)
+            ResponseEntity(desiredUser, HttpStatus.OK)
+        } catch (e: Exception) {
+            when(e) {
+                is ItemNotFoundException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.NOT_FOUND)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+    @GetMapping("/{userId}/search")
+    fun getUsersByNameUsingLocation(
+            @PathVariable("userId") userId: String,
+            @RequestParam(value = "nameRequired", defaultValue = "") nameRequired: String,
+            request: HttpServletRequest
+    ): ResponseEntity<List<UserResponse>> {
+        val eventName = "get_users_by_name_near_location"
+        val eventTags = listOf(CONTROLLER, NETWORK, RETRIEVAL, USER, LOCATION)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val result = getUsersByNameUsingLocation.run(userId,nameRequired)
+            val desiredUser = result.map {toUserResponse(it)}
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {
             when(e) {

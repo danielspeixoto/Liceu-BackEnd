@@ -7,26 +7,19 @@ import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
-import com.mongodb.client.model.geojson.CoordinateReferenceSystem
-import com.mongodb.client.model.geojson.GeoJsonObjectType
-import com.mongodb.client.model.geojson.Point
-import com.mongodb.client.model.geojson.Position
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
+import org.springframework.data.geo.Metrics
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.Aggregation.limit
 import org.springframework.data.mongodb.core.aggregation.Aggregation.sort
+import org.springframework.data.mongodb.core.aggregation.GeoNearOperation
+import org.springframework.data.mongodb.core.aggregation.MatchOperation
 import org.springframework.data.mongodb.core.findOne
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.query.Criteria
-import org.springframework.data.mongodb.core.query.Query
-import org.springframework.data.mongodb.core.query.Update
-import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
-import java.io.StringReader
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
-
+import org.springframework.data.mongodb.core.query.*
 
 
 @Repository
@@ -207,6 +200,43 @@ class MongoUserRepository(
         return challengesRetrieved
     }
 
+    override fun getUsersByNameUsingLocation(nameSearched: String, latitude: Double?, longitude: Double?): List<User> {
+        val match: MatchOperation
+        val geoMatch: GeoNearOperation?
+        val agg: Aggregation
+        if(latitude != null && longitude != null){
+            val location = GeoJsonPoint(longitude,latitude)
+            geoMatch = Aggregation.geoNear(NearQuery.near(location).minDistance(1.0, Metrics.KILOMETERS), "distance")
+            match = Aggregation.match(Criteria("name")
+                    .regex(nameSearched, "ix"))
+            agg = Aggregation.newAggregation(geoMatch,match)
+        } else{
+            match =  Aggregation.match(Criteria("name")
+                    .regex(nameSearched,"ix"))
+            agg = Aggregation.newAggregation(match)
+        }
+        val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
+        return results.map {
+            User(
+                    it.id.toHexString(),
+                    it.name,
+                    it.email,
+                    Picture(
+                            it.picture.url,
+                            it.picture.width,
+                            it.picture.height
+                    ),
+                    it.location,
+                    it.state,
+                    it.school,
+                    it.age,
+                    it.youtubeChannel,
+                    it.instagramProfile,
+                    it.description,
+                    it.website
+            )
+        }
+    }
 
 }
 

@@ -131,6 +131,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun getUsersByNameFromLocation(): UserBoundary.IGetUsersByNameUsingLocation{
+        return UsersByNameUsingLocation(mongoUserRepository)
+    }
+
+    @Bean
     fun getChallengesFromUserById(): UserBoundary.IChallengesFromUserById{
         return ChallengesFromUserId(mongoUserRepository)
     }
