@@ -163,14 +163,14 @@ class TestUser: TestSystem("/v2/user") {
 
         val entity = HttpEntity(
                 hashMapOf(
-                        "instagramProfile" to "@liceu.co"
+                        "instagramProfile" to "liceu.co"
                 ), headers)
         val response = restTemplate
                 .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/instagram", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
-        Truth.assertThat(userUpdated.instagramProfile).isEqualTo("@liceu.co")
+        Truth.assertThat(userUpdated.instagramProfile).isEqualTo("https://www.instagram.com/liceu.co/")
     }
 
     @Test

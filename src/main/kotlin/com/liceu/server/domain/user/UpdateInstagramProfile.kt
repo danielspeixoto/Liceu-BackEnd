@@ -24,7 +24,8 @@ class UpdateInstagramProfile(
                     "userId" to userId,
                     "instagramProfile" to instagramProfile
             ))
-            userRepo.updateInstagramProfileFromUser(userId,instagramProfile)
+            var instagramProfileURL = "https://www.instagram.com/$instagramProfile/"
+            userRepo.updateInstagramProfileFromUser(userId,instagramProfileURL)
         }catch (e: Exception){
             Logging.error(EVENT_NAME,TAGS,e)
             throw  e
