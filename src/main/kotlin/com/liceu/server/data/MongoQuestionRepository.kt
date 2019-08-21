@@ -53,7 +53,7 @@ class MongoQuestionRepository(
         }
     }
 
-    override fun videos(id: String, start: Int, count: Int): List<Video> {
+    override fun videos(id: String, start: Int, count: Int): MutableList<Video> {
         val match = Aggregation.match(Criteria("questionId").isEqualTo(ObjectId(id)))
         val sort = Aggregation.sort(Sort.Direction.ASC, "retrievalPosition")
         val skip = Aggregation.skip(start.toLong())
@@ -72,7 +72,7 @@ class MongoQuestionRepository(
                     it.thumbnails.default,
                     it.channel.title
             )
-        }
+        }.toMutableList()
     }
 
     override fun getQuestionById(questionId: String): Question {

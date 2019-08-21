@@ -11,7 +11,7 @@ class QuestionBoundary {
         @Throws(Error::class)
         fun randomByTags(tags: List<String>, amount: Int): List<Question>
         @Throws(Error::class)
-        fun videos(id: String, start: Int, count: Int): List<Video>
+        fun videos(id: String, start: Int, count: Int): MutableList<Video>
         fun getQuestionById(questionId: String): Question
 
     }
