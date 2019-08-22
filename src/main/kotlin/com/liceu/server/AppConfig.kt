@@ -132,7 +132,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun getUsersByNameFromLocation(): UserBoundary.IGetUsersByNameUsingLocation{
-        return UsersByNameUsingLocation(mongoUserRepository)
+        return UsersByNameUsingLocation(mongoUserRepository, 30)
     }
 
     @Bean

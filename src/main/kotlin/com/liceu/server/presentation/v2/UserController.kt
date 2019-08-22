@@ -53,13 +53,6 @@ class UserController (
     @Autowired
     lateinit var netUtils: NetworkUtils
 
-    @GetMapping
-    fun me(
-        @RequestAttribute("userId") userId: String
-    ): String {
-        return userId
-    }
-
     @GetMapping("/{userId}")
     fun getUserById(
             @PathVariable("userId") userId: String,
@@ -97,10 +90,13 @@ class UserController (
             }
         }
     }
-    @GetMapping("/{userId}/search")
+
+    @GetMapping
     fun getUsersByNameUsingLocation(
-            @PathVariable("userId") userId: String,
             @RequestParam(value = "nameRequired", defaultValue = "") nameRequired: String,
+            @RequestParam(value = "longitude", defaultValue = "") longitude: Double,
+            @RequestParam(value = "latitude", defaultValue = "") latitude: Double,
+            @RequestParam(value = "amount", defaultValue = "0") amount: Int,
             request: HttpServletRequest
     ): ResponseEntity<List<UserResponse>> {
         val eventName = "get_users_by_name_near_location"
@@ -111,7 +107,7 @@ class UserController (
                 "version" to 2
         ))
         return try {
-            val result = getUsersByNameUsingLocation.run(userId,nameRequired)
+            val result = getUsersByNameUsingLocation.run(nameRequired,longitude,latitude,amount)
             val desiredUser = result.map {toUserResponse(it)}
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {

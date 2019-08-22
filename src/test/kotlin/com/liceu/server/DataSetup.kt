@@ -333,7 +333,7 @@ class DataSetup {
         user2.id = ObjectId(USER_ID_2)
         userRepo.insert(user2)
         val user3 = MongoDatabase.MongoUser(
-                "user3",
+                "manitos1",
                 "user3@g.com",
                 MongoDatabase.MongoPicture(
                         "https://picture3.jpg",

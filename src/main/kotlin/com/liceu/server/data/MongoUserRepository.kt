@@ -200,20 +200,21 @@ class MongoUserRepository(
         return challengesRetrieved
     }
 
-    override fun getUsersByNameUsingLocation(nameSearched: String, latitude: Double?, longitude: Double?): List<User> {
+    override fun getUsersByNameUsingLocation(nameSearched: String, longitude: Double?, latitude: Double?, amount: Int): List<User> {
         val match: MatchOperation
         val geoMatch: GeoNearOperation?
         val agg: Aggregation
+        val sample = Aggregation.sample(amount.toLong())
         if(latitude != null && longitude != null){
             val location = GeoJsonPoint(longitude,latitude)
-            geoMatch = Aggregation.geoNear(NearQuery.near(location).minDistance(1.0, Metrics.KILOMETERS), "distance")
+            geoMatch = Aggregation.geoNear(NearQuery.near(location), "distance")
             match = Aggregation.match(Criteria("name")
                     .regex(nameSearched, "ix"))
-            agg = Aggregation.newAggregation(geoMatch,match)
+            agg = Aggregation.newAggregation(geoMatch,match,sample)
         } else{
             match =  Aggregation.match(Criteria("name")
                     .regex(nameSearched,"ix"))
-            agg = Aggregation.newAggregation(match)
+            agg = Aggregation.newAggregation(match,sample)
         }
         val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
         return results.map {

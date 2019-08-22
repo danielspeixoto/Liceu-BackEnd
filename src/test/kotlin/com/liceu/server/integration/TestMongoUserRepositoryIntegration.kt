@@ -196,19 +196,27 @@ class TestMongoUserRepositoryIntegration {
     }
 
     @Test
-    fun getUsersByNameWithoutLocation_userExist_returnListOfUsers(){
-        val result = data.getUsersByNameUsingLocation("user",null,null)
-        assertThat(result.size).isEqualTo(4)
+    fun getUsersByNameWithoutLocation_usersExist_returnListOfUsers(){
+        val result = data.getUsersByNameUsingLocation("user",null,null,15)
+        assertThat(result.size).isEqualTo(3)
         val ids = result.map { it.id }
-        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_3,testSetup.USER_ID_4)
+        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_4)
+    }
+
+    @Test
+    fun getUsersByNameUsingLocation_usersExist_returnListOfUsers(){
+        val result = data.getUsersByNameUsingLocation("user",-90.83,-42.86,15)
+        assertThat(result.size).isEqualTo(3)
+        val ids = result.map { it.id }
+        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_4)
     }
 
     @Test
     fun getUsersByNameUsingLocation_userExist_returnListOfUsers(){
-        val result = data.getUsersByNameUsingLocation("user",-18.83,-42.86)
-        assertThat(result.size).isEqualTo(4)
+        val result = data.getUsersByNameUsingLocation("man i",-90.83,-42.86,15)
+        assertThat(result.size).isEqualTo(1)
         val ids = result.map { it.id }
-        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_3,testSetup.USER_ID_4)
+        assertThat(ids).containsExactly(testSetup.USER_ID_3)
     }
 
 
