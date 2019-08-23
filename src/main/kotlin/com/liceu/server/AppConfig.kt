@@ -176,6 +176,16 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateProducerToBeFollowed(): UserBoundary.IupdateProducerToBeFollowed {
+        return UpdateProducerToBeFollowed(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateProducerToBeUnfollowed(): UserBoundary.IupdateProducerToBeUnfollowed {
+        return UpdateProducerToBeUnfollowed(mongoUserRepository)
+    }
+
+    @Bean
     fun getQuestionById(): QuestionBoundary.IQuestionById{
         return QuestionById(mongoQuestionRepository)
     }

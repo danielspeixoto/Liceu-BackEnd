@@ -262,6 +262,20 @@ class TestMongoUserRepositoryIntegration {
     }
 
 
+    @Test
+    fun updateProducerToBeUnfollowed_producerWithNoFollowers_verifyUserAndProducer(){
+        //talvez fazer conditional query no mongoDb pra evitar -1 -> pensar se necessário
+        val resultDel = data.updateProducerToBeUnfollowed(testSetup.USER_ID_2)
+        assertThat(resultDel).isEqualTo(1)
+        val producerBefore = data.getUserById(testSetup.USER_ID_2)
+        assertThat(producerBefore.amountOfFollowers).isEqualTo(-1)
+        val resultDel2 = data.updateRemoveProducerToFollowingList(testSetup.USER_ID_1,testSetup.USER_ID_2)
+        assertThat(resultDel2).isEqualTo(0)
+        val userAfter = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userAfter.following?.size).isNull()
+    }
+
+
 
 
 }

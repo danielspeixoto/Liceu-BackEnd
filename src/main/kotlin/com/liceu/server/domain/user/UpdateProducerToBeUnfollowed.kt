@@ -1,10 +1,7 @@
 package com.liceu.server.domain.user
 
 import com.liceu.server.data.MongoUserRepository
-import com.liceu.server.domain.global.FOLLOWED
-import com.liceu.server.domain.global.PRODUCER
-import com.liceu.server.domain.global.UPDATE
-import com.liceu.server.domain.global.USER
+import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 
 class UpdateProducerToBeUnfollowed(
@@ -12,8 +9,8 @@ class UpdateProducerToBeUnfollowed(
 ): UserBoundary.IupdateProducerToBeUnfollowed{
 
     companion object{
-        const val EVENT_NAME = "put_producer_followed_by_user"
-        val TAGS = listOf(UPDATE, USER , PRODUCER, FOLLOWED)
+        const val EVENT_NAME = "put_producer_unfollowed_by_user"
+        val TAGS = listOf(UPDATE, USER , PRODUCER, UNFOLLOWED)
     }
     override fun run(userId: String, producerId: String) {
         try {
