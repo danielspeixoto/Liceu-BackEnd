@@ -78,6 +78,8 @@ class DataSetup {
     lateinit var triviaRepo: TriviaRepository
     @Autowired
     lateinit var challengeRepo: ChallengeRepository
+    @Autowired
+    lateinit var postRepo: PostRepository
 
     fun setup() {
         questionRepo.deleteAll()
@@ -86,12 +88,14 @@ class DataSetup {
         gameRepo.deleteAll()
         triviaRepo.deleteAll()
         challengeRepo.deleteAll()
+        postRepo.deleteAll()
         questions()
         videos()
         users()
         games()
         trivia()
         challenge()
+        post()
     }
 
     fun questions() {
@@ -769,6 +773,9 @@ class DataSetup {
         )
         ch5.id = ObjectId(CHALLENGE_TRIVIA_ID_5)
         challengeRepo.insert(ch5)
+    }
+    fun post(){
+
     }
 }
 

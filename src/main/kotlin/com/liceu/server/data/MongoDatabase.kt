@@ -23,6 +23,7 @@ class MongoDatabase {
         const val REPORT_COLLECTION = "report"
         const val TRIVIA_COLLECTION = "trivia"
         const val CHALLENGE_COLLECTION = "challenge"
+        const val POST_COLLECTION = "post"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -197,5 +198,27 @@ class MongoDatabase {
         lateinit var id: ObjectId
     }
 
+    @Document(collection = MongoDatabase.POST_COLLECTION)
+    data class MongoPost(
+        val userId: ObjectId,
+        val type: String,
+        val text: String?,
+        val image: MongoPostImage?,
+        val video: MongoPostVideo?
+    ){
+        @Id
+        lateinit var id: ObjectId
+    }
+
+    data class MongoPostImage(
+            val imageURL: String?,
+            val description: String?
+    )
+
+    data class MongoPostVideo(
+            val videoUrl: String?,
+            val description: String?,
+            var thumbnails: Thumbnails?
+    )
 
 }
