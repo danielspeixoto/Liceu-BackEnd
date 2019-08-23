@@ -307,6 +307,8 @@ class DataSetup {
                 null,
                 null,
                 null,
+                null,
+                null,
                 null
         )
         user1.id = ObjectId(USER_ID_1)
@@ -322,6 +324,8 @@ class DataSetup {
                 "facebookId2",
                 GeoJsonPoint(-15.83, -47.86),
                 //null,
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -349,6 +353,8 @@ class DataSetup {
                 null,
                 null,
                 null,
+                null,
+                null,
                 null
         )
         user3.id = ObjectId(USER_ID_3)
@@ -364,6 +370,8 @@ class DataSetup {
                 "facebookId4",
                 GeoJsonPoint(-20.83, -57.86),
                 //null,
+                null,
+                null,
                 null,
                 null,
                 null,

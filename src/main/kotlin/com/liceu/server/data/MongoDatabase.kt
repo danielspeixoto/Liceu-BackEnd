@@ -96,8 +96,9 @@ class MongoDatabase {
             var youtubeChannel: String?,
             var instagramProfile: String?,
             var description: String?,
-            var website: String?
-
+            var website: String?,
+            var amountOfFollowers: Int?,
+            var following: List<String>?
     ) {
         @Id
         lateinit var id: ObjectId

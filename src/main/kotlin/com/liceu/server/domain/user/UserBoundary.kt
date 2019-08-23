@@ -25,6 +25,10 @@ class UserBoundary {
         fun updateInstagramProfileFromUser(userId: String, instagramProfile: String): Long
         fun updateDescriptionFromUser(userId: String, description: String): Long
         fun updateWebsiteFromUser(userId: String, website: String): Long
+        fun updateProducerToBeFollowed(producerId: String): Long
+        fun updateProducerToBeUnfollowed(producerId: String): Long
+        fun updateAddProducerToFollowingList(userId: String,producerId: String): Long
+        fun updateRemoveProducerToFollowingList(userId: String,producerId: String): Long
     }
 
     interface IUpdateAge {
@@ -53,6 +57,14 @@ class UserBoundary {
 
     interface IUpdateLocation {
         fun run (userId: String,longitude: Double,latitude: Double)
+    }
+
+    interface IupdateProducerToBeFollowed {
+        fun run (userId: String, producerId: String)
+    }
+
+    interface IupdateProducerToBeUnfollowed {
+        fun run (userId: String, producerId: String)
     }
 
     interface IUserById {
