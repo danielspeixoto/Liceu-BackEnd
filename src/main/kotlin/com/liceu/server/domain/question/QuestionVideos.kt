@@ -3,6 +3,8 @@ package com.liceu.server.domain.question
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.video.Video
 import com.liceu.server.util.Logging
+import net.logstash.logback.encoder.org.apache.commons.lang.ArrayUtils.indexOf
+import net.logstash.logback.encoder.org.apache.commons.lang.ArrayUtils.removeElement
 import java.lang.Exception
 
 class QuestionVideos(
@@ -30,7 +32,8 @@ class QuestionVideos(
             )
         }
         try {
-            val result =  videoRepo.videos(id, start, finalAmount)
+            var result =  videoRepo.videos(id, start, finalAmount)
+            var resultToIterate = result.toMutableList()
             Logging.info(
                     EVENT_NAME,
                     TAGS,
@@ -41,6 +44,14 @@ class QuestionVideos(
                             "retrieved" to result.size
                     )
             )
+            //process to remove Bernoulli from videos retrieved
+            if(result.size > 0){
+                for(i in 0..(resultToIterate.size-1)){
+                    if(resultToIterate[i].title.toUpperCase().contains("BERNOULLI")  || resultToIterate[i].channelTitle.toUpperCase().contains("BERNOULLI")){
+                        result.remove(resultToIterate[i])
+                    }
+                }
+            }
             return result
         } catch (e: Exception) {
             Logging.error(EVENT_NAME, TAGS, e)

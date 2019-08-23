@@ -131,6 +131,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun getUsersByNameFromLocation(): UserBoundary.IGetUsersByNameUsingLocation{
+        return UsersByNameUsingLocation(mongoUserRepository, 30)
+    }
+
+    @Bean
     fun getChallengesFromUserById(): UserBoundary.IChallengesFromUserById{
         return ChallengesFromUserId(mongoUserRepository)
     }
@@ -168,6 +173,16 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun updateWebsite(): UserBoundary.IUpdateWebsite{
         return UpdateWebsite(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateProducerToBeFollowed(): UserBoundary.IupdateProducerToBeFollowed {
+        return UpdateProducerToBeFollowed(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateProducerToBeUnfollowed(): UserBoundary.IupdateProducerToBeUnfollowed {
+        return UpdateProducerToBeUnfollowed(mongoUserRepository)
     }
 
     @Bean

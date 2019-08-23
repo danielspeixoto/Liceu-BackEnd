@@ -38,6 +38,24 @@ class TestVideo : TestSystem("/v2/question") {
     }
 
     @Test
+    fun videos_QuestionHasVideosAttachedWithBernoulli_ReturnsThem() {
+        val videos = videos("$baseUrl/${testSetup.QUESTION_ID_3}/videos?amount=10").map { it["id"] }
+        Truth.assertThat(videos).containsExactly(testSetup.VIDEO_ID_5)
+    }
+
+    @Test
+    fun videos_QuestionHasVideosAttachedWithBernoulli_LimitsAmount(){
+        val videos = videos("$baseUrl/${testSetup.QUESTION_ID_3}/videos?amount=1").map { it["id"] }
+        Truth.assertThat(videos).containsExactly(testSetup.VIDEO_ID_5)
+    }
+
+    @Test
+    fun videos_QuestionHasOneVideoAttachedWithBernoulli_ReturnsEmpty() {
+        val videos = videos("$baseUrl/${testSetup.QUESTION_ID_4}/videos?amount=10")
+        Truth.assertThat(videos).isEmpty()
+    }
+
+    @Test
     fun videos_QuestionHasNoVideos_Empty() {
         val videos = videos("$baseUrl/${testSetup.INVALID_ID}/videos?amount=10")
         Truth.assertThat(videos).isEmpty()
@@ -60,6 +78,7 @@ class TestVideo : TestSystem("/v2/question") {
         val data = videos("$baseUrl/${testSetup.INVALID_ID}/videos?amount=10")
         Truth.assertThat(data).isEmpty()
     }
+
 
 
 }

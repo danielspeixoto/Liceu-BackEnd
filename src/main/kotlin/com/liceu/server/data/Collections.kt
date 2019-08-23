@@ -11,3 +11,4 @@ interface GameRepository: MongoRepository<MongoDatabase.MongoGame, String>
 interface ReportRepository: MongoRepository<MongoDatabase.MongoReport, String>
 interface TriviaRepository: MongoRepository<MongoDatabase.MongoTriviaQuestion, String>
 interface ChallengeRepository: MongoRepository<MongoDatabase.MongoChallenge, String>
+interface PostRepository: MongoRepository<MongoDatabase.MongoPost,String>

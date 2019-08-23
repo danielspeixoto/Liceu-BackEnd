@@ -1,23 +1,12 @@
-package com.liceu.server.e2e
+package com.liceu.server.acceptance
 
 import com.google.common.truth.Truth
 import com.google.gson.GsonBuilder
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.UserRepository
 import com.liceu.server.util.JWTAuth
-import org.junit.Ignore
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.test.web.client.exchange
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import java.io.*
 import java.net.HttpURLConnection

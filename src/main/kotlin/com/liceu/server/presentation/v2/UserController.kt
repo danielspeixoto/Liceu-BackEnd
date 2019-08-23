@@ -28,7 +28,10 @@ class UserController (
         @Autowired val updateYoutubeChannel: UserBoundary.IUpdateYoutubeChannel,
         @Autowired val updateInstagramProfile: UserBoundary.IUpdateInstagramProfile,
         @Autowired val updateDescription: UserBoundary.IUpdateDescription,
-        @Autowired val updateWebsite: UserBoundary.IUpdateWebsite
+        @Autowired val updateWebsite: UserBoundary.IUpdateWebsite,
+        @Autowired val updateProducerToBeFollowed: UserBoundary.IupdateProducerToBeFollowed,
+        @Autowired val updateProducerToBeUnfollowed: UserBoundary.IupdateProducerToBeUnfollowed,
+        @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation
 ) {
 
 
@@ -52,13 +55,6 @@ class UserController (
     @Autowired
     lateinit var netUtils: NetworkUtils
 
-    @GetMapping
-    fun me(
-        @RequestAttribute("userId") userId: String
-    ): String {
-        return userId
-    }
-
     @GetMapping("/{userId}")
     fun getUserById(
             @PathVariable("userId") userId: String,
@@ -74,6 +70,47 @@ class UserController (
         return try {
             val result = user.run(userId)
             val desiredUser = toUserResponse(result)
+            ResponseEntity(desiredUser, HttpStatus.OK)
+        } catch (e: Exception) {
+            when(e) {
+                is ItemNotFoundException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.NOT_FOUND)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
+    @GetMapping
+    fun getUsersByNameUsingLocation(
+            @RequestParam(value = "nameRequired", defaultValue = "") nameRequired: String,
+            @RequestParam(value = "longitude", defaultValue = "") longitude: Double,
+            @RequestParam(value = "latitude", defaultValue = "") latitude: Double,
+            @RequestParam(value = "amount", defaultValue = "0") amount: Int,
+            request: HttpServletRequest
+    ): ResponseEntity<List<UserResponse>> {
+        val eventName = "get_users_by_name_near_location"
+        val eventTags = listOf(CONTROLLER, NETWORK, RETRIEVAL, USER, LOCATION)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val result = getUsersByNameUsingLocation.run(nameRequired,longitude,latitude,amount)
+            val desiredUser = result.map {toUserResponse(it)}
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {
             when(e) {
@@ -401,6 +438,86 @@ class UserController (
 
             val website = body["website"] as String? ?: throw ValidationException()
             updateWebsite.run(userId,website)
+            ResponseEntity(HttpStatus.OK)
+
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
+    @PutMapping("/{producerId}/followers")
+    fun updateProducerToBeFollowed(
+            @PathVariable("producerId") producerId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "update_producer_followed_by_user"
+        val eventTags = listOf(CONTROLLER, NETWORK, PRODUCER , FOLLOWED, UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+            val userId = body["userId"] as String? ?: throw ValidationException()
+            updateProducerToBeFollowed.run(userId, producerId)
+            ResponseEntity(HttpStatus.OK)
+
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
+    @DeleteMapping("/{producerId}/followers")
+    fun updateProducerToBeUnfollowed(
+            @PathVariable("producerId") producerId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "update_producer_unfollowed_by_user"
+        val eventTags = listOf(CONTROLLER, NETWORK, PRODUCER , UNFOLLOWED, UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+            val userId = body["userId"] as String? ?: throw ValidationException()
+            updateProducerToBeUnfollowed.run(userId, producerId)
             ResponseEntity(HttpStatus.OK)
 
         }catch (e: Exception) {

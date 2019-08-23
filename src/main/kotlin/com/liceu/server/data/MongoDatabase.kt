@@ -3,6 +3,9 @@ package com.liceu.server.data
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexType
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed
+import org.springframework.data.mongodb.core.index.GeospatialIndex
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import java.sql.Timestamp
@@ -20,6 +23,7 @@ class MongoDatabase {
         const val REPORT_COLLECTION = "report"
         const val TRIVIA_COLLECTION = "trivia"
         const val CHALLENGE_COLLECTION = "challenge"
+        const val POST_COLLECTION = "post"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -86,15 +90,16 @@ class MongoDatabase {
             @Indexed(unique=true) var email: String,
             var picture: MongoPicture,
             var facebookId: String,
-            var location: GeoJsonPoint?,
+            @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE) var location: GeoJsonPoint?,
             var state: String?,
             var school: String?,
             var age: Int?,
             var youtubeChannel: String?,
             var instagramProfile: String?,
             var description: String?,
-            var website: String?
-
+            var website: String?,
+            var amountOfFollowers: Int?,
+            var following: List<String>?
     ) {
         @Id
         lateinit var id: ObjectId
@@ -193,5 +198,27 @@ class MongoDatabase {
         lateinit var id: ObjectId
     }
 
+    @Document(collection = MongoDatabase.POST_COLLECTION)
+    data class MongoPost(
+        val userId: ObjectId,
+        val type: String,
+        val text: String?,
+        val image: MongoPostImage?,
+        val video: MongoPostVideo?
+    ){
+        @Id
+        lateinit var id: ObjectId
+    }
+
+    data class MongoPostImage(
+            val imageURL: String?,
+            val description: String?
+    )
+
+    data class MongoPostVideo(
+            val videoUrl: String?,
+            val description: String?,
+            var thumbnails: Thumbnails?
+    )
 
 }

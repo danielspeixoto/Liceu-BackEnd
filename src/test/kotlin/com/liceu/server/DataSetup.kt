@@ -4,6 +4,7 @@ import com.liceu.server.data.*
 import com.liceu.server.util.JWTAuth
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration
 import java.time.Instant
@@ -19,6 +20,7 @@ class DataSetup {
     val QUESTION_ID_1 = "0a1449a4bdb40abd5ae1e431"
     val QUESTION_ID_2 = "09c54d325b75357a571d4cc2"
     val QUESTION_ID_3 = "07235b2a67c76abebce3f6e6"
+    val QUESTION_ID_4 = "07235b2a67c76abebce3f6e7"
 
     val QUESTION_TRIVIA_ID_1 = "0a1449a4bdb40abd5ae1e461"
     val QUESTION_TRIVIA_ID_2 = "0a1449a4bdb40abd5ae1e411"
@@ -35,6 +37,10 @@ class DataSetup {
     val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
     val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
     val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
+    val VIDEO_ID_4 = "17235b2a67c76abebce3f6e5"
+    val VIDEO_ID_5 = "17235b2a67c76abebce3f6e4"
+    val VIDEO_ID_6 = "17235b2a67c76abebce3f6e3"
+    val VIDEO_ID_7 = "17235b2a67c76abebce3f6e2"
 
     val TAG_ID_1 = "2a1449a4bdb40abd5ae1e431"
     val TAG_ID_2 = "29c54d325b75357a571d4cc2"
@@ -72,6 +78,8 @@ class DataSetup {
     lateinit var triviaRepo: TriviaRepository
     @Autowired
     lateinit var challengeRepo: ChallengeRepository
+    @Autowired
+    lateinit var postRepo: PostRepository
 
     fun setup() {
         questionRepo.deleteAll()
@@ -80,12 +88,14 @@ class DataSetup {
         gameRepo.deleteAll()
         triviaRepo.deleteAll()
         challengeRepo.deleteAll()
+        postRepo.deleteAll()
         questions()
         videos()
         users()
         games()
         trivia()
         challenge()
+        post()
     }
 
     fun questions() {
@@ -201,6 +211,86 @@ class DataSetup {
         )
         item3.id = ObjectId(VIDEO_ID_3)
         videoRepo.insert(item3)
+
+        val item4 = MongoDatabase.MongoVideo(
+                "bErnouLLI",
+                "terceiro video",
+                "videoId2",
+                ObjectId(QUESTION_ID_3),
+                1.3f,
+                MongoDatabase.Thumbnails(
+                        "highQuality",
+                        "defaultQuality",
+                        "mediumQuality"
+                ),
+                MongoDatabase.Channel(
+                        "channelTitle",
+                        "channelId"
+                ),
+                2
+        )
+        item4.id = ObjectId(VIDEO_ID_4)
+        videoRepo.insert(item4)
+
+        val item5 = MongoDatabase.MongoVideo(
+                "terceiro",
+                "terceiro video",
+                "videoId2",
+                ObjectId(QUESTION_ID_3),
+                1.3f,
+                MongoDatabase.Thumbnails(
+                        "highQuality",
+                        "defaultQuality",
+                        "mediumQuality"
+                ),
+                MongoDatabase.Channel(
+                        "channelTitle",
+                        "channelId"
+                ),
+                1
+        )
+        item5.id = ObjectId(VIDEO_ID_5)
+        videoRepo.insert(item5)
+
+        val item6 = MongoDatabase.MongoVideo(
+                "terceiro",
+                "terceiro video",
+                "videoId2",
+                ObjectId(QUESTION_ID_3),
+                1.3f,
+                MongoDatabase.Thumbnails(
+                        "highQuality",
+                        "defaultQuality",
+                        "mediumQuality"
+                ),
+                MongoDatabase.Channel(
+                        "bernouLLI",
+                        "channelId"
+                ),
+                1
+        )
+        item6.id = ObjectId(VIDEO_ID_6)
+        videoRepo.insert(item6)
+
+        val item7 = MongoDatabase.MongoVideo(
+                "terceiro",
+                "terceiro video",
+                "videoId2",
+                ObjectId(QUESTION_ID_4),
+                1.3f,
+                MongoDatabase.Thumbnails(
+                        "highQuality",
+                        "defaultQuality",
+                        "mediumQuality"
+                ),
+                MongoDatabase.Channel(
+                        "bernouLLI",
+                        "channelId"
+                ),
+                1
+        )
+        item7.id = ObjectId(VIDEO_ID_7)
+        videoRepo.insert(item7)
     }
 
     fun users() {
@@ -213,6 +303,9 @@ class DataSetup {
                         200
                 ),
                 "facebookId1",
+                GeoJsonPoint(-12.83, -44.86),
+                //null,
+                null,
                 null,
                 null,
                 null,
@@ -233,6 +326,9 @@ class DataSetup {
                         200
                 ),
                 "facebookId2",
+                GeoJsonPoint(-15.83, -47.86),
+                //null,
+                null,
                 null,
                 null,
                 null,
@@ -245,7 +341,7 @@ class DataSetup {
         user2.id = ObjectId(USER_ID_2)
         userRepo.insert(user2)
         val user3 = MongoDatabase.MongoUser(
-                "user3",
+                "manitos1",
                 "user3@g.com",
                 MongoDatabase.MongoPicture(
                         "https://picture3.jpg",
@@ -253,6 +349,9 @@ class DataSetup {
                         200
                 ),
                 "facebookId3",
+                GeoJsonPoint(-11.83, -49.86),
+                //null,
+                null,
                 null,
                 null,
                 null,
@@ -273,6 +372,9 @@ class DataSetup {
                         200
                 ),
                 "facebookId4",
+                GeoJsonPoint(-20.83, -57.86),
+                //null,
+                null,
                 null,
                 null,
                 null,
@@ -671,6 +773,9 @@ class DataSetup {
         )
         ch5.id = ObjectId(CHALLENGE_TRIVIA_ID_5)
         challengeRepo.insert(ch5)
+    }
+    fun post(){
+
     }
 }
 

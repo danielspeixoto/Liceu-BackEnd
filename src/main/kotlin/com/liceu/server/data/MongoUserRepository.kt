@@ -7,26 +7,20 @@ import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
-import com.mongodb.client.model.geojson.CoordinateReferenceSystem
-import com.mongodb.client.model.geojson.GeoJsonObjectType
-import com.mongodb.client.model.geojson.Point
-import com.mongodb.client.model.geojson.Position
+import com.mongodb.Mongo
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
+import org.springframework.data.geo.Metrics
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.Aggregation.limit
 import org.springframework.data.mongodb.core.aggregation.Aggregation.sort
+import org.springframework.data.mongodb.core.aggregation.GeoNearOperation
+import org.springframework.data.mongodb.core.aggregation.MatchOperation
 import org.springframework.data.mongodb.core.findOne
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.query.Criteria
-import org.springframework.data.mongodb.core.query.Query
-import org.springframework.data.mongodb.core.query.Update
-import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
-import java.io.StringReader
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
-
+import org.springframework.data.mongodb.core.query.*
 
 
 @Repository
@@ -51,7 +45,9 @@ class MongoUserRepository(
                 user.youtubeChannel,
                 user.instagramProfile,
                 user.description,
-                user.website
+                user.website,
+                user.amountOfFollowers,
+                user.following
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
         if (user != null) {
@@ -59,6 +55,33 @@ class MongoUserRepository(
         }
         return template.save(mongoUser).id.toHexString()
     }
+
+
+
+    override fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double,state: String): Long {
+        val location = GeoJsonPoint(longitude,latitude)
+        val update = Update()
+        update.set("location", location)
+        update.set("state", state)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateSchoolFromUser(userId: String, school: String): Long {
+        val update = Update()
+        update.set("school",school)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
 
     override fun updateAgeFromUser(userId: String, age: Int): Long {
         val update = Update()
@@ -115,11 +138,31 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
-    override fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double,state: String): Long {
-        val location = GeoJsonPoint(longitude,latitude)
+    override fun updateProducerToBeFollowed(producerId: String): Long {
         val update = Update()
-        update.set("location", location)
-        update.set("state", state)
+        update.inc("amountOfFollowers",1)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateProducerToBeUnfollowed(producerId: String): Long {
+        val update = Update()
+        update.inc("amountOfFollowers",-1)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateAddProducerToFollowingList(userId: String, producerId: String): Long {
+        val update = Update()
+        update.addToSet("following",producerId)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -128,9 +171,9 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
-    override fun updateSchoolFromUser(userId: String, school: String): Long {
+    override fun updateRemoveProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.set("school",school)
+        update.pull("following",producerId)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -160,7 +203,9 @@ class MongoUserRepository(
                     it.youtubeChannel,
                     it.instagramProfile,
                     it.description,
-                    it.website
+                    it.website,
+                    it.amountOfFollowers,
+                    it.following
             )
         }
         if (userRetrieved.isNotEmpty()) {
@@ -206,6 +251,48 @@ class MongoUserRepository(
         }
         return challengesRetrieved
     }
+
+    override fun getUsersByNameUsingLocation(nameSearched: String, longitude: Double?, latitude: Double?, amount: Int): List<User> {
+        val match: MatchOperation
+        val geoMatch: GeoNearOperation?
+        val agg: Aggregation
+        val sample = Aggregation.sample(amount.toLong())
+        if(latitude != null && longitude != null){
+            val location = GeoJsonPoint(longitude,latitude)
+            geoMatch = Aggregation.geoNear(NearQuery.near(location), "distance")
+            match = Aggregation.match(Criteria("name")
+                    .regex(nameSearched, "ix"))
+            agg = Aggregation.newAggregation(geoMatch,match,sample)
+        } else{
+            match =  Aggregation.match(Criteria("name")
+                    .regex(nameSearched,"ix"))
+            agg = Aggregation.newAggregation(match,sample)
+        }
+        val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
+        return results.map {
+            User(
+                    it.id.toHexString(),
+                    it.name,
+                    it.email,
+                    Picture(
+                            it.picture.url,
+                            it.picture.width,
+                            it.picture.height
+                    ),
+                    it.location,
+                    it.state,
+                    it.school,
+                    it.age,
+                    it.youtubeChannel,
+                    it.instagramProfile,
+                    it.description,
+                    it.website,
+                    it.amountOfFollowers,
+                    it.following
+            )
+        }
+    }
+
 
 
 }

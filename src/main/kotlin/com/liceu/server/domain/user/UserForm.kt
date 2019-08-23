@@ -15,5 +15,7 @@ data class UserForm(
         val youtubeChannel: String?,
         val instagramProfile: String?,
         val description: String?,
-        val website: String?
+        val website: String?,
+        val amountOfFollowers: Int?,
+        val following: List<String>?
 )

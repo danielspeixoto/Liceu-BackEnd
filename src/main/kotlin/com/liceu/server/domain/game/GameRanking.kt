@@ -27,7 +27,7 @@ class GameRanking(val repo: GameBoundary.IRepository, val maxResults: Int): Game
                     MAX_RESULTS_OVERFLOW,
                     TAGS + listOf(OVERFLOW),
                     hashMapOf(
-                            "action" to EVENT_NAME,
+
                             "requested" to amount,
                             "max_allowed" to maxResults
                     )
