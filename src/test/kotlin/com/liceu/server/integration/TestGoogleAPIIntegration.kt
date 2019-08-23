@@ -13,11 +13,11 @@ class TestGoogleAPIIntegration {
             "sm2sA37l2SshglMRa7PTAYz1"
     )
 
-    @Test
+//    @Test
     fun data_ValidAccessToken_ReturnsInfo() {
         val user = googleAPI.data("4/nQG18-KawrfR53XRO2YT6XCvPoMgv4bhtNafSiEidCcP0e5B83eqGU0AQbe7W90TisMOYNV-f7WLa_nxKD2dPu4")
         assertThat(user.email).isEqualTo("ingoalmeida@hotmail.com")
-//        TODO ADD assertions
+//        TODO ADD other assertions
     }
 
     @Test
