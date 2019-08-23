@@ -78,6 +78,8 @@ class DataSetup {
     lateinit var triviaRepo: TriviaRepository
     @Autowired
     lateinit var challengeRepo: ChallengeRepository
+    @Autowired
+    lateinit var postRepo: PostRepository
 
     fun setup() {
         questionRepo.deleteAll()
@@ -86,12 +88,14 @@ class DataSetup {
         gameRepo.deleteAll()
         triviaRepo.deleteAll()
         challengeRepo.deleteAll()
+        postRepo.deleteAll()
         questions()
         videos()
         users()
         games()
         trivia()
         challenge()
+        post()
     }
 
     fun questions() {
@@ -307,6 +311,8 @@ class DataSetup {
                 null,
                 null,
                 null,
+                null,
+                null,
                 null
         )
         user1.id = ObjectId(USER_ID_1)
@@ -328,12 +334,14 @@ class DataSetup {
                 null,
                 null,
                 null,
+                null,
+                null,
                 null
         )
         user2.id = ObjectId(USER_ID_2)
         userRepo.insert(user2)
         val user3 = MongoDatabase.MongoUser(
-                "user3",
+                "manitos1",
                 "user3@g.com",
                 MongoDatabase.MongoPicture(
                         "https://picture3.jpg",
@@ -343,6 +351,8 @@ class DataSetup {
                 "facebookId3",
                 GeoJsonPoint(-11.83, -49.86),
                 //null,
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -364,6 +374,8 @@ class DataSetup {
                 "facebookId4",
                 GeoJsonPoint(-20.83, -57.86),
                 //null,
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -761,6 +773,9 @@ class DataSetup {
         )
         ch5.id = ObjectId(CHALLENGE_TRIVIA_ID_5)
         challengeRepo.insert(ch5)
+    }
+    fun post(){
+
     }
 }
 

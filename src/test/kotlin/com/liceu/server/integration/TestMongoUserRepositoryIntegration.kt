@@ -54,6 +54,8 @@ class TestMongoUserRepositoryIntegration {
                 null,
                 null,
                 null,
+                null,
+                null,
                 null
         ))
         val user = userRepository.findByEmail("newuser@gmail.com")
@@ -73,6 +75,8 @@ class TestMongoUserRepositoryIntegration {
                         200, 200
                 ),
                 "oldId",
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -196,20 +200,82 @@ class TestMongoUserRepositoryIntegration {
     }
 
     @Test
-    fun getUsersByNameWithoutLocation_userExist_returnListOfUsers(){
-        val result = data.getUsersByNameUsingLocation("user",null,null)
-        assertThat(result.size).isEqualTo(4)
+    fun getUsersByNameWithoutLocation_usersExist_returnListOfUsers(){
+        val result = data.getUsersByNameUsingLocation("user",null,null,15)
+        assertThat(result.size).isEqualTo(3)
         val ids = result.map { it.id }
-        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_3,testSetup.USER_ID_4)
+        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_4)
+    }
+
+    @Test
+    fun getUsersByNameUsingLocation_usersExist_returnListOfUsers(){
+        val result = data.getUsersByNameUsingLocation("user",-90.83,-42.86,15)
+        assertThat(result.size).isEqualTo(3)
+        val ids = result.map { it.id }
+        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_4)
     }
 
     @Test
     fun getUsersByNameUsingLocation_userExist_returnListOfUsers(){
-        val result = data.getUsersByNameUsingLocation("user",-18.83,-42.86)
-        assertThat(result.size).isEqualTo(4)
+        val result = data.getUsersByNameUsingLocation("man i",-90.83,-42.86,15)
+        assertThat(result.size).isEqualTo(1)
         val ids = result.map { it.id }
-        assertThat(ids).containsExactly(testSetup.USER_ID_1,testSetup.USER_ID_2,testSetup.USER_ID_3,testSetup.USER_ID_4)
+        assertThat(ids).containsExactly(testSetup.USER_ID_3)
     }
+
+    @Test
+    fun updateProducerToBeFollowed_userExist_verifyUserAndProducer(){
+        val producerBefore = data.getUserById(testSetup.USER_ID_2)
+        assertThat(producerBefore.amountOfFollowers).isNull()
+        val userBefore = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userBefore.following?.size).isNull()
+        val result = data.updateProducerToBeFollowed(testSetup.USER_ID_2)
+        assertThat(result).isEqualTo(1)
+        val result2 = data.updateAddProducerToFollowingList(testSetup.USER_ID_1,testSetup.USER_ID_2)
+        assertThat(result2).isEqualTo(1)
+        val producerAfter = data.getUserById(testSetup.USER_ID_2)
+        assertThat(producerAfter.amountOfFollowers).isEqualTo(1)
+        val userAfter = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userAfter.following?.size).isEqualTo(1)
+        assertThat(userAfter.following?.get(0)).isEqualTo(testSetup.USER_ID_2)
+    }
+
+    @Test
+    fun updateProducerToBeUnfollowed_userExist_verifyUserAndProducer(){
+        val result = data.updateProducerToBeFollowed(testSetup.USER_ID_2)
+        assertThat(result).isEqualTo(1)
+        val result2 = data.updateAddProducerToFollowingList(testSetup.USER_ID_1,testSetup.USER_ID_2)
+        assertThat(result2).isEqualTo(1)
+        val producerBefore = data.getUserById(testSetup.USER_ID_2)
+        assertThat(producerBefore.amountOfFollowers).isEqualTo(1)
+        val userBefore = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userBefore.following?.size).isEqualTo(1)
+        assertThat(userBefore.following?.get(0)).isEqualTo(testSetup.USER_ID_2)
+        val resultDel = data.updateProducerToBeUnfollowed(testSetup.USER_ID_2)
+        assertThat(resultDel).isEqualTo(1)
+        val resultDel2 = data.updateRemoveProducerToFollowingList(testSetup.USER_ID_1,testSetup.USER_ID_2)
+        assertThat(resultDel2).isEqualTo(1)
+        val producerAfter = data.getUserById(testSetup.USER_ID_2)
+        assertThat(producerAfter.amountOfFollowers).isEqualTo(0)
+        val userAfter = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userAfter.following?.size).isEqualTo(0)
+    }
+
+
+    @Test
+    fun updateProducerToBeUnfollowed_producerWithNoFollowers_verifyUserAndProducer(){
+        //talvez fazer conditional query no mongoDb pra evitar -1 -> pensar se necessário
+        val resultDel = data.updateProducerToBeUnfollowed(testSetup.USER_ID_2)
+        assertThat(resultDel).isEqualTo(1)
+        val producerBefore = data.getUserById(testSetup.USER_ID_2)
+        assertThat(producerBefore.amountOfFollowers).isEqualTo(-1)
+        val resultDel2 = data.updateRemoveProducerToFollowingList(testSetup.USER_ID_1,testSetup.USER_ID_2)
+        assertThat(resultDel2).isEqualTo(0)
+        val userAfter = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userAfter.following?.size).isNull()
+    }
+
+
 
 
 }

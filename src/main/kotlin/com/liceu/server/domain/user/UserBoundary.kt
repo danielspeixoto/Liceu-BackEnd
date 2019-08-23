@@ -17,7 +17,7 @@ class UserBoundary {
         fun save(user: UserForm): String
         fun getUserById(userId: String): User
         fun getChallengesFromUserById(userId: String): List<Challenge>
-        fun getUsersByNameUsingLocation(nameSearched: String, latitude: Double?, longitude: Double?): List<User>
+        fun getUsersByNameUsingLocation(nameSearched: String, latitude: Double?, longitude: Double?, amount: Int): List<User>
         fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double, state: String): Long
         fun updateSchoolFromUser(userId: String, school: String): Long
         fun updateAgeFromUser(userId: String, age: Int): Long
@@ -25,6 +25,10 @@ class UserBoundary {
         fun updateInstagramProfileFromUser(userId: String, instagramProfile: String): Long
         fun updateDescriptionFromUser(userId: String, description: String): Long
         fun updateWebsiteFromUser(userId: String, website: String): Long
+        fun updateProducerToBeFollowed(producerId: String): Long
+        fun updateProducerToBeUnfollowed(producerId: String): Long
+        fun updateAddProducerToFollowingList(userId: String,producerId: String): Long
+        fun updateRemoveProducerToFollowingList(userId: String,producerId: String): Long
     }
 
     interface IUpdateAge {
@@ -55,6 +59,14 @@ class UserBoundary {
         fun run (userId: String,longitude: Double,latitude: Double)
     }
 
+    interface IupdateProducerToBeFollowed {
+        fun run (userId: String, producerId: String)
+    }
+
+    interface IupdateProducerToBeUnfollowed {
+        fun run (userId: String, producerId: String)
+    }
+
     interface IUserById {
         @Throws(Error::class)
         fun run(userId: String): User
@@ -65,7 +77,7 @@ class UserBoundary {
     }
 
     interface IGetUsersByNameUsingLocation {
-        fun run(userId: String,nameSearched: String): List<User>
+        fun run(nameSearched: String, longitude: Double,latitude: Double, amount: Int): List<User>
     }
 
     interface IMultipleAuthenticate {
