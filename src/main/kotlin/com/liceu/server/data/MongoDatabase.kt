@@ -87,9 +87,9 @@ class MongoDatabase {
     @Document(collection = MongoDatabase.USER_COLLECTION)
     data class MongoUser(
             var name: String,
-            @Indexed(unique=true) var email: String,
+            var email: String,
             var picture: MongoPicture,
-            var facebookId: String,
+            @Indexed(unique=true) var facebookId: String,
             @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE) var location: GeoJsonPoint?,
             var state: String?,
             var school: String?,
