@@ -170,7 +170,7 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
-        Truth.assertThat(userUpdated.instagramProfile).isEqualTo("https://www.instagram.com/liceu.co/")
+        Truth.assertThat(userUpdated.instagramProfile).isEqualTo("liceu.co")
     }
 
     @Test
