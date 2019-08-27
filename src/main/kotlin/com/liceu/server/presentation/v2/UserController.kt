@@ -46,8 +46,9 @@ class UserController (
             val youtubeChannel: String?,
             val instagramProfile: String?,
             val description: String?,
-            val website: String?
-
+            val website: String?,
+            val amountOfFollowers: Int?,
+            val following: List<String>?
     )
 
 
@@ -554,7 +555,9 @@ class UserController (
                 user.youtubeChannel,
                 user.instagramProfile,
                 user.description,
-                user.website
+                user.website,
+                user.amountOfFollowers,
+                user.following
         )
     }
     fun toChallengeResponse(challenge: Challenge): ChallengeResponse {

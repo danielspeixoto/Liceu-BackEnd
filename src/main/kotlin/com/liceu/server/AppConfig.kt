@@ -9,6 +9,9 @@ import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.domain.game.GameBoundary
 import com.liceu.server.domain.game.GameRanking
 import com.liceu.server.domain.game.SubmitGame
+import com.liceu.server.domain.post.PostBoundary
+import com.liceu.server.domain.post.TextPost
+import com.liceu.server.domain.post.VideoPost
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.QuestionById
 import com.liceu.server.domain.question.RandomQuestions
@@ -63,6 +66,10 @@ class AppConfig : AbstractMongoConfiguration() {
 
     val mongoChallengeRepository by lazy{
         MongoChallengeRepository(mongoTemplate())
+    }
+
+    val mongoPostRepository by lazy {
+        MongoPostRepository(mongoTemplate())
     }
 
     val facebookAPI by lazy {
@@ -213,6 +220,16 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun UpdateAnswers(): ChallengeBoundary.IUpdateAnswers{
         return UpdateAnswers(mongoChallengeRepository)
+    }
+
+    @Bean
+    fun textPost(): PostBoundary.ITextPost{
+        return TextPost(mongoPostRepository)
+    }
+
+    @Bean
+    fun videoPost(): PostBoundary.IVideoPost{
+        return VideoPost(mongoPostRepository)
     }
 
 }

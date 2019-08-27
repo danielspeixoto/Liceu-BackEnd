@@ -202,23 +202,30 @@ class MongoDatabase {
     data class MongoPost(
         val userId: ObjectId,
         val type: String,
-        val text: String?,
-        val image: MongoPostImage?,
-        val video: MongoPostVideo?
+        val description: String,
+        val imageURL: String?,
+        val video: MongoPostVideo?,
+        val submissionDate: Date
     ){
         @Id
         lateinit var id: ObjectId
     }
 
-    data class MongoPostImage(
-            val imageURL: String?,
-            val description: String?
-    )
+//    data class MongoPostImage(
+//            val imageURL: String?,
+//            val description: String?
+//    )
 
     data class MongoPostVideo(
             val videoUrl: String?,
-            val description: String?,
-            var thumbnails: Thumbnails?
+            //val description: String?,
+            val thumbnails: MongoPostThumbnails?
+    )
+
+    data class MongoPostThumbnails(
+            var high: String?,
+            var default: String?,
+            var medium: String?
     )
 
 }
