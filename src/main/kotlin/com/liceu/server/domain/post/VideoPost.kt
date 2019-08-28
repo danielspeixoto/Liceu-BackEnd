@@ -24,10 +24,10 @@ class VideoPost(
             if(post.description.length > 800){
                 throw OverflowSizeException ("Description is too long")
             }
-            if(post.video!!.videoUrl!!.isEmpty()){
+            if(post.video?.videoUrl?.isEmpty()!!){
                 throw OverflowSizeException ("Video URl can't be null")
             }
-            if(post.video.videoUrl!!.length > 250){
+            if(post.video.videoUrl.length > 250){
                 throw OverflowSizeException ("Video URL is too long")
             }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(

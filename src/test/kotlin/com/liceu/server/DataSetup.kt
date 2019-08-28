@@ -322,7 +322,10 @@ class DataSetup {
                 null,
                 null,
                 null,
-                null
+                listOf(
+                        USER_ID_2,
+                        USER_ID_4
+                )
         )
         user1.id = ObjectId(USER_ID_1)
         userRepo.insert(user1)
@@ -370,7 +373,7 @@ class DataSetup {
                 null,
                 listOf(
                         USER_ID_2,
-                        USER_ID_3
+                        USER_ID_4
                 )
         )
         user3.id = ObjectId(USER_ID_3)
@@ -810,7 +813,7 @@ class DataSetup {
         post2.id = ObjectId(POST_ID_2)
         postRepo.insert(post2)
         val post3 = MongoDatabase.MongoPost(
-                ObjectId(USER_ID_3),
+                ObjectId(USER_ID_4),
                 "video",
                 "teste de video",
                 null,
@@ -826,6 +829,26 @@ class DataSetup {
         )
         post3.id = ObjectId(POST_ID_3)
         postRepo.insert(post3)
+        val post4 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_3),
+                "text",
+                "teste de texto 2",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
+        )
+        post4.id = ObjectId(POST_ID_4)
+        postRepo.insert(post4)
+        val post5 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_3),
+                "text",
+                "teste de texto 2",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
+        )
+        post5.id = ObjectId(POST_ID_5)
+        postRepo.insert(post5)
     }
 }
 

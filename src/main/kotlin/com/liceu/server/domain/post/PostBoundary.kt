@@ -7,8 +7,9 @@ class PostBoundary {
 
     interface IRepository{
         fun insertPost(postToInsert: PostToInsert): String
-        fun getPosts(user:User, date: Date,amount: Int): List<Post>
+        fun getPostsForFeed(user:User, date: Date,amount: Int): List<Post>?
         fun getPostById(postId: String): Post
+        fun getPostFromUser(userId: String): List<Post>
     }
 
     interface ITextPost {
@@ -24,7 +25,11 @@ class PostBoundary {
     }
 
     interface IGetPosts {
-        fun run(userId:String, date: Date, amount: Int): List<Post>
+        fun run(userId:String, date: Date, amount: Int): List<Post>?
+    }
+
+    interface IGetPostsFromUser{
+        fun run(userId: String): List<Post>
     }
 
 

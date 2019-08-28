@@ -20,6 +20,7 @@ data class PostToInsert(
 )
 
 data class Post(
+        val id: String,
         val userId: String,
         val type: String,
         val description: String,

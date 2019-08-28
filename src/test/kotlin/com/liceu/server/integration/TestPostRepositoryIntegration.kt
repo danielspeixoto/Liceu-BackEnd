@@ -102,29 +102,45 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
-    fun getPosts_postsInserter_returnOnePost(){
+    fun getPosts_postsInserted_returnOnePost(){
         val date = Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
         val user = userRepository.getUserById(testSetup.USER_ID_4)
-        val retrievedPosts = data.getPosts(user,date,10)
-        assertThat(retrievedPosts.size).isEqualTo(1)
-        assertThat(retrievedPosts[0].type).isEqualTo("text")
-        assertThat(retrievedPosts[0].description).isEqualTo("teste de texto")
+        val retrievedPosts = data.getPostsForFeed(user,date,10)
+        assertThat(retrievedPosts?.size).isEqualTo(1)
+        assertThat(retrievedPosts?.get(0)?.type).isEqualTo("text")
+        assertThat(retrievedPosts?.get(0)?.description).isEqualTo("teste de texto")
     }
 
     @Test
-    fun getPosts_postsInserter_returnMultiplesPost(){
+    fun getPosts_postsInserted_returnMultiplesPost(){
         val date = Date.from(Instant.parse("2019-08-27T12:40:20.00Z"))
         val user = userRepository.getUserById(testSetup.USER_ID_3)
-        val retrievedPosts = data.getPosts(user,date,10)
-        assertThat(retrievedPosts.size).isEqualTo(2)
-        val userIdsFromPosts = retrievedPosts.map { it.userId }
-        assertThat(userIdsFromPosts).containsExactly(testSetup.USER_ID_2,testSetup.USER_ID_3)
-        assertThat(retrievedPosts[0].type).isEqualTo("video")
-        assertThat(retrievedPosts[1].type).isEqualTo("text")
+        val retrievedPosts = data.getPostsForFeed(user,date,10)
+        assertThat(retrievedPosts?.size).isEqualTo(2)
+        val userIdsFromPosts = retrievedPosts?.map { it.userId }
+        assertThat(userIdsFromPosts).containsExactly(testSetup.USER_ID_2,testSetup.USER_ID_4)
+        assertThat(retrievedPosts?.get(0)?.type).isEqualTo("video")
+        assertThat(retrievedPosts?.get(1)?.type).isEqualTo("text")
     }
 
+    @Test
+    fun getPosts_followingArrayEmpty_returnNull(){
+        val date = Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
+        val user = userRepository.getUserById(testSetup.USER_ID_2)
+        val retrievedPosts = data.getPostsForFeed(user,date,10)
+        assertThat(retrievedPosts?.size).isNull()
+    }
 
+    @Test
+    fun getPostsFromUser_userExists_returnListOfPosts(){
+        val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_3)
+        assertThat(retrievedPosts.size).isEqualTo(2)
+    }
 
-
+    @Test
+    fun getPostsFromUser_userExists_returnOnePost(){
+        val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_1)
+        assertThat(retrievedPosts.size).isEqualTo(1)
+    }
 
 }

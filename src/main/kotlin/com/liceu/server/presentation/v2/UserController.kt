@@ -271,7 +271,6 @@ class UserController (
                 "version" to 2
         ))
         return try{
-
             val day = body["day"] as Int? ?: throw ValidationException()
             val month = body["month"] as Int? ?: throw ValidationException()
             val year = body["year"] as Int? ?: throw ValidationException()

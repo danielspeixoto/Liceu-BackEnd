@@ -228,7 +228,7 @@ class TestMongoUserRepositoryIntegration {
         val producerBefore = data.getUserById(testSetup.USER_ID_2)
         assertThat(producerBefore.amountOfFollowers).isNull()
         val userBefore = data.getUserById(testSetup.USER_ID_1)
-        assertThat(userBefore.following?.size).isNull()
+        assertThat(userBefore.following?.size).isEqualTo(2)
         val result = data.updateProducerToBeFollowed(testSetup.USER_ID_2)
         assertThat(result).isEqualTo(1)
         val result2 = data.updateAddProducerToFollowingList(testSetup.USER_ID_1,testSetup.USER_ID_2)
@@ -236,7 +236,7 @@ class TestMongoUserRepositoryIntegration {
         val producerAfter = data.getUserById(testSetup.USER_ID_2)
         assertThat(producerAfter.amountOfFollowers).isEqualTo(1)
         val userAfter = data.getUserById(testSetup.USER_ID_1)
-        assertThat(userAfter.following?.size).isEqualTo(1)
+        assertThat(userAfter.following?.size).isEqualTo(3)
         assertThat(userAfter.following?.get(0)).isEqualTo(testSetup.USER_ID_2)
     }
 
@@ -249,7 +249,7 @@ class TestMongoUserRepositoryIntegration {
         val producerBefore = data.getUserById(testSetup.USER_ID_2)
         assertThat(producerBefore.amountOfFollowers).isEqualTo(1)
         val userBefore = data.getUserById(testSetup.USER_ID_1)
-        assertThat(userBefore.following?.size).isEqualTo(1)
+        assertThat(userBefore.following?.size).isEqualTo(3)
         assertThat(userBefore.following?.get(0)).isEqualTo(testSetup.USER_ID_2)
         val resultDel = data.updateProducerToBeUnfollowed(testSetup.USER_ID_2)
         assertThat(resultDel).isEqualTo(1)
@@ -258,7 +258,7 @@ class TestMongoUserRepositoryIntegration {
         val producerAfter = data.getUserById(testSetup.USER_ID_2)
         assertThat(producerAfter.amountOfFollowers).isEqualTo(0)
         val userAfter = data.getUserById(testSetup.USER_ID_1)
-        assertThat(userAfter.following?.size).isEqualTo(0)
+        assertThat(userAfter.following?.size).isEqualTo(2)
     }
 
 
@@ -272,7 +272,7 @@ class TestMongoUserRepositoryIntegration {
         val resultDel2 = data.updateRemoveProducerToFollowingList(testSetup.USER_ID_1,testSetup.USER_ID_2)
         assertThat(resultDel2).isEqualTo(0)
         val userAfter = data.getUserById(testSetup.USER_ID_1)
-        assertThat(userAfter.following?.size).isNull()
+        assertThat(userAfter.following?.size).isEqualTo(2)
     }
 
 

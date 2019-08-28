@@ -2,7 +2,6 @@ package com.liceu.server.data
 
 import com.liceu.server.domain.post.*
 import com.liceu.server.domain.user.User
-import com.mongodb.client.model.Filters.elemMatch
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -43,6 +42,7 @@ class MongoPostRepository(
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         val postRetrieved = results.map {
             Post(
+                it.id.toHexString(),
                 it.userId.toHexString(),
                 it.type,
                 it.description,
@@ -61,8 +61,11 @@ class MongoPostRepository(
         return postRetrieved[0]
     }
 
-    override fun getPosts(user: User, date: Date, amount: Int): List<Post> {
-        var objectsIds = user.following!!.map {ObjectId(it)}
+    override fun getPostsForFeed(user: User, date: Date, amount: Int): List<Post>? {
+        if(user.following.isNullOrEmpty()){
+            return null
+        }
+        val objectsIds = user.following!!.map {ObjectId(it)}
         val match = Aggregation.match(Criteria.where("userId").`in`(objectsIds)
                 .and("submissionDate").lte(date))
         val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
@@ -71,6 +74,7 @@ class MongoPostRepository(
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         return results.map {
             Post(
+                    it.id.toHexString(),
                     it.userId.toHexString(),
                     it.type,
                     it.description,
@@ -88,4 +92,27 @@ class MongoPostRepository(
         }
     }
 
+    override fun getPostFromUser(userId: String): List<Post> {
+        val match = Aggregation.match(Criteria("userId").isEqualTo(ObjectId(userId)))
+        val agg = Aggregation.newAggregation(match)
+        val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
+        return results.map {
+            Post(
+                    it.id.toHexString(),
+                    it.userId.toHexString(),
+                    it.type,
+                    it.description,
+                    it.imageURL,
+                    PostVideo(
+                            it.video?.videoUrl,
+                            PostThumbnails(
+                                    it.video?.thumbnails?.high,
+                                    it.video?.thumbnails?.default,
+                                    it.video?.thumbnails?.medium
+                            )
+                    ),
+                    it.submissionDate
+            )
+        }
+    }
 }

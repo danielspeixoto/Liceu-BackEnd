@@ -9,9 +9,7 @@ import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.domain.game.GameBoundary
 import com.liceu.server.domain.game.GameRanking
 import com.liceu.server.domain.game.SubmitGame
-import com.liceu.server.domain.post.PostBoundary
-import com.liceu.server.domain.post.TextPost
-import com.liceu.server.domain.post.VideoPost
+import com.liceu.server.domain.post.*
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.QuestionById
 import com.liceu.server.domain.question.RandomQuestions
@@ -230,6 +228,15 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun videoPost(): PostBoundary.IVideoPost{
         return VideoPost(mongoPostRepository)
+    }
+
+    @Bean
+    fun getPosts(): PostBoundary.IGetPosts{
+        return GetPosts(mongoPostRepository,mongoUserRepository,30)
+    }
+    @Bean
+    fun getPostsFromUser(): PostBoundary.IGetPostsFromUser{
+        return GetPostsFromUser(mongoPostRepository)
     }
 
 }
