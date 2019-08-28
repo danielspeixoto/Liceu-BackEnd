@@ -4,6 +4,7 @@ import com.liceu.server.domain.post.*
 import com.liceu.server.domain.user.User
 import com.mongodb.client.model.Filters.elemMatch
 import org.bson.types.ObjectId
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
@@ -61,8 +62,30 @@ class MongoPostRepository(
     }
 
     override fun getPosts(user: User, date: Date, amount: Int): List<Post> {
-        //val match = Aggregation.match(elemMatch("_id")
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var objectsIds = user.following!!.map {ObjectId(it)}
+        val match = Aggregation.match(Criteria.where("userId").`in`(objectsIds)
+                .and("submissionDate").lte(date))
+        val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
+        val limitOfReturnedPosts = Aggregation.limit(amount.toLong())
+        val agg = Aggregation.newAggregation(match,sortByDate,limitOfReturnedPosts)
+        val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
+        return results.map {
+            Post(
+                    it.userId.toHexString(),
+                    it.type,
+                    it.description,
+                    it.imageURL,
+                    PostVideo(
+                            it.video?.videoUrl,
+                            PostThumbnails(
+                                    it.video?.thumbnails?.high,
+                                    it.video?.thumbnails?.default,
+                                    it.video?.thumbnails?.medium
+                            )
+                    ),
+                    it.submissionDate
+            )
+        }
     }
 
 }

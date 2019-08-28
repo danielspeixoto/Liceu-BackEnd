@@ -1,6 +1,9 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.domain.post.PostThumbnails
+import com.liceu.server.domain.post.PostVideo
+import com.liceu.server.domain.post.VideoPost
 import com.liceu.server.util.JWTAuth
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,6 +36,12 @@ class DataSetup {
     val CHALLENGE_TRIVIA_ID_3 = "09c54d325b75357a571d4cc1"
     val CHALLENGE_TRIVIA_ID_4 = "09c54d325b75357a571d4cd2"
     val CHALLENGE_TRIVIA_ID_5 = "09c54d325b75357a571d4ce2"
+
+    val POST_ID_1 = "09c54d325b75357a581d4ca2"
+    val POST_ID_2 = "09c54d325b75357a581d4ca3"
+    val POST_ID_3 = "09c54d325b75357a581d4ca4"
+    val POST_ID_4 = "09c54d325b75357a581d4ca5"
+    val POST_ID_5 = "09c54d325b75357a581d4ca6"
 
     val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
     val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
@@ -359,7 +368,10 @@ class DataSetup {
                 null,
                 null,
                 null,
-                null
+                listOf(
+                        USER_ID_2,
+                        USER_ID_3
+                )
         )
         user3.id = ObjectId(USER_ID_3)
         userRepo.insert(user3)
@@ -382,7 +394,9 @@ class DataSetup {
                 null,
                 null,
                 null,
-                null
+                listOf(
+                        USER_ID_1
+                )
         )
         user4.id = ObjectId(USER_ID_4)
         userRepo.insert(user4)
@@ -775,7 +789,43 @@ class DataSetup {
         challengeRepo.insert(ch5)
     }
     fun post(){
-
+        val post1 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_1),
+                "text",
+                "teste de texto",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
+        )
+        post1.id = ObjectId(POST_ID_1)
+        postRepo.insert(post1)
+        val post2 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_2),
+                "text",
+                "teste de texto 2",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
+        )
+        post2.id = ObjectId(POST_ID_2)
+        postRepo.insert(post2)
+        val post3 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_3),
+                "video",
+                "teste de video",
+                null,
+                MongoDatabase.MongoPostVideo(
+                        "asassa",
+                        MongoDatabase.MongoPostThumbnails(
+                                "high",
+                                "default",
+                                "medium"
+                        )
+                ),
+                Date.from(Instant.parse("2019-08-27T12:40:20.00Z"))
+        )
+        post3.id = ObjectId(POST_ID_3)
+        postRepo.insert(post3)
     }
 }
 

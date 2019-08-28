@@ -24,7 +24,7 @@ class PostBoundary {
     }
 
     interface IGetPosts {
-        fun run(userId:String, day: Int, month: Int, year: Int, amount: Int): List<Post>
+        fun run(userId:String, date: Date, amount: Int): List<Post>
     }
 
 

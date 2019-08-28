@@ -19,24 +19,15 @@ class GetPosts(
         const val EVENT_NAME = "get_posts"
         val TAGS = listOf(RETRIEVAL,POST)
     }
-    override fun run(userId: String, day: Int, month: Int, year: Int, amount: Int): List<Post> {
+    override fun run(userId: String, date: Date, amount: Int): List<Post> {
         try{
             val user = userRepository.getUserById(userId)
-            val date = LocalDate.of(year, month, day)
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to userId,
                     "dateRequired" to date,
                     "amount" to amount
             ))
-            //postRepository.getPosts(user,)
-        return listOf(Post(
-                "123",
-                "text",
-                "123132",
-                null,
-                null,
-                Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant())
-        ))
+            return postRepository.getPosts(user,date,amount)
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e

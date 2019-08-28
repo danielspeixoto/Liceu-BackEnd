@@ -162,7 +162,7 @@ class MongoUserRepository(
 
     override fun updateAddProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.addToSet("following",producerId)
+        update.addToSet("following",ObjectId(producerId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -173,7 +173,7 @@ class MongoUserRepository(
 
     override fun updateRemoveProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.pull("following",producerId)
+        update.pull("following",ObjectId(producerId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,

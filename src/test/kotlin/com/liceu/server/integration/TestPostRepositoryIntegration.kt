@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoPostRepository
+import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.PostRepository
 import com.liceu.server.domain.post.PostThumbnails
 import com.liceu.server.domain.post.PostToInsert
@@ -26,9 +27,11 @@ import java.util.*
 class TestPostRepositoryIntegration {
 
     @Autowired
-        lateinit var data: MongoPostRepository
+    lateinit var data: MongoPostRepository
     @Autowired
     lateinit var postRepository: PostRepository
+    @Autowired
+    lateinit var userRepository: MongoUserRepository
 
     @Autowired
     lateinit var testSetup: DataSetup
@@ -96,6 +99,28 @@ class TestPostRepositoryIntegration {
         assertThat(postInserted.video?.thumbnails?.high).isEqualTo("high")
         assertThat(postInserted.video?.thumbnails?.default).isEqualTo("default")
         assertThat(postInserted.video?.thumbnails?.medium).isEqualTo("medium")
+    }
+
+    @Test
+    fun getPosts_postsInserter_returnOnePost(){
+        val date = Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
+        val user = userRepository.getUserById(testSetup.USER_ID_4)
+        val retrievedPosts = data.getPosts(user,date,10)
+        assertThat(retrievedPosts.size).isEqualTo(1)
+        assertThat(retrievedPosts[0].type).isEqualTo("text")
+        assertThat(retrievedPosts[0].description).isEqualTo("teste de texto")
+    }
+
+    @Test
+    fun getPosts_postsInserter_returnMultiplesPost(){
+        val date = Date.from(Instant.parse("2019-08-27T12:40:20.00Z"))
+        val user = userRepository.getUserById(testSetup.USER_ID_3)
+        val retrievedPosts = data.getPosts(user,date,10)
+        assertThat(retrievedPosts.size).isEqualTo(2)
+        val userIdsFromPosts = retrievedPosts.map { it.userId }
+        assertThat(userIdsFromPosts).containsExactly(testSetup.USER_ID_2,testSetup.USER_ID_3)
+        assertThat(retrievedPosts[0].type).isEqualTo("video")
+        assertThat(retrievedPosts[1].type).isEqualTo("text")
     }
 
 
