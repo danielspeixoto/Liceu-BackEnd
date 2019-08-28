@@ -24,6 +24,7 @@ class MongoDatabase {
         const val TRIVIA_COLLECTION = "trivia"
         const val CHALLENGE_COLLECTION = "challenge"
         const val POST_COLLECTION = "post"
+        const val ACTIVITIES_COLLECTION = "activities"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -227,5 +228,16 @@ class MongoDatabase {
             var default: String?,
             var medium: String?
     )
+
+    @Document(collection = MongoDatabase.ACTIVITIES_COLLECTION)
+    data class MongoActivities(
+        val userId: ObjectId,
+        val type: String,
+        val params: HashMap<String,Any>,
+        val submissionDate: Date
+    ){
+        @Id
+        lateinit var id: ObjectId
+    }
 
 }

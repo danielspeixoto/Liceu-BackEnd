@@ -1,6 +1,9 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.domain.activities.ActivityBoundary
+import com.liceu.server.domain.activities.GetActivitiesFromUser
+import com.liceu.server.domain.activities.InsertActivity
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.GetChallenge
 import com.liceu.server.domain.challenge.UpdateAnswers
@@ -68,6 +71,10 @@ class AppConfig : AbstractMongoConfiguration() {
 
     val mongoPostRepository by lazy {
         MongoPostRepository(mongoTemplate())
+    }
+
+    val mongoActivityRepository by lazy {
+        MongoActivityRepository(mongoTemplate())
     }
 
     val facebookAPI by lazy {
@@ -237,6 +244,16 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun getPostsFromUser(): PostBoundary.IGetPostsFromUser{
         return GetPostsFromUser(mongoPostRepository)
+    }
+
+    @Bean
+    fun insertActivity (): ActivityBoundary.IInsertActivity{
+        return InsertActivity(mongoActivityRepository)
+    }
+
+    @Bean
+    fun getActivitiesFromUser(): ActivityBoundary.IGetActivitiesFromUser{
+        return GetActivitiesFromUser(mongoActivityRepository,50)
     }
 
 }

@@ -135,6 +135,8 @@ class TestPostRepositoryIntegration {
     fun getPostsFromUser_userExists_returnListOfPosts(){
         val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_3)
         assertThat(retrievedPosts.size).isEqualTo(2)
+        val idsFromPosts = retrievedPosts.map { it.id }
+        assertThat(idsFromPosts).containsExactly(testSetup.POST_ID_5,testSetup.POST_ID_4).inOrder()
     }
 
     @Test

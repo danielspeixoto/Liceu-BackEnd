@@ -30,6 +30,9 @@ class VideoPost(
             if(post.video.videoUrl.length > 250){
                 throw OverflowSizeException ("Video URL is too long")
             }
+            if(post.video.thumbnails?.high?.isEmpty()!! or post.video.thumbnails?.default?.isEmpty()!! or post.video.thumbnails?.medium?.isEmpty()!!){
+                throw OverflowSizeException ("None of the thumbnails can be null")
+            }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to post.userId,
                     "type" to post.type,

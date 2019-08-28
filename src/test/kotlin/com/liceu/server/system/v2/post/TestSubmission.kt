@@ -67,4 +67,73 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.video?.videoUrl).isEqualTo("www.youtube.com/lalal")
         Truth.assertThat(insertedPost.video?.thumbnails?.high).isEqualTo("highQuality")
     }
+    @Test
+    fun submitVideoPost_descriptionNull_throwError() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "type" to "video",
+                "description" to null,
+                "videoUrl" to "www.youtube.com/lalal",
+                "high" to "highQuality",
+                "default" to "defaulQuality",
+                "medium" to "mediumQuality"
+        ), headers)
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+    @Test
+    fun submitVideoPost_descriptionEmptyString_throwError() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "type" to "video",
+                "description" to "",
+                "videoUrl" to "www.youtube.com/lalal",
+                "high" to "highQuality",
+                "default" to "defaulQuality",
+                "medium" to "mediumQuality"
+        ), headers)
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+    @Test
+    fun submitVideoPost_videoUrlEmpty_throwError() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "type" to "video",
+                "description" to "teste teste",
+                "videoUrl" to "",
+                "high" to "highQuality",
+                "default" to "defaulQuality",
+                "medium" to "mediumQuality"
+        ), headers)
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun submitVideoPost_defaultThumbnailEmpty_throwError() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "type" to "video",
+                "description" to "teste teste",
+                "videoUrl" to "www.youtube.com/lalal",
+                "high" to "highQuality",
+                "default" to "",
+                "medium" to "mediumQuality"
+        ), headers)
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
 }

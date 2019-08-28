@@ -94,7 +94,8 @@ class MongoPostRepository(
 
     override fun getPostFromUser(userId: String): List<Post> {
         val match = Aggregation.match(Criteria("userId").isEqualTo(ObjectId(userId)))
-        val agg = Aggregation.newAggregation(match)
+        val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
+        val agg = Aggregation.newAggregation(match,sortByDate)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         return results.map {
             Post(

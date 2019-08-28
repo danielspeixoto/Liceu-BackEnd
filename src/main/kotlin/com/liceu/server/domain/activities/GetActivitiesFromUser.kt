@@ -1,22 +1,20 @@
-package com.liceu.server.domain.post
+package com.liceu.server.domain.activities
 
-import com.liceu.server.data.MongoPostRepository
-import com.liceu.server.data.MongoUserRepository
+import com.liceu.server.data.MongoActivityRepository
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
-import java.util.*
 
-class GetPosts(
-        private val postRepository: MongoPostRepository,
-        private val userRepository: MongoUserRepository,
+class GetActivitiesFromUser(
+        private val activityRepository: MongoActivityRepository,
         private val maxResults: Int
-): PostBoundary.IGetPosts {
+): ActivityBoundary.IGetActivitiesFromUser {
 
-    companion object{
-        const val EVENT_NAME = "get_posts"
-        val TAGS = listOf(RETRIEVAL,POST)
+    companion object {
+        const val EVENT_NAME = "get_activities_from_user"
+        val TAGS = listOf(RETRIEVAL, ACTIVITY, USER)
     }
-    override fun run(userId: String, date: Date, amount: Int): List<Post>? {
+
+    override fun run(userId: String, amount: Int): List<Activity> {
         if(amount == 0) {
             Logging.warn(UNCOMMON_PARAMS, TAGS, hashMapOf(
                     "action" to EVENT_NAME,
@@ -35,16 +33,13 @@ class GetPosts(
                     )
             )
         }
-        try{
-            val user = userRepository.getUserById(userId)
+        try {
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
-                    "userId" to userId,
-                    "dateRequired" to date,
-                    "amount" to amount
+                    "userId" to userId
             ))
-            return postRepository.getPostsForFeed(user,date,finalAmount)
+            return activityRepository.getActivitiesFromUser(userId,finalAmount)
         }catch (e: Exception){
-            Logging.error(EVENT_NAME, TAGS,e)
+            Logging.error(EVENT_NAME,TAGS,e)
             throw e
         }
     }
