@@ -241,9 +241,15 @@ class AppConfig : AbstractMongoConfiguration() {
     fun getPosts(): PostBoundary.IGetPosts{
         return GetPosts(mongoPostRepository,mongoUserRepository,30)
     }
+
     @Bean
     fun getPostsFromUser(): PostBoundary.IGetPostsFromUser{
         return GetPostsFromUser(mongoPostRepository)
+    }
+
+    @Bean
+    fun getRandomPosts(): PostBoundary.IGetRandomPosts{
+        return GetRandomPosts(mongoPostRepository,20)
     }
 
     @Bean

@@ -65,4 +65,28 @@ class TestGetPosts: TestSystem("/v2/post")  {
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(1)
     }
+
+    @Test
+    fun getRandomPosts_PostsExists_returnListOfPosts(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/explore?amount=10", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body.size).isEqualTo(5)
+    }
+
+    @Test
+    fun getRandomPosts_amountZero_returnEmptyList(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/explore?amount=0", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body).isEmpty()
+    }
 }

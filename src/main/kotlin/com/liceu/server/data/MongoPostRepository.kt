@@ -1,6 +1,7 @@
 package com.liceu.server.data
 
 import com.liceu.server.domain.post.*
+import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
@@ -61,9 +62,9 @@ class MongoPostRepository(
         return postRetrieved[0]
     }
 
-    override fun getPostsForFeed(user: User, date: Date, amount: Int): List<Post>? {
+    override fun getPostsForFeed(user: User, date: Date, amount: Int): List<Post> {
         if(user.following.isNullOrEmpty()){
-            return null
+            return emptyList()
         }
         val objectsIds = user.following!!.map {ObjectId(it)}
         val match = Aggregation.match(Criteria.where("userId").`in`(objectsIds)
@@ -116,4 +117,33 @@ class MongoPostRepository(
             )
         }
     }
+
+    override fun getRandomPosts(amount: Int): List<Post> {
+            if(amount == 0){
+                return emptyList()
+            }
+            val sample = Aggregation.sample(amount.toLong())
+            val agg = Aggregation.newAggregation(sample)
+
+            val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
+            return results.map {
+                Post(
+                        it.id.toHexString(),
+                        it.userId.toHexString(),
+                        it.type,
+                        it.description,
+                        it.imageURL,
+                        PostVideo(
+                                it.video?.videoUrl,
+                                PostThumbnails(
+                                        it.video?.thumbnails?.high,
+                                        it.video?.thumbnails?.default,
+                                        it.video?.thumbnails?.medium
+                                )
+                        ),
+                        it.submissionDate
+                )
+            }
+        }
+
 }

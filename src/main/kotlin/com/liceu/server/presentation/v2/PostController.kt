@@ -20,7 +20,8 @@ class PostController(
         @Autowired val textPost: PostBoundary.ITextPost,
         @Autowired val videoPost: PostBoundary.IVideoPost,
         @Autowired val getPostsForFeed: PostBoundary.IGetPosts,
-        @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser
+        @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
+        @Autowired val getRandomPosts: PostBoundary.IGetRandomPosts
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -142,6 +143,33 @@ class PostController(
             )
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
+
+    }
+
+    @GetMapping("/explore")
+    fun getRandomPosts (
+            @RequestParam("amount") amount: Int,
+            request: HttpServletRequest
+    ): ResponseEntity<List<PostResponse>> {
+        val eventName = "get_random_posts"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, RANDOM, RETRIEVAL)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val postsRetrieved = getRandomPosts.run(amount)
+            ResponseEntity(postsRetrieved.map { toPostResponse(it) },HttpStatus.OK)
+        }catch (e: Exception){
+            Logging.error(
+                    eventName,
+                    eventTags,
+                    e, data = networkData
+            )
+            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
+
     }
 
     data class PostResponse(

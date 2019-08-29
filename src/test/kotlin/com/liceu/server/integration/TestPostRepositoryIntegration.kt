@@ -124,11 +124,11 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
-    fun getPosts_followingArrayEmpty_returnNull(){
+    fun getPosts_followingArrayEmpty_returnEmptyList(){
         val date = Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
         val user = userRepository.getUserById(testSetup.USER_ID_2)
         val retrievedPosts = data.getPostsForFeed(user,date,10)
-        assertThat(retrievedPosts?.size).isNull()
+        assertThat(retrievedPosts?.isEmpty())
     }
 
     @Test
@@ -143,6 +143,18 @@ class TestPostRepositoryIntegration {
     fun getPostsFromUser_userExists_returnOnePost(){
         val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_1)
         assertThat(retrievedPosts.size).isEqualTo(1)
+    }
+
+    @Test
+    fun getRandomPosts_postsExists_returnListOfPosts(){
+        val retrievedPosts = data.getRandomPosts(10)
+        assertThat(retrievedPosts.size).isEqualTo(5)
+    }
+
+    @Test
+    fun getRandomPosts_amountZero_returnEmptyList(){
+        val retrievedPosts = data.getRandomPosts(0)
+        assertThat(retrievedPosts).isEmpty()
     }
 
 }
