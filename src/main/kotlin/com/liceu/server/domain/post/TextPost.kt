@@ -37,7 +37,8 @@ class TextPost(
                 post.description,
                 null,
                 post.video,
-                Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant())
+                Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()),
+                null
                 ))
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)

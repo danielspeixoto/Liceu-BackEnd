@@ -1,5 +1,6 @@
 package com.liceu.server.domain.post
 
+import org.bson.types.ObjectId
 import java.util.*
 
 data class PostSubmission (
@@ -16,7 +17,8 @@ data class PostToInsert(
         val description: String,
         val imageURL: String?,
         val video: PostVideo?,
-        val submissionDate: Date
+        val submissionDate: Date,
+        val comments: List<PostComment>?
 )
 
 data class Post(
@@ -26,18 +28,19 @@ data class Post(
         val description: String,
         val imageURL: String?,
         val video: PostVideo?,
-        val submissionDate: Date
+        val submissionDate: Date,
+        val comments: List<PostComment>?
 )
 
-
-//data class PostImage(
-//        val imageURL: String?,
-//        val description: String?
-//)
+data class PostComment (
+        var id: ObjectId,
+        var userId: ObjectId,
+        var author: String,
+        var comment: String
+)
 
 data class PostVideo(
         val videoUrl: String?,
-        //val description: String?,
         var thumbnails: PostThumbnails?
 )
 

@@ -253,6 +253,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateComments(): PostBoundary.IUpdateListOfComments {
+        return UpdateComments(mongoPostRepository,mongoUserRepository)
+    }
+
+    @Bean
     fun insertActivity (): ActivityBoundary.IInsertActivity{
         return InsertActivity(mongoActivityRepository)
     }

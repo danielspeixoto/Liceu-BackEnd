@@ -21,7 +21,8 @@ class PostController(
         @Autowired val videoPost: PostBoundary.IVideoPost,
         @Autowired val getPostsForFeed: PostBoundary.IGetPosts,
         @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
-        @Autowired val getRandomPosts: PostBoundary.IGetRandomPosts
+        @Autowired val getRandomPosts: PostBoundary.IGetRandomPosts,
+        @Autowired val updateComments: PostBoundary.IUpdateListOfComments
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -168,8 +169,45 @@ class PostController(
             )
             ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
         }
+    }
 
-
+    @PutMapping ("/{postId}/comment")
+    fun updatePostComments(
+            @PathVariable("postId") postId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "put_comment_posts"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, COMMENT, UPDATE)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val userId = body["userId"] as String? ?:throw ValidationException()
+            val comment = body["comment"] as String? ?:throw ValidationException()
+            updateComments.run(postId,userId,comment)
+            ResponseEntity(HttpStatus.OK)
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
     }
 
     data class PostResponse(

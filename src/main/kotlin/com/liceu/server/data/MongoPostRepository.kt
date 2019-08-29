@@ -8,9 +8,18 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
+import java.math.BigInteger
+import java.security.Timestamp
+import java.time.Instant
+import java.time.ZoneOffset
 import java.util.*
+import java.text.SimpleDateFormat
+
+
 
 @Repository
 class MongoPostRepository(
@@ -31,8 +40,13 @@ class MongoPostRepository(
                             postToInsert.video?.thumbnails?.medium
                         )
                 ),
-                postToInsert.submissionDate
-
+                postToInsert.submissionDate,
+                postToInsert.comments?.map { MongoDatabase.MongoComment(
+                        ObjectId(postToInsert.userId+Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()).toString()),
+                        it.userId,
+                        it.author,
+                        it.comment
+                ) }
         ))
         return result.id.toHexString()
     }
@@ -56,7 +70,15 @@ class MongoPostRepository(
                         it.video?.thumbnails?.medium
                     )
                 ),
-                it.submissionDate
+                it.submissionDate,
+                it.comments?.map {
+                    PostComment(
+                            it.id,
+                            it.userId,
+                            it.author,
+                            it.comment
+                    )
+                }
             )
         }
         return postRetrieved[0]
@@ -88,7 +110,16 @@ class MongoPostRepository(
                                     it.video?.thumbnails?.medium
                             )
                     ),
-                    it.submissionDate
+                    it.submissionDate,
+                    it.comments?.map {
+                        PostComment(
+                                it.id,
+                                it.userId,
+                                it.author,
+                                it.comment
+                        )
+                    }
+
             )
         }
     }
@@ -113,37 +144,70 @@ class MongoPostRepository(
                                     it.video?.thumbnails?.medium
                             )
                     ),
-                    it.submissionDate
+                    it.submissionDate,
+                    it.comments?.map {
+                        PostComment(
+                                it.id,
+                                it.userId,
+                                it.author,
+                                it.comment
+                        )
+                    }
             )
         }
     }
 
     override fun getRandomPosts(amount: Int): List<Post> {
-            if(amount == 0){
-                return emptyList()
-            }
-            val sample = Aggregation.sample(amount.toLong())
-            val agg = Aggregation.newAggregation(sample)
-
-            val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
-            return results.map {
-                Post(
-                        it.id.toHexString(),
-                        it.userId.toHexString(),
-                        it.type,
-                        it.description,
-                        it.imageURL,
-                        PostVideo(
-                                it.video?.videoUrl,
-                                PostThumbnails(
-                                        it.video?.thumbnails?.high,
-                                        it.video?.thumbnails?.default,
-                                        it.video?.thumbnails?.medium
-                                )
-                        ),
-                        it.submissionDate
-                )
-            }
+        if(amount == 0){
+            return emptyList()
         }
+        val sample = Aggregation.sample(amount.toLong())
+        val agg = Aggregation.newAggregation(sample)
 
+        val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
+        return results.map {
+            Post(
+                    it.id.toHexString(),
+                    it.userId.toHexString(),
+                    it.type,
+                    it.description,
+                    it.imageURL,
+                    PostVideo(
+                            it.video?.videoUrl,
+                            PostThumbnails(
+                                    it.video?.thumbnails?.high,
+                                    it.video?.thumbnails?.default,
+                                    it.video?.thumbnails?.medium
+                            )
+                    ),
+                    it.submissionDate,
+                    it.comments?.map {
+                        PostComment(
+                                it.id,
+                                it.userId,
+                                it.author,
+                                it.comment
+                        )
+                    }
+            )
+        }
+    }
+
+    override fun updateListOfComments(postId: String, userId: String,author: String ,comment: String): Long {
+        val update = Update()
+        val id = ObjectId()
+        val commentToBeInserted = MongoDatabase.MongoComment(
+                id,
+                ObjectId(userId),
+                author,
+                comment
+        )
+        update.addToSet("comments",commentToBeInserted)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(postId))),
+                update,
+                MongoDatabase.MongoPost::class.java
+        )
+        return result.modifiedCount
+    }
 }

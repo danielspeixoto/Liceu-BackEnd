@@ -49,7 +49,8 @@ class TestPostRepositoryIntegration {
             "Eu sou um teste de texto",
             null,
             null,
-            Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+            Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+            null
         ))
         val postInserted = data.getPostById(newPost)
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
@@ -65,7 +66,8 @@ class TestPostRepositoryIntegration {
                 "imagem legal",
                 "www.teste.com.br",
                 null,
-                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+                null
         ))
         val postInserted = data.getPostById(newPost)
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
@@ -89,7 +91,8 @@ class TestPostRepositoryIntegration {
                                 "medium"
                         )
                 ),
-                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+                null
         ))
         val postInserted = data.getPostById(newPost)
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
@@ -155,6 +158,20 @@ class TestPostRepositoryIntegration {
     fun getRandomPosts_amountZero_returnEmptyList(){
         val retrievedPosts = data.getRandomPosts(0)
         assertThat(retrievedPosts).isEmpty()
+    }
+
+    @Test
+    fun updateListOfComments_postExists_verifyCommentsFromPost(){
+        val result1 = data.updateListOfComments(testSetup.POST_ID_1,testSetup.USER_ID_2,"user2","post interessante 1")
+        val result2 = data.updateListOfComments(testSetup.POST_ID_1,testSetup.USER_ID_2,"user2","post interessante 2")
+        val result3= data.updateListOfComments(testSetup.POST_ID_1,testSetup.USER_ID_2,"user2","post interessante 3")
+        assertThat(result1).isEqualTo(1)
+        assertThat(result2).isEqualTo(1)
+        assertThat(result3).isEqualTo(1)
+        val postChanged = data.getPostById(testSetup.POST_ID_1)
+        assertThat(postChanged.comments?.size).isEqualTo(3)
+        assertThat(postChanged.comments?.get(0)?.comment).isEqualTo("post interessante 1")
+        assertThat(postChanged.comments?.get(1)?.comment).isEqualTo("post interessante 2")
     }
 
 }

@@ -206,20 +206,15 @@ class MongoDatabase {
         val description: String,
         val imageURL: String?,
         val video: MongoPostVideo?,
-        val submissionDate: Date
+        val submissionDate: Date,
+        val comments: List<MongoComment>?
     ){
         @Id
         lateinit var id: ObjectId
     }
 
-//    data class MongoPostImage(
-//            val imageURL: String?,
-//            val description: String?
-//    )
-
     data class MongoPostVideo(
             val videoUrl: String?,
-            //val description: String?,
             val thumbnails: MongoPostThumbnails?
     )
 
@@ -227,6 +222,14 @@ class MongoDatabase {
             var high: String?,
             var default: String?,
             var medium: String?
+    )
+
+
+    data class MongoComment (
+            var id: ObjectId,
+            var userId: ObjectId,
+            var author: String,
+            var comment: String
     )
 
     @Document(collection = MongoDatabase.ACTIVITIES_COLLECTION)
