@@ -1,6 +1,9 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.domain.activities.ActivityBoundary
+import com.liceu.server.domain.activities.GetActivitiesFromUser
+import com.liceu.server.domain.activities.InsertActivity
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.GetChallenge
 import com.liceu.server.domain.challenge.UpdateAnswers
@@ -9,6 +12,7 @@ import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.domain.game.GameBoundary
 import com.liceu.server.domain.game.GameRanking
 import com.liceu.server.domain.game.SubmitGame
+import com.liceu.server.domain.post.*
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.QuestionById
 import com.liceu.server.domain.question.RandomQuestions
@@ -16,6 +20,7 @@ import com.liceu.server.domain.question.QuestionVideos
 import com.liceu.server.domain.trivia.SubmitTriviaQuestion
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.trivia.TriviaRandomQuestions
+import com.liceu.server.domain.trivia.UpdateCommentsTrivia
 import com.liceu.server.domain.user.*
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
@@ -63,6 +68,14 @@ class AppConfig : AbstractMongoConfiguration() {
 
     val mongoChallengeRepository by lazy{
         MongoChallengeRepository(mongoTemplate())
+    }
+
+    val mongoPostRepository by lazy {
+        MongoPostRepository(mongoTemplate())
+    }
+
+    val mongoActivityRepository by lazy {
+        MongoActivityRepository(mongoTemplate())
     }
 
     val facebookAPI by lazy {
@@ -206,6 +219,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateCommentsTrivia(): TriviaBoundary.IUpdateListOfComments {
+        return UpdateCommentsTrivia(mongoTriviaRepository,mongoUserRepository)
+    }
+
+    @Bean
     fun getChallenge(): ChallengeBoundary.IGetChallenge{
         return GetChallenge(mongoChallengeRepository,mongoTriviaRepository)
     }
@@ -213,6 +231,46 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun UpdateAnswers(): ChallengeBoundary.IUpdateAnswers{
         return UpdateAnswers(mongoChallengeRepository)
+    }
+
+    @Bean
+    fun textPost(): PostBoundary.ITextPost{
+        return TextPost(mongoPostRepository)
+    }
+
+    @Bean
+    fun videoPost(): PostBoundary.IVideoPost{
+        return VideoPost(mongoPostRepository)
+    }
+
+    @Bean
+    fun getPosts(): PostBoundary.IGetPosts{
+        return GetPosts(mongoPostRepository,mongoUserRepository,30)
+    }
+
+    @Bean
+    fun getPostsFromUser(): PostBoundary.IGetPostsFromUser{
+        return GetPostsFromUser(mongoPostRepository)
+    }
+
+    @Bean
+    fun getRandomPosts(): PostBoundary.IGetRandomPosts{
+        return GetRandomPosts(mongoPostRepository,20)
+    }
+
+    @Bean
+    fun updateComments(): PostBoundary.IUpdateListOfComments {
+        return UpdateComments(mongoPostRepository,mongoUserRepository)
+    }
+
+    @Bean
+    fun insertActivity (): ActivityBoundary.IInsertActivity{
+        return InsertActivity(mongoActivityRepository)
+    }
+
+    @Bean
+    fun getActivitiesFromUser(): ActivityBoundary.IGetActivitiesFromUser{
+        return GetActivitiesFromUser(mongoActivityRepository,50)
     }
 
 }

@@ -46,8 +46,9 @@ class UserController (
             val youtubeChannel: String?,
             val instagramProfile: String?,
             val description: String?,
-            val website: String?
-
+            val website: String?,
+            val amountOfFollowers: Int?,
+            val following: List<String>?
     )
 
 
@@ -270,7 +271,6 @@ class UserController (
                 "version" to 2
         ))
         return try{
-
             val day = body["day"] as Int? ?: throw ValidationException()
             val month = body["month"] as Int? ?: throw ValidationException()
             val year = body["year"] as Int? ?: throw ValidationException()
@@ -554,7 +554,9 @@ class UserController (
                 user.youtubeChannel,
                 user.instagramProfile,
                 user.description,
-                user.website
+                user.website,
+                user.amountOfFollowers,
+                user.following
         )
     }
     fun toChallengeResponse(challenge: Challenge): ChallengeResponse {

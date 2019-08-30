@@ -4,6 +4,7 @@ import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.ChallengeToInsert
 import com.liceu.server.domain.global.ItemNotFoundException
+import com.liceu.server.domain.trivia.PostComment
 import com.liceu.server.domain.trivia.TriviaQuestion
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -35,7 +36,15 @@ class MongoChallengeRepository(
                             it.question,
                             it.correctAnswer,
                             it.wrongAnswer,
-                            it.tags
+                            it.tags,
+                            it.comments?.map {
+                                MongoDatabase.MongoComment(
+                                        it.id,
+                                        it.userId,
+                                        it.author,
+                                        it.comment
+                                )
+                            }
                     )
                 },
                 matchmaking.submissionDate
@@ -69,7 +78,15 @@ class MongoChallengeRepository(
                                 triviaQuestion.question,
                                 triviaQuestion.correctAnswer,
                                 triviaQuestion.wrongAnswer,
-                                triviaQuestion.tags
+                                triviaQuestion.tags,
+                                triviaQuestion.comments?.map {
+                                    PostComment(
+                                            it.id,
+                                            it.userId,
+                                            it.author,
+                                            it.comment
+                                    )
+                                }
                         )
                     },
                     it.submissionDate
@@ -114,7 +131,15 @@ class MongoChallengeRepository(
                                 triviaQuestion.question,
                                 triviaQuestion.correctAnswer,
                                 triviaQuestion.wrongAnswer,
-                                triviaQuestion.tags
+                                triviaQuestion.tags,
+                                triviaQuestion.comments?.map {
+                                    PostComment(
+                                            it.id,
+                                            it.userId,
+                                            it.author,
+                                            it.comment
+                                    )
+                                }
                         )
                     },
                     it.submissionDate
@@ -148,7 +173,15 @@ class MongoChallengeRepository(
                 answer.question,
                 answer.correctAnswer,
                 answer.wrongAnswer,
-                answer.tags
+                answer.tags,
+                answer.comments?.map {
+                    PostComment(
+                            it.id,
+                            it.userId,
+                            it.author,
+                            it.comment
+                    )
+                }
         )
     }
 }

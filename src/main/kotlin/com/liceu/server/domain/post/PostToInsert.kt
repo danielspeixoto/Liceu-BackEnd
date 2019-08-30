@@ -1,35 +1,52 @@
 package com.liceu.server.domain.post
 
-import com.liceu.server.data.MongoDatabase
 import org.bson.types.ObjectId
 import java.util.*
 
 data class PostSubmission (
         val userId: String,
         val type: String,
-        val text: String?,
-        val image: MongoPostImage?,
-        val video: MongoPostVideo?
+        val description: String,
+        val imageURL: Base64?,
+        val video: PostVideo?
 )
 
 data class PostToInsert(
         val userId: String,
-        val text: String?,
         val type: String,
-        val image: MongoPostImage?,
-        val video: MongoPostVideo?,
-        val submissionDate: Date
-)
-
-
-data class MongoPostImage(
-        val imageURL: String,
-        val description: String
-)
-
-data class MongoPostVideo(
-        val videoUrl: String,
         val description: String,
-        var thumbnails: MongoDatabase.Thumbnails
+        val imageURL: String?,
+        val video: PostVideo?,
+        val submissionDate: Date,
+        val comments: List<PostComment>?
+)
+
+data class Post(
+        val id: String,
+        val userId: String,
+        val type: String,
+        val description: String,
+        val imageURL: String?,
+        val video: PostVideo?,
+        val submissionDate: Date,
+        val comments: List<PostComment>?
+)
+
+data class PostComment (
+        var id: ObjectId,
+        var userId: ObjectId,
+        var author: String,
+        var comment: String
+)
+
+data class PostVideo(
+        val videoUrl: String?,
+        var thumbnails: PostThumbnails?
+)
+
+data class PostThumbnails(
+        var high: String?,
+        var default: String?,
+        var medium: String?
 )
 

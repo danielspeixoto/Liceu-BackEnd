@@ -4,8 +4,10 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.trivia.TriviaQuestionSubmission
+import com.liceu.server.domain.trivia.UpdateCommentsTrivia
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
+import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,7 +22,8 @@ import javax.validation.ValidationException
 @RequestMapping("/v2/trivia")
 class TriviaController(
         @Autowired val submit: TriviaBoundary.ISubmit,
-        @Autowired val randomQuestions: TriviaBoundary.IRandomQuestions
+        @Autowired val randomQuestions: TriviaBoundary.IRandomQuestions,
+        @Autowired val updateCommentsTrivia: TriviaBoundary.IUpdateListOfComments
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -102,13 +105,53 @@ class TriviaController(
         }
     }
 
+    @PutMapping ("/{questionId}/comment")
+    fun updatePostComments(
+            @PathVariable("questionId") questionId: String,
+            @RequestBody body: java.util.HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "put_comment_question"
+        val eventTags = listOf(CONTROLLER, NETWORK, QUESTION, COMMENT, UPDATE)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val userId = body["userId"] as String? ?: throw ValidationException()
+            val comment = body["comment"] as String? ?: throw ValidationException()
+            updateCommentsTrivia.run(questionId, userId, comment)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
+
     data class TriviaQuestionResponse(
             val id: String,
             val userId: String,
             val question: String,
             val correctAnswer: String,
             val wrongAnswer: String,
-            val tags: List<String>
+            val tags: List<String>,
+            val comments: List<PostComment>?
     )
 
     fun toTriviaQuestionResponse(triviaQuestion: TriviaQuestion): TriviaQuestionResponse{
@@ -118,11 +161,24 @@ class TriviaController(
                 triviaQuestion.question,
                 triviaQuestion.correctAnswer,
                 triviaQuestion.wrongAnswer,
-                triviaQuestion.tags
+                triviaQuestion.tags,
+                triviaQuestion.comments?.map {
+                    PostComment(
+                            it.id,
+                            it.userId,
+                            it.author,
+                            it.comment
+                    )
+                }
         )
     }
 
-
+    data class PostComment (
+            var id: ObjectId,
+            var userId: ObjectId,
+            var author: String,
+            var comment: String
+    )
 
 
 }

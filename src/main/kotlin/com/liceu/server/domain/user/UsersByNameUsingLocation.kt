@@ -41,7 +41,7 @@ class UsersByNameUsingLocation(
         }
         try {
             if(nameSearched.length <= 3){
-                throw OverflowSizeException("It needs more than 3 characters")
+                throw OverflowSizeException("Name searched needs more than 3 characters")
             }
             var nameNormalized = Normalizer.normalize(nameSearched, Normalizer.Form.NFD)
             nameNormalized = REGEX_UNACCENT.replace(nameNormalized, "").trim()

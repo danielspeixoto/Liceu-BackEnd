@@ -24,6 +24,7 @@ class MongoDatabase {
         const val TRIVIA_COLLECTION = "trivia"
         const val CHALLENGE_COLLECTION = "challenge"
         const val POST_COLLECTION = "post"
+        const val ACTIVITIES_COLLECTION = "activities"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -164,7 +165,8 @@ class MongoDatabase {
             val question: String,
             val correctAnswer: String,
             val wrongAnswer: String,
-            val tags: List<String>
+            val tags: List<String>,
+            val comments: List<MongoComment>?
     ) {
         @Id
         lateinit var id: ObjectId
@@ -178,7 +180,8 @@ class MongoDatabase {
             val question: String,
             val correctAnswer: String,
             val wrongAnswer: String,
-            val tags: List<String>
+            val tags: List<String>,
+            val comments: List<MongoComment>?
     )
 
 
@@ -202,23 +205,44 @@ class MongoDatabase {
     data class MongoPost(
         val userId: ObjectId,
         val type: String,
-        val text: String?,
-        val image: MongoPostImage?,
-        val video: MongoPostVideo?
+        val description: String,
+        val imageURL: String?,
+        val video: MongoPostVideo?,
+        val submissionDate: Date,
+        val comments: List<MongoComment>?
     ){
         @Id
         lateinit var id: ObjectId
     }
 
-    data class MongoPostImage(
-            val imageURL: String?,
-            val description: String?
-    )
-
     data class MongoPostVideo(
             val videoUrl: String?,
-            val description: String?,
-            var thumbnails: Thumbnails?
+            val thumbnails: MongoPostThumbnails?
     )
+
+    data class MongoPostThumbnails(
+            var high: String?,
+            var default: String?,
+            var medium: String?
+    )
+
+
+    data class MongoComment (
+            var id: ObjectId,
+            var userId: ObjectId,
+            var author: String,
+            var comment: String
+    )
+
+    @Document(collection = MongoDatabase.ACTIVITIES_COLLECTION)
+    data class MongoActivities(
+        val userId: ObjectId,
+        val type: String,
+        val params: HashMap<String,Any>,
+        val submissionDate: Date
+    ){
+        @Id
+        lateinit var id: ObjectId
+    }
 
 }

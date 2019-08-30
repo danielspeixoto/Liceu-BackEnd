@@ -170,7 +170,7 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
-        Truth.assertThat(userUpdated.instagramProfile).isEqualTo("https://www.instagram.com/liceu.co/")
+        Truth.assertThat(userUpdated.instagramProfile).isEqualTo("liceu.co")
     }
 
     @Test
@@ -225,7 +225,7 @@ class TestUser: TestSystem("/v2/user") {
         val producer =  data.getUserById("39c54d325b75357a571d4cc2")
         val user = data.getUserById("3a1449a4bdb40abd5ae1e431")
         Truth.assertThat(producer.amountOfFollowers).isEqualTo(1)
-        Truth.assertThat(user.following?.size).isEqualTo(1)
+        Truth.assertThat(user.following?.size).isEqualTo(3)
         Truth.assertThat(user.following?.get(0)).isEqualTo("39c54d325b75357a571d4cc2")
     }
 
@@ -245,7 +245,7 @@ class TestUser: TestSystem("/v2/user") {
         var producer =  data.getUserById("39c54d325b75357a571d4cc2")
         var user = data.getUserById("3a1449a4bdb40abd5ae1e431")
         Truth.assertThat(producer.amountOfFollowers).isEqualTo(1)
-        Truth.assertThat(user.following?.size).isEqualTo(1)
+        Truth.assertThat(user.following?.size).isEqualTo(3)
         Truth.assertThat(user.following?.get(0)).isEqualTo("39c54d325b75357a571d4cc2")
 
         val responseDelete = restTemplate
@@ -254,7 +254,7 @@ class TestUser: TestSystem("/v2/user") {
         producer =  data.getUserById("39c54d325b75357a571d4cc2")
         user = data.getUserById("3a1449a4bdb40abd5ae1e431")
         Truth.assertThat(producer.amountOfFollowers).isEqualTo(0)
-        Truth.assertThat(user.following?.size).isEqualTo(0)
+        Truth.assertThat(user.following?.size).isEqualTo(2)
     }
 
 
