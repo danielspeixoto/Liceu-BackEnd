@@ -50,7 +50,7 @@ class TestHeroku  {
         Truth.assertThat(auth.length).isGreaterThan(10)
     }
 
-    @Test
+    //@Test
     fun getRanking_Exists_returnTopGames() {
         val url = URL("https://liceu-dev.herokuapp.com/v2/ranking/?year=2019&month=7&amount=5")
         val con = url.openConnection() as HttpURLConnection
