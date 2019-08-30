@@ -49,6 +49,8 @@ class DataSetup {
     val ACITIVITY_ID_4 = "0a4449a4bdb40abd5ae1e461"
     val ACITIVITY_ID_5 = "0a5449a4bdb40abd5ae1e461"
 
+    val COMMENT_ID_1 = "0a4449a4bdb40abd5ae1e461"
+
     val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
     val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
     val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
@@ -569,7 +571,8 @@ class DataSetup {
                         "matematica",
                         "angulos",
                         "trigonometria"
-                )
+                ),
+                null
         )
         q1.id = ObjectId(QUESTION_TRIVIA_ID_1)
         triviaRepo.insert(q1)
@@ -583,7 +586,8 @@ class DataSetup {
                             "matematica",
                             "angulos",
                             "trigonometria"
-                    )
+                    ),
+                null
             )
             q2.id = ObjectId(QUESTION_TRIVIA_ID_2)
             triviaRepo.insert(q2)
@@ -597,7 +601,8 @@ class DataSetup {
                             "matematica",
                             "angulos",
                             "trigonometria"
-                    )
+                    ),
+                null
             )
             q3.id = ObjectId(QUESTION_TRIVIA_ID_3)
             triviaRepo.insert(q3)
@@ -611,7 +616,8 @@ class DataSetup {
                             "matematica",
                             "angulos",
                             "trigonometria"
-                    )
+                    ),
+                null
             )
             q4.id = ObjectId(QUESTION_TRIVIA_ID_4)
             triviaRepo.insert(q4)
@@ -624,7 +630,8 @@ class DataSetup {
                 listOf(
                         "historia",
                         "descoberta"
-                )
+                ),
+                null
         )
         q5.id = ObjectId(QUESTION_TRIVIA_ID_5)
         triviaRepo.insert(q5)
@@ -660,7 +667,8 @@ class DataSetup {
                                 listOf(
                                         "matematica",
                                         "algebra"
-                                )
+                                ),
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T19:20:20.00Z"))
@@ -695,7 +703,8 @@ class DataSetup {
                                 listOf(
                                         "graficos",
                                         "algebra"
-                                )
+                                ),
+                                null
                         ),
                         MongoDatabase.MongoChallengeTrivia(
                                 ObjectId(QUESTION_TRIVIA_ID_1),
@@ -706,7 +715,8 @@ class DataSetup {
                                 listOf(
                                         "graficos",
                                         "algebra"
-                                )
+                                ),
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
@@ -737,6 +747,14 @@ class DataSetup {
                                 listOf(
                                         "matematica",
                                         "algebra"
+                                ),
+                                listOf(
+                                        MongoDatabase.MongoComment(
+                                                ObjectId(COMMENT_ID_1),
+                                                ObjectId(USER_ID_1),
+                                                "user1",
+                                                "essa questao e boa"
+                                        )
                                 )
                         )
                 ),
@@ -767,7 +785,8 @@ class DataSetup {
                                 listOf(
                                         "matematica",
                                         "algebra"
-                                )
+                                ),
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T19:20:20.00Z"))
@@ -793,7 +812,8 @@ class DataSetup {
                                 listOf(
                                         "matematica",
                                         "algebra"
-                                )
+                                ),
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))

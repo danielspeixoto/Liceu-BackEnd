@@ -70,7 +70,8 @@ class TestMongoChallengeRepositoryIntegration {
                                 listOf(
                                         "graficos",
                                         "algebra"
-                                )
+                                ),
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
@@ -128,7 +129,8 @@ class TestMongoChallengeRepositoryIntegration {
                                 listOf(
                                         "graficos",
                                         "algebra"
-                                )
+                                ),
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
@@ -175,6 +177,7 @@ class TestMongoChallengeRepositoryIntegration {
         Truth.assertThat(resultRetrieved?.triviaQuestionsUsed?.get(0)?.wrongAnswer).isEqualTo("1")
         Truth.assertThat(resultRetrieved?.triviaQuestionsUsed?.get(0)?.tags?.get(0)).isEqualTo("matematica")
         Truth.assertThat(resultRetrieved?.triviaQuestionsUsed?.get(0)?.tags?.get(1)).isEqualTo("algebra")
+        Truth.assertThat(resultRetrieved?.triviaQuestionsUsed?.get(0)?.comments?.get(0)?.comment).isEqualTo("essa questao e boa")
     }
 
     @Test

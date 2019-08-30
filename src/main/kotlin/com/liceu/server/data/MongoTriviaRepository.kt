@@ -1,5 +1,6 @@
 package com.liceu.server.data
 
+import com.liceu.server.domain.trivia.PostComment
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.trivia.TriviaQuestionToInsert
@@ -7,6 +8,9 @@ import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
+import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
 
 
@@ -22,7 +26,8 @@ class MongoTriviaRepository(
             triviaQuestion.question,
             triviaQuestion.correctAnswer,
             triviaQuestion.wrongAnswer,
-            triviaQuestion.tags
+            triviaQuestion.tags,
+            null
         ))
         return result.id.toHexString()
     }
@@ -42,11 +47,61 @@ class MongoTriviaRepository(
                     it.question,
                     it.correctAnswer,
                     it.wrongAnswer,
-                    it.tags
+                    it.tags,
+                    it.comments?.map {
+                        PostComment(
+                                it.id,
+                                it.userId,
+                                it.author,
+                                it.comment
+                        )
+                    }
             )
         }
     }
 
+    override fun updateListOfComments(questionId: String, userId: String, author: String, comment: String): Long {
+        val update = Update()
+        val id = ObjectId()
+        val commentToBeInserted = MongoDatabase.MongoComment(
+                id,
+                ObjectId(userId),
+                author,
+                comment
+        )
+        update.addToSet("comments",commentToBeInserted)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(questionId))),
+                update,
+                MongoDatabase.MongoTriviaQuestion::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun getTriviaById(questionId: String): TriviaQuestion {
+        val match = Aggregation.match(Criteria.where("_id").isEqualTo(ObjectId(questionId)))
+        val agg = Aggregation.newAggregation(match)
+        val result = template.aggregate(agg,MongoDatabase.TRIVIA_COLLECTION,MongoDatabase.MongoTriviaQuestion::class.java)
+        val retrievedQuestion = result.map {
+            TriviaQuestion(
+                it.id.toString(),
+                it.userId.toString(),
+                it.question,
+                it.correctAnswer,
+                it.wrongAnswer,
+                it.tags,
+                it.comments?.map {
+                PostComment(
+                        it.id,
+                        it.userId,
+                        it.author,
+                        it.comment
+                    )
+                }
+            )
+        }
+        return retrievedQuestion[0]
+    }
 
     fun toTriviaQuestion(answer: MongoDatabase.MongoTriviaQuestion): TriviaQuestion{
         return TriviaQuestion(
@@ -55,7 +110,15 @@ class MongoTriviaRepository(
                 answer.question,
                 answer.correctAnswer,
                 answer.wrongAnswer,
-                answer.tags
+                answer.tags,
+                answer.comments?.map {
+                    PostComment(
+                            it.id,
+                            it.userId,
+                            it.author,
+                            it.comment
+                    )
+                }
         )
     }
 

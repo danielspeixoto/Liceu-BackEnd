@@ -165,7 +165,8 @@ class MongoDatabase {
             val question: String,
             val correctAnswer: String,
             val wrongAnswer: String,
-            val tags: List<String>
+            val tags: List<String>,
+            val comments: List<MongoComment>?
     ) {
         @Id
         lateinit var id: ObjectId
@@ -179,7 +180,8 @@ class MongoDatabase {
             val question: String,
             val correctAnswer: String,
             val wrongAnswer: String,
-            val tags: List<String>
+            val tags: List<String>,
+            val comments: List<MongoComment>?
     )
 
 

@@ -1,23 +1,22 @@
-package com.liceu.server.domain.post
+package com.liceu.server.domain.trivia
 
-import com.liceu.server.data.MongoPostRepository
+import com.liceu.server.data.MongoTriviaRepository
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.global.COMMENT
 import com.liceu.server.domain.global.OverflowSizeException
-import com.liceu.server.domain.global.POST
+import com.liceu.server.domain.global.TRIVIA
 import com.liceu.server.domain.global.UPDATE
 import com.liceu.server.util.Logging
 
-class UpdateComments(
-        private val postRepository: MongoPostRepository,
+class UpdateCommentsTrivia(
+        private val triviaRepository: MongoTriviaRepository,
         private val userRepository: MongoUserRepository
-): PostBoundary.IUpdateListOfComments {
+): TriviaBoundary.IUpdateListOfComments {
     companion object {
-        const val EVENT_NAME = "post_comment_update"
-        val TAGS = listOf(UPDATE,POST,COMMENT)
+        const val EVENT_NAME = "trivia_question_comment_update"
+        val TAGS = listOf(UPDATE, TRIVIA, COMMENT)
     }
-
-    override fun run(postId: String, userId: String, comment: String) {
+    override fun run(questionId: String, userId: String, comment: String) {
         try {
             if(comment.isBlank()){
                 throw OverflowSizeException("Comment can't be null")
@@ -30,14 +29,13 @@ class UpdateComments(
             }
             val authorComment = userRepository.getUserById(userId).name
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
-                    "postId" to postId,
+                    "questionId" to questionId,
                     "author" to authorComment,
                     "comment" to comment
             ))
-            postRepository.updateListOfComments(postId,userId,authorComment,comment)
+            triviaRepository.updateListOfComments(questionId,userId,authorComment,comment)
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e
-        }
-    }
+        }    }
 }

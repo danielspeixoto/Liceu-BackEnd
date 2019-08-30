@@ -82,6 +82,20 @@ class TestMongoTriviaRepositoryIntegration {
                 testSetup.QUESTION_TRIVIA_ID_4,testSetup.QUESTION_TRIVIA_ID_5)
     }
 
+    @Test
+    fun updateCommentsTrivia_commentValid_verifyTrivia(){
+        val result1 = data.updateListOfComments(testSetup.QUESTION_TRIVIA_ID_1,testSetup.USER_ID_2,"user2","questao interessante 1")
+        val result2 = data.updateListOfComments(testSetup.QUESTION_TRIVIA_ID_1,testSetup.USER_ID_2,"user2","questao interessante 2")
+        val result3= data.updateListOfComments(testSetup.QUESTION_TRIVIA_ID_1,testSetup.USER_ID_2,"user2","questao interessante 3")
+        Truth.assertThat(result1).isEqualTo(1)
+        Truth.assertThat(result2).isEqualTo(1)
+        Truth.assertThat(result3).isEqualTo(1)
+        val triviaChanged = data.getTriviaById(testSetup.QUESTION_TRIVIA_ID_1)
+        Truth.assertThat(triviaChanged.comments?.size).isEqualTo(3)
+        Truth.assertThat(triviaChanged.comments?.get(0)?.comment).isEqualTo("questao interessante 1")
+        Truth.assertThat(triviaChanged.comments?.get(1)?.comment).isEqualTo("questao interessante 2")
+    }
+
 
 
 }

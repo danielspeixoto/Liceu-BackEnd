@@ -20,6 +20,7 @@ import com.liceu.server.domain.question.QuestionVideos
 import com.liceu.server.domain.trivia.SubmitTriviaQuestion
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.trivia.TriviaRandomQuestions
+import com.liceu.server.domain.trivia.UpdateCommentsTrivia
 import com.liceu.server.domain.user.*
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
@@ -215,6 +216,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun randomTriviaQuestions(): TriviaBoundary.IRandomQuestions{
         return TriviaRandomQuestions(mongoTriviaRepository, 5)
+    }
+
+    @Bean
+    fun updateCommentsTrivia(): TriviaBoundary.IUpdateListOfComments {
+        return UpdateCommentsTrivia(mongoTriviaRepository,mongoUserRepository)
     }
 
     @Bean
