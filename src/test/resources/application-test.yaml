@@ -10,8 +10,8 @@ client:
   api_key: apikey
 
 mongo:
-  dbName: test
-  uri:  mongodb://localhost:27017
+  dbName: ${MONGO_DB_NAME}
+  uri:  ${MONGO_CONNECTION}
 
 dev: true
 
