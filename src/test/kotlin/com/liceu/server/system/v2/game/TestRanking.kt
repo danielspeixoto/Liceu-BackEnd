@@ -37,6 +37,7 @@ class TestRanking: TestSystem("/v2/ranking") {
         Truth.assertThat(body.size).isEqualTo(4)
         Truth.assertThat(body[0]["id"]).isEqualTo(testSetup.GAME_ID_5)
         Truth.assertThat(body[0]["userId"]).isEqualTo(testSetup.USER_ID_4)
+//        TODO Fix format for testing on travis
 //        Truth.assertThat(body[0]["submissionDate"]).isEqualTo("Mon Oct 14 08:20:20 BRT 2019")
         Truth.assertThat(body[0]["timeSpent"]).isEqualTo(1)
         val answerRetrieved = (body[0]["answers"] as List<HashMap<String, Any>>)[0]

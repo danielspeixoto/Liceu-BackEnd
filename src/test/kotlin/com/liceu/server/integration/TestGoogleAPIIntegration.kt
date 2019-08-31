@@ -1,16 +1,21 @@
 package com.liceu.server.integration
 
 import com.google.common.truth.Truth.assertThat
+import com.liceu.server.DataSetup
 import com.liceu.server.data.GoogleAPI
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 
 
 class TestGoogleAPIIntegration {
 
+    @Autowired
+    lateinit var testSetup: DataSetup
     val googleAPI = GoogleAPI(
-            "851853196382-6dr3s1jb1ee3ejt7i4iselu4vej3rmbq.apps.googleusercontent.com",
-            "sm2sA37l2SshglMRa7PTAYz1"
+            testSetup.googleClientId,
+            testSetup.googleClientSecret
     )
 
 //    @Test

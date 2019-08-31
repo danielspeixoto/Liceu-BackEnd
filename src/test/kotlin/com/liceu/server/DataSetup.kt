@@ -7,6 +7,7 @@ import com.liceu.server.domain.post.VideoPost
 import com.liceu.server.util.JWTAuth
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration
@@ -16,6 +17,13 @@ import java.util.*
 @Component
 @ContextConfiguration(classes=[TestConfiguration::class])
 class DataSetup {
+
+    @Value("\${facebook.accessToken}")
+    lateinit var facebookAccessToken: String
+    @Value("\${google.clientId}")
+    lateinit var googleClientId: String
+    @Value("\${google.clientSecret}")
+    lateinit var googleClientSecret: String
 
     @Autowired
     lateinit var jwtAuth: JWTAuth
