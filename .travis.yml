@@ -2,13 +2,16 @@ language: java
 jdk:
   - oraclejdk8
 
+services:
+  - docker
+
 before_install:
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
 
 script:
-  - mongodump --host $DB_HOST --ssl --username $DB_USER --password $DB_PASS --authenticationDatabase admin --db $DB_NAME
-  - mongorestore --host $DB_DEST --ssl --username $DB_RESTORE_USER --password $DB_RESTORE_PASS --authenticationDatabase admin --db $DB_NAME
 #  - ./gradlew test --tests "com.liceu.server.integration.*"
 #  - ./gradlew test --tests "com.liceu.server.system.*"
+  - mongodump --host $DB_HOST --ssl --username $DB_USER --password $DB_PASS --authenticationDatabase admin --db $DB_NAME
+  - mongorestore --host $DB_DEST --ssl --username $DB_RESTORE_USER --password $DB_RESTORE_PASS --authenticationDatabase admin --db $DB_NAME
   - ./gradlew test --tests "com.liceu.server.acceptance.*"
