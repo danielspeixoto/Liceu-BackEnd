@@ -7,7 +7,6 @@ import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.*
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
-import com.mongodb.client.model.geojson.GeoJsonObjectType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -29,7 +28,7 @@ class UserController (
         @Autowired val updateInstagramProfile: UserBoundary.IUpdateInstagramProfile,
         @Autowired val updateDescription: UserBoundary.IUpdateDescription,
         @Autowired val updateWebsite: UserBoundary.IUpdateWebsite,
-        @Autowired val updateProducerToBeFollowed: UserBoundary.IupdateProducerToBeFollowed,
+        @Autowired val updateProducerToBeFollowed: UserBoundary.IUpdateProducerToBeFollowed,
         @Autowired val updateProducerToBeUnfollowed: UserBoundary.IupdateProducerToBeUnfollowed,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation
 ) {

@@ -59,7 +59,7 @@ class UserBoundary {
         fun run (userId: String,longitude: Double,latitude: Double)
     }
 
-    interface IupdateProducerToBeFollowed {
+    interface IUpdateProducerToBeFollowed {
         fun run (userId: String, producerId: String)
     }
 

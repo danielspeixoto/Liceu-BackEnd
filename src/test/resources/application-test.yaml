@@ -5,7 +5,6 @@ auth:
 google:
   clientId:  851853196382-6dr3s1jb1ee3ejt7i4iselu4vej3rmbq.apps.googleusercontent.com
   clientSecret: sm2sA37l2SshglMRa7PTAYz1
-  accessToken:
 
 facebook:
   accessToken: EAAf4pgUyFpsBAPqmyAC2kZBpOOEDZCz1EQlV5svVLuxyOCGlhFVcbOBMdkfu6i4Fxuq9LAA51gnsBv2ZALVZADl2gPZAVNhwmsftjVuId1BqcAufkrKDeKhuGAQauboYUlKUOR1BTyYDjkvcho7ZAAgADZAYrlLkJHszaxZBPFWE7QDzL1EzAzpKtHO9K9fnwo7SWMCuakQw1V81zZBHZAAzgh

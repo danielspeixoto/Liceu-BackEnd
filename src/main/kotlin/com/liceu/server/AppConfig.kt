@@ -189,7 +189,7 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
-    fun updateProducerToBeFollowed(): UserBoundary.IupdateProducerToBeFollowed {
+    fun updateProducerToBeFollowed(): UserBoundary.IUpdateProducerToBeFollowed {
         return UpdateProducerToBeFollowed(mongoUserRepository)
     }
 

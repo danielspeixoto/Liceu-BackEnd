@@ -6,7 +6,7 @@ import com.liceu.server.util.Logging
 
 class UpdateProducerToBeFollowed(
         private val userRepo: MongoUserRepository
-): UserBoundary.IupdateProducerToBeFollowed {
+): UserBoundary.IUpdateProducerToBeFollowed {
     companion object{
         const val EVENT_NAME = "put_producer_followed_by_user"
         val TAGS = listOf(UPDATE, USER , PRODUCER, FOLLOWED)
@@ -20,7 +20,7 @@ class UpdateProducerToBeFollowed(
             ))
             userRepo.updateAddProducerToFollowingList(userId,producerId)
             userRepo.updateProducerToBeFollowed(producerId)
-        }catch (e: Exception){
+        } catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e
         }
