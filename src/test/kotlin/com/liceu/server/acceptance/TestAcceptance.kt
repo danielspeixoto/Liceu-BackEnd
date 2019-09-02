@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import com.liceu.server.data.UserRepository
 import com.liceu.server.system.TestSystem
 import com.liceu.server.util.JWTAuth
+import com.liceu.server.util.Logging
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +21,7 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 
-class TestAcceptance : TestSystem("/v2/user") {
+class TestAcceptance : TestSystem("/v2") {
 
     lateinit var auth: String
     lateinit var userId: String
@@ -36,7 +37,7 @@ class TestAcceptance : TestSystem("/v2/user") {
                 "accessToken" to testSetup.facebookAccessToken
         )
         val entity = HttpEntity(body, headers)
-        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl + "/login", HttpMethod.POST, entity)
 
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         Truth.assertThat(response.headers).containsKey("Authorization")
@@ -53,9 +54,9 @@ class TestAcceptance : TestSystem("/v2/user") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = auth
-        val entity = HttpEntity(null,headers)
+        val entity = HttpEntity(null, headers)
         val response = restTemplate
-                .exchange<List<java.util.HashMap<String, Any>>>(baseUrl + "?year=2019&month=8&amount=5", HttpMethod.GET,entity)
+                .exchange<List<java.util.HashMap<String, Any>>>(baseUrl + "/ranking?year=2019&month=8&amount=5", HttpMethod.GET,entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(5)
