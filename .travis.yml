@@ -10,8 +10,8 @@ before_install:
   - chmod +x gradle/wrapper/gradle-wrapper.jar
 
 script:
-  - ./gradlew test --tests "com.liceu.server.integration.*" --info
-  - ./gradlew test --tests "com.liceu.server.system.* " --info
+  - ./gradlew test --tests "com.liceu.server.integration.*" --stacktrace
+  - ./gradlew test --tests "com.liceu.server.system.* " --stacktrace
 #  - mongodump --host $DB_HOST --ssl --username $DB_USER --password $DB_PASS --authenticationDatabase admin --db $DB_NAME
 #  - mongorestore --host $DB_DEST --ssl --username $DB_RESTORE_USER --password $DB_RESTORE_PASS --authenticationDatabase admin --db $DB_NAME
 #  - ./gradlew test --tests "com.liceu.server.acceptance.*"
