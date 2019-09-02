@@ -8,27 +8,23 @@ services:
 before_install:
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
-  - mongo --version
-  - sudo apt-get update
-  - sudo apt-get install -y mongodb-org mongodb-org-server mongodb-org-shell mongodb-org-mongos mongodb-org-tools
-  - mongo --version
 
 jobs:
   include:
-    - stage: integration testing
-      env:
-        - MONGO_CONNECTION="mongodb://localhost:27017"
-      script:
-        - ./gradlew test --tests "com.liceu.server.integration.**" --info
-    - stage: system testing
-      env:
-        - MONGO_CONNECTION="mongodb://localhost:27017"
-      script:
-        - ./gradlew test --tests "com.liceu.server.system.**" --info
+#    - stage: integration testing
+#      env:
+#        - MONGO_CONNECTION="mongodb://localhost:27017"
+#      script:
+#        - ./gradlew test --tests "com.liceu.server.integration.**" --info
+#    - stage: system testing
+#      env:
+#        - MONGO_CONNECTION="mongodb://localhost:27017"
+#      script:
+#        - ./gradlew test --tests "com.liceu.server.system.**" --info
     - stage: production db cloning
       script:
         - mongodump --host $DB_HOST --ssl --username $DB_USER --password $DB_PASS --authenticationDatabase admin --db $DB_NAME
-        - mongorestore --host $DB_DEST --ssl --username $DB_RESTORE_USER --password $DB_RESTORE_PASS --authenticationDatabase admin --db $DB_NAME
+        - mongorestore --host $DB_DEST --ssl --username $DB_RESTORE_USER --password $DB_RESTORE_PASS --authenticationDatabase admin --db $DB_NAME dump
     - stage: acceptance testing
       script:
         - ./gradlew test --tests "com.liceu.server.acceptance.**" --info
