@@ -13,7 +13,7 @@ client:
 
 mongo:
   dbName: ${DB_NAME}
-  uri:  mongodb+srv://dbAdminMasterLiceuDev:v41JK7NiDZGiNFFT@cluster0-3csiz.mongodb.net/test?retryWrites=true&w=majority
+  uri:  ${MONGO_CONNECTION}
 
 dev: true
 
