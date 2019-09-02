@@ -20,7 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ContextConfiguration(classes=[TestConfiguration::class])
 @ActiveProfiles("test")
 @DataMongoTest
-
 class TestMongoGameRanking {
 
     @Autowired

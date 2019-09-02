@@ -63,7 +63,7 @@ dependencies {
 
 tasks.test {
     testLogging {
-        events = setOf(TestLogEvent.FAILED)
+        events = setOf(TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
         exceptionFormat = TestExceptionFormat.FULL
     }
     failFast = true
