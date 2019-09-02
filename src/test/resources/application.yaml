@@ -7,13 +7,13 @@ google:
   clientSecret: sm2sA37l2SshglMRa7PTAYz1
 
 facebook:
-  accessToken: EAAf4pgUyFpsBAPqmyAC2kZBpOOEDZCz1EQlV5svVLuxyOCGlhFVcbOBMdkfu6i4Fxuq9LAA51gnsBv2ZALVZADl2gPZAVNhwmsftjVuId1BqcAufkrKDeKhuGAQauboYUlKUOR1BTyYDjkvcho7ZAAgADZAYrlLkJHszaxZBPFWE7QDzL1EzAzpKtHO9K9fnwo7SWMCuakQw1V81zZBHZAAzgh
+  accessToken: EAAf4pgUyFpsBADFfsCpP7VZBBuvEKKBnZC0QZBK008S39a11ExhZAZAj319UWNxrRkpbCyfrw6zMQ8HIuPeuPnM5eYlFt1kZBpVsoRxJBSlFblMjKQY7ObcolQwID7HDjAb3c8NUZA1AGzowlh4mGRQ4FRCq2K4aP8tsfDWZCMbR5nZAJSySGZApitxE6jlNGSOeQ46eUz0O8GrQZDZD
 client:
   api_key: apikey
 
 mongo:
   dbName: ${DB_NAME}
-  uri:  mongodb+srv://dbAdminMasterLiceuDev:v41JK7NiDZGiNFFT@cluster0-3csiz.mongodb.net/test?retryWrites=true&w=majority
+  uri:  ${MONGO_CONNECTION}
 
 dev: true
 

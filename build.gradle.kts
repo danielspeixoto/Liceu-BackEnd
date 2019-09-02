@@ -66,6 +66,7 @@ tasks.test {
         events = setOf(TestLogEvent.FAILED)
         exceptionFormat = TestExceptionFormat.FULL
     }
+    failFast = true
 }
 
 tasks.withType<Test> {
