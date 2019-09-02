@@ -14,16 +14,20 @@ jobs:
 #    - stage: integration testing
 #      env:
 #        - MONGO_CONNECTION="mongodb://localhost:27017"
+#        - DB_NAME=test
 #      script:
 #        - ./gradlew test --tests "com.liceu.server.integration.**" --info
 #    - stage: system testing
 #      env:
 #        - MONGO_CONNECTION="mongodb://localhost:27017"
+#        - DB_NAME=test
 #      script:
 #        - ./gradlew test --tests "com.liceu.server.system.**" --info
     - stage: production db cloning
       script:
         - mongodump --host $DB_HOST --ssl --username $DB_USER --password $DB_PASS --authenticationDatabase admin --db $DB_NAME
+        - cd dump && ls $DB_NAME && cd ..
+        - mongo $DB_NAME --eval "db.dropDatabase()"
         - mongorestore --host $DB_DEST --ssl --username $DB_RESTORE_USER --password $DB_RESTORE_PASS --authenticationDatabase admin --db $DB_NAME dump
     - stage: acceptance testing
       script:
