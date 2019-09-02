@@ -2,6 +2,9 @@ language: java
 jdk:
   - oraclejdk8
 
+services:
+  - mongodb
+
 before_install:
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
