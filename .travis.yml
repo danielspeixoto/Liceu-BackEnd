@@ -23,10 +23,3 @@ jobs:
         - DB_NAME=test
       script:
         - ./gradlew test --tests "com.liceu.server.system.**" --info
-    - stage: production db cloning
-      script:
-        - mongodump --host $DB_HOST --ssl --username $DB_USER --password $DB_PASS --authenticationDatabase admin --db $DB_NAME
-        - mongorestore --drop --host $DB_DEST --ssl --username $DB_RESTORE_USER --password $DB_RESTORE_PASS --authenticationDatabase admin --db $DB_NAME dump
-    - stage: acceptance testing
-      script:
-        - ./gradlew test --tests "com.liceu.server.acceptance.**" --info
