@@ -11,7 +11,7 @@ import java.time.ZoneOffset
 import java.util.*
 
 class TextPost(
-        private val postRepository: MongoPostRepository
+        private val postRepository: PostBoundary.IRepository
 ): PostBoundary.ITextPost {
 
     companion object{

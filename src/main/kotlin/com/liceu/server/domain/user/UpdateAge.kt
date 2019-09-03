@@ -9,7 +9,7 @@ import java.time.Period
 
 
 class UpdateAge(
-    private var userRepo: MongoUserRepository
+    private var userRepo: UserBoundary.IRepository
 ): UserBoundary.IUpdateAge {
 
     companion object {

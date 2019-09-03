@@ -47,7 +47,7 @@ class MongoUserRepository(
                 user.instagramProfile,
                 user.description,
                 user.website,
-                user.amountOfFollowers,
+                user.followers,
                 user.following
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
@@ -161,9 +161,31 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
+    override fun updateAddUserToProducerFollowerList(userId: String, producerId: String): Long {
+        val update = Update()
+        update.addToSet("followers",userId)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateRemoveUserToProducerFollowerList(userId: String, producerId: String): Long {
+        val update = Update()
+        update.pull("followers",userId)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
     override fun updateAddProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.addToSet("following",ObjectId(producerId))
+        update.addToSet("following",producerId)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -174,7 +196,7 @@ class MongoUserRepository(
 
     override fun updateRemoveProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.pull("following",ObjectId(producerId))
+        update.pull("following",producerId)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -205,7 +227,7 @@ class MongoUserRepository(
                     it.instagramProfile,
                     it.description,
                     it.website,
-                    it.amountOfFollowers,
+                    it.followers,
                     it.following
             )
         }
@@ -296,7 +318,7 @@ class MongoUserRepository(
                     it.instagramProfile,
                     it.description,
                     it.website,
-                    it.amountOfFollowers,
+                    it.followers,
                     it.following
             )
         }

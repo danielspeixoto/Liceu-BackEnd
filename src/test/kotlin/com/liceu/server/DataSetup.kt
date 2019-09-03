@@ -345,7 +345,7 @@ class DataSetup {
                 null,
                 null,
                 listOf(
-                        USER_ID_2,
+                        USER_ID_3,
                         USER_ID_4
                 )
         )

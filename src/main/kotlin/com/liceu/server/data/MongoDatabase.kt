@@ -99,7 +99,7 @@ class MongoDatabase {
             var instagramProfile: String?,
             var description: String?,
             var website: String?,
-            var amountOfFollowers: Int?,
+            var followers: List<String>?,
             var following: List<String>?
     ) {
         @Id

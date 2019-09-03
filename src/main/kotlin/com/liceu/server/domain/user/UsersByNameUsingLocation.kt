@@ -8,7 +8,7 @@ import java.lang.Exception
 import java.text.Normalizer
 
 class UsersByNameUsingLocation(
-    private val userRepo: MongoUserRepository,
+    private val userRepo: UserBoundary.IRepository,
     private val maxResults: Int,
     private val REGEX_UNACCENT: Regex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 ): UserBoundary.IGetUsersByNameUsingLocation {

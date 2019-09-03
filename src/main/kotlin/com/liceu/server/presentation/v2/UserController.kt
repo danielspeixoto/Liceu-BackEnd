@@ -46,7 +46,7 @@ class UserController (
             val instagramProfile: String?,
             val description: String?,
             val website: String?,
-            val amountOfFollowers: Int?,
+            val followers: List<String>?,
             val following: List<String>?
     )
 
@@ -554,7 +554,7 @@ class UserController (
                 user.instagramProfile,
                 user.description,
                 user.website,
-                user.amountOfFollowers,
+                user.followers,
                 user.following
         )
     }

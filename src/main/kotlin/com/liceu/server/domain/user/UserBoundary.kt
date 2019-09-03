@@ -29,6 +29,9 @@ class UserBoundary {
         fun updateProducerToBeUnfollowed(producerId: String): Long
         fun updateAddProducerToFollowingList(userId: String,producerId: String): Long
         fun updateRemoveProducerToFollowingList(userId: String,producerId: String): Long
+        fun updateAddUserToProducerFollowerList(userId: String,producerId: String): Long
+        fun updateRemoveUserToProducerFollowerList(userId: String,producerId: String): Long
+
     }
 
     interface IUpdateAge {

@@ -8,7 +8,7 @@ import java.text.Normalizer
 
 
 class UpdateSchool(
-     private val userRepository:  MongoUserRepository,
+     private val userRepository:  UserBoundary.IRepository,
      private val REGEX_UNACCENT: Regex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 ): UserBoundary.IUpdateSchool {
 

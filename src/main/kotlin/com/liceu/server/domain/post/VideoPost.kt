@@ -8,7 +8,7 @@ import java.time.ZoneOffset
 import java.util.*
 
 class VideoPost(
-        private val postRepository: MongoPostRepository
+        private val postRepository: PostBoundary.IRepository
 ): PostBoundary.IVideoPost {
 
     companion object{

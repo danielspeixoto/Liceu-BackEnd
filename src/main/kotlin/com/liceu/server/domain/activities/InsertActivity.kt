@@ -10,7 +10,7 @@ import java.time.ZoneOffset
 import java.util.*
 
 class InsertActivity(
-        private val activityRepository: MongoActivityRepository
+        private val activityRepository: ActivityBoundary.IRepository
 ): ActivityBoundary.IInsertActivity{
     companion object {
         const val EVENT_NAME = "activity_submission"

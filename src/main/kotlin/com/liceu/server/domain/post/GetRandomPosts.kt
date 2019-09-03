@@ -5,7 +5,7 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 
 class GetRandomPosts(
-        private val postRepository: MongoPostRepository,
+        private val postRepository: PostBoundary.IRepository,
         private val maxResults: Int
 ): PostBoundary.IGetRandomPosts {
 

@@ -5,7 +5,7 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 
 class UpdateProducerToBeUnfollowed(
-        private val userRepo: MongoUserRepository
+        private val userRepo: UserBoundary.IRepository
 ): UserBoundary.IupdateProducerToBeUnfollowed{
 
     companion object{
@@ -14,12 +14,15 @@ class UpdateProducerToBeUnfollowed(
     }
     override fun run(userId: String, producerId: String) {
         try {
+            if(userId.isBlank()){
+                throw OverflowSizeException ("userId can't be null")
+            }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userUnfollowing" to userId,
                     "producerUnfollowed" to producerId
             ))
             userRepo.updateRemoveProducerToFollowingList(userId,producerId)
-            userRepo.updateProducerToBeUnfollowed(producerId)
+            userRepo.updateRemoveUserToProducerFollowerList(userId,producerId)
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e

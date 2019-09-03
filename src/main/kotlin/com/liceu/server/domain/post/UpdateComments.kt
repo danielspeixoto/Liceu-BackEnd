@@ -6,11 +6,12 @@ import com.liceu.server.domain.global.COMMENT
 import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.global.UPDATE
+import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.util.Logging
 
 class UpdateComments(
-        private val postRepository: MongoPostRepository,
-        private val userRepository: MongoUserRepository
+        private val postRepository: PostBoundary.IRepository,
+        private val userRepository: UserBoundary.IRepository
 ): PostBoundary.IUpdateListOfComments {
     companion object {
         const val EVENT_NAME = "post_comment_update"
