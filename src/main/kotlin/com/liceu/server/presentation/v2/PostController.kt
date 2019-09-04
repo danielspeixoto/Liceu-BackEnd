@@ -55,9 +55,9 @@ class PostController(
                 val video = PostVideo(
                     body["videoUrl"] as String? ?: throw ValidationException(),
                     PostThumbnails(
-                            body["high"] as String? ?: throw ValidationException(),
-                            body["default"] as String? ?: throw ValidationException(),
-                            body["medium"] as String? ?: throw ValidationException()
+                            null,
+                            null,
+                            null
                     )
                 )
                 id = videoPost.run(PostSubmission(
@@ -217,7 +217,8 @@ class PostController(
             val description: String,
             val imageURL: String?,
             val video: PostVideo?,
-            val submissionDate: Date
+            val submissionDate: Date,
+            val comments: List<PostComment>?
     )
 
     fun toPostResponse(post: Post): PostResponse{
@@ -228,7 +229,8 @@ class PostController(
                 post.description,
                 post.imageURL,
                 post.video,
-                post.submissionDate
+                post.submissionDate,
+                post.comments
         )
     }
 

@@ -78,7 +78,7 @@ class TestActivityRepositoryIntegration {
     fun getActivitiesFromUser_validUser_returnListOfActivities() {
         val activitiesRetrieved = data.getActivitiesFromUser(testSetup.USER_ID_1,10)
         assertThat(activitiesRetrieved.size).isEqualTo(2)
-        assertThat(activitiesRetrieved[0].type).isEqualTo("TriviaFinished")
+        assertThat(activitiesRetrieved[0].type).isEqualTo("triviaFinished")
         assertThat(activitiesRetrieved[1].type).isEqualTo("followedUser")
     }
 

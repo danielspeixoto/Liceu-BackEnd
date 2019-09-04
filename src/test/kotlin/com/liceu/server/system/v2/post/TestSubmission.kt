@@ -48,10 +48,7 @@ class TestSubmission: TestSystem("/v2/post") {
         val entity = HttpEntity(hashMapOf(
                 "type" to "video",
                 "description" to "esse e um teste aha",
-                "videoUrl" to "www.youtube.com/lalal",
-                "high" to "highQuality",
-                "default" to "defaulQuality",
-                "medium" to "mediumQuality"
+                "videoUrl" to "https://www.youtube.com/watch?v=8vefLpfozPA"
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -64,8 +61,10 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost).isNotNull()
         Truth.assertThat(insertedPost.userId.toHexString()).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(insertedPost.type).isEqualTo("video")
-        Truth.assertThat(insertedPost.video?.videoUrl).isEqualTo("www.youtube.com/lalal")
-        Truth.assertThat(insertedPost.video?.thumbnails?.high).isEqualTo("highQuality")
+        Truth.assertThat(insertedPost.video?.videoUrl).isEqualTo("https://www.youtube.com/watch?v=8vefLpfozPA")
+        Truth.assertThat(insertedPost.video?.thumbnails?.high).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/hqdefault.jpg")
+        Truth.assertThat(insertedPost.video?.thumbnails?.default).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/default.jpg")
+        Truth.assertThat(insertedPost.video?.thumbnails?.medium).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/mqdefault.jpg")
     }
     @Test
     fun submitVideoPost_descriptionNull_throwError() {
@@ -75,10 +74,7 @@ class TestSubmission: TestSystem("/v2/post") {
         val entity = HttpEntity(hashMapOf(
                 "type" to "video",
                 "description" to null,
-                "videoUrl" to "www.youtube.com/lalal",
-                "high" to "highQuality",
-                "default" to "defaulQuality",
-                "medium" to "mediumQuality"
+                "videoUrl" to "www.youtube.com/lalal"
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -92,10 +88,7 @@ class TestSubmission: TestSystem("/v2/post") {
         val entity = HttpEntity(hashMapOf(
                 "type" to "video",
                 "description" to "",
-                "videoUrl" to "www.youtube.com/lalal",
-                "high" to "highQuality",
-                "default" to "defaulQuality",
-                "medium" to "mediumQuality"
+                "videoUrl" to "www.youtube.com/lalal"
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -109,10 +102,7 @@ class TestSubmission: TestSystem("/v2/post") {
         val entity = HttpEntity(hashMapOf(
                 "type" to "video",
                 "description" to "teste teste",
-                "videoUrl" to "",
-                "high" to "highQuality",
-                "default" to "defaulQuality",
-                "medium" to "mediumQuality"
+                "videoUrl" to ""
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
@@ -127,10 +117,7 @@ class TestSubmission: TestSystem("/v2/post") {
         val entity = HttpEntity(hashMapOf(
                 "type" to "video",
                 "description" to "teste teste",
-                "videoUrl" to "www.youtube.com/lalal",
-                "high" to "highQuality",
-                "default" to "",
-                "medium" to "mediumQuality"
+                "videoUrl" to "www.youtube.com/lalal"
         ), headers)
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)

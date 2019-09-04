@@ -909,7 +909,7 @@ class DataSetup {
 
         val activity2 = MongoDatabase.MongoActivities(
                 ObjectId(USER_ID_1),
-                "TriviaFinished",
+                "triviaFinished",
                 hashMapOf(
                         "challengerId" to USER_ID_2,
                         "triviaId" to CHALLENGE_TRIVIA_ID_1

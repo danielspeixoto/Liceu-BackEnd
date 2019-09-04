@@ -27,7 +27,7 @@ class TestGetActivitiesFromUser: TestSystem("/v2/activity") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(2)
-        Truth.assertThat(body[0]["type"]).isEqualTo("TriviaFinished")
+        Truth.assertThat(body[0]["type"]).isEqualTo("triviaFinished")
         Truth.assertThat(body[1]["type"]).isEqualTo("followedUser")
     }
 
