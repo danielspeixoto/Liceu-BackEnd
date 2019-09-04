@@ -46,6 +46,11 @@ class MongoPostRepository(
                         it.userId,
                         it.author,
                         it.comment
+                ) },
+                postToInsert.questions?.map { MongoDatabase.MongoPostQuestions(
+                        it.question,
+                        it.correctAnswer,
+                        it.otherAnswers
                 ) }
         ))
         return result.id.toHexString()
@@ -77,6 +82,13 @@ class MongoPostRepository(
                             it.userId,
                             it.author,
                             it.comment
+                    )
+                },
+                it.questions?.map {
+                    PostQuestions(
+                            it.question,
+                            it.correctAnswer,
+                            it.otherAnswers
                     )
                 }
             )
@@ -118,8 +130,14 @@ class MongoPostRepository(
                                 it.author,
                                 it.comment
                         )
+                    },
+                    it.questions?.map {
+                        PostQuestions(
+                                it.question,
+                                it.correctAnswer,
+                                it.otherAnswers
+                        )
                     }
-
             )
         }
     }
@@ -151,6 +169,13 @@ class MongoPostRepository(
                                 it.userId,
                                 it.author,
                                 it.comment
+                        )
+                    },
+                    it.questions?.map {
+                        PostQuestions(
+                                it.question,
+                                it.correctAnswer,
+                                it.otherAnswers
                         )
                     }
             )
@@ -187,6 +212,13 @@ class MongoPostRepository(
                                 it.userId,
                                 it.author,
                                 it.comment
+                        )
+                    },
+                    it.questions?.map {
+                        PostQuestions(
+                                it.question,
+                                it.correctAnswer,
+                                it.otherAnswers
                         )
                     }
             )

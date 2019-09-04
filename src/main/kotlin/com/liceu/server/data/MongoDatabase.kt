@@ -209,7 +209,8 @@ class MongoDatabase {
         val imageURL: String?,
         val video: MongoPostVideo?,
         val submissionDate: Date,
-        val comments: List<MongoComment>?
+        val comments: List<MongoComment>?,
+        val questions: List<MongoPostQuestions>?
     ){
         @Id
         lateinit var id: ObjectId
@@ -226,12 +227,17 @@ class MongoDatabase {
             var medium: String?
     )
 
-
-    data class MongoComment (
+    data class MongoComment(
             var id: ObjectId,
             var userId: ObjectId,
             var author: String,
             var comment: String
+    )
+
+    data class MongoPostQuestions(
+            var question: String,
+            var correctAnswer: String,
+            var otherAnswers: List<String>
     )
 
     @Document(collection = MongoDatabase.ACTIVITIES_COLLECTION)

@@ -6,6 +6,7 @@ import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.PostRepository
+import com.liceu.server.domain.post.PostQuestions
 import com.liceu.server.domain.post.PostThumbnails
 import com.liceu.server.domain.post.PostToInsert
 import com.liceu.server.domain.post.PostVideo
@@ -50,12 +51,34 @@ class TestPostRepositoryIntegration {
             null,
             null,
             Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
-            null
+            null,
+            listOf(
+                PostQuestions(
+                        "Qual o primeiro nome de Einstein?",
+                        "Albert",
+                        listOf(
+                                "José","Albertonio","Lucas"
+                        )
+                ),
+                PostQuestions(
+                    "Qual o primeiro nome de Newton?",
+                    "Isaac",
+                    listOf(
+                            "José","Albertonio","Albert"
+                    )
+                )
+            )
         ))
         val postInserted = data.getPostById(newPost)
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
         assertThat(postInserted.type).isEqualTo("text")
         assertThat(postInserted.description).isEqualTo("Eu sou um teste de texto")
+        assertThat(postInserted.questions?.get(0)?.question).isEqualTo("Qual o primeiro nome de Einstein?")
+        assertThat(postInserted.questions?.get(0)?.correctAnswer).isEqualTo("Albert")
+        assertThat(postInserted.questions?.get(0)?.otherAnswers?.size).isEqualTo(3)
+        assertThat(postInserted.questions?.get(1)?.question).isEqualTo("Qual o primeiro nome de Newton?")
+        assertThat(postInserted.questions?.get(1)?.correctAnswer).isEqualTo("Isaac")
+        assertThat(postInserted.questions?.get(1)?.otherAnswers?.size).isEqualTo(3)
     }
 
     @Test
@@ -67,6 +90,7 @@ class TestPostRepositoryIntegration {
                 "www.teste.com.br",
                 null,
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+                null,
                 null
         ))
         val postInserted = data.getPostById(newPost)
@@ -92,7 +116,16 @@ class TestPostRepositoryIntegration {
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
-                null
+                null,
+                listOf(
+                        PostQuestions(
+                                "Qual o primeiro nome de Einstein?",
+                                "Albert",
+                                listOf(
+                                        "José","Albertonio","Lucas"
+                                )
+                        )
+                )
         ))
         val postInserted = data.getPostById(newPost)
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
@@ -102,6 +135,9 @@ class TestPostRepositoryIntegration {
         assertThat(postInserted.video?.thumbnails?.high).isEqualTo("high")
         assertThat(postInserted.video?.thumbnails?.default).isEqualTo("default")
         assertThat(postInserted.video?.thumbnails?.medium).isEqualTo("medium")
+        assertThat(postInserted.questions?.get(0)?.question).isEqualTo("Qual o primeiro nome de Einstein?")
+        assertThat(postInserted.questions?.get(0)?.correctAnswer).isEqualTo("Albert")
+        assertThat(postInserted.questions?.get(0)?.otherAnswers?.size).isEqualTo(3)
     }
 
     @Test
@@ -112,6 +148,9 @@ class TestPostRepositoryIntegration {
         assertThat(retrievedPosts?.size).isEqualTo(1)
         assertThat(retrievedPosts?.get(0)?.type).isEqualTo("text")
         assertThat(retrievedPosts?.get(0)?.description).isEqualTo("teste de texto")
+        assertThat(retrievedPosts?.get(0)?.questions?.size).isEqualTo(2)
+        assertThat(retrievedPosts?.get(0)?.questions?.get(0)?.question).isEqualTo("Qual o primeiro nome de Einstein?")
+        assertThat(retrievedPosts?.get(0)?.questions?.get(1)?.question).isEqualTo("Qual o primeiro nome de Newton?")
     }
 
     @Test
@@ -120,6 +159,7 @@ class TestPostRepositoryIntegration {
         val user = userRepository.getUserById(testSetup.USER_ID_3)
         val retrievedPosts = data.getPostsForFeed(user,date,10)
         assertThat(retrievedPosts?.size).isEqualTo(2)
+        assertThat(retrievedPosts?.get(1).questions?.size).isEqualTo(1)
         val userIdsFromPosts = retrievedPosts?.map { it.userId }
         assertThat(userIdsFromPosts).containsExactly(testSetup.USER_ID_2,testSetup.USER_ID_4)
         assertThat(retrievedPosts?.get(0)?.type).isEqualTo("video")

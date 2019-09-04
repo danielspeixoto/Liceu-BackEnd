@@ -1,6 +1,7 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.domain.post.PostQuestions
 import com.liceu.server.domain.post.PostThumbnails
 import com.liceu.server.domain.post.PostVideo
 import com.liceu.server.domain.post.VideoPost
@@ -839,7 +840,23 @@ class DataSetup {
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
-                null
+                null,
+                listOf(
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Einstein?",
+                                "Albert",
+                                listOf(
+                                        "José","Albertonio","Lucas"
+                                )
+                        ),
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Newton?",
+                                "Isaac",
+                                listOf(
+                                        "José","Albertonio","Albert"
+                                )
+                        )
+                )
         )
         post1.id = ObjectId(POST_ID_1)
         postRepo.insert(post1)
@@ -850,7 +867,16 @@ class DataSetup {
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
-                null
+                null,
+                listOf(
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Einstein?",
+                                "Albert",
+                                listOf(
+                                        "José","Albertonio","Lucas"
+                                )
+                        )
+                )
         )
         post2.id = ObjectId(POST_ID_2)
         postRepo.insert(post2)
@@ -868,6 +894,7 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
                 null
         )
         post3.id = ObjectId(POST_ID_3)
@@ -879,6 +906,7 @@ class DataSetup {
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
+                null,
                 null
         )
         post4.id = ObjectId(POST_ID_4)
@@ -890,6 +918,7 @@ class DataSetup {
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
+                null,
                 null
         )
         post5.id = ObjectId(POST_ID_5)
