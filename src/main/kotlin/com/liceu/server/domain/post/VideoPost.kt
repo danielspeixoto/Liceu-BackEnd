@@ -2,12 +2,8 @@ package com.liceu.server.domain.post
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
-import java.time.Instant
-import java.time.ZoneOffset
-import java.util.*
 import org.springframework.web.util.UriComponentsBuilder
-import org.springframework.util.MultiValueMap
-
+import com.liceu.server.domain.util.TimeStamp
 
 
 
@@ -62,7 +58,7 @@ class VideoPost(
                                     mediumThumbails
                             )
                     ),
-                    Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()),
+                    TimeStamp.retrieveActualTimeStamp(),
                     null,
                     post.questions
             ))

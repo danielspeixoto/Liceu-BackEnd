@@ -5,6 +5,7 @@ import com.liceu.server.domain.global.INSERTION
 import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.global.TEXT
+import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
 import java.time.Instant
 import java.time.ZoneOffset
@@ -37,7 +38,7 @@ class TextPost(
                 post.description,
                 null,
                 post.video,
-                Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()),
+                TimeStamp.retrieveActualTimeStamp(),
                 null,
                 post.questions
                 ))

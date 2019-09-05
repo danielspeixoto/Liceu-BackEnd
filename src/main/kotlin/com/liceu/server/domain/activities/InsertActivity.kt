@@ -4,6 +4,7 @@ import com.liceu.server.data.MongoActivityRepository
 import com.liceu.server.domain.global.ACTIVITY
 import com.liceu.server.domain.global.INSERTION
 import com.liceu.server.domain.global.OverflowSizeException
+import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
 import java.time.Instant
 import java.time.ZoneOffset
@@ -32,7 +33,7 @@ class InsertActivity(
                     activitySubmission.userId,
                     activitySubmission.type,
                     activitySubmission.params,
-                    Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant())
+                    TimeStamp.retrieveActualTimeStamp()
             ))
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)

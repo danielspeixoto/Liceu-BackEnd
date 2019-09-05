@@ -4,6 +4,7 @@ import com.liceu.server.data.MongoChallengeRepository
 import com.liceu.server.data.MongoTriviaRepository
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
+import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
 import java.time.Instant
 import java.time.ZoneOffset
@@ -43,8 +44,7 @@ class GetChallenge(
                     null,
                     null,
                     trivias,
-                    Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant())
-
+                    TimeStamp.retrieveActualTimeStamp()
             ))
             Logging.info(
                     EVENT_NAME, TAGS ,
