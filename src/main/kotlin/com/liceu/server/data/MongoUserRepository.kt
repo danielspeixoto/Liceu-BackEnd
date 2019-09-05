@@ -8,10 +8,8 @@ import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
-import com.mongodb.Mongo
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
-import org.springframework.data.geo.Metrics
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.Aggregation.limit
@@ -209,28 +207,7 @@ class MongoUserRepository(
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
         val agg = Aggregation.newAggregation(match)
         val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
-        val userRetrieved = results.map {
-            User(
-                    it.id.toHexString(),
-                    it.name,
-                    it.email,
-                    Picture(
-                            it.picture.url,
-                            it.picture.width,
-                            it.picture.height
-                    ),
-                    it.location,
-                    it.state,
-                    it.school,
-                    it.age,
-                    it.youtubeChannel,
-                    it.instagramProfile,
-                    it.description,
-                    it.website,
-                    it.followers,
-                    it.following
-            )
-        }
+        val userRetrieved = results.map {toUser(it)}
         if (userRetrieved.isNotEmpty()) {
             return userRetrieved[0]
         } else {
@@ -250,7 +227,7 @@ class MongoUserRepository(
 
         val agg = Aggregation.newAggregation(match,sortByDate,limitOfReturnedChallenges)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
-        val challengesRetrieved = results.map {
+        return results.map {
             Challenge(
                     it.id.toHexString(),
                     it.challenger,
@@ -280,7 +257,6 @@ class MongoUserRepository(
                     it.submissionDate
             )
         }
-        return challengesRetrieved
     }
 
     override fun getUsersByNameUsingLocation(nameSearched: String, longitude: Double?, latitude: Double?, amount: Int): List<User> {
@@ -300,31 +276,32 @@ class MongoUserRepository(
             agg = Aggregation.newAggregation(match,sample)
         }
         val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
-        return results.map {
-            User(
-                    it.id.toHexString(),
-                    it.name,
-                    it.email,
-                    Picture(
-                            it.picture.url,
-                            it.picture.width,
-                            it.picture.height
-                    ),
-                    it.location,
-                    it.state,
-                    it.school,
-                    it.age,
-                    it.youtubeChannel,
-                    it.instagramProfile,
-                    it.description,
-                    it.website,
-                    it.followers,
-                    it.following
-            )
-        }
+        return results.map {toUser(it)}
     }
 
 
+    fun toUser(mongoUser: MongoDatabase.MongoUser): User{
+        return User(
+                mongoUser.id.toHexString(),
+                mongoUser.name,
+                mongoUser.email,
+                Picture(
+                        mongoUser.picture.url,
+                        mongoUser.picture.width,
+                        mongoUser.picture.height
+                ),
+                mongoUser.location,
+                mongoUser.state,
+                mongoUser.school,
+                mongoUser.age,
+                mongoUser.youtubeChannel,
+                mongoUser.instagramProfile,
+                mongoUser.description,
+                mongoUser.website,
+                mongoUser.followers,
+                mongoUser.following
+        )
+    }
 
 }
 

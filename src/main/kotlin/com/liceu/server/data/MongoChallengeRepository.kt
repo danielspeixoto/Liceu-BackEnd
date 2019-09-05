@@ -115,36 +115,7 @@ class MongoChallengeRepository(
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(challengeId)))
         val agg = Aggregation.newAggregation(match)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
-        val challengeRetrieved = results.map {
-            return Challenge(
-                    it.id.toHexString(),
-                    it.challenger,
-                    it.challenged,
-                    it.answersChallenger,
-                    it.answersChallenged,
-                    it.scoreChallenger,
-                    it.scoreChallenged,
-                    it.triviaQuestionsUsed.map { triviaQuestion ->
-                        TriviaQuestion(
-                                triviaQuestion.id.toHexString(),
-                                triviaQuestion.userId.toHexString(),
-                                triviaQuestion.question,
-                                triviaQuestion.correctAnswer,
-                                triviaQuestion.wrongAnswer,
-                                triviaQuestion.tags,
-                                triviaQuestion.comments?.map {
-                                    PostComment(
-                                            it.id,
-                                            it.userId,
-                                            it.author,
-                                            it.comment
-                                    )
-                                }
-                        )
-                    },
-                    it.submissionDate
-            )
-        }
+        val challengeRetrieved = results.map { toChallenge(it) }
         if (challengeRetrieved.isNotEmpty()) {
             return challengeRetrieved[0]
         } else {

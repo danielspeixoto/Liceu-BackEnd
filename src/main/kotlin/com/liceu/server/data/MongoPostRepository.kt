@@ -60,39 +60,7 @@ class MongoPostRepository(
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(postId)))
         val agg = Aggregation.newAggregation(match)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
-        val postRetrieved = results.map {
-            Post(
-                it.id.toHexString(),
-                it.userId.toHexString(),
-                it.type,
-                it.description,
-                it.imageURL,
-                PostVideo(
-                    it.video?.videoUrl,
-                    PostThumbnails(
-                        it.video?.thumbnails?.high,
-                        it.video?.thumbnails?.default,
-                        it.video?.thumbnails?.medium
-                    )
-                ),
-                it.submissionDate,
-                it.comments?.map {
-                    PostComment(
-                            it.id,
-                            it.userId,
-                            it.author,
-                            it.comment
-                    )
-                },
-                it.questions?.map {
-                    PostQuestions(
-                            it.question,
-                            it.correctAnswer,
-                            it.otherAnswers
-                    )
-                }
-            )
-        }
+        val postRetrieved = results.map {toPost(it)}
         return postRetrieved[0]
     }
 
@@ -107,39 +75,7 @@ class MongoPostRepository(
         val limitOfReturnedPosts = Aggregation.limit(amount.toLong())
         val agg = Aggregation.newAggregation(match,sortByDate,limitOfReturnedPosts)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
-        return results.map {
-            Post(
-                    it.id.toHexString(),
-                    it.userId.toHexString(),
-                    it.type,
-                    it.description,
-                    it.imageURL,
-                    PostVideo(
-                            it.video?.videoUrl,
-                            PostThumbnails(
-                                    it.video?.thumbnails?.high,
-                                    it.video?.thumbnails?.default,
-                                    it.video?.thumbnails?.medium
-                            )
-                    ),
-                    it.submissionDate,
-                    it.comments?.map {
-                        PostComment(
-                                it.id,
-                                it.userId,
-                                it.author,
-                                it.comment
-                        )
-                    },
-                    it.questions?.map {
-                        PostQuestions(
-                                it.question,
-                                it.correctAnswer,
-                                it.otherAnswers
-                        )
-                    }
-            )
-        }
+        return results.map {toPost(it)}
     }
 
     override fun getPostFromUser(userId: String): List<Post> {
@@ -147,39 +83,7 @@ class MongoPostRepository(
         val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
         val agg = Aggregation.newAggregation(match,sortByDate)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
-        return results.map {
-            Post(
-                    it.id.toHexString(),
-                    it.userId.toHexString(),
-                    it.type,
-                    it.description,
-                    it.imageURL,
-                    PostVideo(
-                            it.video?.videoUrl,
-                            PostThumbnails(
-                                    it.video?.thumbnails?.high,
-                                    it.video?.thumbnails?.default,
-                                    it.video?.thumbnails?.medium
-                            )
-                    ),
-                    it.submissionDate,
-                    it.comments?.map {
-                        PostComment(
-                                it.id,
-                                it.userId,
-                                it.author,
-                                it.comment
-                        )
-                    },
-                    it.questions?.map {
-                        PostQuestions(
-                                it.question,
-                                it.correctAnswer,
-                                it.otherAnswers
-                        )
-                    }
-            )
-        }
+        return results.map {toPost(it)}
     }
 
     override fun getRandomPosts(amount: Int): List<Post> {
@@ -190,39 +94,7 @@ class MongoPostRepository(
         val agg = Aggregation.newAggregation(sample)
 
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
-        return results.map {
-            Post(
-                    it.id.toHexString(),
-                    it.userId.toHexString(),
-                    it.type,
-                    it.description,
-                    it.imageURL,
-                    PostVideo(
-                            it.video?.videoUrl,
-                            PostThumbnails(
-                                    it.video?.thumbnails?.high,
-                                    it.video?.thumbnails?.default,
-                                    it.video?.thumbnails?.medium
-                            )
-                    ),
-                    it.submissionDate,
-                    it.comments?.map {
-                        PostComment(
-                                it.id,
-                                it.userId,
-                                it.author,
-                                it.comment
-                        )
-                    },
-                    it.questions?.map {
-                        PostQuestions(
-                                it.question,
-                                it.correctAnswer,
-                                it.otherAnswers
-                        )
-                    }
-            )
-        }
+        return results.map {toPost(it)}
     }
 
     override fun updateListOfComments(postId: String, userId: String,author: String ,comment: String): Long {
@@ -241,5 +113,39 @@ class MongoPostRepository(
                 MongoDatabase.MongoPost::class.java
         )
         return result.modifiedCount
+    }
+
+    fun toPost(mongoPost: MongoDatabase.MongoPost): Post {
+        return Post(
+                mongoPost.id.toHexString(),
+                mongoPost.userId.toHexString(),
+                mongoPost.type,
+                mongoPost.description,
+                mongoPost.imageURL,
+                PostVideo(
+                        mongoPost.video?.videoUrl,
+                        PostThumbnails(
+                                mongoPost.video?.thumbnails?.high,
+                                mongoPost.video?.thumbnails?.default,
+                                mongoPost.video?.thumbnails?.medium
+                        )
+                ),
+                mongoPost.submissionDate,
+                mongoPost.comments?.map {
+                    PostComment(
+                            it.id,
+                            it.userId,
+                            it.author,
+                            it.comment
+                    )
+                },
+                mongoPost.questions?.map {
+                    PostQuestions(
+                            it.question,
+                            it.correctAnswer,
+                            it.otherAnswers
+                    )
+                }
+        )
     }
 }

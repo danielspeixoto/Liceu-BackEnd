@@ -40,24 +40,7 @@ class MongoTriviaRepository(
         val agg = Aggregation.newAggregation(sample)
 
         val results = template.aggregate(agg, MongoDatabase.TRIVIA_COLLECTION, MongoDatabase.MongoTriviaQuestion::class.java)
-        return results.map {
-            TriviaQuestion(
-                    it.id.toHexString(),
-                    it.userId.toString(),
-                    it.question,
-                    it.correctAnswer,
-                    it.wrongAnswer,
-                    it.tags,
-                    it.comments?.map {
-                        PostComment(
-                                it.id,
-                                it.userId,
-                                it.author,
-                                it.comment
-                        )
-                    }
-            )
-        }
+        return results.map {toTriviaQuestion(it)}
     }
 
     override fun updateListOfComments(questionId: String, userId: String, author: String, comment: String): Long {
@@ -82,24 +65,7 @@ class MongoTriviaRepository(
         val match = Aggregation.match(Criteria.where("_id").isEqualTo(ObjectId(questionId)))
         val agg = Aggregation.newAggregation(match)
         val result = template.aggregate(agg,MongoDatabase.TRIVIA_COLLECTION,MongoDatabase.MongoTriviaQuestion::class.java)
-        val retrievedQuestion = result.map {
-            TriviaQuestion(
-                it.id.toString(),
-                it.userId.toString(),
-                it.question,
-                it.correctAnswer,
-                it.wrongAnswer,
-                it.tags,
-                it.comments?.map {
-                PostComment(
-                        it.id,
-                        it.userId,
-                        it.author,
-                        it.comment
-                    )
-                }
-            )
-        }
+        val retrievedQuestion = result.map {toTriviaQuestion(it)}
         return retrievedQuestion[0]
     }
 
