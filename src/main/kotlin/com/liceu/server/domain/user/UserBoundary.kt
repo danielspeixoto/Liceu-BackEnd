@@ -25,8 +25,6 @@ class UserBoundary {
         fun updateInstagramProfileFromUser(userId: String, instagramProfile: String): Long
         fun updateDescriptionFromUser(userId: String, description: String): Long
         fun updateWebsiteFromUser(userId: String, website: String): Long
-        fun updateProducerToBeFollowed(producerId: String): Long
-        fun updateProducerToBeUnfollowed(producerId: String): Long
         fun updateAddProducerToFollowingList(userId: String,producerId: String): Long
         fun updateRemoveProducerToFollowingList(userId: String,producerId: String): Long
         fun updateAddUserToProducerFollowerList(userId: String,producerId: String): Long

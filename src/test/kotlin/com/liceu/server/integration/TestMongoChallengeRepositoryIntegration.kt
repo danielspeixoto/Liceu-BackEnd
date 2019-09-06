@@ -69,6 +69,8 @@ class TestMongoChallengeRepositoryIntegration {
                                         "graficos",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),
@@ -128,6 +130,8 @@ class TestMongoChallengeRepositoryIntegration {
                                         "graficos",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),

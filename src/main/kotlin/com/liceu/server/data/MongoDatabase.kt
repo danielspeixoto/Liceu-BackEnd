@@ -166,7 +166,9 @@ class MongoDatabase {
             val correctAnswer: String,
             val wrongAnswer: String,
             val tags: List<String>,
-            val comments: List<MongoComment>?
+            val comments: List<MongoComment>?,
+            val likes: Int?,
+            val dislikes: Int?
     ) {
         @Id
         lateinit var id: ObjectId
@@ -181,7 +183,9 @@ class MongoDatabase {
             val correctAnswer: String,
             val wrongAnswer: String,
             val tags: List<String>,
-            val comments: List<MongoComment>?
+            val comments: List<MongoComment>?,
+            val likes: Int?,
+            val dislikes: Int?
     )
 
 

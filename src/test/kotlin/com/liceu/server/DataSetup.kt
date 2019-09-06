@@ -583,7 +583,9 @@ class DataSetup {
                         "angulos",
                         "trigonometria"
                 ),
-                null
+                null,
+                3,
+                4
         )
         q1.id = ObjectId(QUESTION_TRIVIA_ID_1)
         triviaRepo.insert(q1)
@@ -598,6 +600,8 @@ class DataSetup {
                             "angulos",
                             "trigonometria"
                     ),
+                null,
+                null,
                 null
             )
             q2.id = ObjectId(QUESTION_TRIVIA_ID_2)
@@ -613,6 +617,8 @@ class DataSetup {
                             "angulos",
                             "trigonometria"
                     ),
+                null,
+                null,
                 null
             )
             q3.id = ObjectId(QUESTION_TRIVIA_ID_3)
@@ -628,6 +634,8 @@ class DataSetup {
                             "angulos",
                             "trigonometria"
                     ),
+                null,
+                null,
                 null
             )
             q4.id = ObjectId(QUESTION_TRIVIA_ID_4)
@@ -642,6 +650,8 @@ class DataSetup {
                         "historia",
                         "descoberta"
                 ),
+                null,
+                null,
                 null
         )
         q5.id = ObjectId(QUESTION_TRIVIA_ID_5)
@@ -679,6 +689,8 @@ class DataSetup {
                                         "matematica",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),
@@ -715,6 +727,8 @@ class DataSetup {
                                         "graficos",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         ),
                         MongoDatabase.MongoChallengeTrivia(
@@ -727,6 +741,8 @@ class DataSetup {
                                         "graficos",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),
@@ -766,7 +782,9 @@ class DataSetup {
                                                 "user1",
                                                 "essa questao e boa"
                                         )
-                                )
+                                ),
+                                null,
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-06-11T11:20:20.00Z"))
@@ -797,6 +815,8 @@ class DataSetup {
                                         "matematica",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),
@@ -824,6 +844,8 @@ class DataSetup {
                                         "matematica",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),

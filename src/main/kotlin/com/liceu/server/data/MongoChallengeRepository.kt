@@ -44,7 +44,9 @@ class MongoChallengeRepository(
                                         it.author,
                                         it.comment
                                 )
-                            }
+                            },
+                            it.likes,
+                            it.dislikes
                     )
                 },
                 matchmaking.submissionDate
@@ -86,7 +88,9 @@ class MongoChallengeRepository(
                                             it.author,
                                             it.comment
                                     )
-                                }
+                                },
+                                triviaQuestion.likes,
+                                triviaQuestion.dislikes
                         )
                     },
                     it.submissionDate
@@ -152,7 +156,9 @@ class MongoChallengeRepository(
                             it.author,
                             it.comment
                     )
-                }
+                },
+                answer.likes,
+                answer.dislikes
         )
     }
 }

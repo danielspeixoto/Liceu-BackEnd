@@ -137,28 +137,6 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
-    override fun updateProducerToBeFollowed(producerId: String): Long {
-        val update = Update()
-        update.inc("amountOfFollowers",1)
-        val result = template.updateFirst(
-                Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
-                update,
-                MongoDatabase.MongoUser::class.java
-        )
-        return result.modifiedCount
-    }
-
-    override fun updateProducerToBeUnfollowed(producerId: String): Long {
-        val update = Update()
-        update.inc("amountOfFollowers",-1)
-        val result = template.updateFirst(
-                Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
-                update,
-                MongoDatabase.MongoUser::class.java
-        )
-        return result.modifiedCount
-    }
-
     override fun updateAddUserToProducerFollowerList(userId: String, producerId: String): Long {
         val update = Update()
         update.addToSet("followers",userId)
@@ -251,7 +229,9 @@ class MongoUserRepository(
                                             it.author,
                                             it.comment
                                     )
-                                }
+                                },
+                                triviaQuestion.likes,
+                                triviaQuestion.dislikes
                         )
                     },
                     it.submissionDate

@@ -7,6 +7,8 @@ class TriviaBoundary {
         fun insert(triviaQuestion: TriviaQuestionToInsert): String
         fun randomQuestions(tags: List<String>, amount: Int): List<TriviaQuestion>
         fun updateListOfComments(questionId: String,userId: String,author: String,comment: String): Long
+        fun updateLike(questionId: String): Long
+        fun updateDislike(questionId: String): Long
         fun getTriviaById(questionId: String): TriviaQuestion
     }
 
@@ -20,6 +22,10 @@ class TriviaBoundary {
 
     interface IUpdateListOfComments{
         fun run(questionId: String,userId: String,comment: String)
+    }
+
+    interface IUpdateRating{
+        fun run(questionId: String,rating: Int)
     }
 
 }
