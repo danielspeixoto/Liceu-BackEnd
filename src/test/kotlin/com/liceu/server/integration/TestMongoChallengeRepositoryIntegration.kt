@@ -3,9 +3,7 @@ package com.liceu.server.integration
 import com.google.common.truth.Truth
 import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
-import com.liceu.server.data.ChallengeRepository
-import com.liceu.server.data.MongoChallengeRepository
-import com.liceu.server.data.MongoDatabase
+import com.liceu.server.data.*
 import com.liceu.server.domain.challenge.ChallengeToInsert
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.trivia.TriviaQuestion
@@ -160,10 +158,10 @@ class TestMongoChallengeRepositoryIntegration {
 
     @Test
     fun retrieve_validChallenge_returnChallenge(){
-        val resultRetrieved = data.matchMaking("0a1449a4bdb40abd5ae1e333")
+        val resultRetrieved = data.matchMaking("39c54d325b75357a571d4cc2")
         Truth.assertThat(resultRetrieved?.id).isEqualTo("09c54d325b75357a571d4cc1")
         Truth.assertThat(resultRetrieved?.challenger).isEqualTo("37235b2a67c76abebce3f6e6")
-        Truth.assertThat(resultRetrieved?.challenged).isEqualTo("0a1449a4bdb40abd5ae1e333")
+        Truth.assertThat(resultRetrieved?.challenged).isEqualTo("39c54d325b75357a571d4cc2")
         Truth.assertThat(resultRetrieved?.answersChallenger?.get(0)).isEqualTo("oi")
         Truth.assertThat(resultRetrieved?.answersChallenger?.get(1)).isEqualTo("abriu")
         Truth.assertThat(resultRetrieved?.answersChallenger?.get(2)).isEqualTo("testando")

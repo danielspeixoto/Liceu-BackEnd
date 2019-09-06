@@ -3,6 +3,7 @@ package com.liceu.server.system.v2.activities
 import com.google.common.truth.Truth
 import com.liceu.server.data.ActivityRepository
 import com.liceu.server.system.TestSystem
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
@@ -17,6 +18,7 @@ class TestSubmission: TestSystem("/v2/activity") {
     @Autowired
     lateinit var activityRepo: ActivityRepository
 
+    @Disabled
     @Test
     fun submitActivity_Valid_Success() {
         val headers = HttpHeaders()
@@ -41,6 +43,7 @@ class TestSubmission: TestSystem("/v2/activity") {
         Truth.assertThat(insertedActivity.type).isEqualTo("followedUser")
     }
 
+    @Disabled
     @Test
     fun submitActivity_typeNull_throwError() {
         val headers = HttpHeaders()
@@ -57,6 +60,7 @@ class TestSubmission: TestSystem("/v2/activity") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
+    @Disabled
     @Test
     fun submitActivity_typeEmpty_throwError() {
         val headers = HttpHeaders()
@@ -73,6 +77,7 @@ class TestSubmission: TestSystem("/v2/activity") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
+    @Disabled
     @Test
     fun submitActivity_paramsNull_throwError() {
         val headers = HttpHeaders()

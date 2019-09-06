@@ -2,6 +2,8 @@ package com.liceu.server.domain.challenge
 
 import com.liceu.server.data.MongoChallengeRepository
 import com.liceu.server.data.MongoTriviaRepository
+import com.liceu.server.domain.activities.ActivityBoundary
+import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.util.TimeStamp
@@ -12,7 +14,8 @@ import java.util.*
 
 class GetChallenge(
         private val challengeRepository: MongoChallengeRepository,
-        private val triviaRepository: MongoTriviaRepository
+        private val triviaRepository: MongoTriviaRepository,
+        private val activityRepository: ActivityBoundary.IRepository
 ) : ChallengeBoundary.IGetChallenge {
 
     companion object {
@@ -33,6 +36,15 @@ class GetChallenge(
                                 "answersChallengedSize" to it.answersChallenged.size
                         )
                 )
+                activityRepository.insertActivity(ActivityToInsert(
+                        it.challenger,
+                        "challengeAccepted",
+                        hashMapOf(
+                                "challengeId" to it.id,
+                                "challengedId" to userId
+                        ),
+                        TimeStamp.retrieveActualTimeStamp()
+                ))
                 return it
             }
             val trivias = triviaRepository.randomQuestions(listOf(), 5)

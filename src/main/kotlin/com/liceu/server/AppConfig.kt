@@ -190,7 +190,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun updateProducerToBeFollowed(): UserBoundary.IUpdateProducerToBeFollowed {
-        return UpdateProducerToBeFollowed(mongoUserRepository)
+        return UpdateProducerToBeFollowed(mongoUserRepository,mongoActivityRepository)
     }
 
     @Bean
@@ -225,12 +225,12 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun getChallenge(): ChallengeBoundary.IGetChallenge{
-        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository)
+        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository)
     }
 
     @Bean
     fun UpdateAnswers(): ChallengeBoundary.IUpdateAnswers{
-        return UpdateAnswers(mongoChallengeRepository)
+        return UpdateAnswers(mongoChallengeRepository,mongoActivityRepository)
     }
 
     @Bean

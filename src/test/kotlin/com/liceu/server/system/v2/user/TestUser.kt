@@ -1,6 +1,7 @@
 package com.liceu.server.system.v2.user
 
 import com.google.common.truth.Truth
+import com.liceu.server.data.MongoActivityRepository
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.UserRepository
 import com.liceu.server.domain.global.OverflowSizeException
@@ -22,6 +23,9 @@ class TestUser: TestSystem("/v2/user") {
 
     @Autowired
     lateinit var data: MongoUserRepository
+
+    @Autowired
+    lateinit var activitiesData: MongoActivityRepository
 
     @Test
     fun userID_exists_returnUser(){
@@ -228,6 +232,9 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(producer.followers?.get(0)).isEqualTo("3a1449a4bdb40abd5ae1e431")
         Truth.assertThat(user.following?.size).isEqualTo(3)
         Truth.assertThat(user.following).contains("39c54d325b75357a571d4cc2")
+        val activitiesProducer = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10)
+        Truth.assertThat(activitiesProducer.size).isEqualTo(2)
+        Truth.assertThat(activitiesProducer[0].type).isEqualTo("followedUser")
     }
 
     @Test
