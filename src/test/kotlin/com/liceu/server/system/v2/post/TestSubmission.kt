@@ -217,7 +217,5 @@ class TestSubmission: TestSystem("/v2/post") {
         val response =
                 restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-
     }
-
 }

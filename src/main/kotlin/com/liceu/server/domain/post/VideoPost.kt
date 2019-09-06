@@ -34,7 +34,6 @@ class VideoPost(
             if(queryParams.size == 0){
                 throw OverflowSizeException("It's necessary have parameters in video Url")
             }
-            //val videoId = post.video.videoUrl.substring(post.video.videoUrl.indexOf("v=") + 2);
             val defaultUrl = "http://i.ytimg.com/vi/"
             val highThumbails = defaultUrl+ queryParams["v"]!![0] + "/hqdefault.jpg"
             val defaultThumbails = defaultUrl+ queryParams["v"]!![0] + "/default.jpg"

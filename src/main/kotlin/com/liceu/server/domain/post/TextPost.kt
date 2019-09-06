@@ -1,16 +1,11 @@
 package com.liceu.server.domain.post
 
-import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.domain.global.INSERTION
 import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.global.TEXT
 import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
-import java.time.Instant
-import java.time.ZoneOffset
-import java.util.*
-
 class TextPost(
         private val postRepository: PostBoundary.IRepository
 ): PostBoundary.ITextPost {

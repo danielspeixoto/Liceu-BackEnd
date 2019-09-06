@@ -72,6 +72,7 @@ class PostController(
                             null,
                             null,
                             null
+
                     )
                 )
                 id = videoPost.run(PostSubmission(
@@ -231,7 +232,8 @@ class PostController(
             val imageURL: String?,
             val video: PostVideo?,
             val submissionDate: Date,
-            val comments: List<PostComment>?
+            val comments: List<PostComment>?,
+            val questions: List<PostQuestions>?
     )
 
     fun toPostResponse(post: Post): PostResponse{
@@ -243,7 +245,8 @@ class PostController(
                 post.imageURL,
                 post.video,
                 post.submissionDate,
-                post.comments
+                post.comments,
+                post.questions
         )
     }
 

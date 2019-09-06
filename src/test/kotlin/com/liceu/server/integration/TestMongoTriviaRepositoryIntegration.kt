@@ -97,7 +97,6 @@ class TestMongoTriviaRepositoryIntegration {
         Truth.assertThat(triviaChanged.comments?.get(0)?.comment).isEqualTo("questao interessante 1")
         Truth.assertThat(triviaChanged.comments?.get(1)?.comment).isEqualTo("questao interessante 2")
     }
-
     @Test
     fun updateLikeTrivia_valid_verifyTrivia(){
         val result1 = data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
@@ -130,7 +129,4 @@ class TestMongoTriviaRepositoryIntegration {
         val triviaUpdated = data.getTriviaById(testSetup.QUESTION_TRIVIA_ID_1)
         Truth.assertThat(triviaUpdated.dislikes).isEqualTo(14)
     }
-
-
-
 }

@@ -28,4 +28,5 @@ class TriviaBoundary {
         fun run(questionId: String,rating: Int)
     }
 
+
 }

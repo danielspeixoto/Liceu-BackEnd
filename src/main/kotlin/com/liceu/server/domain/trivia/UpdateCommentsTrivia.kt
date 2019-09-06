@@ -1,7 +1,6 @@
 package com.liceu.server.domain.trivia
 
-import com.liceu.server.data.MongoTriviaRepository
-import com.liceu.server.data.MongoUserRepository
+
 import com.liceu.server.domain.global.COMMENT
 import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.domain.global.TRIVIA
@@ -12,6 +11,7 @@ import com.liceu.server.util.Logging
 class UpdateCommentsTrivia(
         private val triviaRepository: TriviaBoundary.IRepository,
         private val userRepository: UserBoundary.IRepository
+
 ): TriviaBoundary.IUpdateListOfComments {
     companion object {
         const val EVENT_NAME = "trivia_question_comment_update"

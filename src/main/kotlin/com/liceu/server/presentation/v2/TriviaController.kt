@@ -25,6 +25,7 @@ class TriviaController(
         @Autowired val randomQuestions: TriviaBoundary.IRandomQuestions,
         @Autowired val updateCommentsTrivia: TriviaBoundary.IUpdateListOfComments,
         @Autowired val updateRatingTrivia: TriviaBoundary.IUpdateRating
+
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -144,7 +145,6 @@ class TriviaController(
             }
         }
     }
-
     @PutMapping ("/{questionId}/rating")
     fun updateRating(
             @PathVariable("questionId") questionId: String,
@@ -182,7 +182,6 @@ class TriviaController(
             }
         }
     }
-
     data class TriviaQuestionResponse(
             val id: String,
             val userId: String,
@@ -190,7 +189,9 @@ class TriviaController(
             val correctAnswer: String,
             val wrongAnswer: String,
             val tags: List<String>,
-            val comments: List<PostComment>?
+            val comments: List<PostComment>?,
+            val likes: Int?,
+            val dislikes: Int?
     )
 
     fun toTriviaQuestionResponse(triviaQuestion: TriviaQuestion): TriviaQuestionResponse{
@@ -208,7 +209,9 @@ class TriviaController(
                             it.author,
                             it.comment
                     )
-                }
+                },
+                triviaQuestion.likes,
+                triviaQuestion.dislikes
         )
     }
 

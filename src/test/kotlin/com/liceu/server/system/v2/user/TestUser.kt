@@ -256,7 +256,6 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(producer.followers?.get(0)).isEqualTo("3a1449a4bdb40abd5ae1e431")
         Truth.assertThat(user.following?.size).isEqualTo(3)
         Truth.assertThat(user.following).contains("39c54d325b75357a571d4cc2")
-
         val responseDelete = restTemplate
                 .exchange<Void>("$baseUrl/39c54d325b75357a571d4cc2/followers", HttpMethod.DELETE, entity)
         Truth.assertThat(responseDelete.statusCode).isEqualTo(HttpStatus.OK)

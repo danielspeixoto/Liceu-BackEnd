@@ -1,16 +1,11 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
-import com.liceu.server.domain.post.PostQuestions
-import com.liceu.server.domain.post.PostThumbnails
-import com.liceu.server.domain.post.PostVideo
-import com.liceu.server.domain.post.VideoPost
+
 import com.liceu.server.util.JWTAuth
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration

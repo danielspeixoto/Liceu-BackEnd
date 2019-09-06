@@ -1,7 +1,5 @@
 package com.liceu.server.domain.post
 
-import com.liceu.server.data.MongoPostRepository
-import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.util.Logging
