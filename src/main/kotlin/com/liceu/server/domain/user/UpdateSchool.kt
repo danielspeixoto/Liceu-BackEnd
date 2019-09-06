@@ -9,7 +9,7 @@ import java.text.Normalizer
 
 class UpdateSchool(
      private val userRepository:  UserBoundary.IRepository,
-     private val REGEX_UNACCENT: Regex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
+     private val REGEX_UNACCENT: Regex = "\\p{InCombiningDiacriticalMarks}+".toRegex() //REGEX to remove special characters and accentuation
 ): UserBoundary.IUpdateSchool {
 
     companion object {

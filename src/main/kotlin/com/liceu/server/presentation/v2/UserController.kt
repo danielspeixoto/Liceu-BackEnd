@@ -95,7 +95,7 @@ class UserController (
 
     @GetMapping
     fun getUsersByNameUsingLocation(
-            @RequestParam(value = "nameRequired", defaultValue = "") nameRequired: String,
+            @RequestParam(value = "name", defaultValue = "") name: String,
             @RequestParam(value = "longitude", defaultValue = "") longitude: Double,
             @RequestParam(value = "latitude", defaultValue = "") latitude: Double,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
@@ -109,7 +109,7 @@ class UserController (
                 "version" to 2
         ))
         return try {
-            val result = getUsersByNameUsingLocation.run(nameRequired,longitude,latitude,amount)
+            val result = getUsersByNameUsingLocation.run(name,longitude,latitude,amount)
             val desiredUser = result.map {toUserResponse(it)}
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {

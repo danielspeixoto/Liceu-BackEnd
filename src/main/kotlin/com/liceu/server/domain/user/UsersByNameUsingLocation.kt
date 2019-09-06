@@ -10,7 +10,7 @@ import java.text.Normalizer
 class UsersByNameUsingLocation(
     private val userRepo: UserBoundary.IRepository,
     private val maxResults: Int,
-    private val REGEX_UNACCENT: Regex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
+    private val REGEX_UNACCENT: Regex = "\\p{InCombiningDiacriticalMarks}+".toRegex() //REGEX to remove special characters and accentuation
 ): UserBoundary.IGetUsersByNameUsingLocation {
 
     companion object{
