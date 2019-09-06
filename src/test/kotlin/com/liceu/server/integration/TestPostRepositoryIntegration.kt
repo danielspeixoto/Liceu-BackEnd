@@ -214,4 +214,36 @@ class TestPostRepositoryIntegration {
         assertThat(postChanged.comments?.get(1)?.comment).isEqualTo("post interessante 2")
     }
 
+    @Test
+    fun deletePosts_postExists_verifyPosts() {
+        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3)
+        assertThat(postsBefore.size).isEqualTo(2)
+        val result = data.deletePost(testSetup.POST_ID_5, testSetup.USER_ID_3)
+        assertThat(result?.id).isEqualTo(testSetup.POST_ID_5)
+        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3)
+        assertThat(postsAfter.size).isEqualTo(1)
+    }
+
+    @Test
+    fun deleteMultiplePosts_postExists_verifyPosts() {
+        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3)
+        assertThat(postsBefore.size).isEqualTo(2)
+        val result1 = data.deletePost(testSetup.POST_ID_4, testSetup.USER_ID_3)
+        val result2 = data.deletePost(testSetup.POST_ID_5, testSetup.USER_ID_3)
+        assertThat(result1?.id).isEqualTo(testSetup.POST_ID_4)
+        assertThat(result2?.id).isEqualTo(testSetup.POST_ID_5)
+        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3)
+        assertThat(postsAfter.size).isEqualTo(0)
+    }
+
+    @Test
+    fun deletePosts_postExistsWrongUser_verifyThatPostIsNotDeleted() {
+        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3)
+        assertThat(postsBefore.size).isEqualTo(2)
+        val result = data.deletePost(testSetup.POST_ID_5, testSetup.USER_ID_1)
+        assertThat(result).isNull()
+        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3)
+        assertThat(postsAfter.size).isEqualTo(2)
+    }
+
 }
