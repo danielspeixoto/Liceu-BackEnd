@@ -28,7 +28,7 @@ class TestHeroku  {
     @BeforeEach
     fun login_ValidAccessToken_CreatesUserOrLogsIn() {
         val body = hashMapOf<String, Any>(
-                "accessToken" to "EAAf4pgUyFpsBAFX6PdFdrdaVyVZBPkthb5dpzxpXYXh7IoAE9P2RD9ZBwhF8p2uIGr0J5kvmNMR84EGZAeSOAeH8oG32pKeLjwT9LLvPj2fa1O6FauiBfjwulxttjRktbYjYGpE7KUwiG5kRzyvaXx2ZBk1pONIg6OapNreqlyqGcg8EUNRVlDoHoF6jjiWkjYXjeuOjyAZDZD"
+                "accessToken" to "EAAf4pgUyFpsBACERnEgTjs232323UY2ZAMfCWmcvAsryuVgz8MqIhFAn96jk3e5bVOllp3WLVcIaBnP6DhiuKgAMqpsM7IlKXdZCfP1apvoZCitFCEyR48avZB2qj2cYKWiwQbmhaL7DcnbnMMwO9FeKpDIeYviWNCDtBZBx6OimR9vEu1CIhy9Da1eGPcZBCvqCGPULYR2JbYM62FhA"
         )
 
         val url = URL("https://liceu-dev.herokuapp.com/v2/login")
