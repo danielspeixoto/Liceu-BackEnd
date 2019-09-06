@@ -7,9 +7,6 @@ class ActivityBoundary {
         fun insertActivity(activityToInsert: ActivityToInsert): String
     }
 
-    interface IInsertActivity {
-        fun run (activitySubmission: ActivitySubmission): String
-    }
     interface IGetActivitiesFromUser {
         fun run(userId: String,amount: Int): List<Activity>
     }

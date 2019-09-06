@@ -3,7 +3,6 @@ package com.liceu.server
 import com.liceu.server.data.*
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
-import com.liceu.server.domain.activities.InsertActivity
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.GetChallenge
 import com.liceu.server.domain.challenge.UpdateAnswers
@@ -265,10 +264,6 @@ class AppConfig : AbstractMongoConfiguration() {
         return UpdateComments(mongoPostRepository,mongoUserRepository)
     }
 
-    @Bean
-    fun insertActivity (): ActivityBoundary.IInsertActivity{
-        return InsertActivity(mongoActivityRepository)
-    }
 
     @Bean
     fun getActivitiesFromUser(): ActivityBoundary.IGetActivitiesFromUser{
