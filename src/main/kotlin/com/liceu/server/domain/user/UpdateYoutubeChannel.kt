@@ -6,7 +6,7 @@ import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.util.Logging
 
 class UpdateYoutubeChannel(
-        private val userRepo: MongoUserRepository
+        private val userRepo: UserBoundary.IRepository
 ): UserBoundary.IUpdateYoutubeChannel {
 
     companion object {

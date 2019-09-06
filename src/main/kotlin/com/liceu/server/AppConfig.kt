@@ -3,7 +3,6 @@ package com.liceu.server
 import com.liceu.server.data.*
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
-import com.liceu.server.domain.activities.InsertActivity
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.GetChallenge
 import com.liceu.server.domain.challenge.UpdateAnswers
@@ -17,10 +16,7 @@ import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.question.QuestionById
 import com.liceu.server.domain.question.RandomQuestions
 import com.liceu.server.domain.question.QuestionVideos
-import com.liceu.server.domain.trivia.SubmitTriviaQuestion
-import com.liceu.server.domain.trivia.TriviaBoundary
-import com.liceu.server.domain.trivia.TriviaRandomQuestions
-import com.liceu.server.domain.trivia.UpdateCommentsTrivia
+import com.liceu.server.domain.trivia.*
 import com.liceu.server.domain.user.*
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
@@ -189,8 +185,8 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
-    fun updateProducerToBeFollowed(): UserBoundary.IupdateProducerToBeFollowed {
-        return UpdateProducerToBeFollowed(mongoUserRepository)
+    fun updateProducerToBeFollowed(): UserBoundary.IUpdateProducerToBeFollowed {
+        return UpdateProducerToBeFollowed(mongoUserRepository,mongoActivityRepository)
     }
 
     @Bean
@@ -224,13 +220,18 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateRatingTrivia(): TriviaBoundary.IUpdateRating{
+        return UpdateRating(mongoTriviaRepository)
+    }
+
+    @Bean
     fun getChallenge(): ChallengeBoundary.IGetChallenge{
-        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository)
+        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository)
     }
 
     @Bean
     fun UpdateAnswers(): ChallengeBoundary.IUpdateAnswers{
-        return UpdateAnswers(mongoChallengeRepository)
+        return UpdateAnswers(mongoChallengeRepository,mongoActivityRepository)
     }
 
     @Bean
@@ -263,10 +264,6 @@ class AppConfig : AbstractMongoConfiguration() {
         return UpdateComments(mongoPostRepository,mongoUserRepository)
     }
 
-    @Bean
-    fun insertActivity (): ActivityBoundary.IInsertActivity{
-        return InsertActivity(mongoActivityRepository)
-    }
 
     @Bean
     fun getActivitiesFromUser(): ActivityBoundary.IGetActivitiesFromUser{

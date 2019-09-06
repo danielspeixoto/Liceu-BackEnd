@@ -1,17 +1,13 @@
 package com.liceu.server.domain.post
 
-import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.domain.global.INSERTION
 import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.global.TEXT
+import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
-import java.time.Instant
-import java.time.ZoneOffset
-import java.util.*
-
 class TextPost(
-        private val postRepository: MongoPostRepository
+        private val postRepository: PostBoundary.IRepository
 ): PostBoundary.ITextPost {
 
     companion object{
@@ -37,8 +33,9 @@ class TextPost(
                 post.description,
                 null,
                 post.video,
-                Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()),
-                null
+                TimeStamp.retrieveActualTimeStamp(),
+                null,
+                post.questions
                 ))
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)

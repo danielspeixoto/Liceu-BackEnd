@@ -13,6 +13,7 @@ import java.time.Instant
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.validation.ValidationException
+import kotlin.collections.HashMap
 
 @RestController
 @RequestMapping("/v2/post")
@@ -43,21 +44,35 @@ class PostController(
             var id = ""
             val type = body["type"] as String? ?: throw ValidationException()
             val description = body["description"] as String? ?: throw ValidationException()
+            var questions = emptyList<PostQuestions>()
+            if(body["hasQuestions"] as String?  == "true"){
+                val questionsPassed = body["questions"] as List<HashMap<String,Any>>
+                questions = questionsPassed.map {
+                    PostQuestions(
+                            it["question"] as String? ?: throw ValidationException(),
+                            it["correctAnswer"] as String? ?: throw ValidationException(),
+                            it["otherAnswers"] as List<String>? ?: throw ValidationException()
+                    )
+                }
+            }
             if(type == "text"){
                 id = textPost.run(PostSubmission(
                         userId,
                         type,
                         description,
                         null,
-                        null
+                        null,
+                        questions
                 ))
-            }else if(type == "video"){
+            }
+            if(type == "video"){
                 val video = PostVideo(
                     body["videoUrl"] as String? ?: throw ValidationException(),
                     PostThumbnails(
-                            body["high"] as String? ?: throw ValidationException(),
-                            body["default"] as String? ?: throw ValidationException(),
-                            body["medium"] as String? ?: throw ValidationException()
+                            null,
+                            null,
+                            null
+
                     )
                 )
                 id = videoPost.run(PostSubmission(
@@ -65,14 +80,13 @@ class PostController(
                         type,
                         description,
                         null,
-                        video
+                        video,
+                        questions
                 ))
             }
-
             ResponseEntity(hashMapOf<String,Any>(
                     "id" to id
             ), HttpStatus.OK)
-
         }catch (e: Exception) {
             when(e) {
                 is ValidationException, is ClassCastException -> {
@@ -217,7 +231,9 @@ class PostController(
             val description: String,
             val imageURL: String?,
             val video: PostVideo?,
-            val submissionDate: Date
+            val submissionDate: Date,
+            val comments: List<PostComment>?,
+            val questions: List<PostQuestions>?
     )
 
     fun toPostResponse(post: Post): PostResponse{
@@ -228,7 +244,9 @@ class PostController(
                 post.description,
                 post.imageURL,
                 post.video,
-                post.submissionDate
+                post.submissionDate,
+                post.comments,
+                post.questions
         )
     }
 

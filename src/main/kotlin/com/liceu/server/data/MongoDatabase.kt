@@ -99,7 +99,7 @@ class MongoDatabase {
             var instagramProfile: String?,
             var description: String?,
             var website: String?,
-            var amountOfFollowers: Int?,
+            var followers: List<String>?,
             var following: List<String>?
     ) {
         @Id
@@ -166,7 +166,9 @@ class MongoDatabase {
             val correctAnswer: String,
             val wrongAnswer: String,
             val tags: List<String>,
-            val comments: List<MongoComment>?
+            val comments: List<MongoComment>?,
+            val likes: Int?,
+            val dislikes: Int?
     ) {
         @Id
         lateinit var id: ObjectId
@@ -181,7 +183,9 @@ class MongoDatabase {
             val correctAnswer: String,
             val wrongAnswer: String,
             val tags: List<String>,
-            val comments: List<MongoComment>?
+            val comments: List<MongoComment>?,
+            val likes: Int?,
+            val dislikes: Int?
     )
 
 
@@ -209,7 +213,8 @@ class MongoDatabase {
         val imageURL: String?,
         val video: MongoPostVideo?,
         val submissionDate: Date,
-        val comments: List<MongoComment>?
+        val comments: List<MongoComment>?,
+        val questions: List<MongoPostQuestions>?
     ){
         @Id
         lateinit var id: ObjectId
@@ -226,12 +231,17 @@ class MongoDatabase {
             var medium: String?
     )
 
-
-    data class MongoComment (
+    data class MongoComment(
             var id: ObjectId,
             var userId: ObjectId,
             var author: String,
             var comment: String
+    )
+
+    data class MongoPostQuestions(
+            var question: String,
+            var correctAnswer: String,
+            var otherAnswers: List<String>
     )
 
     @Document(collection = MongoDatabase.ACTIVITIES_COLLECTION)

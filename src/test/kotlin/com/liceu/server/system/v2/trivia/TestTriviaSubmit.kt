@@ -1,10 +1,8 @@
-package com.liceu.server.system.v2.Trivia
+package com.liceu.server.system.v2.trivia
 
 import com.google.common.truth.Truth
 import com.liceu.server.data.TriviaRepository
-import com.liceu.server.domain.trivia.TriviaQuestionToInsert
 import com.liceu.server.system.TestSystem
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange

@@ -1,14 +1,14 @@
 package com.liceu.server.domain.post
 
-import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
-import java.time.Instant
-import java.time.ZoneOffset
-import java.util.*
+import org.springframework.web.util.UriComponentsBuilder
+import com.liceu.server.domain.util.TimeStamp
+
+
 
 class VideoPost(
-        private val postRepository: MongoPostRepository
+        private val postRepository: PostBoundary.IRepository
 ): PostBoundary.IVideoPost {
 
     companion object{
@@ -30,9 +30,14 @@ class VideoPost(
             if(post.video.videoUrl.length > 250){
                 throw OverflowSizeException ("Video URL is too long")
             }
-            if(post.video.thumbnails?.high?.isEmpty()!! or post.video.thumbnails?.default?.isEmpty()!! or post.video.thumbnails?.medium?.isEmpty()!!){
-                throw OverflowSizeException ("None of the thumbnails can be null")
+            val queryParams = UriComponentsBuilder.fromUriString(post.video.videoUrl).build().queryParams
+            if(queryParams.size == 0){
+                throw OverflowSizeException("It's necessary have parameters in video Url")
             }
+            val defaultUrl = "http://i.ytimg.com/vi/"
+            val highThumbails = defaultUrl+ queryParams["v"]!![0] + "/hqdefault.jpg"
+            val defaultThumbails = defaultUrl+ queryParams["v"]!![0] + "/default.jpg"
+            val mediumThumbails = defaultUrl+ queryParams["v"]!![0] + "/mqdefault.jpg"
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to post.userId,
                     "type" to post.type,
@@ -47,13 +52,14 @@ class VideoPost(
                     PostVideo(
                             post.video.videoUrl,
                             PostThumbnails(
-                                    post.video.thumbnails!!.high,
-                                    post.video.thumbnails!!.default,
-                                    post.video.thumbnails!!.medium
+                                    highThumbails,
+                                    defaultThumbails,
+                                    mediumThumbails
                             )
                     ),
-                    Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()),
-                    null
+                    TimeStamp.retrieveActualTimeStamp(),
+                    null,
+                    post.questions
             ))
         }catch (e: Exception){
             Logging.error(EVENT_NAME,TAGS,e)

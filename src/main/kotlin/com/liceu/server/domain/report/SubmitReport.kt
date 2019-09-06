@@ -1,6 +1,7 @@
 package com.liceu.server.domain.report
 
 import com.liceu.server.domain.global.*
+import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
 import java.lang.Exception
 import java.time.Instant
@@ -52,7 +53,7 @@ class SubmitReport(
                     report.message,
                     report.tags,
                     report.params,
-                    Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant())
+                    TimeStamp.retrieveActualTimeStamp()
             ))
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to report.userId,

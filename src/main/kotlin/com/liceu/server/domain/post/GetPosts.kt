@@ -1,14 +1,13 @@
 package com.liceu.server.domain.post
 
-import com.liceu.server.data.MongoPostRepository
-import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.global.*
+import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.util.Logging
 import java.util.*
 
 class GetPosts(
-        private val postRepository: MongoPostRepository,
-        private val userRepository: MongoUserRepository,
+        private val postRepository: PostBoundary.IRepository,
+        private val userRepository: UserBoundary.IRepository,
         private val maxResults: Int
 ): PostBoundary.IGetPosts {
 

@@ -5,7 +5,7 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 
 class GetActivitiesFromUser(
-        private val activityRepository: MongoActivityRepository,
+        private val activityRepository: ActivityBoundary.IRepository,
         private val maxResults: Int
 ): ActivityBoundary.IGetActivitiesFromUser {
 

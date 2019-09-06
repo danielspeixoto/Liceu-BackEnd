@@ -20,59 +20,11 @@ import kotlin.collections.HashMap
 @RestController
 @RequestMapping("/v2/activity")
 class ActivityController(
-        @Autowired val insertActivity: ActivityBoundary.IInsertActivity,
         @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
 ) {
 
     @Autowired
     lateinit var netUtils: NetworkUtils
-
-    @PostMapping
-    fun insertActivity(
-            @RequestAttribute("userId") userId: String,
-            @RequestBody body: java.util.HashMap<String, Any>,
-            request: HttpServletRequest
-    ): ResponseEntity<HashMap<String,Any>> {
-        val eventName = "activity_post"
-        val eventTags = listOf(CONTROLLER, NETWORK, ACTIVITY, INSERTION)
-        val networkData = netUtils.networkData(request)
-        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
-                "version" to 2
-        ))
-        return try{
-            val type = body["type"] as String? ?: throw ValidationException()
-            val params = body["params"] as HashMap<String,Any>
-
-            val id = insertActivity.run(ActivitySubmission(
-                    userId,
-                    type,
-                    params
-            ))
-            ResponseEntity(hashMapOf<String,Any>(
-                    "id" to id
-            ),HttpStatus.OK)
-
-        } catch (e: Exception) {
-            when(e) {
-                is ValidationException, is ClassCastException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.BAD_REQUEST)
-                }
-                else -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-                }
-            }
-        }
-    }
 
     @GetMapping ("/{userId}")
     fun getActivityFromUser (

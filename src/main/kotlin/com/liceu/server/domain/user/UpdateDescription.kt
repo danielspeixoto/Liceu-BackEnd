@@ -5,7 +5,7 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 
 class UpdateDescription(
-    private val userRepo: MongoUserRepository
+    private val userRepo: UserBoundary.IRepository
 ):UserBoundary.IUpdateDescription {
 
     companion object {

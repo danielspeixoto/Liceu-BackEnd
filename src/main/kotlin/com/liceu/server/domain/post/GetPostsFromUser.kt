@@ -5,7 +5,7 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 
 class GetPostsFromUser(
-        private val postRepository: MongoPostRepository
+        private val postRepository: PostBoundary.IRepository
 ): PostBoundary.IGetPostsFromUser {
     companion object{
         const val EVENT_NAME = "get_posts_from_user"

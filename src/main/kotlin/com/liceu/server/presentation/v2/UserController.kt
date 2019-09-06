@@ -7,7 +7,6 @@ import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.*
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
-import com.mongodb.client.model.geojson.GeoJsonObjectType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -29,7 +28,7 @@ class UserController (
         @Autowired val updateInstagramProfile: UserBoundary.IUpdateInstagramProfile,
         @Autowired val updateDescription: UserBoundary.IUpdateDescription,
         @Autowired val updateWebsite: UserBoundary.IUpdateWebsite,
-        @Autowired val updateProducerToBeFollowed: UserBoundary.IupdateProducerToBeFollowed,
+        @Autowired val updateProducerToBeFollowed: UserBoundary.IUpdateProducerToBeFollowed,
         @Autowired val updateProducerToBeUnfollowed: UserBoundary.IupdateProducerToBeUnfollowed,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation
 ) {
@@ -47,7 +46,7 @@ class UserController (
             val instagramProfile: String?,
             val description: String?,
             val website: String?,
-            val amountOfFollowers: Int?,
+            val followers: List<String>?,
             val following: List<String>?
     )
 
@@ -96,7 +95,7 @@ class UserController (
 
     @GetMapping
     fun getUsersByNameUsingLocation(
-            @RequestParam(value = "nameRequired", defaultValue = "") nameRequired: String,
+            @RequestParam(value = "name", defaultValue = "") name: String,
             @RequestParam(value = "longitude", defaultValue = "") longitude: Double,
             @RequestParam(value = "latitude", defaultValue = "") latitude: Double,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
@@ -110,7 +109,7 @@ class UserController (
                 "version" to 2
         ))
         return try {
-            val result = getUsersByNameUsingLocation.run(nameRequired,longitude,latitude,amount)
+            val result = getUsersByNameUsingLocation.run(name,longitude,latitude,amount)
             val desiredUser = result.map {toUserResponse(it)}
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {
@@ -555,7 +554,7 @@ class UserController (
                 user.instagramProfile,
                 user.description,
                 user.website,
-                user.amountOfFollowers,
+                user.followers,
                 user.following
         )
     }

@@ -1,12 +1,11 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
-import com.liceu.server.domain.post.PostThumbnails
-import com.liceu.server.domain.post.PostVideo
-import com.liceu.server.domain.post.VideoPost
+
 import com.liceu.server.util.JWTAuth
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration
@@ -16,6 +15,13 @@ import java.util.*
 @Component
 @ContextConfiguration(classes=[TestConfiguration::class])
 class DataSetup {
+
+    @Value("\${facebook.accessToken}")
+    lateinit var facebookAccessToken: String
+    @Value("\${google.clientId}")
+    lateinit var googleClientId: String
+    @Value("\${google.clientSecret}")
+    lateinit var googleClientSecret: String
 
     @Autowired
     lateinit var jwtAuth: JWTAuth
@@ -335,7 +341,7 @@ class DataSetup {
                 null,
                 null,
                 listOf(
-                        USER_ID_2,
+                        USER_ID_3,
                         USER_ID_4
                 )
         )
@@ -572,7 +578,9 @@ class DataSetup {
                         "angulos",
                         "trigonometria"
                 ),
-                null
+                null,
+                3,
+                4
         )
         q1.id = ObjectId(QUESTION_TRIVIA_ID_1)
         triviaRepo.insert(q1)
@@ -587,6 +595,8 @@ class DataSetup {
                             "angulos",
                             "trigonometria"
                     ),
+                null,
+                null,
                 null
             )
             q2.id = ObjectId(QUESTION_TRIVIA_ID_2)
@@ -602,6 +612,8 @@ class DataSetup {
                             "angulos",
                             "trigonometria"
                     ),
+                null,
+                null,
                 null
             )
             q3.id = ObjectId(QUESTION_TRIVIA_ID_3)
@@ -617,6 +629,8 @@ class DataSetup {
                             "angulos",
                             "trigonometria"
                     ),
+                null,
+                null,
                 null
             )
             q4.id = ObjectId(QUESTION_TRIVIA_ID_4)
@@ -631,6 +645,8 @@ class DataSetup {
                         "historia",
                         "descoberta"
                 ),
+                null,
+                null,
                 null
         )
         q5.id = ObjectId(QUESTION_TRIVIA_ID_5)
@@ -668,6 +684,8 @@ class DataSetup {
                                         "matematica",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),
@@ -704,6 +722,8 @@ class DataSetup {
                                         "graficos",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         ),
                         MongoDatabase.MongoChallengeTrivia(
@@ -716,6 +736,8 @@ class DataSetup {
                                         "graficos",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),
@@ -755,7 +777,9 @@ class DataSetup {
                                                 "user1",
                                                 "essa questao e boa"
                                         )
-                                )
+                                ),
+                                null,
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-06-11T11:20:20.00Z"))
@@ -786,6 +810,8 @@ class DataSetup {
                                         "matematica",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),
@@ -813,6 +839,8 @@ class DataSetup {
                                         "matematica",
                                         "algebra"
                                 ),
+                                null,
+                                null,
                                 null
                         )
                 ),
@@ -829,7 +857,23 @@ class DataSetup {
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
-                null
+                null,
+                listOf(
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Einstein?",
+                                "Albert",
+                                listOf(
+                                        "José","Albertonio","Lucas"
+                                )
+                        ),
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Newton?",
+                                "Isaac",
+                                listOf(
+                                        "José","Albertonio","Albert"
+                                )
+                        )
+                )
         )
         post1.id = ObjectId(POST_ID_1)
         postRepo.insert(post1)
@@ -840,7 +884,16 @@ class DataSetup {
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
-                null
+                null,
+                listOf(
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Einstein?",
+                                "Albert",
+                                listOf(
+                                        "José","Albertonio","Lucas"
+                                )
+                        )
+                )
         )
         post2.id = ObjectId(POST_ID_2)
         postRepo.insert(post2)
@@ -858,6 +911,7 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
                 null
         )
         post3.id = ObjectId(POST_ID_3)
@@ -869,6 +923,7 @@ class DataSetup {
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
+                null,
                 null
         )
         post4.id = ObjectId(POST_ID_4)
@@ -880,6 +935,7 @@ class DataSetup {
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
+                null,
                 null
         )
         post5.id = ObjectId(POST_ID_5)
@@ -899,7 +955,7 @@ class DataSetup {
 
         val activity2 = MongoDatabase.MongoActivities(
                 ObjectId(USER_ID_1),
-                "TriviaFinished",
+                "triviaFinished",
                 hashMapOf(
                         "challengerId" to USER_ID_2,
                         "triviaId" to CHALLENGE_TRIVIA_ID_1

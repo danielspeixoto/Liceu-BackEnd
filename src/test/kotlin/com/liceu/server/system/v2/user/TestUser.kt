@@ -1,6 +1,7 @@
 package com.liceu.server.system.v2.user
 
 import com.google.common.truth.Truth
+import com.liceu.server.data.MongoActivityRepository
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.UserRepository
 import com.liceu.server.domain.global.OverflowSizeException
@@ -22,6 +23,9 @@ class TestUser: TestSystem("/v2/user") {
 
     @Autowired
     lateinit var data: MongoUserRepository
+
+    @Autowired
+    lateinit var activitiesData: MongoActivityRepository
 
     @Test
     fun userID_exists_returnUser(){
@@ -224,9 +228,13 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val producer =  data.getUserById("39c54d325b75357a571d4cc2")
         val user = data.getUserById("3a1449a4bdb40abd5ae1e431")
-        Truth.assertThat(producer.amountOfFollowers).isEqualTo(1)
+        Truth.assertThat(producer.followers?.size).isEqualTo(1)
+        Truth.assertThat(producer.followers?.get(0)).isEqualTo("3a1449a4bdb40abd5ae1e431")
         Truth.assertThat(user.following?.size).isEqualTo(3)
-        Truth.assertThat(user.following?.get(0)).isEqualTo("39c54d325b75357a571d4cc2")
+        Truth.assertThat(user.following).contains("39c54d325b75357a571d4cc2")
+        val activitiesProducer = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10)
+        Truth.assertThat(activitiesProducer.size).isEqualTo(2)
+        Truth.assertThat(activitiesProducer[0].type).isEqualTo("followedUser")
     }
 
     @Test
@@ -244,18 +252,20 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         var producer =  data.getUserById("39c54d325b75357a571d4cc2")
         var user = data.getUserById("3a1449a4bdb40abd5ae1e431")
-        Truth.assertThat(producer.amountOfFollowers).isEqualTo(1)
+        Truth.assertThat(producer.followers?.size).isEqualTo(1)
+        Truth.assertThat(producer.followers?.get(0)).isEqualTo("3a1449a4bdb40abd5ae1e431")
         Truth.assertThat(user.following?.size).isEqualTo(3)
-        Truth.assertThat(user.following?.get(0)).isEqualTo("39c54d325b75357a571d4cc2")
-
+        Truth.assertThat(user.following).contains("39c54d325b75357a571d4cc2")
         val responseDelete = restTemplate
                 .exchange<Void>("$baseUrl/39c54d325b75357a571d4cc2/followers", HttpMethod.DELETE, entity)
         Truth.assertThat(responseDelete.statusCode).isEqualTo(HttpStatus.OK)
-        producer =  data.getUserById("39c54d325b75357a571d4cc2")
+        producer = data.getUserById("39c54d325b75357a571d4cc2")
         user = data.getUserById("3a1449a4bdb40abd5ae1e431")
-        Truth.assertThat(producer.amountOfFollowers).isEqualTo(0)
+        Truth.assertThat(producer.followers?.size).isEqualTo(0)
         Truth.assertThat(user.following?.size).isEqualTo(2)
     }
+
+
 
 
 
@@ -411,6 +421,34 @@ class TestUser: TestSystem("/v2/user") {
     }
 
     @Test
+    fun updateProducerToBeFollowed_userIdToEmptyString_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                "userId" to ""
+                , headers)
+        val response = restTemplate
+                .exchange<Void>("$baseUrl/39c54d325b75357a571d4cc2/followers", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateProducerToBeFollowed_userIdToNull_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                "userId" to null
+                , headers)
+        val response = restTemplate
+                .exchange<Void>("$baseUrl/39c54d325b75357a571d4cc2/followers", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
     fun updateProducerToBeFollowed_wrongProducerId_throwException(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
@@ -464,6 +502,34 @@ class TestUser: TestSystem("/v2/user") {
 
         val entity = HttpEntity(
                 null, headers)
+        val response = restTemplate
+                .exchange<Void>("$baseUrl/39c54d325b75357a571d4cc2/followers", HttpMethod.DELETE, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateProducerToBeUnfollowed_userIdToEmptyString_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                "userId" to ""
+                , headers)
+        val response = restTemplate
+                .exchange<Void>("$baseUrl/39c54d325b75357a571d4cc2/followers", HttpMethod.DELETE, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateProducerToBeUnfollowed_userIdToNull_throwException(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                "userId" to null
+                , headers)
         val response = restTemplate
                 .exchange<Void>("$baseUrl/39c54d325b75357a571d4cc2/followers", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)

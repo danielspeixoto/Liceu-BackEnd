@@ -23,7 +23,9 @@ import javax.validation.ValidationException
 class TriviaController(
         @Autowired val submit: TriviaBoundary.ISubmit,
         @Autowired val randomQuestions: TriviaBoundary.IRandomQuestions,
-        @Autowired val updateCommentsTrivia: TriviaBoundary.IUpdateListOfComments
+        @Autowired val updateCommentsTrivia: TriviaBoundary.IUpdateListOfComments,
+        @Autowired val updateRatingTrivia: TriviaBoundary.IUpdateRating
+
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -106,7 +108,7 @@ class TriviaController(
     }
 
     @PutMapping ("/{questionId}/comment")
-    fun updatePostComments(
+    fun updateComments(
             @PathVariable("questionId") questionId: String,
             @RequestBody body: java.util.HashMap<String, Any>,
             request: HttpServletRequest
@@ -143,7 +145,43 @@ class TriviaController(
             }
         }
     }
-
+    @PutMapping ("/{questionId}/rating")
+    fun updateRating(
+            @PathVariable("questionId") questionId: String,
+            @RequestBody body: java.util.HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "put_comment_rating"
+        val eventTags = listOf(CONTROLLER, NETWORK, QUESTION, RATING, UPDATE)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val rating = body["rating"] as Int? ?:throw ValidationException()
+            updateRatingTrivia.run(questionId,rating)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+    }
     data class TriviaQuestionResponse(
             val id: String,
             val userId: String,
@@ -151,7 +189,9 @@ class TriviaController(
             val correctAnswer: String,
             val wrongAnswer: String,
             val tags: List<String>,
-            val comments: List<PostComment>?
+            val comments: List<PostComment>?,
+            val likes: Int?,
+            val dislikes: Int?
     )
 
     fun toTriviaQuestionResponse(triviaQuestion: TriviaQuestion): TriviaQuestionResponse{
@@ -169,7 +209,9 @@ class TriviaController(
                             it.author,
                             it.comment
                     )
-                }
+                },
+                triviaQuestion.likes,
+                triviaQuestion.dislikes
         )
     }
 

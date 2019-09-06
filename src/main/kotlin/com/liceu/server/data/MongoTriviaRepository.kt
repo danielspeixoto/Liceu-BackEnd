@@ -27,6 +27,8 @@ class MongoTriviaRepository(
             triviaQuestion.correctAnswer,
             triviaQuestion.wrongAnswer,
             triviaQuestion.tags,
+            null,
+            null,
             null
         ))
         return result.id.toHexString()
@@ -40,24 +42,7 @@ class MongoTriviaRepository(
         val agg = Aggregation.newAggregation(sample)
 
         val results = template.aggregate(agg, MongoDatabase.TRIVIA_COLLECTION, MongoDatabase.MongoTriviaQuestion::class.java)
-        return results.map {
-            TriviaQuestion(
-                    it.id.toHexString(),
-                    it.userId.toString(),
-                    it.question,
-                    it.correctAnswer,
-                    it.wrongAnswer,
-                    it.tags,
-                    it.comments?.map {
-                        PostComment(
-                                it.id,
-                                it.userId,
-                                it.author,
-                                it.comment
-                        )
-                    }
-            )
-        }
+        return results.map {toTriviaQuestion(it)}
     }
 
     override fun updateListOfComments(questionId: String, userId: String, author: String, comment: String): Long {
@@ -82,26 +67,32 @@ class MongoTriviaRepository(
         val match = Aggregation.match(Criteria.where("_id").isEqualTo(ObjectId(questionId)))
         val agg = Aggregation.newAggregation(match)
         val result = template.aggregate(agg,MongoDatabase.TRIVIA_COLLECTION,MongoDatabase.MongoTriviaQuestion::class.java)
-        val retrievedQuestion = result.map {
-            TriviaQuestion(
-                it.id.toString(),
-                it.userId.toString(),
-                it.question,
-                it.correctAnswer,
-                it.wrongAnswer,
-                it.tags,
-                it.comments?.map {
-                PostComment(
-                        it.id,
-                        it.userId,
-                        it.author,
-                        it.comment
-                    )
-                }
-            )
-        }
+        val retrievedQuestion = result.map {toTriviaQuestion(it)}
         return retrievedQuestion[0]
     }
+
+    override fun updateLike(questionId: String): Long {
+        val update = Update()
+        update.inc("likes",1)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(questionId))),
+                update,
+                MongoDatabase.MongoTriviaQuestion::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateDislike(questionId: String): Long {
+        val update = Update()
+        update.inc("dislikes",1)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(questionId))),
+                update,
+                MongoDatabase.MongoTriviaQuestion::class.java
+        )
+        return result.modifiedCount
+    }
+
 
     fun toTriviaQuestion(answer: MongoDatabase.MongoTriviaQuestion): TriviaQuestion{
         return TriviaQuestion(
@@ -118,7 +109,9 @@ class MongoTriviaRepository(
                             it.author,
                             it.comment
                     )
-                }
+                },
+                answer.likes,
+                answer.dislikes
         )
     }
 

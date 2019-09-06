@@ -2,8 +2,11 @@ package com.liceu.server.domain.challenge
 
 import com.liceu.server.data.MongoChallengeRepository
 import com.liceu.server.data.MongoTriviaRepository
+import com.liceu.server.domain.activities.ActivityBoundary
+import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
+import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
 import java.time.Instant
 import java.time.ZoneOffset
@@ -11,7 +14,8 @@ import java.util.*
 
 class GetChallenge(
         private val challengeRepository: MongoChallengeRepository,
-        private val triviaRepository: MongoTriviaRepository
+        private val triviaRepository: MongoTriviaRepository,
+        private val activityRepository: ActivityBoundary.IRepository
 ) : ChallengeBoundary.IGetChallenge {
 
     companion object {
@@ -32,6 +36,15 @@ class GetChallenge(
                                 "answersChallengedSize" to it.answersChallenged.size
                         )
                 )
+                activityRepository.insertActivity(ActivityToInsert(
+                        it.challenger,
+                        "challengeAccepted",
+                        hashMapOf(
+                                "challengeId" to it.id,
+                                "challengedId" to userId
+                        ),
+                        TimeStamp.retrieveActualTimeStamp()
+                ))
                 return it
             }
             val trivias = triviaRepository.randomQuestions(listOf(), 5)
@@ -43,8 +56,7 @@ class GetChallenge(
                     null,
                     null,
                     trivias,
-                    Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant())
-
+                    TimeStamp.retrieveActualTimeStamp()
             ))
             Logging.info(
                     EVENT_NAME, TAGS ,

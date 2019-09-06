@@ -27,7 +27,9 @@ data class TriviaQuestionToInsert(
         val correctAnswer: String,
         val wrongAnswer: String,
         val tags: List<String>,
-        val comments: List<PostComment>?
+        val comments: List<PostComment>?,
+        val likes: Int?,
+        val dislikes: Int?
     )
 
 

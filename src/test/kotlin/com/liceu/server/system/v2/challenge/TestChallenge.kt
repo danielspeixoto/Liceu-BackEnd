@@ -3,6 +3,7 @@ package com.liceu.server.system.v2.challenge
 import com.google.common.truth.Truth
 import com.liceu.server.DataSetup
 import com.liceu.server.data.ChallengeRepository
+import com.liceu.server.data.MongoActivityRepository
 import com.liceu.server.system.TestSystem
 import org.bson.types.ObjectId
 import org.junit.jupiter.api.Test
@@ -20,6 +21,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
     @Autowired
     lateinit var challengeRepo: ChallengeRepository
 
+    @Autowired
+    lateinit var activitiesData: MongoActivityRepository
 
     @Autowired
     override lateinit var testSetup: DataSetup
@@ -59,6 +62,11 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         val tags = triviaQuestionsUsed["tags"] as List<String>
         Truth.assertThat(tags[0]).isEqualTo("matematica")
         Truth.assertThat(tags[1]).isEqualTo("algebra")
+        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_3,10)
+        Truth.assertThat(activitiesChallenger.size).isEqualTo(1)
+        Truth.assertThat(activitiesChallenger[0].type).isEqualTo("challengeAccepted")
+        Truth.assertThat(activitiesChallenger[0].params["challengedId"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
+
     }
 
     @Test
@@ -147,6 +155,14 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
         Truth.assertThat(resultRetrieved.answersChallenged[1]).isEqualTo("4")
         Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(2)
+        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10)
+        val activitiesChallenged = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10)
+        Truth.assertThat(activitiesChallenger.size).isEqualTo(2)
+        Truth.assertThat(activitiesChallenger[0].type).isEqualTo("challengeFinished")
+        Truth.assertThat(activitiesChallenged.size).isEqualTo(3)
+        Truth.assertThat(activitiesChallenged[0].type).isEqualTo("challengeFinished")
+
+
     }
 
 

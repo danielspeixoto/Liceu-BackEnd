@@ -8,7 +8,8 @@ data class PostSubmission (
         val type: String,
         val description: String,
         val imageURL: Base64?,
-        val video: PostVideo?
+        val video: PostVideo?,
+        val questions: List<PostQuestions>?
 )
 
 data class PostToInsert(
@@ -18,7 +19,8 @@ data class PostToInsert(
         val imageURL: String?,
         val video: PostVideo?,
         val submissionDate: Date,
-        val comments: List<PostComment>?
+        val comments: List<PostComment>?,
+        val questions: List<PostQuestions>?
 )
 
 data class Post(
@@ -29,7 +31,8 @@ data class Post(
         val imageURL: String?,
         val video: PostVideo?,
         val submissionDate: Date,
-        val comments: List<PostComment>?
+        val comments: List<PostComment>?,
+        val questions: List<PostQuestions>?
 )
 
 data class PostComment (
@@ -48,5 +51,11 @@ data class PostThumbnails(
         var high: String?,
         var default: String?,
         var medium: String?
+)
+
+data class PostQuestions(
+        var question: String,
+        var correctAnswer: String,
+        var otherAnswers: List<String>
 )
 

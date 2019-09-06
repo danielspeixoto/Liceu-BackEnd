@@ -31,6 +31,10 @@ class TestSystem(val endpoint: String) {
     @Value("\${client.api_key}")
     lateinit var apiKey: String
 
+
+
+    val googleServerAuthCode = "4/nQF47iLi0DqRPU39i-TGqNgEwp9tHcTk1Nlym51k7E2zuHhroqQZY3c7JHUfFK_TPOHjwFCS1NqNqPcv4kAn128"
+
     @BeforeEach
     fun setup() {
         testSetup.setup()
