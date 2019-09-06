@@ -269,7 +269,6 @@ class AppConfig : AbstractMongoConfiguration() {
         return DeletePosts(mongoPostRepository)
     }
 
-
     @Bean
     fun getActivitiesFromUser(): ActivityBoundary.IGetActivitiesFromUser{
         return GetActivitiesFromUser(mongoActivityRepository,50)
