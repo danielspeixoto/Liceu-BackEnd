@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.isEqualTo
+import org.springframework.data.mongodb.core.remove
 import org.springframework.stereotype.Repository
 import java.math.BigInteger
 import java.security.Timestamp
@@ -113,6 +114,15 @@ class MongoPostRepository(
                 MongoDatabase.MongoPost::class.java
         )
         return result.modifiedCount
+    }
+
+    override fun deletePost(postId: String, userId: String): Post? {
+        val result = template.findAndRemove(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(postId))
+                        .and("userId").isEqualTo(ObjectId(userId))),
+                MongoDatabase.MongoPost::class.java
+        )
+        return result?.let { toPost(it) }
     }
 
     fun toPost(mongoPost: MongoDatabase.MongoPost): Post {

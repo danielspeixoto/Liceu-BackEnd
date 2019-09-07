@@ -23,7 +23,8 @@ class PostController(
         @Autowired val getPostsForFeed: PostBoundary.IGetPosts,
         @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
         @Autowired val getRandomPosts: PostBoundary.IGetRandomPosts,
-        @Autowired val updateComments: PostBoundary.IUpdateListOfComments
+        @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
+        @Autowired val deletePosts: PostBoundary.IDeletePost
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -222,6 +223,45 @@ class PostController(
                 }
             }
         }
+    }
+
+    @DeleteMapping("/{postId}")
+    fun deletePost(
+        @PathVariable("postId") postId: String,
+        @RequestBody body: HashMap<String,Any>,
+        request: HttpServletRequest
+    ): ResponseEntity<Void>{
+        val eventName = "delete_post"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, DELETE)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val userId = body["userId"] as String? ?:throw ValidationException()
+            deletePosts.run(postId,userId)
+            ResponseEntity(HttpStatus.OK)
+        }catch (e: Exception) {
+            when (e) {
+                is ValidationException, is ClassCastException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                else -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+                }
+            }
+        }
+
     }
 
     data class PostResponse(
