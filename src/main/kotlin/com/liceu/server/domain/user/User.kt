@@ -18,5 +18,4 @@ data class User(
         val website: String?,
         val followers: List<String>?,
         val following: List<String>?
-
 )
