@@ -75,9 +75,13 @@ class DataSetup {
     }
 
     val USER_ID_2 = "39c54d325b75357a571d4cc2"
+    val USER_2_ACCESS_TOKEN by lazy {
+        jwtAuth.sign(USER_ID_2)
+    }
+
     val USER_ID_3 = "37235b2a67c76abebce3f6e6"
     val USER_ID_4 = "37235b2a67c76abebce3f6e3"
-    val USER_ID_5 = "37235b2a67c76abebce3h6e8"
+    val USER_ID_5 = "37235b2a67c76abebce3f6e8"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
     val GAME_ID_2 = "49c54d325b75357a571d4cc2"
@@ -380,15 +384,16 @@ class DataSetup {
                 ),
                 "facebookId3",
                 GeoJsonPoint(-11.83, -49.86),
-                //null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
+                "BA",
+                "MARISTA",
+                18,
+                "Jorginho",
+                "jorge",
+                "alguma descrição maneira",
+                "www.umsite.com.br",
+                listOf(
+                        USER_ID_1
+                ),
                 listOf(
                         USER_ID_2,
                         USER_ID_4

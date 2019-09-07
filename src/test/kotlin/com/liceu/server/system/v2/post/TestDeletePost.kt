@@ -39,74 +39,12 @@ class TestDeletePost: TestSystem ("/v2/post") {
     fun deletePost_postExistWrongUserOwner_postsNotDeleted(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "userId" to testSetup.USER_ID_2
-        ), headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/09c54d325b75357a581d4ca2", HttpMethod.DELETE, entity)
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.POST_ID_1}", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val postsAfter = data.getPostFromUser(testSetup.USER_ID_1)
         Truth.assertThat(postsAfter.size).isEqualTo(1)
+        Truth.assertThat(postsAfter[0].id).isEqualTo(testSetup.POST_ID_1)
     }
-
-    @Test
-    fun deletePost_userIdToEmptyString_throwError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "userId" to ""
-        ), headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/09c54d325b75357a581d4ca2", HttpMethod.DELETE, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
-    fun deletePost_userIdToNull_throwError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "userId" to null
-        ), headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/09c54d325b75357a581d4ca2", HttpMethod.DELETE, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
-    fun deletePost_userdIdToNull_throwError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "userId" to null
-        ), headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/09c54d325b75357a581d4ca2", HttpMethod.DELETE, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
-    fun deletePost_userIdToInt_throwError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "userId" to 1
-        ), headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/09c54d325b75357a581d4ca2", HttpMethod.DELETE, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
-    fun deletePost_userIdToDouble_throwError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "userId" to 1
-        ), headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/09c54d325b75357a581d4ca2", HttpMethod.DELETE, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
 }

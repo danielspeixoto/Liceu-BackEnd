@@ -46,17 +46,17 @@ class UserController (
             val instagramProfile: String?,
             val description: String?,
             val website: String?,
-            val followers: List<String>?,
-            val following: List<String>?
+            val amountOfFollowers: Int,
+            val amountOfFollowing: Int,
+            val following: Boolean
     )
-
-
 
     @Autowired
     lateinit var netUtils: NetworkUtils
 
     @GetMapping("/{userId}")
     fun getUserById(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             request: HttpServletRequest
     ): ResponseEntity<UserResponse> {
@@ -69,7 +69,7 @@ class UserController (
         ))
         return try {
             val result = user.run(userId)
-            val desiredUser = toUserResponse(result)
+            val desiredUser = toUserResponse(result, authenticatedUserId)
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {
             when(e) {
@@ -95,6 +95,7 @@ class UserController (
 
     @GetMapping
     fun getUsersByNameUsingLocation(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @RequestParam(value = "name", defaultValue = "") name: String,
             @RequestParam(value = "longitude", defaultValue = "") longitude: Double,
             @RequestParam(value = "latitude", defaultValue = "") latitude: Double,
@@ -110,7 +111,7 @@ class UserController (
         ))
         return try {
             val result = getUsersByNameUsingLocation.run(name,longitude,latitude,amount)
-            val desiredUser = result.map {toUserResponse(it)}
+            val desiredUser = result.map {toUserResponse(it, authenticatedUserId)}
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {
             when(e) {
@@ -175,6 +176,7 @@ class UserController (
 
     @PutMapping("/{userId}/locale")
     fun updateLocation(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
@@ -187,7 +189,9 @@ class UserController (
                 "version" to 2
         ))
         return try{
-
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
             val longitude = body["longitude"] as Double? ?: throw ValidationException()
             val latitude = body["latitude"] as Double? ?: throw ValidationException()
             updateLocation.run(userId,longitude,latitude)
@@ -203,6 +207,14 @@ class UserController (
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
                 }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
+                }
                 else -> {
                     Logging.error(
                             eventName,
@@ -217,6 +229,7 @@ class UserController (
 
     @PutMapping("/{userId}/school")
     fun updateSchool(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
@@ -229,12 +242,14 @@ class UserController (
                 "version" to 2
         ))
         return try{
-
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
             val school = body["school"] as String? ?: throw ValidationException()
             updateSchool.run(userId,school)
             ResponseEntity(HttpStatus.OK)
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             when (e) {
                 is ValidationException, is ClassCastException -> {
                     Logging.error(
@@ -243,6 +258,14 @@ class UserController (
                             e, data = networkData
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
                 }
                 else -> {
                     Logging.error(
@@ -258,6 +281,7 @@ class UserController (
 
     @PutMapping("/{userId}/age")
     fun updateAge(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
@@ -270,6 +294,9 @@ class UserController (
                 "version" to 2
         ))
         return try{
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
             val day = body["day"] as Int? ?: throw ValidationException()
             val month = body["month"] as Int? ?: throw ValidationException()
             val year = body["year"] as Int? ?: throw ValidationException()
@@ -286,6 +313,14 @@ class UserController (
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
                 }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
+                }
                 else -> {
                     Logging.error(
                             eventName,
@@ -300,6 +335,7 @@ class UserController (
 
     @PutMapping("/{userId}/youtube")
     fun updateYoutubeChannel(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
@@ -312,11 +348,14 @@ class UserController (
                 "version" to 2
         ))
         return try{
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
             val youtubeChannel = body["youtubeChannel"] as String? ?: throw ValidationException()
             updateYoutubeChannel.run(userId,youtubeChannel)
             ResponseEntity(HttpStatus.OK)
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             when (e) {
                 is ValidationException, is ClassCastException -> {
                     Logging.error(
@@ -325,6 +364,14 @@ class UserController (
                             e, data = networkData
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
                 }
                 else -> {
                     Logging.error(
@@ -340,6 +387,7 @@ class UserController (
 
     @PutMapping("/{userId}/instagram")
     fun updateInstagramProfile(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
@@ -352,12 +400,14 @@ class UserController (
                 "version" to 2
         ))
         return try{
-
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
             val instagramProfile = body["instagramProfile"] as String? ?: throw ValidationException()
             updateInstagramProfile.run(userId,instagramProfile)
             ResponseEntity(HttpStatus.OK)
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             when (e) {
                 is ValidationException, is ClassCastException -> {
                     Logging.error(
@@ -366,6 +416,14 @@ class UserController (
                             e, data = networkData
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
                 }
                 else -> {
                     Logging.error(
@@ -381,6 +439,7 @@ class UserController (
 
     @PutMapping("/{userId}/description")
     fun updateDescription(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
@@ -393,12 +452,14 @@ class UserController (
                 "version" to 2
         ))
         return try{
-
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
             val description = body["description"] as String? ?: throw ValidationException()
             updateDescription.run(userId,description)
             ResponseEntity(HttpStatus.OK)
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             when (e) {
                 is ValidationException, is ClassCastException -> {
                     Logging.error(
@@ -407,6 +468,14 @@ class UserController (
                             e, data = networkData
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
                 }
                 else -> {
                     Logging.error(
@@ -422,6 +491,7 @@ class UserController (
 
     @PutMapping("/{userId}/website")
     fun updateWebsite(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
@@ -434,12 +504,14 @@ class UserController (
                 "version" to 2
         ))
         return try{
-
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
             val website = body["website"] as String? ?: throw ValidationException()
             updateWebsite.run(userId,website)
             ResponseEntity(HttpStatus.OK)
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             when (e) {
                 is ValidationException, is ClassCastException -> {
                     Logging.error(
@@ -448,6 +520,14 @@ class UserController (
                             e, data = networkData
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
                 }
                 else -> {
                     Logging.error(
@@ -463,8 +543,8 @@ class UserController (
 
     @PutMapping("/{producerId}/followers")
     fun updateProducerToBeFollowed(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("producerId") producerId: String,
-            @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
     ): ResponseEntity<Void>{
         val eventName = "update_producer_followed_by_user"
@@ -474,12 +554,11 @@ class UserController (
         Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
                 "version" to 2
         ))
-        return try{
-            val userId = body["userId"] as String? ?: throw ValidationException()
-            updateProducerToBeFollowed.run(userId, producerId)
+        return try {
+            updateProducerToBeFollowed.run(authenticatedUserId, producerId)
             ResponseEntity(HttpStatus.OK)
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             when (e) {
                 is ValidationException, is ClassCastException -> {
                     Logging.error(
@@ -488,6 +567,14 @@ class UserController (
                             e, data = networkData
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
                 }
                 else -> {
                     Logging.error(
@@ -503,8 +590,8 @@ class UserController (
 
     @DeleteMapping("/{producerId}/followers")
     fun updateProducerToBeUnfollowed(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("producerId") producerId: String,
-            @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
     ): ResponseEntity<Void>{
         val eventName = "update_producer_unfollowed_by_user"
@@ -515,11 +602,9 @@ class UserController (
                 "version" to 2
         ))
         return try{
-            val userId = body["userId"] as String? ?: throw ValidationException()
-            updateProducerToBeUnfollowed.run(userId, producerId)
+            updateProducerToBeUnfollowed.run(authenticatedUserId, producerId)
             ResponseEntity(HttpStatus.OK)
-
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             when (e) {
                 is ValidationException, is ClassCastException -> {
                     Logging.error(
@@ -528,6 +613,14 @@ class UserController (
                             e, data = networkData
                     )
                     ResponseEntity(HttpStatus.BAD_REQUEST)
+                }
+                is AuthenticationException -> {
+                    Logging.error(
+                            eventName,
+                            eventTags,
+                            e, data = networkData
+                    )
+                    ResponseEntity(HttpStatus.UNAUTHORIZED)
                 }
                 else -> {
                     Logging.error(
@@ -541,7 +634,19 @@ class UserController (
         }
     }
 
-    fun toUserResponse(user: User): UserResponse {
+    fun toUserResponse(user: User, id: String): UserResponse {
+        var amountOfFollowers = 0
+        var isFollowing = false
+        if(user.followers != null) {
+            amountOfFollowers = user.followers.size
+            isFollowing = user.followers.contains(id)
+        }
+        var amountOfFollowing = 0
+        if(user.following != null) {
+            amountOfFollowing = user.following.size
+        }
+
+
         return UserResponse (
                 user.id,
                 user.name,
@@ -554,8 +659,9 @@ class UserController (
                 user.instagramProfile,
                 user.description,
                 user.website,
-                user.followers,
-                user.following
+                amountOfFollowers,
+                amountOfFollowing,
+                isFollowing
         )
     }
     fun toChallengeResponse(challenge: Challenge): ChallengeResponse {

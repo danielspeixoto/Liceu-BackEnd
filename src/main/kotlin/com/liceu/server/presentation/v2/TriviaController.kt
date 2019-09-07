@@ -109,6 +109,7 @@ class TriviaController(
 
     @PutMapping ("/{questionId}/comment")
     fun updateComments(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("questionId") questionId: String,
             @RequestBody body: java.util.HashMap<String, Any>,
             request: HttpServletRequest
@@ -120,9 +121,8 @@ class TriviaController(
                 "version" to 2
         ))
         return try {
-            val userId = body["userId"] as String? ?: throw ValidationException()
             val comment = body["comment"] as String? ?: throw ValidationException()
-            updateCommentsTrivia.run(questionId, userId, comment)
+            updateCommentsTrivia.run(questionId, authenticatedUserId, comment)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
             when (e) {
