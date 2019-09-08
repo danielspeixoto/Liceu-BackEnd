@@ -57,23 +57,32 @@ class TestMongoTriviaRepositoryIntegration {
         Truth.assertThat(report.wrongAnswer).isEqualTo("1")
     }
 
-    @Disabled
     @Test
-    fun randomQuestions_requestOnlyOne_returnsExistent() {
-        // Test will fail temporarily to avoid mongo sample aggregation error
+    fun randomQuestions_requestOnlyOne_returnsOne() {
         val questions = data.randomQuestions(listOf("historia"), 5)
-        val ids = questions.map { it.id }
-        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_5)
+        Truth.assertThat(questions.size).isEqualTo(1)
     }
 
-    @Disabled
     @Test
-    fun randomQuestions_requestMajoraty_returnsExistent() {
-        // Test will fail temporarily to avoid mongo sample aggregation error
+    fun randomQuestions_requestFive_ReturnsFiveDifferentQuestions() {
         val questions = data.randomQuestions(listOf("matematica"), 5)
-        val ids = questions.map { it.id }
-        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_1, testSetup.QUESTION_TRIVIA_ID_2, testSetup.QUESTION_TRIVIA_ID_3,
-                testSetup.QUESTION_TRIVIA_ID_4)
+        Truth.assertThat(questions.size).isEqualTo(5)
+        val ids = arrayListOf<String>()
+        questions.forEach {
+            Truth.assertThat(ids).doesNotContain(it.id)
+            ids.add(it.id)
+        }
+    }
+
+    @Test
+    fun randomQuestions_requestAHundred_ReturnsMaxOfDifferentQuestions() {
+        val questions = data.randomQuestions(listOf("matematica"), 100)
+        Truth.assertThat(questions.size).isLessThan(50)
+        val ids = arrayListOf<String>()
+        questions.forEach {
+            Truth.assertThat(ids).doesNotContain(it.id)
+            ids.add(it.id)
+        }
     }
 
     @Test

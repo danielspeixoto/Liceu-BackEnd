@@ -45,8 +45,8 @@ class MongoUserRepository(
                 user.instagramProfile,
                 user.description,
                 user.website,
-                user.followers,
-                user.following
+                user.followers?.map { ObjectId(it) },
+                user.following?.map { ObjectId(it) }
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
         if (user != null) {
@@ -139,7 +139,7 @@ class MongoUserRepository(
 
     override fun updateAddUserToProducerFollowerList(userId: String, producerId: String): Long {
         val update = Update()
-        update.addToSet("followers",userId)
+        update.addToSet("followers", ObjectId(userId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
                 update,
@@ -150,7 +150,7 @@ class MongoUserRepository(
 
     override fun updateRemoveUserToProducerFollowerList(userId: String, producerId: String): Long {
         val update = Update()
-        update.pull("followers",userId)
+        update.pull("followers", ObjectId(userId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
                 update,
@@ -161,7 +161,7 @@ class MongoUserRepository(
 
     override fun updateAddProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.addToSet("following",producerId)
+        update.addToSet("following", ObjectId(producerId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -172,7 +172,7 @@ class MongoUserRepository(
 
     override fun updateRemoveProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.pull("following",producerId)
+        update.pull("following", ObjectId(producerId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -191,6 +191,14 @@ class MongoUserRepository(
         } else {
             throw ItemNotFoundException()
         }
+    }
+
+    override fun userExists(userId: String): Boolean {
+        val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
+        val agg = Aggregation.newAggregation(match)
+        val results = template.aggregate(
+                agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
+        return results.count() > 0
     }
 
     override fun getChallengesFromUserById(userId: String): List<Challenge> {
@@ -278,8 +286,8 @@ class MongoUserRepository(
                 mongoUser.instagramProfile,
                 mongoUser.description,
                 mongoUser.website,
-                mongoUser.followers,
-                mongoUser.following
+                mongoUser.followers?.map { it.toHexString() },
+                mongoUser.following?.map { it.toHexString() }
         )
     }
 

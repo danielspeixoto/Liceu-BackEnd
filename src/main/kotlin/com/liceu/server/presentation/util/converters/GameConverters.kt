@@ -1,4 +1,4 @@
-package com.liceu.server.presentation.converters
+package com.liceu.server.presentation.util.converters
 
 import com.liceu.server.domain.game.Answer
 import com.liceu.server.domain.game.Game
