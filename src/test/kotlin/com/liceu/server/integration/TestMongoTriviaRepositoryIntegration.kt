@@ -59,7 +59,7 @@ class TestMongoTriviaRepositoryIntegration {
 
     @Test
     fun randomQuestions_requestOnlyOne_returnsOne() {
-        val questions = data.randomQuestions(listOf("historia"), 5)
+        val questions = data.randomQuestions(listOf("historia"), 1)
         Truth.assertThat(questions.size).isEqualTo(1)
     }
 
