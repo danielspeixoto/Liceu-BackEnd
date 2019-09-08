@@ -38,7 +38,7 @@ class MongoTriviaRepository(
         if(amount == 0){
             return emptyList()
         }
-        val sample = Aggregation.sample(amount.toLong() + 5)
+        val sample = Aggregation.sample(amount.toLong())
         val agg = Aggregation.newAggregation(sample)
 
         val results = template.aggregate(agg, MongoDatabase.TRIVIA_COLLECTION, MongoDatabase.MongoTriviaQuestion::class.java)

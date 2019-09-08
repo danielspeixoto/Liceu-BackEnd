@@ -345,8 +345,8 @@ class DataSetup {
                 null,
                 null,
                 listOf(
-                        USER_ID_3,
-                        USER_ID_4
+                        ObjectId(USER_ID_3),
+                        ObjectId(USER_ID_4)
                 )
         )
         user1.id = ObjectId(USER_ID_1)
@@ -392,11 +392,11 @@ class DataSetup {
                 "alguma descrição maneira",
                 "www.umsite.com.br",
                 listOf(
-                        USER_ID_1
+                        ObjectId(USER_ID_1)
                 ),
                 listOf(
-                        USER_ID_2,
-                        USER_ID_4
+                        ObjectId(USER_ID_2),
+                        ObjectId(USER_ID_4)
                 )
         )
         user3.id = ObjectId(USER_ID_3)
@@ -421,7 +421,7 @@ class DataSetup {
                 null,
                 null,
                 listOf(
-                        USER_ID_1
+                        ObjectId(USER_ID_1)
                 )
         )
         user4.id = ObjectId(USER_ID_4)

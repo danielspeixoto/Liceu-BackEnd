@@ -44,7 +44,7 @@ class MongoPostRepository(
                 postToInsert.submissionDate,
                 postToInsert.comments?.map { MongoDatabase.MongoComment(
                         ObjectId(postToInsert.userId+Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()).toString()),
-                        it.userId,
+                        ObjectId(it.userId),
                         it.author,
                         it.comment
                 ) },
@@ -143,8 +143,8 @@ class MongoPostRepository(
                 mongoPost.submissionDate,
                 mongoPost.comments?.map {
                     PostComment(
-                            it.id,
-                            it.userId,
+                            it.id.toHexString(),
+                            it.userId.toHexString(),
                             it.author,
                             it.comment
                     )

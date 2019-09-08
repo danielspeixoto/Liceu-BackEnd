@@ -65,7 +65,7 @@ class TestUser: TestSystem("/v2/user") {
     }
 
     @Test
-    fun userID_doestNofFollow_followingIsFalse(){
+    fun userID_notFollowingUser_followingIsFalse(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -246,6 +246,33 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(activitiesProducer.size).isEqualTo(2)
         Truth.assertThat(activitiesProducer[0].type).isEqualTo("followedUser")
     }
+
+    @Test
+    fun updateProducerToBeFollowed_producerIdInvalid_throwsError(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                null, headers)
+        val response = restTemplate
+                .exchange<Void>("$baseUrl/undefined/followers", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @Test
+    fun updateProducerToBeFollowed_producerDoesNotExists_throwsError(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                null, headers)
+        val response = restTemplate
+                .exchange<Void>("$baseUrl/aaaa49a4bdb40abd5ae1e431/followers", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+    }
+
 
     @Test
     fun updateProducerToBeUnfollowed_usersExists_verifyUserAndProducer(){

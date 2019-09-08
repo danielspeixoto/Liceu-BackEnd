@@ -47,7 +47,7 @@ class GetChallenge(
                 ))
                 return it
             }
-            val trivias = triviaRepository.randomQuestions(listOf(), 5)
+            val trivias = triviaRepository.randomQuestions(listOf(), 10)
             val challengeId = challengeRepository.createChallenge(ChallengeToInsert(
                     userId,
                     null,

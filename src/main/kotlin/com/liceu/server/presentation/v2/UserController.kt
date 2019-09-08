@@ -5,6 +5,7 @@ import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.*
+import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -559,32 +560,7 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            when (e) {
-                is ValidationException, is ClassCastException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.BAD_REQUEST)
-                }
-                is AuthenticationException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.UNAUTHORIZED)
-                }
-                else -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-                }
-            }
+            handleException(e, eventName, eventTags, networkData)
         }
     }
 

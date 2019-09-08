@@ -277,7 +277,4 @@ class TestMongoUserRepositoryIntegration {
         assertThat(userAfter.following?.size).isEqualTo(2)
     }
 
-
-
-
 }

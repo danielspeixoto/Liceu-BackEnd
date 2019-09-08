@@ -2,8 +2,8 @@ package com.liceu.server.presentation.v2
 
 import com.liceu.server.domain.game.GameBoundary
 import com.liceu.server.domain.global.*
-import com.liceu.server.presentation.converters.GameConverters.toGameResponse
-import com.liceu.server.presentation.converters.GameResponse
+import com.liceu.server.presentation.util.converters.GameConverters.toGameResponse
+import com.liceu.server.presentation.util.converters.GameResponse
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
