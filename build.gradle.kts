@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -25,10 +27,10 @@ repositories {
 }
 
 dependencies {
+    implementation(group = "com.google.cloud", name = "google-cloud-storage", version = "1.36.0")
     implementation(group = "com.google.auth", name = "google-auth-library-credentials", version = "0.16.2")
     implementation(group = "com.google.apis", name = "google-api-services-oauth2", version = "v2-rev151-1.25.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-//	implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -58,6 +60,13 @@ dependencies {
 
 }
 
+tasks.test {
+    testLogging {
+        events = setOf(TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
+        exceptionFormat = TestExceptionFormat.FULL
+    }
+    failFast = true
+}
 
 tasks.withType<Test> {
     useJUnitPlatform()

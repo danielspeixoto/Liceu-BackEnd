@@ -67,7 +67,7 @@ class TestUserLocation: TestSystem("/v2/user") {
 
         val entity = HttpEntity(null, headers)
         val response = restTemplate
-                .exchange<List<HashMap<String, Any>>>("$baseUrl?nameRequired=user&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
+                .exchange<List<HashMap<String, Any>>>("$baseUrl?name=user&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(3)
@@ -81,7 +81,7 @@ class TestUserLocation: TestSystem("/v2/user") {
 
         val entity = HttpEntity(null, headers)
         val response = restTemplate
-                .exchange<List<HashMap<String, Any>>>("$baseUrl?nameRequired=man i&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
+                .exchange<List<HashMap<String, Any>>>("$baseUrl?name=man i&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(1)
@@ -96,7 +96,7 @@ class TestUserLocation: TestSystem("/v2/user") {
 
         val entity = HttpEntity(null, headers)
         val response = restTemplate
-                .exchange<List<HashMap<String, Any>>>("$baseUrl?nameRequired= mán i&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
+                .exchange<List<HashMap<String, Any>>>("$baseUrl?name= mán i&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(1)
@@ -111,7 +111,7 @@ class TestUserLocation: TestSystem("/v2/user") {
 
         val entity = HttpEntity(null, headers)
         val response = restTemplate
-                .exchange<Void>("$baseUrl?nameRequired=&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
+                .exchange<Void>("$baseUrl?name=&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
@@ -123,7 +123,7 @@ class TestUserLocation: TestSystem("/v2/user") {
 
         val entity = HttpEntity(null, headers)
         val response = restTemplate
-                .exchange<Void>("$baseUrl?nameRequired=1231&longitude=-44.30&latitude=-2.55&amount=0", HttpMethod.GET, entity)
+                .exchange<Void>("$baseUrl?name=1231&longitude=-44.30&latitude=-2.55&amount=0", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
 
     }
@@ -136,7 +136,7 @@ class TestUserLocation: TestSystem("/v2/user") {
 
         val entity = HttpEntity(null, headers)
         val response = restTemplate
-                .exchange<Void>("$baseUrl?nameRequired=1231&longitude=-44.30&latitude=oi&amount=10", HttpMethod.GET, entity)
+                .exchange<Void>("$baseUrl?name=1231&longitude=-44.30&latitude=oi&amount=10", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -148,7 +148,7 @@ class TestUserLocation: TestSystem("/v2/user") {
 
         val entity = HttpEntity(null, headers)
         val response = restTemplate
-                .exchange<Void>("$baseUrl?nameRequired=1231&longitude=ahah&latitude=-32.53&amount=10", HttpMethod.GET, entity)
+                .exchange<Void>("$baseUrl?name=1231&longitude=ahah&latitude=-32.53&amount=10", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 

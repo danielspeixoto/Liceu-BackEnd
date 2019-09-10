@@ -24,6 +24,7 @@ class MongoDatabase {
         const val TRIVIA_COLLECTION = "trivia"
         const val CHALLENGE_COLLECTION = "challenge"
         const val POST_COLLECTION = "post"
+        const val ACTIVITIES_COLLECTION = "activities"
     }
 
     @Document(collection = MongoDatabase.VIDEO_COLLECTION)
@@ -87,9 +88,9 @@ class MongoDatabase {
     @Document(collection = MongoDatabase.USER_COLLECTION)
     data class MongoUser(
             var name: String,
-            @Indexed(unique=true) var email: String,
+            var email: String,
             var picture: MongoPicture,
-            var facebookId: String,
+            @Indexed(unique=true) var facebookId: String,
             @GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE) var location: GeoJsonPoint?,
             var state: String?,
             var school: String?,
@@ -98,8 +99,8 @@ class MongoDatabase {
             var instagramProfile: String?,
             var description: String?,
             var website: String?,
-            var amountOfFollowers: Int?,
-            var following: List<String>?
+            var followers: List<ObjectId>?,
+            var following: List<ObjectId>?
     ) {
         @Id
         lateinit var id: ObjectId
@@ -164,7 +165,10 @@ class MongoDatabase {
             val question: String,
             val correctAnswer: String,
             val wrongAnswer: String,
-            val tags: List<String>
+            val tags: List<String>,
+            val comments: List<MongoComment>?,
+            val likes: Int?,
+            val dislikes: Int?
     ) {
         @Id
         lateinit var id: ObjectId
@@ -178,7 +182,10 @@ class MongoDatabase {
             val question: String,
             val correctAnswer: String,
             val wrongAnswer: String,
-            val tags: List<String>
+            val tags: List<String>,
+            val comments: List<MongoComment>?,
+            val likes: Int?,
+            val dislikes: Int?
     )
 
 
@@ -202,23 +209,50 @@ class MongoDatabase {
     data class MongoPost(
         val userId: ObjectId,
         val type: String,
-        val text: String?,
-        val image: MongoPostImage?,
-        val video: MongoPostVideo?
+        val description: String,
+        val imageURL: String?,
+        val video: MongoPostVideo?,
+        val submissionDate: Date,
+        val comments: List<MongoComment>?,
+        val questions: List<MongoPostQuestions>?
     ){
         @Id
         lateinit var id: ObjectId
     }
 
-    data class MongoPostImage(
-            val imageURL: String?,
-            val description: String?
-    )
-
     data class MongoPostVideo(
             val videoUrl: String?,
-            val description: String?,
-            var thumbnails: Thumbnails?
+            val thumbnails: MongoPostThumbnails?
     )
+
+    data class MongoPostThumbnails(
+            var high: String?,
+            var default: String?,
+            var medium: String?
+    )
+
+    data class MongoComment(
+            var id: ObjectId,
+            var userId: ObjectId,
+            var author: String,
+            var comment: String
+    )
+
+    data class MongoPostQuestions(
+            var question: String,
+            var correctAnswer: String,
+            var otherAnswers: List<String>
+    )
+
+    @Document(collection = MongoDatabase.ACTIVITIES_COLLECTION)
+    data class MongoActivities(
+        val userId: ObjectId,
+        val type: String,
+        val params: HashMap<String,Any>,
+        val submissionDate: Date
+    ){
+        @Id
+        lateinit var id: ObjectId
+    }
 
 }

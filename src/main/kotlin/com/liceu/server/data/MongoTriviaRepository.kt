@@ -1,5 +1,6 @@
 package com.liceu.server.data
 
+import com.liceu.server.domain.trivia.PostComment
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.trivia.TriviaQuestionToInsert
@@ -7,6 +8,9 @@ import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.mongodb.core.query.Update
+import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
 
 
@@ -22,7 +26,10 @@ class MongoTriviaRepository(
             triviaQuestion.question,
             triviaQuestion.correctAnswer,
             triviaQuestion.wrongAnswer,
-            triviaQuestion.tags
+            triviaQuestion.tags,
+            null,
+            null,
+            null
         ))
         return result.id.toHexString()
     }
@@ -31,20 +38,59 @@ class MongoTriviaRepository(
         if(amount == 0){
             return emptyList()
         }
-        val sample = Aggregation.sample(amount.toLong() + 5)
+        val sample = Aggregation.sample(amount.toLong())
         val agg = Aggregation.newAggregation(sample)
 
         val results = template.aggregate(agg, MongoDatabase.TRIVIA_COLLECTION, MongoDatabase.MongoTriviaQuestion::class.java)
-        return results.map {
-            TriviaQuestion(
-                    it.id.toHexString(),
-                    it.userId.toString(),
-                    it.question,
-                    it.correctAnswer,
-                    it.wrongAnswer,
-                    it.tags
-            )
-        }
+        return results.map {toTriviaQuestion(it)}
+    }
+
+    override fun updateListOfComments(questionId: String, userId: String, author: String, comment: String): Long {
+        val update = Update()
+        val id = ObjectId()
+        val commentToBeInserted = MongoDatabase.MongoComment(
+                id,
+                ObjectId(userId),
+                author,
+                comment
+        )
+        update.addToSet("comments",commentToBeInserted)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(questionId))),
+                update,
+                MongoDatabase.MongoTriviaQuestion::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun getTriviaById(questionId: String): TriviaQuestion {
+        val match = Aggregation.match(Criteria.where("_id").isEqualTo(ObjectId(questionId)))
+        val agg = Aggregation.newAggregation(match)
+        val result = template.aggregate(agg,MongoDatabase.TRIVIA_COLLECTION,MongoDatabase.MongoTriviaQuestion::class.java)
+        val retrievedQuestion = result.map {toTriviaQuestion(it)}
+        return retrievedQuestion[0]
+    }
+
+    override fun updateLike(questionId: String): Long {
+        val update = Update()
+        update.inc("likes",1)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(questionId))),
+                update,
+                MongoDatabase.MongoTriviaQuestion::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateDislike(questionId: String): Long {
+        val update = Update()
+        update.inc("dislikes",1)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(questionId))),
+                update,
+                MongoDatabase.MongoTriviaQuestion::class.java
+        )
+        return result.modifiedCount
     }
 
 
@@ -55,7 +101,17 @@ class MongoTriviaRepository(
                 answer.question,
                 answer.correctAnswer,
                 answer.wrongAnswer,
-                answer.tags
+                answer.tags,
+                answer.comments?.map {
+                    PostComment(
+                            it.id,
+                            it.userId,
+                            it.author,
+                            it.comment
+                    )
+                },
+                answer.likes,
+                answer.dislikes
         )
     }
 

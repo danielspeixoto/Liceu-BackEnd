@@ -7,6 +7,7 @@ import com.liceu.server.data.MongoTriviaRepository
 import com.liceu.server.data.TriviaRepository
 import com.liceu.server.domain.trivia.TriviaQuestionToInsert
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -56,22 +57,32 @@ class TestMongoTriviaRepositoryIntegration {
         Truth.assertThat(report.wrongAnswer).isEqualTo("1")
     }
 
-
-//    @Test
-    fun randomQuestions_requestOnlyOne_returnsExistent() {
-        // Test will fail temporarily to avoid mongo sample aggregation error
-        val questions = data.randomQuestions(listOf("historia"), 5)
-        val ids = questions.map { it.id }
-        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_5)
+    @Test
+    fun randomQuestions_requestOnlyOne_returnsOne() {
+        val questions = data.randomQuestions(listOf("historia"), 1)
+        Truth.assertThat(questions.size).isEqualTo(1)
     }
 
-//    @Test
-    fun randomQuestions_requestMajoraty_returnsExistent() {
-        // Test will fail temporarily to avoid mongo sample aggregation error
+    @Test
+    fun randomQuestions_requestFive_ReturnsFiveDifferentQuestions() {
         val questions = data.randomQuestions(listOf("matematica"), 5)
-        val ids = questions.map { it.id }
-        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_1, testSetup.QUESTION_TRIVIA_ID_2, testSetup.QUESTION_TRIVIA_ID_3,
-                testSetup.QUESTION_TRIVIA_ID_4)
+        Truth.assertThat(questions.size).isEqualTo(5)
+        val ids = arrayListOf<String>()
+        questions.forEach {
+            Truth.assertThat(ids).doesNotContain(it.id)
+            ids.add(it.id)
+        }
+    }
+
+    @Test
+    fun randomQuestions_requestAHundred_ReturnsMaxOfDifferentQuestions() {
+        val questions = data.randomQuestions(listOf("matematica"), 100)
+        Truth.assertThat(questions.size).isLessThan(50)
+        val ids = arrayListOf<String>()
+        questions.forEach {
+            Truth.assertThat(ids).doesNotContain(it.id)
+            ids.add(it.id)
+        }
     }
 
     @Test
@@ -82,6 +93,49 @@ class TestMongoTriviaRepositoryIntegration {
                 testSetup.QUESTION_TRIVIA_ID_4,testSetup.QUESTION_TRIVIA_ID_5)
     }
 
+    @Test
+    fun updateCommentsTrivia_commentValid_verifyTrivia(){
+        val result1 = data.updateListOfComments(testSetup.QUESTION_TRIVIA_ID_1,testSetup.USER_ID_2,"user2","questao interessante 1")
+        val result2 = data.updateListOfComments(testSetup.QUESTION_TRIVIA_ID_1,testSetup.USER_ID_2,"user2","questao interessante 2")
+        val result3= data.updateListOfComments(testSetup.QUESTION_TRIVIA_ID_1,testSetup.USER_ID_2,"user2","questao interessante 3")
+        Truth.assertThat(result1).isEqualTo(1)
+        Truth.assertThat(result2).isEqualTo(1)
+        Truth.assertThat(result3).isEqualTo(1)
+        val triviaChanged = data.getTriviaById(testSetup.QUESTION_TRIVIA_ID_1)
+        Truth.assertThat(triviaChanged.comments?.size).isEqualTo(3)
+        Truth.assertThat(triviaChanged.comments?.get(0)?.comment).isEqualTo("questao interessante 1")
+        Truth.assertThat(triviaChanged.comments?.get(1)?.comment).isEqualTo("questao interessante 2")
+    }
+    @Test
+    fun updateLikeTrivia_valid_verifyTrivia(){
+        val result1 = data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        Truth.assertThat(result1).isEqualTo(1)
+        data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateLike(testSetup.QUESTION_TRIVIA_ID_1)
+        val triviaUpdated = data.getTriviaById(testSetup.QUESTION_TRIVIA_ID_1)
+        Truth.assertThat(triviaUpdated.likes).isEqualTo(12)
+    }
 
-
+    @Test
+    fun updateDislikeTrivia_valid_verifyTrivia(){
+        val result1 = data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        Truth.assertThat(result1).isEqualTo(1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        data.updateDislike(testSetup.QUESTION_TRIVIA_ID_1)
+        val triviaUpdated = data.getTriviaById(testSetup.QUESTION_TRIVIA_ID_1)
+        Truth.assertThat(triviaUpdated.dislikes).isEqualTo(14)
+    }
 }

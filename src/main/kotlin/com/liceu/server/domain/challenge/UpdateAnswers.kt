@@ -1,14 +1,19 @@
 package com.liceu.server.domain.challenge
 
 import com.liceu.server.data.MongoChallengeRepository
+import com.liceu.server.domain.activities.ActivityBoundary
+import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.ANSWERS
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.global.UPDATE
+import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
 
 class UpdateAnswers(
-        private val challengeRepository: MongoChallengeRepository
+        private val challengeRepository: MongoChallengeRepository,
+        private val activityRepository: ActivityBoundary.IRepository
+
 ): ChallengeBoundary.IUpdateAnswers{
 
     companion object {
@@ -27,6 +32,24 @@ class UpdateAnswers(
                 }
             }
             challengeRepository.updateAnswers(challengeId,isChallenger,answers,result)
+            activityRepository.insertActivity(ActivityToInsert(
+                    challenge.challenger,
+                    "challengeFinished",
+                    hashMapOf(
+                            "challengeId" to challenge.id,
+                            "challengedId" to challenge.challenged!!
+                    ),
+                    TimeStamp.retrieveActualTimeStamp()
+            ))
+            activityRepository.insertActivity(ActivityToInsert(
+                    challenge.challenged!!,
+                    "challengeFinished",
+                    hashMapOf(
+                            "challengeId" to challenge.id,
+                            "challengedId" to  challenge.challenger
+                    ),
+                    TimeStamp.retrieveActualTimeStamp()
+            ))
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS, e)
             throw e

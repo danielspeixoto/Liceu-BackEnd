@@ -1,16 +1,25 @@
 language: java
 jdk:
-  - oraclejdk8
+  - oraclejdk12
 
 services:
-  - docker
+  - mongodb
 
 before_install:
-  - docker pull mongo
-  - docker run -d -p 27017:27017 --name deffishdb mongo
-  - docker ps -a
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
 
-script:
-  - ./gradlew test
+jobs:
+  include:
+    - stage: integration testing
+      env:
+        - MONGO_CONNECTION="mongodb://localhost:27017"
+        - DB_NAME=test
+      script:
+        - ./gradlew test --tests "com.liceu.server.integration.**" --info
+    - stage: system testing
+      env:
+        - MONGO_CONNECTION="mongodb://localhost:27017"
+        - DB_NAME=test
+      script:
+        - ./gradlew test --tests "com.liceu.server.system.**" --info

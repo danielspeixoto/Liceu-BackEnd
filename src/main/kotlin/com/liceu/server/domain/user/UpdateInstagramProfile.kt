@@ -6,7 +6,7 @@ import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.util.Logging
 
 class UpdateInstagramProfile(
-    private val userRepo: MongoUserRepository
+    private val userRepo: UserBoundary.IRepository
 ): UserBoundary.IUpdateInstagramProfile {
 
     companion object {
@@ -24,8 +24,7 @@ class UpdateInstagramProfile(
                     "userId" to userId,
                     "instagramProfile" to instagramProfile
             ))
-            var instagramProfileURL = "https://www.instagram.com/$instagramProfile/"
-            userRepo.updateInstagramProfileFromUser(userId,instagramProfileURL)
+            userRepo.updateInstagramProfileFromUser(userId,instagramProfile)
         }catch (e: Exception){
             Logging.error(EVENT_NAME,TAGS,e)
             throw  e

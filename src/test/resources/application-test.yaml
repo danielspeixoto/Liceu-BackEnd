@@ -6,12 +6,14 @@ google:
   clientId:  851853196382-6dr3s1jb1ee3ejt7i4iselu4vej3rmbq.apps.googleusercontent.com
   clientSecret: sm2sA37l2SshglMRa7PTAYz1
 
+facebook:
+  accessToken: EAAf4pgUyFpsBAHYdiJshCwOp7BTopaJuwhNv8WiZCyvalIomy37uXZA9Lis97EzR1FCdm8glnuDCVlbfsZB96MrZBtigPu3hfaOFacIOApneTiciJ7wUTPZBYdA5fP2bCJs4DYbfp3oLJwWLnUzyRilI6CdPVZBQPCGLkzbFZCG1smDUYBFCM9ZCbCZA3ZBWCR5p6rc899gWuk1QZDZD
 client:
   api_key: apikey
 
 mongo:
-  dbName: test
-  uri:  mongodb://localhost:27017
+  dbName: ${DB_NAME:test}
+  uri:  ${MONGO_CONNECTION:mongodb://localhost:27017}
 
 dev: true
 

@@ -3,14 +3,13 @@ package com.liceu.server.data
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.global.ItemNotFoundException
+import com.liceu.server.domain.trivia.PostComment
 import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
-import com.mongodb.Mongo
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
-import org.springframework.data.geo.Metrics
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.aggregation.Aggregation.limit
@@ -46,8 +45,8 @@ class MongoUserRepository(
                 user.instagramProfile,
                 user.description,
                 user.website,
-                user.amountOfFollowers,
-                user.following
+                user.followers?.map { ObjectId(it) },
+                user.following?.map { ObjectId(it) }
         )
         val user = template.findOne<MongoDatabase.MongoUser>(query)
         if (user != null) {
@@ -138,9 +137,9 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
-    override fun updateProducerToBeFollowed(producerId: String): Long {
+    override fun updateAddUserToProducerFollowerList(userId: String, producerId: String): Long {
         val update = Update()
-        update.inc("amountOfFollowers",1)
+        update.addToSet("followers", ObjectId(userId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
                 update,
@@ -149,9 +148,9 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
-    override fun updateProducerToBeUnfollowed(producerId: String): Long {
+    override fun updateRemoveUserToProducerFollowerList(userId: String, producerId: String): Long {
         val update = Update()
-        update.inc("amountOfFollowers",-1)
+        update.pull("followers", ObjectId(userId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(producerId))),
                 update,
@@ -162,7 +161,7 @@ class MongoUserRepository(
 
     override fun updateAddProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.addToSet("following",producerId)
+        update.addToSet("following", ObjectId(producerId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -173,7 +172,7 @@ class MongoUserRepository(
 
     override fun updateRemoveProducerToFollowingList(userId: String, producerId: String): Long {
         val update = Update()
-        update.pull("following",producerId)
+        update.pull("following", ObjectId(producerId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,
@@ -186,33 +185,20 @@ class MongoUserRepository(
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
         val agg = Aggregation.newAggregation(match)
         val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
-        val userRetrieved = results.map {
-            User(
-                    it.id.toHexString(),
-                    it.name,
-                    it.email,
-                    Picture(
-                            it.picture.url,
-                            it.picture.width,
-                            it.picture.height
-                    ),
-                    it.location,
-                    it.state,
-                    it.school,
-                    it.age,
-                    it.youtubeChannel,
-                    it.instagramProfile,
-                    it.description,
-                    it.website,
-                    it.amountOfFollowers,
-                    it.following
-            )
-        }
+        val userRetrieved = results.map {toUser(it)}
         if (userRetrieved.isNotEmpty()) {
             return userRetrieved[0]
         } else {
             throw ItemNotFoundException()
         }
+    }
+
+    override fun userExists(userId: String): Boolean {
+        val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
+        val agg = Aggregation.newAggregation(match)
+        val results = template.aggregate(
+                agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
+        return results.count() > 0
     }
 
     override fun getChallengesFromUserById(userId: String): List<Challenge> {
@@ -227,7 +213,7 @@ class MongoUserRepository(
 
         val agg = Aggregation.newAggregation(match,sortByDate,limitOfReturnedChallenges)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
-        val challengesRetrieved = results.map {
+        return results.map {
             Challenge(
                     it.id.toHexString(),
                     it.challenger,
@@ -243,13 +229,22 @@ class MongoUserRepository(
                                 triviaQuestion.question,
                                 triviaQuestion.correctAnswer,
                                 triviaQuestion.wrongAnswer,
-                                triviaQuestion.tags
+                                triviaQuestion.tags,
+                                triviaQuestion.comments?.map {
+                                    PostComment(
+                                            it.id,
+                                            it.userId,
+                                            it.author,
+                                            it.comment
+                                    )
+                                },
+                                triviaQuestion.likes,
+                                triviaQuestion.dislikes
                         )
                     },
                     it.submissionDate
             )
         }
-        return challengesRetrieved
     }
 
     override fun getUsersByNameUsingLocation(nameSearched: String, longitude: Double?, latitude: Double?, amount: Int): List<User> {
@@ -269,31 +264,32 @@ class MongoUserRepository(
             agg = Aggregation.newAggregation(match,sample)
         }
         val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
-        return results.map {
-            User(
-                    it.id.toHexString(),
-                    it.name,
-                    it.email,
-                    Picture(
-                            it.picture.url,
-                            it.picture.width,
-                            it.picture.height
-                    ),
-                    it.location,
-                    it.state,
-                    it.school,
-                    it.age,
-                    it.youtubeChannel,
-                    it.instagramProfile,
-                    it.description,
-                    it.website,
-                    it.amountOfFollowers,
-                    it.following
-            )
-        }
+        return results.map {toUser(it)}
     }
 
 
+    fun toUser(mongoUser: MongoDatabase.MongoUser): User{
+        return User(
+                mongoUser.id.toHexString(),
+                mongoUser.name,
+                mongoUser.email,
+                Picture(
+                        mongoUser.picture.url,
+                        mongoUser.picture.width,
+                        mongoUser.picture.height
+                ),
+                mongoUser.location,
+                mongoUser.state,
+                mongoUser.school,
+                mongoUser.age,
+                mongoUser.youtubeChannel,
+                mongoUser.instagramProfile,
+                mongoUser.description,
+                mongoUser.website,
+                mongoUser.followers?.map { it.toHexString() },
+                mongoUser.following?.map { it.toHexString() }
+        )
+    }
 
 }
 

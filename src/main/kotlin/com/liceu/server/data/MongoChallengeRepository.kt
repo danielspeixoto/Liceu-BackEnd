@@ -4,6 +4,7 @@ import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.ChallengeToInsert
 import com.liceu.server.domain.global.ItemNotFoundException
+import com.liceu.server.domain.trivia.PostComment
 import com.liceu.server.domain.trivia.TriviaQuestion
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -35,7 +36,17 @@ class MongoChallengeRepository(
                             it.question,
                             it.correctAnswer,
                             it.wrongAnswer,
-                            it.tags
+                            it.tags,
+                            it.comments?.map {
+                                MongoDatabase.MongoComment(
+                                        it.id,
+                                        it.userId,
+                                        it.author,
+                                        it.comment
+                                )
+                            },
+                            it.likes,
+                            it.dislikes
                     )
                 },
                 matchmaking.submissionDate
@@ -69,7 +80,17 @@ class MongoChallengeRepository(
                                 triviaQuestion.question,
                                 triviaQuestion.correctAnswer,
                                 triviaQuestion.wrongAnswer,
-                                triviaQuestion.tags
+                                triviaQuestion.tags,
+                                triviaQuestion.comments?.map {
+                                    PostComment(
+                                            it.id,
+                                            it.userId,
+                                            it.author,
+                                            it.comment
+                                    )
+                                },
+                                triviaQuestion.likes,
+                                triviaQuestion.dislikes
                         )
                     },
                     it.submissionDate
@@ -98,28 +119,7 @@ class MongoChallengeRepository(
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(challengeId)))
         val agg = Aggregation.newAggregation(match)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
-        val challengeRetrieved = results.map {
-            return Challenge(
-                    it.id.toHexString(),
-                    it.challenger,
-                    it.challenged,
-                    it.answersChallenger,
-                    it.answersChallenged,
-                    it.scoreChallenger,
-                    it.scoreChallenged,
-                    it.triviaQuestionsUsed.map { triviaQuestion ->
-                        TriviaQuestion(
-                                triviaQuestion.id.toHexString(),
-                                triviaQuestion.userId.toHexString(),
-                                triviaQuestion.question,
-                                triviaQuestion.correctAnswer,
-                                triviaQuestion.wrongAnswer,
-                                triviaQuestion.tags
-                        )
-                    },
-                    it.submissionDate
-            )
-        }
+        val challengeRetrieved = results.map { toChallenge(it) }
         if (challengeRetrieved.isNotEmpty()) {
             return challengeRetrieved[0]
         } else {
@@ -148,7 +148,17 @@ class MongoChallengeRepository(
                 answer.question,
                 answer.correctAnswer,
                 answer.wrongAnswer,
-                answer.tags
+                answer.tags,
+                answer.comments?.map {
+                    PostComment(
+                            it.id,
+                            it.userId,
+                            it.author,
+                            it.comment
+                    )
+                },
+                answer.likes,
+                answer.dislikes
         )
     }
 }

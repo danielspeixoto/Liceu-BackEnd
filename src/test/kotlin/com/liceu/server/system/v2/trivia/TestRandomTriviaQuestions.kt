@@ -1,4 +1,4 @@
-package com.liceu.server.system.v2.Trivia
+package com.liceu.server.system.v2.trivia
 
 import com.google.common.truth.Truth
 import com.liceu.server.data.TriviaRepository

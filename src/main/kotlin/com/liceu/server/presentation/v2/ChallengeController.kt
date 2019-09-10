@@ -68,9 +68,7 @@ class ChallengeController(
                 "version" to 2
         ))
         return try{
-
             val listAnswers = body["answers"] as List<String>? ?: throw ValidationException()
-
             updateChallenge.run(challengeId,userId,listAnswers)
             ResponseEntity(HttpStatus.OK)
 

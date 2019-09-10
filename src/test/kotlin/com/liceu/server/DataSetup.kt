@@ -1,9 +1,11 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+
 import com.liceu.server.util.JWTAuth
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration
@@ -13,6 +15,13 @@ import java.util.*
 @Component
 @ContextConfiguration(classes=[TestConfiguration::class])
 class DataSetup {
+
+    @Value("\${facebook.accessToken}")
+    lateinit var facebookAccessToken: String
+    @Value("\${google.clientId}")
+    lateinit var googleClientId: String
+    @Value("\${google.clientSecret}")
+    lateinit var googleClientSecret: String
 
     @Autowired
     lateinit var jwtAuth: JWTAuth
@@ -34,6 +43,20 @@ class DataSetup {
     val CHALLENGE_TRIVIA_ID_4 = "09c54d325b75357a571d4cd2"
     val CHALLENGE_TRIVIA_ID_5 = "09c54d325b75357a571d4ce2"
 
+    val POST_ID_1 = "09c54d325b75357a581d4ca2"
+    val POST_ID_2 = "09c54d325b75357a581d4ca3"
+    val POST_ID_3 = "09c54d325b75357a581d4ca4"
+    val POST_ID_4 = "09c54d325b75357a581d4ca5"
+    val POST_ID_5 = "09c54d325b75357a581d4ca6"
+
+    val ACITIVITY_ID_1 = "0a1449a4bdb40abd5ae1e461"
+    val ACITIVITY_ID_2 = "0a2449a4bdb40abd5ae1e461"
+    val ACITIVITY_ID_3 = "0a3449a4bdb40abd5ae1e461"
+    val ACITIVITY_ID_4 = "0a4449a4bdb40abd5ae1e461"
+    val ACITIVITY_ID_5 = "0a5449a4bdb40abd5ae1e461"
+
+    val COMMENT_ID_1 = "0a4449a4bdb40abd5ae1e461"
+
     val VIDEO_ID_1 = "1a1449a4bdb40abd5ae1e431"
     val VIDEO_ID_2 = "19c54d325b75357a571d4cc2"
     val VIDEO_ID_3 = "17235b2a67c76abebce3f6e6"
@@ -52,9 +75,13 @@ class DataSetup {
     }
 
     val USER_ID_2 = "39c54d325b75357a571d4cc2"
+    val USER_2_ACCESS_TOKEN by lazy {
+        jwtAuth.sign(USER_ID_2)
+    }
+
     val USER_ID_3 = "37235b2a67c76abebce3f6e6"
     val USER_ID_4 = "37235b2a67c76abebce3f6e3"
-    val USER_ID_5 = "37235b2a67c76abebce3h6e8"
+    val USER_ID_5 = "37235b2a67c76abebce3f6e8"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
     val GAME_ID_2 = "49c54d325b75357a571d4cc2"
@@ -80,6 +107,8 @@ class DataSetup {
     lateinit var challengeRepo: ChallengeRepository
     @Autowired
     lateinit var postRepo: PostRepository
+    @Autowired
+    lateinit var activityRepo: ActivityRepository
 
     fun setup() {
         questionRepo.deleteAll()
@@ -89,6 +118,7 @@ class DataSetup {
         triviaRepo.deleteAll()
         challengeRepo.deleteAll()
         postRepo.deleteAll()
+        activityRepo.deleteAll()
         questions()
         videos()
         users()
@@ -96,6 +126,7 @@ class DataSetup {
         trivia()
         challenge()
         post()
+        activity()
     }
 
     fun questions() {
@@ -313,7 +344,10 @@ class DataSetup {
                 null,
                 null,
                 null,
-                null
+                listOf(
+                        ObjectId(USER_ID_3),
+                        ObjectId(USER_ID_4)
+                )
         )
         user1.id = ObjectId(USER_ID_1)
         userRepo.insert(user1)
@@ -350,16 +384,20 @@ class DataSetup {
                 ),
                 "facebookId3",
                 GeoJsonPoint(-11.83, -49.86),
-                //null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                "BA",
+                "MARISTA",
+                18,
+                "Jorginho",
+                "jorge",
+                "alguma descrição maneira",
+                "www.umsite.com.br",
+                listOf(
+                        ObjectId(USER_ID_1)
+                ),
+                listOf(
+                        ObjectId(USER_ID_2),
+                        ObjectId(USER_ID_4)
+                )
         )
         user3.id = ObjectId(USER_ID_3)
         userRepo.insert(user3)
@@ -382,7 +420,9 @@ class DataSetup {
                 null,
                 null,
                 null,
-                null
+                listOf(
+                        ObjectId(USER_ID_1)
+                )
         )
         user4.id = ObjectId(USER_ID_4)
         userRepo.insert(user4)
@@ -542,7 +582,10 @@ class DataSetup {
                         "matematica",
                         "angulos",
                         "trigonometria"
-                )
+                ),
+                null,
+                3,
+                4
         )
         q1.id = ObjectId(QUESTION_TRIVIA_ID_1)
         triviaRepo.insert(q1)
@@ -556,7 +599,10 @@ class DataSetup {
                             "matematica",
                             "angulos",
                             "trigonometria"
-                    )
+                    ),
+                null,
+                null,
+                null
             )
             q2.id = ObjectId(QUESTION_TRIVIA_ID_2)
             triviaRepo.insert(q2)
@@ -570,7 +616,10 @@ class DataSetup {
                             "matematica",
                             "angulos",
                             "trigonometria"
-                    )
+                    ),
+                null,
+                null,
+                null
             )
             q3.id = ObjectId(QUESTION_TRIVIA_ID_3)
             triviaRepo.insert(q3)
@@ -584,7 +633,10 @@ class DataSetup {
                             "matematica",
                             "angulos",
                             "trigonometria"
-                    )
+                    ),
+                null,
+                null,
+                null
             )
             q4.id = ObjectId(QUESTION_TRIVIA_ID_4)
             triviaRepo.insert(q4)
@@ -597,7 +649,10 @@ class DataSetup {
                 listOf(
                         "historia",
                         "descoberta"
-                )
+                ),
+                null,
+                null,
+                null
         )
         q5.id = ObjectId(QUESTION_TRIVIA_ID_5)
         triviaRepo.insert(q5)
@@ -633,7 +688,10 @@ class DataSetup {
                                 listOf(
                                         "matematica",
                                         "algebra"
-                                )
+                                ),
+                                null,
+                                null,
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T19:20:20.00Z"))
@@ -668,7 +726,10 @@ class DataSetup {
                                 listOf(
                                         "graficos",
                                         "algebra"
-                                )
+                                ),
+                                null,
+                                null,
+                                null
                         ),
                         MongoDatabase.MongoChallengeTrivia(
                                 ObjectId(QUESTION_TRIVIA_ID_1),
@@ -679,7 +740,10 @@ class DataSetup {
                                 listOf(
                                         "graficos",
                                         "algebra"
-                                )
+                                ),
+                                null,
+                                null,
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
@@ -710,7 +774,17 @@ class DataSetup {
                                 listOf(
                                         "matematica",
                                         "algebra"
-                                )
+                                ),
+                                listOf(
+                                        MongoDatabase.MongoComment(
+                                                ObjectId(COMMENT_ID_1),
+                                                ObjectId(USER_ID_1),
+                                                "user1",
+                                                "essa questao e boa"
+                                        )
+                                ),
+                                null,
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-06-11T11:20:20.00Z"))
@@ -740,7 +814,10 @@ class DataSetup {
                                 listOf(
                                         "matematica",
                                         "algebra"
-                                )
+                                ),
+                                null,
+                                null,
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T19:20:20.00Z"))
@@ -766,7 +843,10 @@ class DataSetup {
                                 listOf(
                                         "matematica",
                                         "algebra"
-                                )
+                                ),
+                                null,
+                                null,
+                                null
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
@@ -775,7 +855,131 @@ class DataSetup {
         challengeRepo.insert(ch5)
     }
     fun post(){
+        val post1 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_1),
+                "text",
+                "teste de texto",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
+                null,
+                listOf(
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Einstein?",
+                                "Albert",
+                                listOf(
+                                        "José","Albertonio","Lucas"
+                                )
+                        ),
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Newton?",
+                                "Isaac",
+                                listOf(
+                                        "José","Albertonio","Albert"
+                                )
+                        )
+                )
+        )
+        post1.id = ObjectId(POST_ID_1)
+        postRepo.insert(post1)
+        val post2 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_2),
+                "text",
+                "teste de texto 2",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
+                null,
+                listOf(
+                        MongoDatabase.MongoPostQuestions(
+                                "Qual o primeiro nome de Einstein?",
+                                "Albert",
+                                listOf(
+                                        "José","Albertonio","Lucas"
+                                )
+                        )
+                )
+        )
+        post2.id = ObjectId(POST_ID_2)
+        postRepo.insert(post2)
+        val post3 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_4),
+                "video",
+                "teste de video",
+                null,
+                MongoDatabase.MongoPostVideo(
+                        "asassa",
+                        MongoDatabase.MongoPostThumbnails(
+                                "high",
+                                "default",
+                                "medium"
+                        )
+                ),
+                Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
+                null
+        )
+        post3.id = ObjectId(POST_ID_3)
+        postRepo.insert(post3)
+        val post4 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_3),
+                "text",
+                "teste de texto 2",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
+                null,
+                null
+        )
+        post4.id = ObjectId(POST_ID_4)
+        postRepo.insert(post4)
+        val post5 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_3),
+                "text",
+                "teste de texto 2",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
+                null,
+                null
+        )
+        post5.id = ObjectId(POST_ID_5)
+        postRepo.insert(post5)
+    }
+    fun activity(){
+        val activity1 = MongoDatabase.MongoActivities(
+                ObjectId(USER_ID_1),
+                "followedUser",
+                hashMapOf(
+                        "followedBy" to USER_ID_2
+                ),
+                Date.from(Instant.parse("2019-08-27T13:40:20.00Z"))
+        )
+        activity1.id = ObjectId(ACITIVITY_ID_1)
+        activityRepo.insert(activity1)
 
+        val activity2 = MongoDatabase.MongoActivities(
+                ObjectId(USER_ID_1),
+                "triviaFinished",
+                hashMapOf(
+                        "challengerId" to USER_ID_2,
+                        "triviaId" to CHALLENGE_TRIVIA_ID_1
+                ),
+                Date.from(Instant.parse("2019-08-28T13:40:20.00Z"))
+        )
+        activity2.id = ObjectId(ACITIVITY_ID_2)
+        activityRepo.insert(activity2)
+
+        val activity3 = MongoDatabase.MongoActivities(
+                ObjectId(USER_ID_2),
+                "unfollowedUser",
+                hashMapOf(
+                        "unfollowedBy" to USER_ID_2
+                ),
+                Date.from(Instant.parse("2019-08-27T13:40:20.00Z"))
+        )
+        activity3.id = ObjectId(ACITIVITY_ID_3)
+        activityRepo.insert(activity3)
     }
 }
 

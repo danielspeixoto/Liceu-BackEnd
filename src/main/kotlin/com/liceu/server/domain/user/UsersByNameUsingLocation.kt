@@ -8,9 +8,9 @@ import java.lang.Exception
 import java.text.Normalizer
 
 class UsersByNameUsingLocation(
-    private val userRepo: MongoUserRepository,
+    private val userRepo: UserBoundary.IRepository,
     private val maxResults: Int,
-    private val REGEX_UNACCENT: Regex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
+    private val REGEX_UNACCENT: Regex = "\\p{InCombiningDiacriticalMarks}+".toRegex() //REGEX to remove special characters and accentuation
 ): UserBoundary.IGetUsersByNameUsingLocation {
 
     companion object{
@@ -41,7 +41,7 @@ class UsersByNameUsingLocation(
         }
         try {
             if(nameSearched.length <= 3){
-                throw OverflowSizeException("It needs more than 3 characters")
+                throw OverflowSizeException("Name searched needs more than 3 characters")
             }
             var nameNormalized = Normalizer.normalize(nameSearched, Normalizer.Form.NFD)
             nameNormalized = REGEX_UNACCENT.replace(nameNormalized, "").trim()
