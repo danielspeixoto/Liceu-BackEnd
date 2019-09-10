@@ -1,4 +1,4 @@
-package com.liceu.server.system.v2.post
+package com.liceu.server.system.v2.feed
 
 import com.google.common.truth.Truth
 import com.liceu.server.data.PostRepository
@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus
 import java.time.Instant
 import java.util.*
 
-class TestGetPosts: TestSystem("/v2/post")  {
+class TestGetPosts: TestSystem("/v2/feed")  {
     @Autowired
     lateinit var postRepo: PostRepository
 
@@ -52,41 +52,5 @@ class TestGetPosts: TestSystem("/v2/post")  {
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(1)
         Truth.assertThat(body[0]["type"]).isEqualTo("video")
-    }
-
-    @Test
-    fun getPostsFromUser_PostsExists_returnPosts() {
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/3a1449a4bdb40abd5ae1e431", HttpMethod.GET, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        val body = response.body!!
-        Truth.assertThat(body.size).isEqualTo(1)
-    }
-
-    @Test
-    fun getRandomPosts_PostsExists_returnListOfPosts(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/explore?amount=10", HttpMethod.GET, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        val body = response.body!!
-        Truth.assertThat(body.size).isEqualTo(5)
-    }
-
-    @Test
-    fun getRandomPosts_amountZero_returnEmptyList(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/explore?amount=0", HttpMethod.GET, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        val body = response.body!!
-        Truth.assertThat(body).isEmpty()
     }
 }

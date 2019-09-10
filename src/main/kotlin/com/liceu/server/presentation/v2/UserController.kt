@@ -3,8 +3,11 @@ package com.liceu.server.presentation.v2
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.global.*
+import com.liceu.server.domain.post.PostBoundary
 import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.*
+import com.liceu.server.presentation.util.converters.PostResponse
+import com.liceu.server.presentation.util.converters.toPostResponse
 import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
@@ -31,7 +34,8 @@ class UserController (
         @Autowired val updateWebsite: UserBoundary.IUpdateWebsite,
         @Autowired val updateProducerToBeFollowed: UserBoundary.IUpdateProducerToBeFollowed,
         @Autowired val updateProducerToBeUnfollowed: UserBoundary.IupdateProducerToBeUnfollowed,
-        @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation
+        @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
+        @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser
 ) {
 
 
@@ -608,6 +612,31 @@ class UserController (
                 }
             }
         }
+    }
+
+    @GetMapping("/{userId}/posts")
+    fun getPostsFromUser(
+            @PathVariable("userId") userId: String,
+            request: HttpServletRequest
+    ): ResponseEntity<List<PostResponse>> {
+        val eventName = "get_posts_from_user"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, USER, RETRIEVAL)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val postsRetrieved = getPostsFromUSer.run(userId)
+            ResponseEntity(postsRetrieved.map { toPostResponse(it) }, HttpStatus.OK)
+        } catch (e: Exception) {
+            Logging.error(
+                    eventName,
+                    eventTags,
+                    e, data = networkData
+            )
+            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }
+
     }
 
     fun toUserResponse(user: User, id: String): UserResponse {

@@ -18,9 +18,6 @@ import javax.validation.ValidationException
 class PostController(
         @Autowired val textPost: PostBoundary.ITextPost,
         @Autowired val videoPost: PostBoundary.IVideoPost,
-        @Autowired val getPostsForFeed: PostBoundary.IGetPosts,
-        @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
-        @Autowired val getRandomPosts: PostBoundary.IGetRandomPosts,
         @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
         @Autowired val deletePosts: PostBoundary.IDeletePost
 ) {
@@ -108,82 +105,6 @@ class PostController(
         }
     }
 
-    @GetMapping
-    fun getPostsForFeed(
-            @RequestAttribute("userId") userId: String,
-            @RequestParam("before") before: String,
-            @RequestParam("amount") amount: Int,
-            request: HttpServletRequest
-    ): ResponseEntity<List<PostResponse>> {
-        val eventName = "posts_get_for_feed"
-        val eventTags = listOf(CONTROLLER, NETWORK, POST, FEED, RETRIEVAL)
-        val networkData = netUtils.networkData(request)
-        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
-                "version" to 2
-        ))
-        return try {
-            val date = Date.from(Instant.parse(before))
-            val postsRetrieved = getPostsForFeed.run(userId, date, amount)
-            ResponseEntity(postsRetrieved?.map { toPostResponse(it) }, HttpStatus.OK)
-        } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
-
-    @GetMapping("/{userId}")
-    fun getPostsFromUser(
-            @PathVariable("userId") userId: String,
-            request: HttpServletRequest
-    ): ResponseEntity<List<PostResponse>> {
-        val eventName = "posts_get_from_user"
-        val eventTags = listOf(CONTROLLER, NETWORK, POST, USER, RETRIEVAL)
-        val networkData = netUtils.networkData(request)
-        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
-                "version" to 2
-        ))
-        return try {
-            val postsRetrieved = getPostsFromUSer.run(userId)
-            ResponseEntity(postsRetrieved.map { toPostResponse(it) }, HttpStatus.OK)
-        } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-
-    }
-
-    @GetMapping("/explore")
-    fun getRandomPosts(
-            @RequestParam("amount") amount: Int,
-            request: HttpServletRequest
-    ): ResponseEntity<List<PostResponse>> {
-        val eventName = "get_random_posts"
-        val eventTags = listOf(CONTROLLER, NETWORK, POST, RANDOM, RETRIEVAL)
-        val networkData = netUtils.networkData(request)
-        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
-                "version" to 2
-        ))
-        return try {
-            val postsRetrieved = getRandomPosts.run(amount)
-            ResponseEntity(postsRetrieved.map { toPostResponse(it) }, HttpStatus.OK)
-        } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
-
     @PutMapping("/{postId}/comment")
     fun updatePostComments(
             @RequestAttribute("userId") authenticatedUserId: String,
@@ -259,32 +180,6 @@ class PostController(
             }
         }
 
-    }
-
-    data class PostResponse(
-            val id: String,
-            val userId: String,
-            val type: String,
-            val description: String,
-            val imageURL: String?,
-            val video: PostVideo?,
-            val submissionDate: Date,
-            val comments: List<PostComment>?,
-            val questions: List<PostQuestions>?
-    )
-
-    fun toPostResponse(post: Post): PostResponse {
-        return PostResponse(
-                post.id,
-                post.userId,
-                post.type,
-                post.description,
-                post.imageURL,
-                post.video,
-                post.submissionDate,
-                post.comments,
-                post.questions
-        )
     }
 
 }
