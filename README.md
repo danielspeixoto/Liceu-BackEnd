@@ -118,21 +118,17 @@ Inserir um jogo de torneio realizado pelo usuário
 	{
 		 "answers" :  [
 				 {
-					"Answer":  {
-							"questionId": "821660feff444347",
-							"selectedAnswer": "1",
-							"correctAnswer": "2"
-						}
+					"questionId": "821660feff444347",
+					"selectedAnswer": "1",
+					"correctAnswer": "2"
 				 },
 				 {
-					"Answer":  {
-						"questionId": "821660feff555347",
-						"selectedAnswer": "2",
-						"correctAnswer": "2"
-					}
+					"questionId": "821660feff555347",
+					"selectedAnswer": "2",
+					"correctAnswer": "2"
 				}
 		],
-			   "timeSpent": 10
+	   	"timeSpent": 10
 	}
 </pre>
 
