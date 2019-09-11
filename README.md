@@ -27,9 +27,9 @@
     + [_getVideoById_](#getvideobyid)
     + [_getRanking_](#getranking)
   * [Funções de report:](#funções-de-report)
-    + [_submit_](#submit)
+    + [_submitReport_](#submitReport)
   * [Funções de trivia:](#fun--es-de-trivia)
-    + [_submit_](#submit--1)
+    + [_submitTrivia_](#submitTrivia)
     + [_triviaQuestions_](#triviaquestions)
     + [_updateComments_](#updatecomments)
     + [_updateRating_](#updaterating)
@@ -342,7 +342,7 @@ Retornar lista de ranking
 
 ##  Funções de report:
 
- - ###  _submit_
+ - ###  _submitReport_
 
 Inserir report de erro  
  **URL:** /v2/report  
@@ -368,7 +368,7 @@ Inserir report de erro
 
 ## Funções de trivia:
 
- - ### _submit_
+ - ### _submitTrivia_
 Inserir questão de trivia  
  **URL:** /v2/trivia  
 **METHOD:** POST  
