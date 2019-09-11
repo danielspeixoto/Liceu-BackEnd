@@ -15,9 +15,9 @@ Para comunicação com os ambientes é utilizado a seguintes URL base:
 
 # Descrição de utilização da API
 
-**OBSERVAÇÃO: Toda função criada nesse repositório necessita de autenticação. Logo todo header de requisição necessita de: **
-			"API_KEY": apiKey,
-			"Authorization": accessToken
+**OBSERVAÇÃO: Toda função criada nesse repositório necessita de autenticação. Logo todo header de requisição necessita de:**
+"API_KEY": apiKey,
+"Authorization": accessToken
 
 ## Funções de atividades:
 
@@ -64,16 +64,16 @@ Atualizar conjunto de resspostas do usuário autenticado
 **METHOD:** PUT
 **Data example:** 
 <pre>
-     {
-		 "answers" :  [
-            		 {
+	{
+		"answers" : [
+				{
 					 "Nazismo",
 					 "Revolução francesa",
 					 "Cateto adjacente",
 					 "Simbiose"
-					 }
-           ]
-      }
+				 }
+		]
+	}
 </pre>
 
 
@@ -134,25 +134,25 @@ Inserir um jogo de torneio realizado pelo usuário  **URL:** /v2/game
 **METHOD:** POST
 **Data example:** 
 <pre>
-     {
+	{
 		 "answers" :  [
-            		 {
-					 	"Answer":  {
+				 {
+					"Answer":  {
 							"questionId": "821660feff444347",
 							"selectedAnswer": "1",
 							"correctAnswer": "2"
 						}
-					 },
-					 {
-						"Answer":  {
-							"questionId": "821660feff555347",
-							"selectedAnswer": "2",
-							"correctAnswer": "2"
-						}
+				 },
+				 {
+					"Answer":  {
+						"questionId": "821660feff555347",
+						"selectedAnswer": "2",
+						"correctAnswer": "2"
 					}
-           ],
-		   "timeSpent": 10
-      }
+				}
+		],
+			   "timeSpent": 10
+	}
 </pre>
 
 
@@ -175,9 +175,9 @@ Realizar login do usuário por autenticação externa
 **Data example:** 
 <pre>
      {
-	 	"accessToken": "38a41b13f063128ee2568991aeb4253c97d9c181ac669e20c5e6f396a544df81f2b9e641e13829094e3a971dffe6bef8abbb7c0ff266c4240f9712cc17a69f72b0287f4849178426aafb66bebbbe042a36e3aa33
+	"accessToken": "38a41b13f063128ee2568991aeb4253c97d9c181ac669e20c5e6f396a544df81f2b9e641e13829094e3a971dffe6bef8abbb7c0ff266c4240f9712cc17a69f72b0287f4849178426aafb66bebbbe042a36e3aa33
 be716ade4d6f88477e0ed869bff2626b0f2a2f185c850a75af7dc6fdb1ef56c61c1be15b08ee50f937a706",
-		"method":  "google"
+	"method":  "google"
      }
 </pre>
 
@@ -198,13 +198,13 @@ Inserir um post do usuário
 **METHOD:** POST
 **Data example:** 
 <pre>
-     {
-	 	"type": "video",
+	{
+		"type": "video",
 		"videoUrl": "www.youtube.com/meuvideo1",
 		"description": "video legal",
 		"hasQuestions": "True"
 		 "questions" :  [
-            		 {
+					{
 						"questionId": "821660feff444347",
 						"correctAnswer": "Brasil",
 						"otherAnswer":  [
@@ -222,8 +222,8 @@ Inserir um post do usuário
 							"Basquete"
 						]
 					}
-           ]
-      }
+		]	
+	}
 </pre>
 
 
@@ -370,16 +370,16 @@ Inserir report de erro
 **Data example:** 
 <pre>
      {
-	 	"message": "erro no gabarito da questao",
-		"tags": [
-			{
-				"question", "error", "answer"
-			}
-		],
-		"params": [
-			"questionId" : "41b13f063128ee2568"
-			"button": "not working"
-		]
+	"message": "erro no gabarito da questao",
+	"tags": [
+		{
+			"question", "error", "answer"
+		}
+	],
+	"params": [
+		"questionId" : "41b13f063128ee2568"
+		"button": "not working"
+	]
      }
 </pre>
  
@@ -401,13 +401,13 @@ Inserir questão de trivia
 **Data example:**
 <pre>
      {
-		"question": "Qual o nome de Albert Einstein?"
-		"correctAnswer": "Albert",
-		"wrongAnswer": "Jorge",
-		"tags": [
-			"ciência",
-			"vida"
-		]
+	"question": "Qual o nome de Albert Einstein?"
+	"correctAnswer": "Albert",
+	"wrongAnswer": "Jorge",
+	"tags": [
+		"ciência",
+		"vida"
+	]
      }
 </pre>
  
@@ -451,7 +451,7 @@ Atualizar comentários de uma determinada questão
 **Data example:** 
 <pre>
      {
-		"comment": "Essa questão é muito boa"
+	"comment": "Essa questão é muito boa"
      }
 </pre>
 
@@ -476,7 +476,7 @@ Atualizar pontuação de uma determinada questão
 **Data example:** 
 <pre>
      {
-		"rating": "6"
+	"rating": "6"
      }
 </pre>
 
@@ -565,8 +565,8 @@ Atualizar localização de um determinado usuário
 **Data example:** 
 <pre>
      {
-		"longitude": "-10.87723",
-		"lagitude": "5.8989812"
+	"longitude": "-10.87723",
+	"lagitude": "5.8989812"
      }
 </pre>
 
@@ -592,7 +592,7 @@ Atualizar escola de um determinado usuário
 **Data example:**
 <pre>
      {
-		"school": "Havard",
+	"school": "Havard",
      }
 </pre>
 
@@ -618,9 +618,9 @@ Atualizar escola de um determinado usuário
 **Data example:**
 <pre>
      {
-		"day": "18",
-		"month": "06",
-		"year": "2019"
+	"day": "18",
+	"month": "06",
+	"year": "2019"
      }
 </pre>
 
@@ -647,7 +647,7 @@ Atualizar canal do youtube de um determinado usuário
 **Data example:**
 <pre>
      {
-		"youtubeChannel": "www.youtube.com/meuvideo2"
+	"youtubeChannel": "www.youtube.com/meuvideo2"
      }
 </pre>
 
@@ -672,7 +672,7 @@ Atualizar instagram de um determinado usuário
 **Data example:**
 <pre>
      {
-		"instagramProfile": "liceu.co"
+	"instagramProfile": "liceu.co"
      }
 </pre>
 
@@ -697,7 +697,7 @@ Atualizar descrição de um determinado usuário
 **Data example:**
 <pre>
      {
-		"description": "aluno estudioso"
+	"description": "aluno estudioso"
      }
 </pre>
 
@@ -722,7 +722,7 @@ Atualizar website de um determinado usuário
 **Data example:**
 <pre>
      {
-		"website": "www.meusite.com.br"
+	"website": "www.meusite.com.br"
      }
 </pre>
 
@@ -747,7 +747,7 @@ Inserir produtor da lista de seguidores de um usuário e usuário da lista de pe
 **Data example:**
 <pre>
      {
-		"producerId": "bbf0faf94faff222"
+	"producerId": "bbf0faf94faff222"
      }
 </pre>
 
@@ -772,7 +772,7 @@ Remover produtor da lista de seguidores de um usuário e usuário da lista de pe
 **Data example:**
 <pre>
      {
-		"producerId": "bbf0faf94faff222"
+	"producerId": "bbf0faf94faff222"
      }
 </pre>
 
