@@ -15,8 +15,8 @@ Para comunicação com os ambientes é utilizado a seguintes URL base:
 
 # Descrição de utilização da API
 
-**OBSERVAÇÃO: Toda função criada nesse repositório necessita de autenticação. Logo todo header de requisição necessita de:**
-"API_KEY": apiKey,
+**OBSERVAÇÃO: Toda função criada nesse repositório necessita de autenticação. Logo todo header de requisição necessita de:**  
+"API_KEY": apiKey,  
 "Authorization": accessToken
 
 ## Funções de atividades:
@@ -81,7 +81,7 @@ Atualizar conjunto de resspostas do usuário autenticado
 **Code:** 200 OK
 
 ### Error Response
-**Code:** 400 BAD REQUEST
+**Code:** 400 BAD REQUEST  
 **Code:** 500 INTERNAL SERVER ERROR
 
 ------------------------
