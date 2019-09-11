@@ -19,7 +19,7 @@ class TextPost(
             if(post.description.isEmpty()){
                 throw OverflowSizeException ("Description can't be null")
             }
-            if(post.description.length > 800){
+            if(post.description.length > 3000){
                 throw OverflowSizeException ("Description is too long")
             }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
@@ -37,7 +37,7 @@ class TextPost(
                 null,
                 post.questions
                 ))
-        }catch (e: Exception){
+        } catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e
         }
