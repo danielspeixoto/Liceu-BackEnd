@@ -4,7 +4,7 @@
 - [Conjunto de ambientes](#conjunto-de-ambientes)
 - [URL base de comunicação](#url-base-de-comunica--o)
 - [Descrição de utilização da API](#descri--o-de-utiliza--o-da-api)
-  * [Funções de atividades:](#fun--es-de-atividades-)
+  * [Funções de atividades:](#funções-de-atividades)
     + [_getActivityFromUser_](#-getactivityfromuser-)
   * [Funções de challenge:](#fun--es-de-challenge-)
     + [_getChallenge_](#-getchallenge-)
