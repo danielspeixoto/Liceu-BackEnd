@@ -17,7 +17,16 @@ Para comunicação com os ambientes é utilizado a seguintes URL base:
 
 **OBSERVAÇÃO: Toda função criada nesse repositório necessita de autenticação. Logo todo header de requisição necessita de:**  
 "API_KEY": apiKey,  
-"Authorization": accessToken
+"Authorization": accessToken  
+
+## HTTP STATUS CODES USED
+### Success Response
+200 OK
+
+### Error Response
+400 BAD REQUEST  
+401 UNAUTHORIZED  
+500 INTERNAL SERVER ERROR
 
 ## Funções de atividades:
 
@@ -31,12 +40,6 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 | ------------ | ------------ |
 | amount  | Int  |
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response 
-**Code:** 500 INTERNAL SERVER ERROR
-
 ------------------------
 
 ## Funções de challenge:
@@ -45,12 +48,6 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 Retornar challenge para início de challenge entre o usuário autenticado e outro usuário 
 **URL:**/v2/challenge
 **METHOD:** GET
-### Success Response
-**Code:** 200 OK
-
-### Error Response 
-**Code:** 500 INTERNAL SERVER ERROR
-
 
 ## _updateAnswers_
 Atualizar conjunto de resspostas do usuário autenticado
@@ -77,13 +74,6 @@ Atualizar conjunto de resspostas do usuário autenticado
 </pre>
 
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST  
-**Code:** 500 INTERNAL SERVER ERROR
-
 ------------------------
 
 ## Funções de explore:
@@ -98,11 +88,6 @@ Retornar posts aleatórios para o usuário
 | ------------ | ------------ |
 | amount  | Int  |
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response 
-**Code:** 500 INTERNAL SERVER ERROR
 
 ------------------------
 
@@ -119,11 +104,6 @@ Retornar posts aleatórios para o usuário
 | before  | String  |
 | amount  | Int  |
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response 
-**Code:** 500 INTERNAL SERVER ERROR
 
 ------------------------
 
@@ -156,14 +136,6 @@ Inserir um jogo de torneio realizado pelo usuário  **URL:** /v2/game
 </pre>
 
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
-
-
 ------------------------
 
 ## Funções de login:
@@ -181,13 +153,6 @@ be716ade4d6f88477e0ed869bff2626b0f2a2f185c850a75af7dc6fdb1ef56c61c1be15b08ee50f9
      }
 </pre>
 
-
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 401 UNAUTHORIZED
-  
 -----------------------
 
 ## Funções de post:
@@ -227,13 +192,6 @@ Inserir um post do usuário
 </pre>
 
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
-
 ## _updatePostComments_
 Atualizar comentários de um determinado post
  **URL:**/v2/post/{postId}/comment
@@ -250,13 +208,7 @@ Atualizar comentários de um determinado post
 	 	"comment": "vídeo muito bom"
       }
 </pre>
- 
- ### Success Response
-**Code:** 200 OK
 
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
  
 ## _deletePost_
 Remover um determinado post
@@ -269,12 +221,6 @@ Remover um determinado post
 
 **METHOD:** DELETE
 
- ### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
 
 -----------------------
 
@@ -292,12 +238,6 @@ Retornar questões baseados em um conjunto de tags
 
 **METHOD:** GET
 
- ### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 500 INTERNAL SERVER ERROR
-
 
 ## _videos_
 Retornar vídeos referentes a uma questão
@@ -312,12 +252,6 @@ Retornar vídeos referentes a uma questão
 
 **METHOD:** GET
 
- ### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 500 INTERNAL SERVER ERROR
-
 ## _getVideoById_
 Retornar video referente a um ID
  **URL:** /v2/{questionId}
@@ -329,12 +263,6 @@ Retornar video referente a um ID
 
 **METHOD:** GET
 
- ### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 404 NOT FOUND
-**Code:** 500 INTERNAL SERVER ERROR
 
 -----------------------
 
@@ -353,11 +281,6 @@ Retornar lista de ranking
 
 **METHOD:** GET
 
- ### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 500 INTERNAL SERVER ERROR
 
 -----------------------
 
@@ -383,12 +306,6 @@ Inserir report de erro
      }
 </pre>
  
- ### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
 
 -----------------------
 
@@ -410,13 +327,6 @@ Inserir questão de trivia
 	]
      }
 </pre>
- 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
 
 
 ## _triviaQuestions_
@@ -430,13 +340,6 @@ Retornar questões de trivia
 | amount | Int |
 
 **METHOD:** GET
-
- ### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 500 INTERNAL SERVER ERROR
-
 
 ## _updateComments_
 Atualizar comentários de uma determinada questão
@@ -454,13 +357,6 @@ Atualizar comentários de uma determinada questão
 	"comment": "Essa questão é muito boa"
      }
 </pre>
-
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
 
 
 ## _updateRating_
@@ -480,13 +376,6 @@ Atualizar pontuação de uma determinada questão
      }
 </pre>
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
-
 
  -----------------------
 
@@ -502,12 +391,6 @@ Retornar usuário referente ao ID
 | userId  | String   |
 
 **METHOD:** GET
-### Success Response
-**Code:** 200 OK
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
-
 
 ## _getUsersByNameUsingLocation_
 Retornar usuários baseados em localização e nome 
@@ -523,15 +406,6 @@ Retornar usuários baseados em localização e nome
 
 **METHOD:** GET
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
-
-
-
 ## _getChallengesFromUserById_
 Retornar challenges de um usúario
  **URL:** /v2/user/{userId}/challenge
@@ -542,14 +416,6 @@ Retornar challenges de um usúario
 | userId  | String   |
 
 **METHOD:** GET
-
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
-
 
 
 ## _updateLocation_
@@ -570,14 +436,6 @@ Atualizar localização de um determinado usuário
      }
 </pre>
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 401 UNAUTHORIZED
-**Code:** 500 INTERNAL SERVER ERROR
-
 
 ## _updateSchool_
 Atualizar escola de um determinado usuário
@@ -595,15 +453,6 @@ Atualizar escola de um determinado usuário
 	"school": "Havard",
      }
 </pre>
-
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 401 UNAUTHORIZED
-**Code:** 500 INTERNAL SERVER ERROR
-
 
 ## _updateAge_
 Atualizar escola de um determinado usuário
@@ -624,15 +473,6 @@ Atualizar escola de um determinado usuário
      }
 </pre>
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 401 UNAUTHORIZED
-**Code:** 500 INTERNAL SERVER ERROR
-
-
 
 ## _updateYoutubeChannel_
 Atualizar canal do youtube de um determinado usuário
@@ -651,13 +491,6 @@ Atualizar canal do youtube de um determinado usuário
      }
 </pre>
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 401 UNAUTHORIZED
-**Code:** 500 INTERNAL SERVER ERROR
 
 ## _updateInstagramProfile_
 Atualizar instagram de um determinado usuário
@@ -676,13 +509,6 @@ Atualizar instagram de um determinado usuário
      }
 </pre>
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 401 UNAUTHORIZED
-**Code:** 500 INTERNAL SERVER ERROR
 
 ## _updateDescription_
 Atualizar descrição de um determinado usuário
@@ -701,13 +527,6 @@ Atualizar descrição de um determinado usuário
      }
 </pre>
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 401 UNAUTHORIZED
-**Code:** 500 INTERNAL SERVER ERROR
 
 ### __updateWebsite__
 Atualizar website de um determinado usuário
@@ -726,13 +545,7 @@ Atualizar website de um determinado usuário
      }
 </pre>
 
-### Success Response
-**Code:** 200 OK
 
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 401 UNAUTHORIZED
-**Code:** 500 INTERNAL SERVER ERROR
 
 ## _updateProducerToBeFollowed_
 Inserir produtor da lista de seguidores de um usuário e usuário da lista de pessoas seguindo do produtor
@@ -750,13 +563,6 @@ Inserir produtor da lista de seguidores de um usuário e usuário da lista de pe
 	"producerId": "bbf0faf94faff222"
      }
 </pre>
-
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
 
 
 ## _updateProducerToBeUnfollowed_
@@ -776,9 +582,3 @@ Remover produtor da lista de seguidores de um usuário e usuário da lista de pe
      }
 </pre>
 
-### Success Response
-**Code:** 200 OK
-
-### Error Response
-**Code:** 400 BAD REQUEST
-**Code:** 500 INTERNAL SERVER ERROR
