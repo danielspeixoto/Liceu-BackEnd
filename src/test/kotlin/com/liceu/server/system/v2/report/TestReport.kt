@@ -56,7 +56,7 @@ class TestReport: TestSystem("/v2/report") {
     }
 
     @Test
-    fun submitReport_overflowTags__Invalid(){
+    fun submitReport_overflowTags__throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -84,7 +84,7 @@ class TestReport: TestSystem("/v2/report") {
     }
 
     @Test
-    fun submitReport_overflowParams__Invalid(){
+    fun submitReport_overflowParams__throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -115,7 +115,7 @@ class TestReport: TestSystem("/v2/report") {
     }
 
     @Test
-    fun submitReport_overflowMessage__Invalid(){
+    fun submitReport_overflowMessage__throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -145,7 +145,7 @@ class TestReport: TestSystem("/v2/report") {
     }
 
     @Test
-    fun submitReport_tagsEmpty__Invalid(){
+    fun submitReport_tagsEmpty__throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -168,7 +168,7 @@ class TestReport: TestSystem("/v2/report") {
     }
 
     @Test
-    fun submitReport_messageEmpty__Invalid(){
+    fun submitReport_messageEmpty__throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -196,7 +196,7 @@ class TestReport: TestSystem("/v2/report") {
     }
 
     @Test
-    fun submitReport_paramsEmpty__Invalid(){
+    fun submitReport_paramsEmpty__throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN

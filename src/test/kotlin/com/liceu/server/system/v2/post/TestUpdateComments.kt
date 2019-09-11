@@ -29,7 +29,7 @@ class TestUpdateComments: TestSystem("/v2/post") {
                 "userId" to testSetup.USER_ID_1,
                 "comment" to "comentando no post"
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/09c54d325b75357a581d4ca2/comment", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_1}/comment", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val postChanged = data.getPostById("09c54d325b75357a581d4ca2")
         Truth.assertThat(postChanged.comments?.size).isEqualTo(1)
@@ -37,7 +37,7 @@ class TestUpdateComments: TestSystem("/v2/post") {
     }
 
     @Test
-    fun updateListOfComments_nullComment_throwError(){
+    fun updateListOfComments_nullComment_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -45,12 +45,12 @@ class TestUpdateComments: TestSystem("/v2/post") {
                 "userId" to testSetup.USER_ID_1,
                 "comment" to null
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/09c54d325b75357a581d4ca2/comment", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_1}/comment", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun updateListOfComments_emptyComment_throwError(){
+    fun updateListOfComments_emptyComment_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -58,33 +58,7 @@ class TestUpdateComments: TestSystem("/v2/post") {
                 "userId" to testSetup.USER_ID_1,
                 "comment" to ""
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/09c54d325b75357a581d4ca2/comment", HttpMethod.PUT, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
-    fun updateListOfComments_nullUserId_throwError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "userId" to null,
-                "comment" to "aaaaa"
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/09c54d325b75357a581d4ca2/comment", HttpMethod.PUT, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
-    fun updateListOfComments_emptyUserId_throwError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "userId" to "",
-                "comment" to "aaaaa"
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/09c54d325b75357a581d4ca2/comment", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_1}/comment", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 }

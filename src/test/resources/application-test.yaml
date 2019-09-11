@@ -7,13 +7,13 @@ google:
   clientSecret: sm2sA37l2SshglMRa7PTAYz1
 
 facebook:
-  accessToken: EAAf4pgUyFpsBAOVrEMaTBt99dM4SpXA98vXobjUZBxtAYDZASPpZBMDc88qoZACd2JiyO3Ov7kr8nZA5EpO72wmyx5MgvtSod2SqWHgRexoxPJwCs2q36ZB1ZCh7teBWpvgdZChn4O0U1MEPwYmRnpAxZCWVd706dazZB53yJ4ttyLP0C6kOM6LsmwucDjtpFZB9ZAPZBJzM8zyU4Vjbv940BxYzb
+  accessToken: EAAf4pgUyFpsBAMOt2f2KdBSnjaaAK77zhy5d812KYaeA679rlZCWFLQ2GcIMFJODLf4LLggQC34DXcrQfKKLkZAgrIc4EuX1y7HX9cxp6iIZCg9EgYwgwU156GlcOEaaUYXHBi0k4yzMWNVrZAr2TkMHunZAZCGdv5vcOxbfTDECjytu6GgovDLm4kzzZCEKMQCzPHvyqf1A1ecZCmTOEysu
 client:
   api_key: apikey
 
 mongo:
-  dbName: ${DB_NAME}
-  uri:  ${MONGO_CONNECTION}
+  dbName: ${DB_NAME:test}
+  uri:  ${MONGO_CONNECTION:mongodb://localhost:27017}
 
 dev: true
 

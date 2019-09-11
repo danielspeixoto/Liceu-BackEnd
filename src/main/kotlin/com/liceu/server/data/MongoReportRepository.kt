@@ -25,13 +25,4 @@ class MongoReportRepository (
         return result.id.toHexString()
     }
 
-    fun toReport(answer: MongoDatabase.MongoReport): Report{
-        return Report(
-                answer.userId.toHexString(),
-                answer.message,
-                answer.tags,
-                answer.params,
-                answer.submissionDate
-        )
-    }
 }

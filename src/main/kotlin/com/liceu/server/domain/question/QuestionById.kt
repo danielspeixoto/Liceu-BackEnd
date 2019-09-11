@@ -16,8 +16,8 @@ class QuestionById(val repo: QuestionBoundary.IRepository): QuestionBoundary.IQu
         try {
             val question = repo.getQuestionById(questionId)
             Logging.info(
-                    QuestionById.EVENT_NAME,
-                    QuestionById.TAGS,
+                    EVENT_NAME,
+                    TAGS,
                     hashMapOf(
                             "questionId" to questionId
                     )

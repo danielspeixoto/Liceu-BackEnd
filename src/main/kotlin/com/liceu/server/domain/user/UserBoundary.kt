@@ -29,7 +29,7 @@ class UserBoundary {
         fun updateRemoveProducerToFollowingList(userId: String,producerId: String): Long
         fun updateAddUserToProducerFollowerList(userId: String,producerId: String): Long
         fun updateRemoveUserToProducerFollowerList(userId: String,producerId: String): Long
-
+        fun userExists(userId: String): Boolean
     }
 
     interface IUpdateAge {

@@ -5,9 +5,9 @@ import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoTriviaRepository
 import com.liceu.server.data.TriviaRepository
+import com.liceu.server.data.util.converters.toTriviaQuestion
 import com.liceu.server.domain.trivia.TriviaQuestionToInsert
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,30 +50,39 @@ class TestMongoTriviaRepositoryIntegration {
                 )
         ))
 
-        val report = data.toTriviaQuestion(reportRepo.findById(id).get())
+        val report = toTriviaQuestion(reportRepo.findById(id).get())
         Truth.assertThat(report.userId).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(report.question).isEqualTo("essa e uma questao de teste sobre matematica: Seno de 0?")
         Truth.assertThat(report.correctAnswer).isEqualTo("0")
         Truth.assertThat(report.wrongAnswer).isEqualTo("1")
     }
 
-    @Disabled
     @Test
-    fun randomQuestions_requestOnlyOne_returnsExistent() {
-        // Test will fail temporarily to avoid mongo sample aggregation error
-        val questions = data.randomQuestions(listOf("historia"), 5)
-        val ids = questions.map { it.id }
-        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_5)
+    fun randomQuestions_requestOnlyOne_returnsOne() {
+        val questions = data.randomQuestions(listOf("historia"), 1)
+        Truth.assertThat(questions.size).isEqualTo(1)
     }
 
-    @Disabled
     @Test
-    fun randomQuestions_requestMajoraty_returnsExistent() {
-        // Test will fail temporarily to avoid mongo sample aggregation error
+    fun randomQuestions_requestFive_ReturnsFiveDifferentQuestions() {
         val questions = data.randomQuestions(listOf("matematica"), 5)
-        val ids = questions.map { it.id }
-        Truth.assertThat(ids).containsExactly(testSetup.QUESTION_TRIVIA_ID_1, testSetup.QUESTION_TRIVIA_ID_2, testSetup.QUESTION_TRIVIA_ID_3,
-                testSetup.QUESTION_TRIVIA_ID_4)
+        Truth.assertThat(questions.size).isEqualTo(5)
+        val ids = arrayListOf<String>()
+        questions.forEach {
+            Truth.assertThat(ids).doesNotContain(it.id)
+            ids.add(it.id)
+        }
+    }
+
+    @Test
+    fun randomQuestions_requestAHundred_ReturnsMaxOfDifferentQuestions() {
+        val questions = data.randomQuestions(listOf("matematica"), 100)
+        Truth.assertThat(questions.size).isLessThan(50)
+        val ids = arrayListOf<String>()
+        questions.forEach {
+            Truth.assertThat(ids).doesNotContain(it.id)
+            ids.add(it.id)
+        }
     }
 
     @Test

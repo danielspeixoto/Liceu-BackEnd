@@ -99,8 +99,8 @@ class MongoDatabase {
             var instagramProfile: String?,
             var description: String?,
             var website: String?,
-            var followers: List<String>?,
-            var following: List<String>?
+            var followers: List<ObjectId>?,
+            var following: List<ObjectId>?
     ) {
         @Id
         lateinit var id: ObjectId

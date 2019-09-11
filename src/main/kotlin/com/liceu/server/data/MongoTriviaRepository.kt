@@ -1,6 +1,6 @@
 package com.liceu.server.data
 
-import com.liceu.server.domain.trivia.PostComment
+import com.liceu.server.data.util.converters.toTriviaQuestion
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.trivia.TriviaQuestionToInsert
@@ -38,11 +38,11 @@ class MongoTriviaRepository(
         if(amount == 0){
             return emptyList()
         }
-        val sample = Aggregation.sample(amount.toLong() + 5)
+        val sample = Aggregation.sample(amount.toLong())
         val agg = Aggregation.newAggregation(sample)
 
         val results = template.aggregate(agg, MongoDatabase.TRIVIA_COLLECTION, MongoDatabase.MongoTriviaQuestion::class.java)
-        return results.map {toTriviaQuestion(it)}
+        return results.map { toTriviaQuestion(it) }
     }
 
     override fun updateListOfComments(questionId: String, userId: String, author: String, comment: String): Long {
@@ -67,7 +67,7 @@ class MongoTriviaRepository(
         val match = Aggregation.match(Criteria.where("_id").isEqualTo(ObjectId(questionId)))
         val agg = Aggregation.newAggregation(match)
         val result = template.aggregate(agg,MongoDatabase.TRIVIA_COLLECTION,MongoDatabase.MongoTriviaQuestion::class.java)
-        val retrievedQuestion = result.map {toTriviaQuestion(it)}
+        val retrievedQuestion = result.map { toTriviaQuestion(it) }
         return retrievedQuestion[0]
     }
 
@@ -92,28 +92,5 @@ class MongoTriviaRepository(
         )
         return result.modifiedCount
     }
-
-
-    fun toTriviaQuestion(answer: MongoDatabase.MongoTriviaQuestion): TriviaQuestion{
-        return TriviaQuestion(
-                answer.id.toString(),
-                answer.userId.toString(),
-                answer.question,
-                answer.correctAnswer,
-                answer.wrongAnswer,
-                answer.tags,
-                answer.comments?.map {
-                    PostComment(
-                            it.id,
-                            it.userId,
-                            it.author,
-                            it.comment
-                    )
-                },
-                answer.likes,
-                answer.dislikes
-        )
-    }
-
 
 }

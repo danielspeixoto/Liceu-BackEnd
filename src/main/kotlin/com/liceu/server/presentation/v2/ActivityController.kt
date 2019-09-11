@@ -1,20 +1,17 @@
 package com.liceu.server.presentation.v2
 
-import com.liceu.server.domain.activities.Activity
 import com.liceu.server.domain.activities.ActivityBoundary
-import com.liceu.server.domain.activities.ActivitySubmission
 import com.liceu.server.domain.global.*
+import com.liceu.server.presentation.util.converters.ActivityResponse
+import com.liceu.server.presentation.util.converters.toActivityResponse
+import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.lang.ClassCastException
-import java.util.*
 import javax.servlet.http.HttpServletRequest
-import javax.validation.ValidationException
-import kotlin.collections.HashMap
 
 
 @RestController
@@ -41,33 +38,9 @@ class ActivityController(
         return try{
             val activitiesRetrieved = getActivityFromUser.run(userId,amount)
             ResponseEntity(activitiesRetrieved.map { toActivityResponse(it) },HttpStatus.OK)
-        }catch (e: Exception){
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData)
         }
-
-    }
-
-    data class ActivityResponse (
-            val id: String,
-            val userId: String,
-            val type: String,
-            val params: HashMap<String,Any>,
-            val submissionDate: Date
-    )
-
-    fun toActivityResponse(activity: Activity): ActivityResponse{
-        return ActivityResponse(
-                activity.id,
-                activity.userId,
-                activity.type,
-                activity.params,
-                activity.submissionDate
-        )
     }
 
 }
