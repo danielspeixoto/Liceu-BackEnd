@@ -1,36 +1,79 @@
-
 # KotlinServer API Documentation
-
-# Objetivo
 **Esse documento tem como objetivo descrever todas as funcionalidadaes presentes na API construída neste repositório.**
+
+- [Conjunto de ambientes](#conjunto-de-ambientes)
+- [URL base de comunicação](#url-base-de-comunica--o)
+- [Descrição de utilização da API](#descri--o-de-utiliza--o-da-api)
+  * [Funções de atividades:](#fun--es-de-atividades-)
+    + [_getActivityFromUser_](#-getactivityfromuser-)
+  * [Funções de challenge:](#fun--es-de-challenge-)
+    + [_getChallenge_](#-getchallenge-)
+    + [_updateAnswers_](#-updateanswers-)
+  * [Funções de explore:](#fun--es-de-explore-)
+    + [_getRandomPosts_](#-getrandomposts-)
+  * [Funções de feed:](#fun--es-de-feed-)
+    + [_getPostsForFeed_](#-getpostsforfeed-)
+  * [Funções de torneio:](#fun--es-de-torneio-)
+    + [_submitGame_](#-submitgame-)
+  * [Funções de login:](#fun--es-de-login-)
+    + [_authenticate_](#-authenticate-)
+  * [Funções de post:](#fun--es-de-post-)
+    + [_submitPost_](#-submitpost-)
+    + [_updatePostComments_](#-updatepostcomments-)
+    + [_deletePost_](#-deletepost-)
+  * [Funções de questões:](#fun--es-de-quest-es-)
+    + [_questions_](#-questions-)
+    + [_videos_](#-videos-)
+    + [_getVideoById_](#-getvideobyid-)
+    + [_getRanking_](#-getranking-)
+  * [Funções de report:](#fun--es-de-report-)
+    + [_submit_](#-submit-)
+  * [Funções de trivia:](#fun--es-de-trivia-)
+    + [_submit_](#-submit--1)
+    + [_triviaQuestions_](#-triviaquestions-)
+    + [_updateComments_](#-updatecomments-)
+    + [_updateRating_](#-updaterating-)
+  * [Funções de user:](#fun--es-de-user-)
+    + [_getUserById_](#-getuserbyid-)
+    + [_getUsersByNameUsingLocation_](#-getusersbynameusinglocation-)
+    + [_getChallengesFromUserById_](#-getchallengesfromuserbyid-)
+    + [_updateLocation_](#-updatelocation-)
+    + [_updateSchool_](#-updateschool-)
+    + [_updateAge_](#-updateage-)
+    + [_updateYoutubeChannel_](#-updateyoutubechannel-)
+    + [_updateInstagramProfile_](#-updateinstagramprofile-)
+    + [_updateDescription_](#-updatedescription-)
+    + [_updateWebsite_](#-updatewebsite-)
+    + [_updateProducerToBeFollowed_](#-updateproducertobefollowed-)
+    + [_updateProducerToBeUnfollowed_](#-updateproducertobeunfollowed-)
+- [HTTP STATUS Codes Used](#http-status-codes-used)
+
 
 # Conjunto de ambientes
 Esta API é utilizada por **2** ambientes ao total, sendo eles:
 - Liceu-Production
 - Liceu-Staging
 
+---------------------
+
 # URL base de comunicação
 Para comunicação com os ambientes é utilizado a seguintes URL base: 
 - https://liceu-staging.herokuapp.com
 
+-------------------
+
 # Descrição de utilização da API
 
 **OBSERVAÇÃO: Toda função criada nesse repositório necessita de autenticação. Logo todo header de requisição necessita de:**  
-"API_KEY": apiKey,  
-"Authorization": accessToken  
-  
-## HTTP STATUS CODES USED
-### Success Response
-200 OK
+- "API_KEY": apiKey,  
+- "Authorization": accessToken  
 
-### Error Response
-400 BAD REQUEST  
-401 UNAUTHORIZED  
-500 INTERNAL SERVER ERROR
-  
-## Funções de atividades:
 
-## _getActivityFromUser_
+##  Funções de atividades:
+
+- ###  _getActivityFromUser_
+
+
 Retornar todas as atividades realizadas pelo ou para o usuário  
 **URL:** /v2/activity/{userId}  
 **METHOD:** GET  
@@ -44,12 +87,14 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 
 ## Funções de challenge:
 
-## _getChallenge_
+ - ###  _getChallenge_
+
 Retornar challenge para início de challenge entre o usuário autenticado e outro usuário  
 **URL:**/v2/challenge  
 **METHOD:** GET  
 
-## _updateAnswers_
+ - ### _updateAnswers_
+
 Atualizar conjunto de resspostas do usuário autenticado  
 **URL:** v2/challenge/{challengeId}  
  **URL Parameters:**
@@ -59,7 +104,7 @@ Atualizar conjunto de resspostas do usuário autenticado
 | challengeId  | String  |
 
 **METHOD:** PUT  
-**Data example:**  
+**BODY:**  
 <pre>
 	{
 		"answers" : [
@@ -78,7 +123,9 @@ Atualizar conjunto de resspostas do usuário autenticado
 
 ## Funções de explore:
 
-## _getRandomPosts_
+
+  - ### _getRandomPosts_
+
 Retornar posts aleatórios para o usuário  
 **URL:** /v2/explore  
 **METHOD:** GET  
@@ -93,7 +140,8 @@ Retornar posts aleatórios para o usuário
 
 ## Funções de feed:
 
-## _getPostsForFeed_
+  - ### _getPostsForFeed_
+
 Retornar posts aleatórios para o usuário  
 **URL:** /v2/feed  
 **METHOD:** GET  
@@ -109,11 +157,12 @@ Retornar posts aleatórios para o usuário
 
 ## Funções de torneio:
 
-## _submitGame_
+  - ### _submitGame_
+
 Inserir um jogo de torneio realizado pelo usuário  
 **URL:** /v2/game  
 **METHOD:** POST  
-**Data example:** 
+**BODY:** 
 <pre>
 	{
 		 "answers" :  [
@@ -137,11 +186,12 @@ Inserir um jogo de torneio realizado pelo usuário
 
 ## Funções de login:
 
-## _authenticate_
+ - ###  _authenticate_
+
 Realizar login do usuário por autenticação externa  
 **URL:** /v2/login  
 **METHOD:** POST  
-**Data example:** 
+**BODY:** 
 <pre>
      {
 	"accessToken": "38a41b13f063128ee2568991aeb4253c97d9c181ac669e20c5e6f396a544df81f2b9e641e13829094e3a971dffe6bef8abbb7c0ff266c4240f9712cc17a69f72b0287f4849178426aafb66bebbbe042a36e3aa33
@@ -154,11 +204,12 @@ be716ade4d6f88477e0ed869bff2626b0f2a2f185c850a75af7dc6fdb1ef56c61c1be15b08ee50f9
 
 ## Funções de post:
 
-## _submitPost_
+  - ### _submitPost_
+
 Inserir um post do usuário  
 **URL:** /v2/post   
 **METHOD:** POST  
-**Data example:** 
+**BODY:** 
 <pre>
 	{
 		"type": "video",
@@ -189,7 +240,8 @@ Inserir um post do usuário
 </pre>
 
 
-## _updatePostComments_
+  - ### _updatePostComments_
+
 Atualizar comentários de um determinado post  
  **URL:**/v2/post/{postId}/comment  
  **URL Parameters:**  
@@ -199,15 +251,16 @@ Atualizar comentários de um determinado post
 | postId  | String  |
 
 **METHOD:** PUT  
-**Data example:** 
+**BODY:** 
 <pre>
      {
-	 	"comment": "vídeo muito bom"
+	"comment": "vídeo muito bom"
       }
 </pre>
 
  
-## _deletePost_
+ - ###  _deletePost_
+
 Remover um determinado post  
  **URL:**/v2/post/{postId}  
  **URL Parameters:**  
@@ -223,7 +276,8 @@ Remover um determinado post
 
 ## Funções de questões:
 
-## _questions_
+ - ###  _questions_
+
 Retornar questões baseados em um conjunto de tags  
  **URL:** /v2/question    
   **URL Parameters:**  
@@ -235,8 +289,9 @@ Retornar questões baseados em um conjunto de tags
 
 **METHOD:** GET  
 
+ - ###  _videos_
 
-## _videos_
+
 Retornar vídeos referentes a uma questão  
  **URL:** /v2/{questionId}/videos  
   **URL Parameters:**  
@@ -249,7 +304,9 @@ Retornar vídeos referentes a uma questão
 
 **METHOD:** GET
 
-## _getVideoById_
+  - ### _getVideoById_
+
+
 Retornar video referente a um ID  
  **URL:** /v2/{questionId}  
  **URL Parameters:**  
@@ -263,9 +320,11 @@ Retornar video referente a um ID
 
 -----------------------
 
-## Funções de ranking:
+##Funções de ranking:
 
-## _getRanking_
+  - ### _getRanking_
+
+
 Retornar lista de ranking  
  **URL:** /v2/ranking  
  **URL Parameters:**  
@@ -281,13 +340,14 @@ Retornar lista de ranking
 
 -----------------------
 
-## Funções de report:
+##  Funções de report:
 
-## _submit_
+ - ###  _submit_
+
 Inserir report de erro  
  **URL:** /v2/report  
 **METHOD:** POST  
-**Data example:** 
+**BODY:** 
 <pre>
      {
 	"message": "erro no gabarito da questao",
@@ -308,11 +368,11 @@ Inserir report de erro
 
 ## Funções de trivia:
 
-## _submit_
+ - ### _submit_
 Inserir questão de trivia  
  **URL:** /v2/trivia  
 **METHOD:** POST  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"question": "Qual o nome de Albert Einstein?"
@@ -326,7 +386,7 @@ Inserir questão de trivia
 </pre>
 
 
-## _triviaQuestions_
+ - ### _triviaQuestions_
 Retornar questões de trivia  
 **URL:** /v2/trivia  
  **URL Parameters:**
@@ -338,7 +398,7 @@ Retornar questões de trivia
 
 **METHOD:** GET  
 
-## _updateComments_
+ - ### _updateComments_
 Atualizar comentários de uma determinada questão  
  **URL:** /v2/trivia   
  **URL Parameters:**  
@@ -348,7 +408,7 @@ Atualizar comentários de uma determinada questão
 | questionId  | String   |
 
 **METHOD:** POST  
-**Data example:** 
+**BODY:** 
 <pre>
      {
 	"comment": "Essa questão é muito boa"
@@ -356,7 +416,7 @@ Atualizar comentários de uma determinada questão
 </pre>
 
 
-## _updateRating_
+ - ### _updateRating_
 Atualizar pontuação de uma determinada questão  
  **URL:** /v2/trivia/{questionId}/rating  
  **URL Parameters:**
@@ -366,7 +426,7 @@ Atualizar pontuação de uma determinada questão
 | questionId  | String   |
 
 **METHOD:** PUT  
-**Data example:** 
+**BODY:** 
 <pre>
      {
 	"rating": "6"
@@ -378,7 +438,7 @@ Atualizar pontuação de uma determinada questão
 
 ## Funções de user:
 
-## _getUserById_
+ - ### _getUserById_
 Retornar usuário referente ao ID  
 **URL:** /v2/user/{userId}  
 **URL Parameters:**  
@@ -389,7 +449,7 @@ Retornar usuário referente ao ID
 
 **METHOD:** GET
 
-## _getUsersByNameUsingLocation_
+ - ### _getUsersByNameUsingLocation_
 Retornar usuários baseados em localização e nome   
  **URL:** /v2/user  
  **URL Parameters:**  
@@ -403,7 +463,7 @@ Retornar usuários baseados em localização e nome
 
 **METHOD:** GET  
 
-## _getChallengesFromUserById_
+ - ### _getChallengesFromUserById_
 Retornar challenges de um usúario  
  **URL:** /v2/user/{userId}/challenge  
  **URL Parameters:**
@@ -415,7 +475,7 @@ Retornar challenges de um usúario
 **METHOD:** GET
 
 
-## _updateLocation_
+ - ### _updateLocation_
 Atualizar localização de um determinado usuário  
  **URL:** /{userId}/locale  
  **URL Parameters:**  
@@ -425,7 +485,7 @@ Atualizar localização de um determinado usuário
 | userId  | String   |
 
 **METHOD:** PUT
-**Data example:** 
+**BODY:** 
 <pre>
      {
 	"longitude": "-10.87723",
@@ -434,7 +494,7 @@ Atualizar localização de um determinado usuário
 </pre>
 
 
-## _updateSchool_
+ - ### _updateSchool_
 Atualizar escola de um determinado usuário  
  **URL:** /v2/user/{userId}/school  
  **URL Parameters:**  
@@ -444,14 +504,14 @@ Atualizar escola de um determinado usuário
 | userId  | String   |
 
 **METHOD:** PUT  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"school": "Havard",
      }
 </pre>
 
-## _updateAge_
+ - ### _updateAge_
 Atualizar escola de um determinado usuário  
 **URL:** /v2/user/{userId}/age  
 **URL Parameters:**  
@@ -461,7 +521,7 @@ Atualizar escola de um determinado usuário
 | userId  | String   |
 
 **METHOD:** PUT  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"day": "18",
@@ -471,7 +531,7 @@ Atualizar escola de um determinado usuário
 </pre>
 
 
-## _updateYoutubeChannel_
+ - ### _updateYoutubeChannel_
 Atualizar canal do youtube de um determinado usuário  
 **URL:** /v2/user/{userId}/youtube  
 **URL Parameters:**
@@ -481,7 +541,7 @@ Atualizar canal do youtube de um determinado usuário
 | userId  | String   |
 
 **METHOD:** PUT  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"youtubeChannel": "www.youtube.com/meuvideo2"
@@ -489,7 +549,7 @@ Atualizar canal do youtube de um determinado usuário
 </pre>
 
 
-## _updateInstagramProfile_
+ - ### _updateInstagramProfile_
 Atualizar instagram de um determinado usuário  
 **URL:** /v2/user/{userId}/instagram  
 **URL Parameters:**  
@@ -499,7 +559,7 @@ Atualizar instagram de um determinado usuário
 | userId  | String   |
 
 **METHOD:** PUT  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"instagramProfile": "liceu.co"
@@ -507,7 +567,7 @@ Atualizar instagram de um determinado usuário
 </pre>
 
 
-## _updateDescription_
+ - ### _updateDescription_
 Atualizar descrição de um determinado usuário  
 **URL:** /v2/user/{userId}/description  
 **URL Parameters:**
@@ -517,7 +577,7 @@ Atualizar descrição de um determinado usuário
 | userId  | String   |
 
 **METHOD:** PUT  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"description": "aluno estudioso"
@@ -525,7 +585,7 @@ Atualizar descrição de um determinado usuário
 </pre>
 
 
-### __updateWebsite__
+ - ### _updateWebsite_
 Atualizar website de um determinado usuário  
 **URL:** /v2/user/{userId}/website  
 **URL Parameters:**
@@ -535,7 +595,7 @@ Atualizar website de um determinado usuário
 | userId  | String   |
 
 **METHOD:** PUT  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"website": "www.meusite.com.br"
@@ -544,7 +604,7 @@ Atualizar website de um determinado usuário
 
 
 
-## _updateProducerToBeFollowed_
+ - ### _updateProducerToBeFollowed_
 Inserir produtor da lista de seguidores de um usuário e usuário da lista de pessoas seguindo do produtor  
 **URL:** /v2/user/{userId}/followers    
 **URL Parameters:**
@@ -554,7 +614,7 @@ Inserir produtor da lista de seguidores de um usuário e usuário da lista de pe
 | userId  | String   |
 
 **METHOD:** PUT  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"producerId": "bbf0faf94faff222"
@@ -562,7 +622,7 @@ Inserir produtor da lista de seguidores de um usuário e usuário da lista de pe
 </pre>
 
 
-## _updateProducerToBeUnfollowed_
+ - ### _updateProducerToBeUnfollowed_
 Remover produtor da lista de seguidores de um usuário e usuário da lista de pessoas seguindo do produtor  
 **URL:** /v2/user/{userId}/followers  
 **URL Parameters:**
@@ -572,10 +632,22 @@ Remover produtor da lista de seguidores de um usuário e usuário da lista de pe
 | userId  | String   |
 
 **METHOD:** PUT  
-**Data example:**
+**BODY:**
 <pre>
      {
 	"producerId": "bbf0faf94faff222"
      }
 </pre>
 
+-----------------------
+
+# HTTP STATUS Codes Used
+- ### Success Response
+200 OK
+
+- ### Error Response
+400 BAD REQUEST  
+401 UNAUTHORIZED  
+500 INTERNAL SERVER ERROR
+  
+  
