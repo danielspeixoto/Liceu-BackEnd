@@ -18,7 +18,7 @@ Para comunicação com os ambientes é utilizado a seguintes URL base:
 **OBSERVAÇÃO: Toda função criada nesse repositório necessita de autenticação. Logo todo header de requisição necessita de:**  
 "API_KEY": apiKey,  
 "Authorization": accessToken  
-
+  
 ## HTTP STATUS CODES USED
 ### Success Response
 200 OK
@@ -27,13 +27,13 @@ Para comunicação com os ambientes é utilizado a seguintes URL base:
 400 BAD REQUEST  
 401 UNAUTHORIZED  
 500 INTERNAL SERVER ERROR
-
+  
 ## Funções de atividades:
 
 ## _getActivityFromUser_
-Retornar todas as atividades realizadas pelo ou para o usuário
-**URL:** /v2/activity/{userId} 
-**METHOD:** GET
+Retornar todas as atividades realizadas pelo ou para o usuário  
+**URL:** /v2/activity/{userId}  
+**METHOD:** GET  
  **URL Parameters:**
 
 | Parameter  | Type  |
@@ -45,21 +45,21 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 ## Funções de challenge:
 
 ## _getChallenge_
-Retornar challenge para início de challenge entre o usuário autenticado e outro usuário 
-**URL:**/v2/challenge
-**METHOD:** GET
+Retornar challenge para início de challenge entre o usuário autenticado e outro usuário  
+**URL:**/v2/challenge  
+**METHOD:** GET  
 
 ## _updateAnswers_
-Atualizar conjunto de resspostas do usuário autenticado
-**URL:** v2/challenge/{challengeId}
+Atualizar conjunto de resspostas do usuário autenticado  
+**URL:** v2/challenge/{challengeId}  
  **URL Parameters:**
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | challengeId  | String  |
 
-**METHOD:** PUT
-**Data example:** 
+**METHOD:** PUT  
+**Data example:**  
 <pre>
 	{
 		"answers" : [
@@ -79,9 +79,9 @@ Atualizar conjunto de resspostas do usuário autenticado
 ## Funções de explore:
 
 ## _getRandomPosts_
-Retornar posts aleatórios para o usuário
-**URL:** /v2/explore
-**METHOD:** GET
+Retornar posts aleatórios para o usuário  
+**URL:** /v2/explore  
+**METHOD:** GET  
  **URL Parameters:**
 
 | Parameter  | Type  |
@@ -94,9 +94,9 @@ Retornar posts aleatórios para o usuário
 ## Funções de feed:
 
 ## _getPostsForFeed_
-Retornar posts aleatórios para o usuário
-**URL:** /v2/feed
-**METHOD:** GET
+Retornar posts aleatórios para o usuário  
+**URL:** /v2/feed  
+**METHOD:** GET  
  **URL Parameters:**
 
 | Parameter  | Type  |
@@ -110,8 +110,9 @@ Retornar posts aleatórios para o usuário
 ## Funções de torneio:
 
 ## _submitGame_
-Inserir um jogo de torneio realizado pelo usuário  **URL:** /v2/game 
-**METHOD:** POST
+Inserir um jogo de torneio realizado pelo usuário  
+**URL:** /v2/game  
+**METHOD:** POST  
 **Data example:** 
 <pre>
 	{
@@ -142,8 +143,8 @@ Inserir um jogo de torneio realizado pelo usuário  **URL:** /v2/game
 
 ## _authenticate_
 Realizar login do usuário por autenticação externa  
-  **URL:** /v2/login 
-**METHOD:** POST
+**URL:** /v2/login  
+**METHOD:** POST  
 **Data example:** 
 <pre>
      {
@@ -158,9 +159,9 @@ be716ade4d6f88477e0ed869bff2626b0f2a2f185c850a75af7dc6fdb1ef56c61c1be15b08ee50f9
 ## Funções de post:
 
 ## _submitPost_
-Inserir um post do usuário
-**URL:** /v2/post 
-**METHOD:** POST
+Inserir um post do usuário  
+**URL:** /v2/post   
+**METHOD:** POST  
 **Data example:** 
 <pre>
 	{
@@ -193,15 +194,15 @@ Inserir um post do usuário
 
 
 ## _updatePostComments_
-Atualizar comentários de um determinado post
- **URL:**/v2/post/{postId}/comment
- **URL Parameters:**
+Atualizar comentários de um determinado post  
+ **URL:**/v2/post/{postId}/comment  
+ **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | postId  | String  |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:** 
 <pre>
      {
@@ -211,15 +212,15 @@ Atualizar comentários de um determinado post
 
  
 ## _deletePost_
-Remover um determinado post
- **URL:**/v2/post/{postId}
- **URL Parameters:**
+Remover um determinado post  
+ **URL:**/v2/post/{postId}  
+ **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | postId  | String  |
 
-**METHOD:** DELETE
+**METHOD:** DELETE  
 
 
 -----------------------
@@ -227,22 +228,22 @@ Remover um determinado post
 ## Funções de questões:
 
 ## _questions_
-Retornar questões baseados em um conjunto de tags
- **URL:** /v2/question
-  **URL Parameters:**
+Retornar questões baseados em um conjunto de tags  
+ **URL:** /v2/question    
+  **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | tags | String |
 | amount  | Int|
 
-**METHOD:** GET
+**METHOD:** GET  
 
 
 ## _videos_
-Retornar vídeos referentes a uma questão
- **URL:** /v2/{questionId}/videos
-  **URL Parameters:**
+Retornar vídeos referentes a uma questão  
+ **URL:** /v2/{questionId}/videos  
+  **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
@@ -253,15 +254,15 @@ Retornar vídeos referentes a uma questão
 **METHOD:** GET
 
 ## _getVideoById_
-Retornar video referente a um ID
- **URL:** /v2/{questionId}
- **URL Parameters:**
+Retornar video referente a um ID  
+ **URL:** /v2/{questionId}  
+ **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | questionId | String |
 
-**METHOD:** GET
+**METHOD:** GET  
 
 
 -----------------------
@@ -269,9 +270,9 @@ Retornar video referente a um ID
 ## Funções de ranking:
 
 ## _getRanking_
-Retornar lista de ranking
- **URL:** /v2/ranking
- **URL Parameters:**
+Retornar lista de ranking  
+ **URL:** /v2/ranking  
+ **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
@@ -279,7 +280,7 @@ Retornar lista de ranking
 | year | Int |
 | amount | Int |
 
-**METHOD:** GET
+**METHOD:** GET  
 
 
 -----------------------
@@ -287,9 +288,9 @@ Retornar lista de ranking
 ## Funções de report:
 
 ## _submit_
-Inserir report de erro
- **URL:** /v2/report
-**METHOD:** POST
+Inserir report de erro  
+ **URL:** /v2/report  
+**METHOD:** POST  
 **Data example:** 
 <pre>
      {
@@ -312,9 +313,9 @@ Inserir report de erro
 ## Funções de trivia:
 
 ## _submit_
-Inserir questão de trivia
- **URL:** /v2/trivia
-**METHOD:** POST
+Inserir questão de trivia  
+ **URL:** /v2/trivia  
+**METHOD:** POST  
 **Data example:**
 <pre>
      {
@@ -330,8 +331,8 @@ Inserir questão de trivia
 
 
 ## _triviaQuestions_
-Retornar questões de trivia
-**URL:** /v2/trivia
+Retornar questões de trivia  
+**URL:** /v2/trivia  
  **URL Parameters:**
 
 | Parameter  | Type  |
@@ -339,18 +340,18 @@ Retornar questões de trivia
 | tags | String |
 | amount | Int |
 
-**METHOD:** GET
+**METHOD:** GET  
 
 ## _updateComments_
-Atualizar comentários de uma determinada questão
- **URL:** /v2/trivia
- **URL Parameters:**
+Atualizar comentários de uma determinada questão  
+ **URL:** /v2/trivia   
+ **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | questionId  | String   |
 
-**METHOD:** POST
+**METHOD:** POST  
 **Data example:** 
 <pre>
      {
@@ -360,15 +361,15 @@ Atualizar comentários de uma determinada questão
 
 
 ## _updateRating_
-Atualizar pontuação de uma determinada questão
- **URL:** /v2/trivia/{questionId}/rating
+Atualizar pontuação de uma determinada questão  
+ **URL:** /v2/trivia/{questionId}/rating  
  **URL Parameters:**
  
 | Parameter  | Type  |
 | ------------ | ------------ |
 | questionId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:** 
 <pre>
      {
@@ -382,9 +383,9 @@ Atualizar pontuação de uma determinada questão
 ## Funções de user:
 
 ## _getUserById_
-Retornar usuário referente ao ID
-**URL:** /v2/user/{userId}
-**URL Parameters:**
+Retornar usuário referente ao ID  
+**URL:** /v2/user/{userId}  
+**URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
@@ -393,9 +394,9 @@ Retornar usuário referente ao ID
 **METHOD:** GET
 
 ## _getUsersByNameUsingLocation_
-Retornar usuários baseados em localização e nome 
- **URL:** /v2/user
- **URL Parameters:**
+Retornar usuários baseados em localização e nome   
+ **URL:** /v2/user  
+ **URL Parameters:**  
 
 |  Parameter  |  Type |
 | ------------ | ------------ |
@@ -404,11 +405,11 @@ Retornar usuários baseados em localização e nome
 | latitude   |  String  |
 |   amount  |  Int  |
 
-**METHOD:** GET
+**METHOD:** GET  
 
 ## _getChallengesFromUserById_
-Retornar challenges de um usúario
- **URL:** /v2/user/{userId}/challenge
+Retornar challenges de um usúario  
+ **URL:** /v2/user/{userId}/challenge  
  **URL Parameters:**
 
 | Parameter  | Type  |
@@ -419,9 +420,9 @@ Retornar challenges de um usúario
 
 
 ## _updateLocation_
-Atualizar localização de um determinado usuário
- **URL:** /{userId}/locale
- **URL Parameters:**
+Atualizar localização de um determinado usuário  
+ **URL:** /{userId}/locale  
+ **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
@@ -438,15 +439,15 @@ Atualizar localização de um determinado usuário
 
 
 ## _updateSchool_
-Atualizar escola de um determinado usuário
- **URL:** /v2/user/{userId}/school
- **URL Parameters:**
+Atualizar escola de um determinado usuário  
+ **URL:** /v2/user/{userId}/school  
+ **URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:**
 <pre>
      {
@@ -455,15 +456,15 @@ Atualizar escola de um determinado usuário
 </pre>
 
 ## _updateAge_
-Atualizar escola de um determinado usuário
-**URL:** /v2/user/{userId}/age
-**URL Parameters:**
+Atualizar escola de um determinado usuário  
+**URL:** /v2/user/{userId}/age  
+**URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:**
 <pre>
      {
@@ -475,15 +476,15 @@ Atualizar escola de um determinado usuário
 
 
 ## _updateYoutubeChannel_
-Atualizar canal do youtube de um determinado usuário
-**URL:** /v2/user/{userId}/youtube
+Atualizar canal do youtube de um determinado usuário  
+**URL:** /v2/user/{userId}/youtube  
 **URL Parameters:**
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:**
 <pre>
      {
@@ -493,15 +494,15 @@ Atualizar canal do youtube de um determinado usuário
 
 
 ## _updateInstagramProfile_
-Atualizar instagram de um determinado usuário
-**URL:** /v2/user/{userId}/instagram
-**URL Parameters:**
+Atualizar instagram de um determinado usuário  
+**URL:** /v2/user/{userId}/instagram  
+**URL Parameters:**  
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:**
 <pre>
      {
@@ -511,15 +512,15 @@ Atualizar instagram de um determinado usuário
 
 
 ## _updateDescription_
-Atualizar descrição de um determinado usuário
-**URL:** /v2/user/{userId}/description
+Atualizar descrição de um determinado usuário  
+**URL:** /v2/user/{userId}/description  
 **URL Parameters:**
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:**
 <pre>
      {
@@ -529,15 +530,15 @@ Atualizar descrição de um determinado usuário
 
 
 ### __updateWebsite__
-Atualizar website de um determinado usuário
-**URL:** /v2/user/{userId}/website
+Atualizar website de um determinado usuário  
+**URL:** /v2/user/{userId}/website  
 **URL Parameters:**
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:**
 <pre>
      {
@@ -548,15 +549,15 @@ Atualizar website de um determinado usuário
 
 
 ## _updateProducerToBeFollowed_
-Inserir produtor da lista de seguidores de um usuário e usuário da lista de pessoas seguindo do produtor
-**URL:** /v2/user/{userId}/followers
+Inserir produtor da lista de seguidores de um usuário e usuário da lista de pessoas seguindo do produtor  
+**URL:** /v2/user/{userId}/followers    
 **URL Parameters:**
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:**
 <pre>
      {
@@ -566,15 +567,15 @@ Inserir produtor da lista de seguidores de um usuário e usuário da lista de pe
 
 
 ## _updateProducerToBeUnfollowed_
-Remover produtor da lista de seguidores de um usuário e usuário da lista de pessoas seguindo do produtor
-**URL:** /v2/user/{userId}/followers
+Remover produtor da lista de seguidores de um usuário e usuário da lista de pessoas seguindo do produtor  
+**URL:** /v2/user/{userId}/followers  
 **URL Parameters:**
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
+**METHOD:** PUT  
 **Data example:**
 <pre>
      {
