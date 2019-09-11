@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus
 import java.time.Instant
 import java.util.*
 
-class TestGetPosts: TestSystem("/v2/post")  {
+class TestGetPosts: TestSystem("/v2/user")  {
     @Autowired
     lateinit var postRepo: PostRepository
 
