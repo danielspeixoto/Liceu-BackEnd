@@ -25,6 +25,7 @@ class GetChallenge(
 
     override fun run(userId: String): Challenge {
         try {
+            //test if  has direct Challenge first
             challengeRepository.matchMaking(userId)?.let {
                 Logging.info(
                         EVENT_NAME, TAGS ,

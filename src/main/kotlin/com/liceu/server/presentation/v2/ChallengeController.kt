@@ -21,11 +21,34 @@ import javax.validation.ValidationException
 @RequestMapping("/v2/challenge")
 class ChallengeController(
         @Autowired val challenge: ChallengeBoundary.IGetChallenge,
-        @Autowired val updateChallenge: ChallengeBoundary.IUpdateAnswers
+        @Autowired val updateChallenge: ChallengeBoundary.IUpdateAnswers,
+        @Autowired val submitChallenge: ChallengeBoundary.ICreateChallenge
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
 
+
+    @PostMapping
+    fun submitChallenge(
+            @RequestAttribute("userId") challengerId: String,
+            @RequestBody body: HashMap<String,Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<ChallengeResponse> {
+        val eventName = "challenge_post"
+        val eventTags = listOf(CONTROLLER, NETWORK, CHALLENGE, POST)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName,eventTags,data = networkData + hashMapOf<String,Any>(
+                "version" to 2
+        ))
+        return try {
+            val challengedId = body["challengedId"] as String? ?: throw ValidationException()
+            val result = submitChallenge.run(challengerId,challengedId)
+            ResponseEntity(toChallengeResponse(result),HttpStatus.OK)
+        }catch (e: Exception){
+            handleException(e, eventName, eventTags, networkData)
+        }
+    }
 
     @GetMapping
     fun getChallenge(

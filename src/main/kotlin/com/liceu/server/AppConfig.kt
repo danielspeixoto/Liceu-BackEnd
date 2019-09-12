@@ -5,6 +5,7 @@ import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.GetChallenge
+import com.liceu.server.domain.challenge.SubmitChallenge
 import com.liceu.server.domain.challenge.UpdateAnswers
 import com.liceu.server.domain.report.ReportBoundary
 import com.liceu.server.domain.report.SubmitReport
@@ -222,6 +223,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun updateRatingTrivia(): TriviaBoundary.IUpdateRating{
         return UpdateRating(mongoTriviaRepository)
+    }
+
+    @Bean
+    fun submitChallenge(): ChallengeBoundary.ICreateChallenge{
+        return SubmitChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository)
     }
 
     @Bean

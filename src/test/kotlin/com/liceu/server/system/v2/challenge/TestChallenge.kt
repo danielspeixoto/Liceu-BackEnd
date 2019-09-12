@@ -27,6 +27,29 @@ class TestChallenge: TestSystem ("/v2/challenge") {
     @Autowired
     override lateinit var testSetup: DataSetup
 
+
+    @Test
+    fun submitChallenge_validChallenge_returnChallenge(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "challengedId" to testSetup.USER_ID_2
+        ),headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST,entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body["challenger"]).isEqualTo(testSetup.USER_ID_1)
+        Truth.assertThat(body["challenged"]).isEqualTo(testSetup.USER_ID_2)
+        Truth.assertThat(body["answersChallenger"] as List<String>).isEmpty()
+        Truth.assertThat(body["answersChallenged"] as List<String>).isEmpty()
+        Truth.assertThat(body["scoreChallenger"]).isNull()
+        Truth.assertThat(body["scoreChallenger"]).isNull()
+        val triviaQuestionsUsed = (body["triviaQuestionsUsed"] as List<HashMap<String, Any>>)[0]
+        Truth.assertThat(triviaQuestionsUsed.size).isEqualTo(9)
+    }
+
+
     @Test
     fun getChallenge_exists_returnChallenge(){
         val headers = HttpHeaders()
@@ -165,6 +188,15 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
     }
 
+    @Test
+    fun submitChallenge_challengedIdToNull_throwBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(null,headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST,entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
 
 
 
