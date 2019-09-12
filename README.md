@@ -37,6 +37,7 @@
     + [_getUserById_](#getuserbyid)
     + [_getUsersByNameUsingLocation_](#getusersbynameusinglocation)
     + [_getChallengesFromUserById_](#getchallengesfromuserbyid)
+	+ [_getPostsFromUser_](#getpostsfromuser)
     + [_updateLocation_](#updatelocation)
     + [_updateSchool_](#updateschool)
     + [_updateAge_](#updateage)
@@ -83,6 +84,19 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 | ------------ | ------------ |
 | amount  | Int  |
 
+**Data Retrieved Example:**
+
+<pre>
+data : {
+	id: "0a1449a4123dsvad5ae1e462"
+	userId: "0a1449a4123dsvad5ae1e462"
+	type: "followedUser"
+	params: {
+		followedBy: "39c898725b75357a571d4cc2"
+	}
+}
+</pre>
+
 ------------------------
 
 ## Funções de challenge:
@@ -92,6 +106,38 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 Retornar challenge para início de challenge entre o usuário autenticado e outro usuário  
 **URL:**/v2/challenge  
 **METHOD:** GET  
+
+**Data Retrieved Example:**
+
+<pre>
+data: {
+	answersChallenged: []
+	answersChallenger: {
+		0: "4"
+		1: "2"
+		2: "1"
+		3: "2"
+		4: "9"
+	}
+	challenged: null
+	challenger: "0a1449a4123dsvad5ae1e462"
+	id: "39c898725b75357a571d4cc2"
+	scoreChallenged: null
+	scoreChallenger: 10
+	triviaQuestionsUsed: {
+		0:{
+			comments: null
+			correctAnswer: "4"
+			dislikes: null
+			id: "0a1449a4bdb40abd5ae1e421"
+			likes: null
+			question: "1+1+2= ?"
+			tags: (3) ["matematica", "angulos", "trigonometria"]
+			userId: "37235b2a87236abebce3f6e6"
+			wrongAnswer: "3"
+		}
+	}
+</pre>
 
  - ### _updateAnswers_
 
@@ -135,6 +181,46 @@ Retornar posts aleatórios para o usuário
 | ------------ | ------------ |
 | amount  | Int  |
 
+**Data Retrieved Example:**
+<pre>
+data: {
+	0: {
+		id: "09c54d325b70909a581d4ca2",
+		userId: "3a1221x2bdb40abd5ae1e431",
+		type: "text",
+		description: "teste de texto",
+		video: {},
+		submissionDate: 2019-08-27T11:40:20.000+00:00,
+		comments: {},
+		questions: {}
+	}
+	1: {
+		id: "3a1221x2bdb40abd112ae431",
+		userId: "3a1221x2bdb40abd5ae1e431",
+		type: "video",
+		description: "Teste vídeo",
+		video: {
+		videoUrl: "https://youtu.be/h_lRtkshuPI",
+			thumbnails{
+				high: "high",
+				medium: "medium",
+				small: "small"
+			}
+		},
+		submissionDate: 2019-08-27T11:40:20.000+00:00,
+		comments: {
+			0: {
+				id: "5d7005a5a1111226c8b02af0"
+				userId: "3a1221x2bdb40abd5ae1e431"
+				author: "Daniel Peixoto"
+				comment: "Alooou"
+			}
+		},
+		questions: {}
+	}
+}
+</pre>
+
 
 ------------------------
 
@@ -152,6 +238,21 @@ Retornar posts aleatórios para o usuário
 | before  | String  |
 | amount  | Int  |
 
+**Data Retrieved Example:**
+<pre>
+data: {
+	0: {
+		id: "09c54d325b70909a581d4ca2",
+		userId: "3a1221x2bdb40abd5ae1e431",
+		type: "text",
+		description: "teste de texto",
+		video: {},
+		submissionDate: 2019-08-27T11:40:20.000+00:00,
+		comments: {},
+		questions: {}
+	}
+}
+</pre>
 
 ------------------------
 
@@ -317,6 +418,28 @@ Retornar video referente a um ID
 
 **METHOD:** GET  
 
+**Data Retrieved Example:**
+<pre>
+data: {
+	id: "1a1449a4bdb40abd5ae1e431"
+	title: "primeira"
+	description: "primeiro video"
+	videoId: "videoId1"
+	questionId: "0a1449a4bdb40abd5ae1e431"
+	aspectRation: 1.100000023841858
+		thumbnails: {
+			high: "highQuality"
+			default: "defaultQuality"
+			medium: "mediumQuality"
+		}
+	channel: {
+		id: "channelId"
+		title: "channelTitle"
+	}
+	retrievalPosition: 3
+}
+</pre>
+
 
 -----------------------
 
@@ -336,6 +459,36 @@ Retornar lista de ranking
 | amount | Int |
 
 **METHOD:** GET  
+
+**Data Retrieved Example:**
+<pre>
+data: {
+	0:{
+	id: "47235b2a69999abebce3f6e3"
+	userId: "37235b22323c76abebce3f6e3"
+	answers:{
+		0: {
+		questionId:0a1441111db40abd5ae1e431
+		correctAnswer:2
+		selectedAnswer:2
+		}
+		1: {
+		questionId:07235b2a622222bebce3f6e6correctAnswer:3
+		selectedAnswer:3
+		}
+	}
+	submissionDate:2019-10-14T11:20:20.000+00:00
+	timeSpent: 1
+	score: 2
+	}
+	1: {
+	...
+	}
+	2: {
+	...
+	}
+}
+</pre>
 
 
 -----------------------
@@ -449,6 +602,30 @@ Retornar usuário referente ao ID
 
 **METHOD:** GET
 
+**Data Retrieved Example:**
+<pre>
+data: {
+	age: null
+	amountOfFollowers: 0
+	amountOfFollowing: 0
+	description: null
+	email: "teste@gmail.com"
+	following: false
+	id: "5d6d529222222c7774cbb7b8"
+	instagramProfile: null
+	name: "Daniel Peixoto"
+	picture:{
+		height: 200
+		url: "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2416844444679864&height=200&width=200&ext=1570813815&hash=AeQhKCfdTJAmbotc"
+		width: 200
+	}
+	school: null
+	state: null
+	website: null
+	youtubeChannel: null
+}
+</pre>
+
  - ### _getUsersByNameUsingLocation_
 Retornar usuários baseados em localização e nome   
  **URL:** /v2/user  
@@ -463,6 +640,51 @@ Retornar usuários baseados em localização e nome
 
 **METHOD:** GET  
 
+**Data Retrieved Example:**
+<pre>
+data:{
+	0: {
+			age: nullamountOfFollowers: 1
+			amountOfFollowing: 0
+			description: null
+			email: "user1@g.com"
+			following: true
+			id: "3a1449a4bdb2222d5ae1e431"
+			instagramProfile: null
+			name: "user1"
+			picture: {
+				url: "https://picture1.jpg",
+				width: 200, 
+				height: 200
+			}
+			school: null
+			state: null
+			website: null
+			youtubeChannel: null
+		}
+	1: {
+			age: null
+			amountOfFollowers: 1
+			amountOfFollowing: 0
+			description: null
+			email: "user2@g.com"
+			following: true
+			id: "3a1449a4bdb21111d5ae1e431"
+			instagramProfile: "5d6d52954c12227774cbb7b8"
+			name: "user2"
+			picture: {
+				url: "https://picture2.jpg", 
+				width: 200, 
+				height: 200
+			}
+			school: null
+			state: null
+			website: null
+			youtubeChannel: null
+		}
+}
+</pre>
+
  - ### _getChallengesFromUserById_
 Retornar challenges de um usúario  
  **URL:** /v2/user/{userId}/challenge  
@@ -474,6 +696,67 @@ Retornar challenges de um usúario
 
 **METHOD:** GET
 
+**Data Retrieved Example:**
+<pre>
+data: {
+	0: {
+		answersChallenged: []
+		answersChallenger: {
+			0: "4"
+			1: "2"
+			2: "1"
+			3: "2"
+			4: "9"
+		}
+		challenged: null
+		challenger: "5d6d52222c1bcc7774cbb7b8"
+		id: "5d7410915e299b6094c12e12"
+		scoreChallenged: nullscoreChallenger: 10
+		triviaQuestionsUsed: {
+			0:{
+				comments: null
+				correctAnswer: "4"
+				dislikes: null
+				id: "0a1449a4aaa40abd5ae1e421"
+				likes: null
+				question: "1+1+2= ?"
+				tags: (3) ["matematica", "angulos", "trigonometria"]
+				userId: "37235b2a12316abebce3f6e6"
+				wrongAnswer: "3"
+			}
+		}
+	}
+	1: {
+	....
+	}
+}
+</pre>
+
+ - ### _getPostsFromUser_
+Retornar posts de um usuário
+ **URL:** /v2/user/{userId}/posts  
+ **URL Parameters:**
+
+| Parameter  | Type  |
+| ------------ | ------------ |
+| userId  | String   |
+
+**METHOD:** GET
+**Data Retrieved Example:**
+<pre>
+data: {
+	0: {
+		id: "09c54d322222357a581d4ca2",
+		userId: "3a143212bdb40abd5ae1e431",
+		type: "text",
+		description: "teste de texto",
+		video: {},
+		submissionDate: 2019-08-27T11:40:20.000+00:00,
+		comments: {},
+		questions: {}
+	}
+}
+</pre>
 
  - ### _updateLocation_
 Atualizar localização de um determinado usuário  
