@@ -5,6 +5,7 @@ import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoReportRepository
 import com.liceu.server.data.ReportRepository
+import com.liceu.server.data.util.converters.toReport
 import com.liceu.server.domain.report.ReportToInsert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -55,7 +56,7 @@ class TestMongoReportRepositoryIntegration {
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
         ))
 
-        val report = data.toReport(reportRepo.findById(id).get())
+        val report = toReport(reportRepo.findById(id).get())
 
         Truth.assertThat(report.userId).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(report.message).isEqualTo("esse e um teste ahahahahah")
@@ -64,7 +65,5 @@ class TestMongoReportRepositoryIntegration {
         Truth.assertThat(report.tags[2]).isEqualTo("teste3haha")
         Truth.assertThat(report.params["oioi"]).isEqualTo(2)
         Truth.assertThat(report.params["lets go"]).isEqualTo("iha")
-//        Truth.assertThat(report.submissionDate.toString()).isEqualTo("Fri Oct 11 08:20:20 BRT 2019")
-
     }
 }

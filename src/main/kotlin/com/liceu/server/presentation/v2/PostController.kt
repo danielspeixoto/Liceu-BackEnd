@@ -2,6 +2,7 @@ package com.liceu.server.presentation.v2
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.post.*
+import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -84,24 +85,7 @@ class PostController(
                     "id" to id
             ), HttpStatus.OK)
         } catch (e: Exception) {
-            when (e) {
-                is ValidationException, is ClassCastException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.BAD_REQUEST)
-                }
-                else -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-                }
-            }
+            handleException(e, eventName, eventTags, networkData)
         }
     }
 
@@ -123,24 +107,7 @@ class PostController(
             updateComments.run(postId, authenticatedUserId, comment)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            when (e) {
-                is ValidationException, is ClassCastException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.BAD_REQUEST)
-                }
-                else -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-                }
-            }
+            handleException(e, eventName, eventTags, networkData)
         }
     }
 
@@ -160,26 +127,8 @@ class PostController(
             deletePosts.run(postId, authenticatedUserId)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            when (e) {
-                is ValidationException, is ClassCastException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.BAD_REQUEST)
-                }
-                else -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-                }
-            }
+            handleException(e, eventName, eventTags, networkData)
         }
-
     }
 
 }

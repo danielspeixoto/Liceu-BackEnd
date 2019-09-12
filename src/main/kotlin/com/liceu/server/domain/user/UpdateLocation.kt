@@ -4,6 +4,7 @@ import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 import java.util.Locale
+import kotlin.math.E
 import kotlin.math.sqrt
 
 
@@ -57,6 +58,10 @@ class UpdateLocation(
                         state = it.key
                     }
                 }
+                Logging.info(EVENT_NAME, TAGS, hashMapOf(
+                        "userId" to userId,
+                        "state" to state
+                ))
                 userRepository.updateLocationFromUser(userId,longitude,latitude,state)
             }catch (e: Exception){
                 Logging.error(EVENT_NAME, TAGS,e)

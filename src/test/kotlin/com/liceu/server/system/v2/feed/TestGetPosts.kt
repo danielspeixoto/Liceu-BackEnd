@@ -32,17 +32,7 @@ class TestGetPosts: TestSystem("/v2/feed")  {
     }
 
     @Test
-    fun getPostsForFeed_wrongDateFormat_throwError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String,Any>>>("$baseUrl?before=08-27T12:40:20.00Z&amount=10", HttpMethod.GET, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-    }
-
-    @Test
-    fun getPostsForFeed_amountToOne_throwError(){
+    fun getPostsForFeed_amountToOne_returnSinglePost(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -53,4 +43,15 @@ class TestGetPosts: TestSystem("/v2/feed")  {
         Truth.assertThat(body.size).isEqualTo(1)
         Truth.assertThat(body[0]["type"]).isEqualTo("video")
     }
+
+    @Test
+    fun getPostsForFeed_wrongDateFormat_throwInternalServerError(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<HashMap<String,Any>>>("$baseUrl?before=08-27T12:40:20.00Z&amount=10", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
 }

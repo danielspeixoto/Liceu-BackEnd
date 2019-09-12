@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import java.time.Instant
 import java.util.*
+import kotlin.collections.HashMap
 
 class TestGetPosts: TestSystem("/v2/user")  {
     @Autowired
@@ -23,7 +24,7 @@ class TestGetPosts: TestSystem("/v2/user")  {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/3a1449a4bdb40abd5ae1e431/posts", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.USER_ID_1}/posts", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(1)

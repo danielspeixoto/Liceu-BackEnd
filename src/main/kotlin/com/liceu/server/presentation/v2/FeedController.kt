@@ -4,6 +4,7 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.domain.post.*
 import com.liceu.server.presentation.util.converters.PostResponse
 import com.liceu.server.presentation.util.converters.toPostResponse
+import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,39 +42,7 @@ class FeedController(
             val postsRetrieved = getPostsForFeed.run(userId, date, amount)
             ResponseEntity(postsRetrieved?.map { toPostResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+            handleException(e, eventName, eventTags, networkData)
         }
     }
-
-    @GetMapping("/explore")
-    fun getRandomPosts(
-            @RequestParam("amount") amount: Int,
-            request: HttpServletRequest
-    ): ResponseEntity<List<PostResponse>> {
-        val eventName = "get_random_posts"
-        val eventTags = listOf(CONTROLLER, NETWORK, POST, RANDOM, RETRIEVAL)
-        val networkData = netUtils.networkData(request)
-        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
-                "version" to 2
-        ))
-        return try {
-            val postsRetrieved = getRandomPosts.run(amount)
-            ResponseEntity(postsRetrieved.map { toPostResponse(it) }, HttpStatus.OK)
-        } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-    }
-
-
-
 }

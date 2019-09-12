@@ -1,5 +1,6 @@
 package com.liceu.server.integration
 
+import com.liceu.server.data.util.converters.toGame
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
@@ -62,7 +63,7 @@ class TestMongoGameRepositoryIntegration {
                 1
         ))
 
-        val game = data.toGame(gameRepo.findById(id).get())
+        val game = toGame(gameRepo.findById(id).get())
 
         assertThat(game).isEqualTo(Game(
                 id,

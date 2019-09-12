@@ -32,7 +32,7 @@ class TestUserLocation: TestSystem("/v2/user") {
                 )
                 ,headers)
 
-        val response = restTemplate.exchange<Void>(baseUrl+"/3a1449a4bdb40abd5ae1e431/locale", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>(baseUrl+"/${testSetup.USER_ID_1}/locale", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val result = userRepo.findById(testSetup.USER_ID_1).get()
@@ -43,7 +43,7 @@ class TestUserLocation: TestSystem("/v2/user") {
 
 
     @Test
-    fun updateLocationFromUser_userExist_throwValidationException() {
+    fun updateLocationFromUser_longitudeToInt_throwBadRequest() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -55,12 +55,12 @@ class TestUserLocation: TestSystem("/v2/user") {
                 )
                 , headers)
 
-        val response = restTemplate.exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/locale", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/locale", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun getUsersByNameUsingLocation_userExists_returnListOfUsers(){
+    fun getUsersByNameUsingLocation_nameExists_returnListOfUsers(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -74,7 +74,7 @@ class TestUserLocation: TestSystem("/v2/user") {
     }
 
     @Test
-    fun getUsersByNameUsingLocation_userExists_returnListOfUser(){
+    fun getUsersByNameUsingLocation_nameExists_returnListOfUser(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -89,7 +89,7 @@ class TestUserLocation: TestSystem("/v2/user") {
     }
 
     @Test
-    fun getUsersByNameUsingLocationWithAccentuation_userExists_returnListOfUser(){
+    fun getUsersByNameUsingLocationWithAccentuation_nameExists_returnListOfUser(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -104,7 +104,7 @@ class TestUserLocation: TestSystem("/v2/user") {
     }
 
     @Test
-    fun getUsersByNameUsingLocation_emptyUser_throwException(){
+    fun getUsersByNameUsingLocation_emptyNameSearch_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -112,11 +112,11 @@ class TestUserLocation: TestSystem("/v2/user") {
         val entity = HttpEntity(null, headers)
         val response = restTemplate
                 .exchange<Void>("$baseUrl?name=&longitude=-44.30&latitude=-2.55&amount=15", HttpMethod.GET, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun getUsersByNameUsingLocation_amountZero_throwException(){
+    fun getUsersByNameUsingLocation_amountZero_throwInternalServerError(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -129,7 +129,7 @@ class TestUserLocation: TestSystem("/v2/user") {
     }
 
     @Test
-    fun getUsersByNameUsingLocation_latitudeAsString_throwException(){
+    fun getUsersByNameUsingLocation_latitudeAsString_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -141,7 +141,7 @@ class TestUserLocation: TestSystem("/v2/user") {
     }
 
     @Test
-    fun getUsersByNameUsingLocation_longitudeAsString_throwException(){
+    fun getUsersByNameUsingLocation_longitudeAsString_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN

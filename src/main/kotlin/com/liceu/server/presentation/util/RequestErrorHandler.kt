@@ -14,6 +14,14 @@ fun <T>handleException(e: Exception,
                     data: Map<String, *>
 ): ResponseEntity<T> {
     return when (e) {
+        is AuthenticationException -> {
+            Logging.error(
+                    eventName,
+                    eventTags,
+                    e, data = data
+            )
+            ResponseEntity(HttpStatus.UNAUTHORIZED)
+        }
         is ValidationException, is ClassCastException -> {
             Logging.error(
                     eventName,
@@ -29,14 +37,6 @@ fun <T>handleException(e: Exception,
                     e, data = data
             )
             ResponseEntity(HttpStatus.NOT_FOUND)
-        }
-        is AuthenticationException -> {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = data
-            )
-            ResponseEntity(HttpStatus.UNAUTHORIZED)
         }
         else -> {
             Logging.error(

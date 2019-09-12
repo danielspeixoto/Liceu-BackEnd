@@ -1,5 +1,6 @@
 package com.liceu.server.data
 
+import com.liceu.server.data.util.converters.toChallenge
 import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.challenge.ChallengeToInsert
@@ -14,6 +15,9 @@ import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
+import java.time.Instant
+import java.time.ZoneOffset
+import java.util.*
 
 
 @Repository
@@ -39,8 +43,8 @@ class MongoChallengeRepository(
                             it.tags,
                             it.comments?.map {
                                 MongoDatabase.MongoComment(
-                                        it.id,
-                                        it.userId,
+                                        ObjectId(matchmaking.challenger + Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()).toString()),
+                                        ObjectId(it.userId),
                                         it.author,
                                         it.comment
                                 )
@@ -83,8 +87,8 @@ class MongoChallengeRepository(
                                 triviaQuestion.tags,
                                 triviaQuestion.comments?.map {
                                     PostComment(
-                                            it.id,
-                                            it.userId,
+                                            it.id.toHexString(),
+                                            it.userId.toHexString(),
                                             it.author,
                                             it.comment
                                     )
@@ -127,38 +131,4 @@ class MongoChallengeRepository(
         }
     }
 
-    fun toChallenge(answer: MongoDatabase.MongoChallenge): Challenge {
-        return Challenge(
-                answer.id.toString(),
-                answer.challenger,
-                answer.challenged,
-                answer.answersChallenger,
-                answer.answersChallenged,
-                answer.scoreChallenger,
-                answer.scoreChallenged,
-                answer.triviaQuestionsUsed.map { toChallengeTrivia(it) },
-                answer.submissionDate
-        )
-    }
-
-    fun toChallengeTrivia(answer: MongoDatabase.MongoChallengeTrivia): TriviaQuestion {
-        return TriviaQuestion(
-                answer.id.toString(),
-                answer.userId.toString(),
-                answer.question,
-                answer.correctAnswer,
-                answer.wrongAnswer,
-                answer.tags,
-                answer.comments?.map {
-                    PostComment(
-                            it.id,
-                            it.userId,
-                            it.author,
-                            it.comment
-                    )
-                },
-                answer.likes,
-                answer.dislikes
-        )
-    }
 }

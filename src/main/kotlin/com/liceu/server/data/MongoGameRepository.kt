@@ -1,5 +1,6 @@
 package com.liceu.server.data
 
+import com.liceu.server.data.util.converters.toGame
 import com.liceu.server.domain.game.*
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
@@ -86,20 +87,4 @@ class MongoGameRepository(
         return lastRequest
     }
 
-
-
-    fun toGame(doc: MongoDatabase.MongoGame): Game {
-        return Game(
-                doc.id.toHexString(),
-                doc.userId.toHexString(),
-                doc.answers.map { Answer(
-                        it.questionId.toHexString(),
-                        it.correctAnswer,
-                        it.selectedAnswer
-                ) },
-                doc.submissionDate,
-                doc.timeSpent,
-                doc.score
-        )
-    }
 }

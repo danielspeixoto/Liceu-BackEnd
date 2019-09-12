@@ -34,8 +34,8 @@ data class TriviaQuestionToInsert(
 
 
     data class PostComment (
-            var id: ObjectId,
-            var userId: ObjectId,
+            var id: String,
+            var userId: String,
             var author: String,
             var comment: String
     )
