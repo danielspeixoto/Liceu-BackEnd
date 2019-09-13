@@ -32,24 +32,26 @@ class UpdateAnswers(
                 }
             }
             challengeRepository.updateAnswers(challengeId,isChallenger,answers,result)
-            activityRepository.insertActivity(ActivityToInsert(
-                    challenge.challenger,
-                    "challengeFinished",
-                    hashMapOf(
-                            "challengeId" to challenge.id,
-                            "challengedId" to challenge.challenged!!
-                    ),
-                    TimeStamp.retrieveActualTimeStamp()
-            ))
-            activityRepository.insertActivity(ActivityToInsert(
-                    challenge.challenged!!,
-                    "challengeFinished",
-                    hashMapOf(
-                            "challengeId" to challenge.id,
-                            "challengedId" to  challenge.challenger
-                    ),
-                    TimeStamp.retrieveActualTimeStamp()
-            ))
+            if(challenge.challenged != null){
+                activityRepository.insertActivity(ActivityToInsert(
+                        challenge.challenger,
+                        "challengeFinished",
+                        hashMapOf(
+                                "challengeId" to challenge.id,
+                                "challengedId" to challenge.challenged
+                        ),
+                        TimeStamp.retrieveActualTimeStamp()
+                ))
+                activityRepository.insertActivity(ActivityToInsert(
+                        challenge.challenged,
+                        "challengeFinished",
+                        hashMapOf(
+                                "challengeId" to challenge.id,
+                                "challengerId" to  challenge.challenger
+                        ),
+                        TimeStamp.retrieveActualTimeStamp()
+                ))
+            }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "challengeId" to challengeId,
                     "player" to player

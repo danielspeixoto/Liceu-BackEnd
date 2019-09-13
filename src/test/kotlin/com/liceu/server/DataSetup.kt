@@ -42,6 +42,9 @@ class DataSetup {
     val CHALLENGE_TRIVIA_ID_3 = "09c54d325b75357a571d4cc1"
     val CHALLENGE_TRIVIA_ID_4 = "09c54d325b75357a571d4cd2"
     val CHALLENGE_TRIVIA_ID_5 = "09c54d325b75357a571d4ce2"
+    val CHALLENGE_TRIVIA_ID_6 = "09c54d425b75357a571d4ce2"
+    val CHALLENGE_TRIVIA_ID_7 = "09b54d425b75357a571d4ce2"
+    val CHALLENGE_TRIVIA_ID_8 = "09b44d425b75357a571d4ce2"
 
     val POST_ID_1 = "09c54d325b75357a581d4ca2"
     val POST_ID_2 = "09c54d325b75357a581d4ca3"
@@ -80,6 +83,10 @@ class DataSetup {
     }
 
     val USER_ID_3 = "37235b2a67c76abebce3f6e6"
+    val USER_3_ACCESS_TOKEN by lazy {
+        jwtAuth.sign(USER_ID_3)
+    }
+
     val USER_ID_4 = "37235b2a67c76abebce3f6e3"
     val USER_ID_5 = "37235b2a67c76abebce3f6e8"
 
@@ -664,14 +671,12 @@ class DataSetup {
         val ch1 = MongoDatabase.MongoChallenge(
                 USER_ID_3,
                 USER_ID_2,
-                //null,
                 listOf(
                         "oi",
                         "abriu",
                         "testando",
                         "4"
                 ),
-                //listOf(),
                 listOf(
                         "oi2",
                         "abriu2",
@@ -749,7 +754,6 @@ class DataSetup {
                         )
                 ),
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
-                //Date.from(Instant.parse("2019-10-11T19:20:20.00Z"))
         )
         ch2.id = ObjectId(CHALLENGE_TRIVIA_ID_2)
         challengeRepo.insert(ch2)
@@ -855,7 +859,124 @@ class DataSetup {
         )
         ch5.id = ObjectId(CHALLENGE_TRIVIA_ID_5)
         challengeRepo.insert(ch5)
+
+    val ch6 = MongoDatabase.MongoChallenge(
+                USER_ID_1,
+                null,
+                listOf(),
+                listOf(),
+                null,
+                null,
+                listOf(
+                    MongoDatabase.MongoChallengeTrivia(
+                            ObjectId(QUESTION_TRIVIA_ID_1),
+                            ObjectId(USER_ID_4),
+                            "1+2?",
+                            "3",
+                            "0",
+                            listOf(
+                                    "graficos",
+                                    "algebra"
+                            ),
+                            null,
+                            null,
+                            null
+                    ),
+                    MongoDatabase.MongoChallengeTrivia(
+                            ObjectId(QUESTION_TRIVIA_ID_1),
+                            ObjectId(USER_ID_4),
+                            "1+3?",
+                            "4",
+                            "0",
+                            listOf(
+                                    "graficos",
+                                    "algebra"
+                            ),
+                            null,
+                            null,
+                            null
+                    ),
+                    MongoDatabase.MongoChallengeTrivia(
+                            ObjectId(QUESTION_TRIVIA_ID_1),
+                            ObjectId(USER_ID_4),
+                            "1+4?",
+                            "5",
+                            "1",
+                            listOf(
+                                    "graficos",
+                                    "algebra"
+                            ),
+                            null,
+                            null,
+                            null
+                    )
+            ),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+        )
+        ch6.id = ObjectId(CHALLENGE_TRIVIA_ID_6)
+        challengeRepo.insert(ch6)
+
+        val ch7 = MongoDatabase.MongoChallenge(
+                USER_ID_1,
+                USER_ID_2,
+                listOf(
+                        "1"
+                ),
+                listOf(),
+                0,
+                null,
+                listOf(
+                        MongoDatabase.MongoChallengeTrivia(
+                                ObjectId(QUESTION_TRIVIA_ID_1),
+                                ObjectId(USER_ID_4),
+                                "1+2?",
+                                "3",
+                                "0",
+                                listOf(
+                                        "graficos",
+                                        "algebra"
+                                ),
+                                null,
+                                null,
+                                null
+                        )
+                ),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+        )
+        ch7.id = ObjectId(CHALLENGE_TRIVIA_ID_7)
+        challengeRepo.insert(ch7)
+
+        val ch8 = MongoDatabase.MongoChallenge(
+                USER_ID_1,
+                USER_ID_3,
+                listOf(
+                        "1"
+                ),
+                listOf(),
+                0,
+                null,
+                listOf(
+                        MongoDatabase.MongoChallengeTrivia(
+                                ObjectId(QUESTION_TRIVIA_ID_1),
+                                ObjectId(USER_ID_4),
+                                "1+2?",
+                                "3",
+                                "0",
+                                listOf(
+                                        "graficos",
+                                        "algebra"
+                                ),
+                                null,
+                                null,
+                                null
+                        )
+                ),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+        )
+        ch8.id = ObjectId(CHALLENGE_TRIVIA_ID_8)
+        challengeRepo.insert(ch8)
     }
+
     fun post(){
         val post1 = MongoDatabase.MongoPost(
                 ObjectId(USER_ID_1),

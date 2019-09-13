@@ -107,7 +107,7 @@ class MongoChallengeRepository(
     override fun verifyDirectChallenges(challengedId: String): Challenge? {
         val result = template.findOne(
                 Query.query(Criteria
-                        .where("challenged").isEqualTo(ObjectId(challengedId))
+                        .where("challenged").isEqualTo(challengedId)
                         .and("answersChallenged").size(0)
                 ),
                 MongoDatabase.MongoChallenge::class.java
