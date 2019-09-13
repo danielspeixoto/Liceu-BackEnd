@@ -553,13 +553,10 @@ Retornar video referente a um ID
 </pre>
 
 
-
 -----------------------
 
 
-
-
-##Funções de ranking:
+## Funções de ranking:
 
 
   - ### _getRanking_
@@ -857,9 +854,9 @@ Retornar challenges de um usúario
 </pre>
 
  - ### _getPostsFromUser_
-Retornar posts de um usuário
- **URL:** /v2/user/{userId}/posts  
- **URL Parameters:**
+Retornar posts de um usuário  
+**URL:** /v2/user/{userId}/posts  
+**URL Parameters:**
 
 | Parameter  | Type  |
 | ------------ | ------------ |
