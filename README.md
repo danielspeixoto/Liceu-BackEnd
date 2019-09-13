@@ -26,6 +26,7 @@
     + [_questions_](#questions)
     + [_videos_](#videos)
     + [_getVideoById_](#getvideobyid)
+  * [Funções de ranking:](#funções-de-ranking)
     + [_getRanking_](#getranking)
   * [Funções de report:](#funções-de-report)
     + [_submitReport_](#submitReport)
