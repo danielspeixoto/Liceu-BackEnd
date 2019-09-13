@@ -7,7 +7,10 @@
   * [Funções de atividades:](#funções-de-atividades)
     + [_getActivityFromUser_](#getactivityfromuser)
   * [Funções de challenge:](#funções-de-challenge)
+<<<<<<< HEAD
     + [_submitChallenge_](#submitchallenge)
+=======
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
     + [_getChallenge_](#getchallenge)
     + [_updateAnswers_](#updateanswers)
   * [Funções de explore:](#funções-de-explore)
@@ -26,7 +29,10 @@
     + [_questions_](#questions)
     + [_videos_](#videos)
     + [_getVideoById_](#getvideobyid)
+<<<<<<< HEAD
   * [Funções de ranking:](#funções-de-ranking)
+=======
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
     + [_getRanking_](#getranking)
   * [Funções de report:](#funções-de-report)
     + [_submitReport_](#submitReport)
@@ -89,12 +95,21 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 **Data Retrieved Example:**
 
 <pre>
+<<<<<<< HEAD
 {
 	"id": "0a1449a4123dsvad5ae1e462"
 	"userId": "0a1449a4123dsvad5ae1e462"
 	"type": "followedUser"
 	"params": {
 		"followedBy": "39c898725b75357a571d4cc2"
+=======
+data : {
+	id: "0a1449a4123dsvad5ae1e462"
+	userId: "0a1449a4123dsvad5ae1e462"
+	type: "followedUser"
+	params: {
+		followedBy: "39c898725b75357a571d4cc2"
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 	}
 }
 </pre>
@@ -103,6 +118,7 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 
 ## Funções de challenge:
 
+<<<<<<< HEAD
 - ### _submitChallenge_
 Desafio direto de um usuário para outro usuário
 **URL:**/v2/challenge  
@@ -159,6 +175,8 @@ Desafio direto de um usuário para outro usuário
 }
 </pre>
 
+=======
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
  - ###  _getChallenge_
 
 Retornar challenge para início de challenge entre o usuário autenticado e outro usuário  
@@ -168,6 +186,7 @@ Retornar challenge para início de challenge entre o usuário autenticado e outr
 **Data Retrieved Example:**
 
 <pre>
+<<<<<<< HEAD
 {
     "id": "09c54aa21414357a571d4cc1",
     "challenger": "37235321avc76abebce3f6e6",
@@ -204,6 +223,35 @@ Retornar challenge para início de challenge entre o usuário autenticado e outr
         }
     ]
 }
+=======
+data: {
+	answersChallenged: []
+	answersChallenger: {
+		0: "4"
+		1: "2"
+		2: "1"
+		3: "2"
+		4: "9"
+	}
+	challenged: null
+	challenger: "0a1449a4123dsvad5ae1e462"
+	id: "39c898725b75357a571d4cc2"
+	scoreChallenged: null
+	scoreChallenger: 10
+	triviaQuestionsUsed: {
+		0:{
+			comments: null
+			correctAnswer: "4"
+			dislikes: null
+			id: "0a1449a4bdb40abd5ae1e421"
+			likes: null
+			question: "1+1+2= ?"
+			tags: (3) ["matematica", "angulos", "trigonometria"]
+			userId: "37235b2a87236abebce3f6e6"
+			wrongAnswer: "3"
+		}
+	}
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 </pre>
 
  - ### _updateAnswers_
@@ -250,6 +298,7 @@ Retornar posts aleatórios para o usuário
 
 **Data Retrieved Example:**
 <pre>
+<<<<<<< HEAD
 {
         "id": "09c54daaa75357a581d4ca2",
         "userId": "37235321avc76abebce3f6e6",
@@ -287,6 +336,44 @@ Retornar posts aleatórios para o usuário
             }
         ]
     }
+=======
+data: {
+	0: {
+		id: "09c54d325b70909a581d4ca2",
+		userId: "3a1221x2bdb40abd5ae1e431",
+		type: "text",
+		description: "teste de texto",
+		video: {},
+		submissionDate: 2019-08-27T11:40:20.000+00:00,
+		comments: {},
+		questions: {}
+	}
+	1: {
+		id: "3a1221x2bdb40abd112ae431",
+		userId: "3a1221x2bdb40abd5ae1e431",
+		type: "video",
+		description: "Teste vídeo",
+		video: {
+		videoUrl: "https://youtu.be/h_lRtkshuPI",
+			thumbnails{
+				high: "high",
+				medium: "medium",
+				small: "small"
+			}
+		},
+		submissionDate: 2019-08-27T11:40:20.000+00:00,
+		comments: {
+			0: {
+				id: "5d7005a5a1111226c8b02af0"
+				userId: "3a1221x2bdb40abd5ae1e431"
+				author: "Daniel Peixoto"
+				comment: "Alooou"
+			}
+		},
+		questions: {}
+	}
+}
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 </pre>
 
 
@@ -308,6 +395,7 @@ Retornar posts aleatórios para o usuário
 
 **Data Retrieved Example:**
 <pre>
+<<<<<<< HEAD
 {
         "id": "09c54d325b75357a581d4ca4",
         "userId": "37235b2a67c76abebce3f6e3",
@@ -325,6 +413,19 @@ Retornar posts aleatórios para o usuário
         "submissionDate": "2019-08-27T12:40:20.000+0000",
         "comments": null,
         "questions": null
+=======
+data: {
+	0: {
+		id: "09c54d325b70909a581d4ca2",
+		userId: "3a1221x2bdb40abd5ae1e431",
+		type: "text",
+		description: "teste de texto",
+		video: {},
+		submissionDate: 2019-08-27T11:40:20.000+00:00,
+		comments: {},
+		questions: {}
+	}
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 }
 </pre>
 
@@ -463,6 +564,7 @@ Retornar questões baseados em um conjunto de tags
 | amount  | Int|
 
 **METHOD:** GET  
+<<<<<<< HEAD
 **Data Retrieved Example:**
 <pre>
 [
@@ -485,6 +587,12 @@ Retornar questões baseados em um conjunto de tags
 
  - ###  _videos_
 
+=======
+
+ - ###  _videos_
+
+
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 Retornar vídeos referentes a uma questão  
  **URL:** /v2/{questionId}/videos  
   **URL Parameters:**  
@@ -495,6 +603,7 @@ Retornar vídeos referentes a uma questão
 | start | Int |
 | amount | Int |
 
+<<<<<<< HEAD
 **METHOD:** GET  
 **Data Retrieved Example:**
 <pre>
@@ -521,6 +630,13 @@ Retornar vídeos referentes a uma questão
 
   - ### _getVideoById_
 
+=======
+**METHOD:** GET
+
+  - ### _getVideoById_
+
+
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 Retornar video referente a um ID  
  **URL:** /v2/{questionId}  
  **URL Parameters:**  
@@ -530,6 +646,7 @@ Retornar video referente a um ID
 | questionId | String |
 
 **METHOD:** GET  
+<<<<<<< HEAD
 **Data Retrieved Example:**
 <pre>
 [
@@ -551,14 +668,41 @@ Retornar video referente a um ID
 				   "retrievalPosition": 1
 		}
 ]
+=======
+
+**Data Retrieved Example:**
+<pre>
+data: {
+	id: "1a1449a4bdb40abd5ae1e431"
+	title: "primeira"
+	description: "primeiro video"
+	videoId: "videoId1"
+	questionId: "0a1449a4bdb40abd5ae1e431"
+	aspectRation: 1.100000023841858
+		thumbnails: {
+			high: "highQuality"
+			default: "defaultQuality"
+			medium: "mediumQuality"
+		}
+	channel: {
+		id: "channelId"
+		title: "channelTitle"
+	}
+	retrievalPosition: 3
+}
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 </pre>
 
 
 -----------------------
 
+<<<<<<< HEAD
 
 ## Funções de ranking:
 
+=======
+##Funções de ranking:
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 
   - ### _getRanking_
 
@@ -577,6 +721,7 @@ Retornar lista de ranking
 
 **Data Retrieved Example:**
 <pre>
+<<<<<<< HEAD
  [
     {
         "id": "47235b2a67c76abebce3f6e3",
@@ -615,6 +760,34 @@ Retornar lista de ranking
         "timeSpent": 3
     }
 ]
+=======
+data: {
+	0:{
+	id: "47235b2a69999abebce3f6e3"
+	userId: "37235b22323c76abebce3f6e3"
+	answers:{
+		0: {
+		questionId:0a1441111db40abd5ae1e431
+		correctAnswer:2
+		selectedAnswer:2
+		}
+		1: {
+		questionId:07235b2a622222bebce3f6e6correctAnswer:3
+		selectedAnswer:3
+		}
+	}
+	submissionDate:2019-10-14T11:20:20.000+00:00
+	timeSpent: 1
+	score: 2
+	}
+	1: {
+	...
+	}
+	2: {
+	...
+	}
+}
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 </pre>
 
 
@@ -677,6 +850,7 @@ Retornar questões de trivia
 | amount | Int |
 
 **METHOD:** GET  
+<<<<<<< HEAD
 **Data Retrieved Example:**
 <pre>
 [
@@ -696,6 +870,8 @@ Retornar questões de trivia
         "dislikes": null
     }
 </pre>
+=======
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 
  - ### _updateComments_
 Atualizar comentários de uma determinada questão  
@@ -750,6 +926,7 @@ Retornar usuário referente ao ID
 
 **Data Retrieved Example:**
 <pre>
+<<<<<<< HEAD
 {
     "id": "37235b2a67c76abebce3f6e6",
     "name": "manitos1",
@@ -769,6 +946,27 @@ Retornar usuário referente ao ID
     "amountOfFollowers": 1,
     "amountOfFollowing": 2,
     "following": true
+=======
+data: {
+	age: null
+	amountOfFollowers: 0
+	amountOfFollowing: 0
+	description: null
+	email: "teste@gmail.com"
+	following: false
+	id: "5d6d529222222c7774cbb7b8"
+	instagramProfile: null
+	name: "Daniel Peixoto"
+	picture:{
+		height: 200
+		url: "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2416844444679864&height=200&width=200&ext=1570813815&hash=AeQhKCfdTJAmbotc"
+		width: 200
+	}
+	school: null
+	state: null
+	website: null
+	youtubeChannel: null
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 }
 </pre>
 
@@ -788,6 +986,7 @@ Retornar usuários baseados em localização e nome
 
 **Data Retrieved Example:**
 <pre>
+<<<<<<< HEAD
 {
     "id": "3723522227c76abebce3f6e6",
     "name": "manolo1",
@@ -807,6 +1006,48 @@ Retornar usuários baseados em localização e nome
     "amountOfFollowers": 1,
     "amountOfFollowing": 2,
     "following": true
+=======
+data:{
+	0: {
+			age: nullamountOfFollowers: 1
+			amountOfFollowing: 0
+			description: null
+			email: "user1@g.com"
+			following: true
+			id: "3a1449a4bdb2222d5ae1e431"
+			instagramProfile: null
+			name: "user1"
+			picture: {
+				url: "https://picture1.jpg",
+				width: 200, 
+				height: 200
+			}
+			school: null
+			state: null
+			website: null
+			youtubeChannel: null
+		}
+	1: {
+			age: null
+			amountOfFollowers: 1
+			amountOfFollowing: 0
+			description: null
+			email: "user2@g.com"
+			following: true
+			id: "3a1449a4bdb21111d5ae1e431"
+			instagramProfile: "5d6d52954c12227774cbb7b8"
+			name: "user2"
+			picture: {
+				url: "https://picture2.jpg", 
+				width: 200, 
+				height: 200
+			}
+			school: null
+			state: null
+			website: null
+			youtubeChannel: null
+		}
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 }
 </pre>
 
@@ -823,6 +1064,7 @@ Retornar challenges de um usúario
 
 **Data Retrieved Example:**
 <pre>
+<<<<<<< HEAD
 [
 	{
         "id": "09b44d425b75357a571d4ce2",
@@ -858,11 +1100,52 @@ Retornar challenges de um usúario
 Retornar posts de um usuário  
 **URL:** /v2/user/{userId}/posts  
 **URL Parameters:**
+=======
+data: {
+	0: {
+		answersChallenged: []
+		answersChallenger: {
+			0: "4"
+			1: "2"
+			2: "1"
+			3: "2"
+			4: "9"
+		}
+		challenged: null
+		challenger: "5d6d52222c1bcc7774cbb7b8"
+		id: "5d7410915e299b6094c12e12"
+		scoreChallenged: nullscoreChallenger: 10
+		triviaQuestionsUsed: {
+			0:{
+				comments: null
+				correctAnswer: "4"
+				dislikes: null
+				id: "0a1449a4aaa40abd5ae1e421"
+				likes: null
+				question: "1+1+2= ?"
+				tags: (3) ["matematica", "angulos", "trigonometria"]
+				userId: "37235b2a12316abebce3f6e6"
+				wrongAnswer: "3"
+			}
+		}
+	}
+	1: {
+	....
+	}
+}
+</pre>
+
+ - ### _getPostsFromUser_
+Retornar posts de um usuário
+ **URL:** /v2/user/{userId}/posts  
+ **URL Parameters:**
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 
 | Parameter  | Type  |
 | ------------ | ------------ |
 | userId  | String   |
 
+<<<<<<< HEAD
 **METHOD:** GET  
 **Data Retrieved Example:**
 <pre>
@@ -886,6 +1169,23 @@ Retornar posts de um usuário
         "questions": null
     }
 ]
+=======
+**METHOD:** GET
+**Data Retrieved Example:**
+<pre>
+data: {
+	0: {
+		id: "09c54d322222357a581d4ca2",
+		userId: "3a143212bdb40abd5ae1e431",
+		type: "text",
+		description: "teste de texto",
+		video: {},
+		submissionDate: 2019-08-27T11:40:20.000+00:00,
+		comments: {},
+		questions: {}
+	}
+}
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 </pre>
 
  - ### _updateLocation_
@@ -897,8 +1197,13 @@ Atualizar localização de um determinado usuário
 | ------------ | ------------ |
 | userId  | String   |
 
+<<<<<<< HEAD
 **METHOD:** PUT  
 **BODY:**  
+=======
+**METHOD:** PUT
+**BODY:** 
+>>>>>>> e03940728c19e8f8f2adafb6aaa482d1355f141e
 <pre>
      {
 	"longitude": "-10.87723",
