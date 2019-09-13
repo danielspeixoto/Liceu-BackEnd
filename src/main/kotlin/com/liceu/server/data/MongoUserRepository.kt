@@ -1,6 +1,6 @@
 package com.liceu.server.data
 
-import com.liceu.server.domain.aggregates.Picture
+import com.liceu.server.data.util.converters.toUser
 import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.trivia.PostComment
@@ -185,7 +185,7 @@ class MongoUserRepository(
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
         val agg = Aggregation.newAggregation(match)
         val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
-        val userRetrieved = results.map {toUser(it)}
+        val userRetrieved = results.map { toUser(it) }
         if (userRetrieved.isNotEmpty()) {
             return userRetrieved[0]
         } else {
@@ -232,8 +232,8 @@ class MongoUserRepository(
                                 triviaQuestion.tags,
                                 triviaQuestion.comments?.map {
                                     PostComment(
-                                            it.id,
-                                            it.userId,
+                                            it.id.toHexString(),
+                                            it.userId.toHexString(),
                                             it.author,
                                             it.comment
                                     )
@@ -264,31 +264,7 @@ class MongoUserRepository(
             agg = Aggregation.newAggregation(match,sample)
         }
         val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
-        return results.map {toUser(it)}
-    }
-
-
-    fun toUser(mongoUser: MongoDatabase.MongoUser): User{
-        return User(
-                mongoUser.id.toHexString(),
-                mongoUser.name,
-                mongoUser.email,
-                Picture(
-                        mongoUser.picture.url,
-                        mongoUser.picture.width,
-                        mongoUser.picture.height
-                ),
-                mongoUser.location,
-                mongoUser.state,
-                mongoUser.school,
-                mongoUser.age,
-                mongoUser.youtubeChannel,
-                mongoUser.instagramProfile,
-                mongoUser.description,
-                mongoUser.website,
-                mongoUser.followers?.map { it.toHexString() },
-                mongoUser.following?.map { it.toHexString() }
-        )
+        return results.map { toUser(it) }
     }
 
 }

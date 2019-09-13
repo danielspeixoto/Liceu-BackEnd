@@ -5,9 +5,9 @@ import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoTriviaRepository
 import com.liceu.server.data.TriviaRepository
+import com.liceu.server.data.util.converters.toTriviaQuestion
 import com.liceu.server.domain.trivia.TriviaQuestionToInsert
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,7 +50,7 @@ class TestMongoTriviaRepositoryIntegration {
                 )
         ))
 
-        val report = data.toTriviaQuestion(reportRepo.findById(id).get())
+        val report = toTriviaQuestion(reportRepo.findById(id).get())
         Truth.assertThat(report.userId).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(report.question).isEqualTo("essa e uma questao de teste sobre matematica: Seno de 0?")
         Truth.assertThat(report.correctAnswer).isEqualTo("0")

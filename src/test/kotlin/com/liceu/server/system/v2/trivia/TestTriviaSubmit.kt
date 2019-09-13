@@ -48,7 +48,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     }
 
     @Test
-    fun submitTrivia_overflowQuestionCharacters_Invalid(){
+    fun submitTrivia_overflowQuestionCharacters_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -75,7 +75,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     }
 
     @Test
-    fun submitTrivia_overflowCorrectAnswer_Invalid(){
+    fun submitTrivia_overflowCorrectAnswer_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -101,7 +101,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     }
 
     @Test
-    fun submitTrivia_overflowWrongAnswer_Invalid(){
+    fun submitTrivia_overflowWrongAnswer_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -127,7 +127,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     }
 
     @Test
-    fun submitTrivia_overflowTagsSize_Invalid(){
+    fun submitTrivia_overflowTagsSize_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -151,7 +151,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     }
 
     @Test
-    fun submitTrivia_missMatchTypeTags_Invalid(){
+    fun submitTrivia_missMatchTypeTags_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -174,7 +174,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     }
 
     @Test
-    fun submitTrivia_emptyQuestionCharacters_Invalid(){
+    fun submitTrivia_emptyQuestionCharacters_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -196,7 +196,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     }
 
     @Test
-    fun submitTrivia_emptyCorrectAnswer_Invalid(){
+    fun submitTrivia_emptyCorrectAnswer_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -219,7 +219,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
 
 
     @Test
-    fun submitTrivia_emptyWrongAnswer_Invalid(){
+    fun submitTrivia_emptyWrongAnswer_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -241,7 +241,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
     }
 
     @Test
-    fun submitTrivia_missMatchTypeQuestion_Invalid(){
+    fun submitTrivia_missMatchTypeQuestion_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN

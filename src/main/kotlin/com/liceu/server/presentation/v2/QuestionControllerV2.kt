@@ -4,6 +4,10 @@ import com.liceu.server.domain.global.*
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.question.QuestionBoundary
 import com.liceu.server.domain.video.Video
+import com.liceu.server.presentation.util.converters.QuestionResponse
+import com.liceu.server.presentation.util.converters.toQuestionResponse
+import com.liceu.server.presentation.util.converters.toVideoResponse
+import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,21 +28,6 @@ class QuestionControllerV2(
     @Autowired
     lateinit var netUtils: NetworkUtils
 
-    data class QuestionResponse(
-            val id: String,
-            val view: String,
-            val source: String,
-            val variant: String,
-            val edition: Int,
-            val number: Int,
-            val domain: String,
-            val answer: Int,
-            val tags: List<String>,
-            val stage: Int,
-            val width: Int,
-            val height: Int
-    )
-
     @GetMapping
     fun questions(
             @RequestParam(value = "tags", defaultValue = "") tagNames: List<String>,
@@ -57,12 +46,7 @@ class QuestionControllerV2(
             val result = random.run(tagNames, amount)
             ResponseEntity(result.map { toQuestionResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+            handleException(e, eventName, eventTags, networkData)
         }
     }
 
@@ -85,12 +69,7 @@ class QuestionControllerV2(
             result.map { toVideoResponse(it) }
             ResponseEntity(result.map { toVideoResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
-            Logging.error(
-                    eventName,
-                    eventTags + listOf(TAG),
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+            handleException(e, eventName, eventTags, networkData)
         }
     }
 
@@ -111,59 +90,9 @@ class QuestionControllerV2(
             val desiredQuestion = toQuestionResponse(result)
             ResponseEntity(desiredQuestion, HttpStatus.OK)
         } catch (e: Exception) {
-            when(e) {
-                is ItemNotFoundException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.NOT_FOUND)
-                }
-                else -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-                }
-            }
+            handleException(e, eventName, eventTags, networkData)
         }
     }
 
-    fun toQuestionResponse(question: Question): QuestionResponse {
-        return QuestionResponse(
-                question.id,
-                question.imageURL,
-                question.source,
-                question.variant,
-                question.edition,
-                question.number,
-                question.domain,
-                question.answer,
-                question.tags,
-                question.stage,
-                question.width,
-                question.height
-        )
-    }
-
-    fun toVideoResponse(video: Video): Map<String, Any> {
-        return hashMapOf<String, Any>(
-                "id" to video.id,
-                "title" to video.title,
-                "description" to video.description,
-                "videoId" to video.videoId,
-                "questionId" to video.questionId,
-                "aspectRatio" to video.aspectRatio,
-                "thumbnails" to hashMapOf(
-                        "default" to video.thumbnail
-                ),
-                "channel" to hashMapOf(
-                        "title" to video.channelTitle
-                )
-        )
-    }
 
 }

@@ -142,7 +142,7 @@ class TestSubmission: TestSystem("/v2/post") {
     }
 
     @Test
-    fun submitVideoPost_descriptionNull_throwError() {
+    fun submitVideoPost_descriptionNull_throwBadRequest() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -157,7 +157,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
     @Test
-    fun submitVideoPost_descriptionEmptyString_throwError() {
+    fun submitVideoPost_descriptionEmptyString_throwBadRequest() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -172,7 +172,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
     @Test
-    fun submitVideoPost_videoUrlEmpty_throwError() {
+    fun submitVideoPost_videoUrlEmpty_throwBadRequest() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -188,7 +188,7 @@ class TestSubmission: TestSystem("/v2/post") {
     }
 
     @Test
-    fun submitVideoPost_defaultThumbnailEmpty_throwError() {
+    fun submitVideoPost_defaultThumbnailEmpty_throwBadRequest() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -204,7 +204,7 @@ class TestSubmission: TestSystem("/v2/post") {
     }
 
     @Test
-    fun submitVideoPost_hasQuestionsToInt_sucess() {
+    fun submitVideoPost_hasQuestionsToInt_throwBadRequest() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN

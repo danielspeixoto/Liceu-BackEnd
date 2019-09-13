@@ -21,16 +21,16 @@ class UpdateProducerToBeFollowed(
             if(userId.isBlank()){
                 throw OverflowSizeException ("userId can't be null")
             }
-            Logging.info(EVENT_NAME, TAGS, hashMapOf(
-                    "userFollowing" to userId,
-                    "producerFollowed" to producerId
-            ))
             if(!userRepo.userExists(userId)) {
                 throw ItemNotFoundException("user does not exists")
             }
             if(!userRepo.userExists(producerId)) {
                 throw ItemNotFoundException("producer does not exists")
             }
+            Logging.info(EVENT_NAME, TAGS, hashMapOf(
+                    "userFollowing" to userId,
+                    "producerFollowed" to producerId
+            ))
             userRepo.updateAddProducerToFollowingList(userId,producerId)
             userRepo.updateAddUserToProducerFollowerList(userId,producerId)
             activityRepository.insertActivity(ActivityToInsert(

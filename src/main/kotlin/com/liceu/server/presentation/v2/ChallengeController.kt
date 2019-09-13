@@ -1,9 +1,10 @@
 package com.liceu.server.presentation.v2
 
-import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.challenge.ChallengeBoundary
 import com.liceu.server.domain.global.*
-import com.liceu.server.domain.trivia.TriviaQuestion
+import com.liceu.server.presentation.util.converters.ChallengeResponse
+import com.liceu.server.presentation.util.converters.toChallengeResponse
+import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,13 +43,8 @@ class ChallengeController(
             val result = challenge.run(userId)
             ResponseEntity(toChallengeResponse (result), HttpStatus.OK)
 
-        }catch (e : Exception){
-            Logging.error(
-                    eventName,
-                    eventTags,
-                    e, data = networkData
-            )
-            ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+        }catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData)
         }
     }
 
@@ -73,51 +69,8 @@ class ChallengeController(
             ResponseEntity(HttpStatus.OK)
 
         }catch (e: Exception) {
-            when (e) {
-                is ValidationException, is ClassCastException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.BAD_REQUEST)
-                }
-                else -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-                }
-            }
+            handleException(e, eventName, eventTags, networkData)
         }
     }
-
-
-
-    fun toChallengeResponse(challenge: Challenge): ChallengeResponse {
-        return ChallengeResponse(
-                challenge.id,
-                challenge.challenger,
-                challenge.challenged,
-                challenge.answersChallenger,
-                challenge.answersChallenged,
-                challenge.scoreChallenger,
-                challenge.scoreChallenged,
-                challenge.triviaQuestionsUsed
-        )
-    }
-
-    data class ChallengeResponse(
-            val id: String,
-            val challenger: String,
-            val challenged: String?,
-            val answersChallenger: List<String>,
-            val answersChallenged: List<String>,
-            val scoreChallenger: Int?,
-            val scoreChallenged: Int?,
-            val triviaQuestionsUsed: List<TriviaQuestion>
-    )
 
 }

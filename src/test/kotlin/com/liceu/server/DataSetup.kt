@@ -419,7 +419,9 @@ class DataSetup {
                 null,
                 null,
                 null,
-                null,
+                listOf(
+                        ObjectId(USER_ID_3)
+                ),
                 listOf(
                         ObjectId(USER_ID_1)
                 )

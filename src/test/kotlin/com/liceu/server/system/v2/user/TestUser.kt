@@ -90,17 +90,17 @@ class TestUser: TestSystem("/v2/user") {
         val entity = HttpEntity(null,headers)
 
         val response = restTemplate
-                .exchange<List<HashMap<String, Any>>>(baseUrl + "/39c54d325b75357a571d4cc2/challenge", HttpMethod.GET,entity)
+                .exchange<List<HashMap<String, Any>>>(baseUrl + "/${testSetup.USER_ID_2}/challenge", HttpMethod.GET,entity)
 
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val body = response.body!!
-        Truth.assertThat(body[0]["id"]).isEqualTo("09c54d325b75357a571d4ca2")
-        Truth.assertThat(body[1]["id"]).isEqualTo("09c54d325b75357a571d4cb2")
+        Truth.assertThat(body[0]["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_1)
+        Truth.assertThat(body[1]["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_2)
     }
 
     @Test
-    fun challengeFromUser_userDontExists_returnError() {
+    fun challengeFromUser_userDontExists_returnEmptyBody() {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -116,7 +116,7 @@ class TestUser: TestSystem("/v2/user") {
     }
 
     @Test
-    fun updateSchool_userExists_noReturn(){
+    fun updateSchool_userExists_returnVoid(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -126,15 +126,51 @@ class TestUser: TestSystem("/v2/user") {
                         "school" to " CURSO MARístá PatãmarEs "
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/school", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/school", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
         Truth.assertThat(userUpdated.school).isEqualTo("MARISTA")
     }
 
     @Test
-    fun updateAge_userExists_noReturn(){
+    fun updateSchool_userExistsAndSchoolNameWithoutPrefix_returnVoid(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "school" to " ÚFBÃ "
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/school", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
+        Truth.assertThat(userUpdated.school).isEqualTo("UFBA")
+    }
+
+    @Test
+    fun updateSchool_userExistsAndSchoolNameWithPrefix_returnVoid(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "school" to " COLÉgiO Antôníó Viẽira "
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/school", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
+        Truth.assertThat(userUpdated.school).isEqualTo("VIEIRA")
+    }
+
+    @Test
+    fun updateAge_userExists_returnVoid(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -146,15 +182,15 @@ class TestUser: TestSystem("/v2/user") {
                         "year" to 1998
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/age", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/age", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
         Truth.assertThat(userUpdated.age).isEqualTo(21)
     }
 
     @Test
-    fun updateYoutubeChannel_userExists_noReturn(){
+    fun updateYoutubeChannel_userExists_returnVoid(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -164,15 +200,15 @@ class TestUser: TestSystem("/v2/user") {
                         "youtubeChannel" to "www.youtube.com/liceu"
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/youtube", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/youtube", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
         Truth.assertThat(userUpdated.youtubeChannel).isEqualTo("www.youtube.com/liceu")
     }
 
     @Test
-    fun updateInstagramProfile_userExists_noReturn(){
+    fun updateInstagramProfile_userExists_returnVoid(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -182,15 +218,15 @@ class TestUser: TestSystem("/v2/user") {
                         "instagramProfile" to "liceu.co"
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/instagram", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/instagram", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
         Truth.assertThat(userUpdated.instagramProfile).isEqualTo("liceu.co")
     }
 
     @Test
-    fun updateDescription_userExists_noReturn(){
+    fun updateDescription_userExists_returnVoid(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -200,15 +236,15 @@ class TestUser: TestSystem("/v2/user") {
                         "description" to "O liceu e muito legal po"
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/description", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/description", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
         Truth.assertThat(userUpdated.description).isEqualTo("O liceu e muito legal po")
     }
 
     @Test
-    fun updateWebsite_userExists_noReturn(){
+    fun updateWebsite_userExists_returnVoid(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -218,64 +254,36 @@ class TestUser: TestSystem("/v2/user") {
                         "website" to "www.liceu.co.com.br"
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/website", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/website", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
-        val userUpdated = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
         Truth.assertThat(userUpdated.website).isEqualTo("www.liceu.co.com.br")
     }
 
     @Test
-    fun updateProducerToBeFollowed_usersExists_verifyUserAndProducer(){
+    fun updateProducerToBeFollowed_usersExists_returnVoidAndVerifyUserAndProducer(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-
         val entity = HttpEntity(
                 null, headers)
         val response = restTemplate
                 .exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/followers", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        val producer =  data.getUserById("39c54d325b75357a571d4cc2")
-        val user = data.getUserById("3a1449a4bdb40abd5ae1e431")
+        val producer =  data.getUserById(testSetup.USER_ID_2)
+        val user = data.getUserById(testSetup.USER_ID_1)
         Truth.assertThat(producer.followers?.size).isEqualTo(1)
-        Truth.assertThat(producer.followers?.get(0)).isEqualTo("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(producer.followers?.get(0)).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(user.following?.size).isEqualTo(3)
-        Truth.assertThat(user.following).contains("39c54d325b75357a571d4cc2")
+        Truth.assertThat(user.following).contains(testSetup.USER_ID_2)
         val activitiesProducer = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10)
         Truth.assertThat(activitiesProducer.size).isEqualTo(2)
         Truth.assertThat(activitiesProducer[0].type).isEqualTo("followedUser")
     }
 
     @Test
-    fun updateProducerToBeFollowed_producerIdInvalid_throwsError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-
-        val entity = HttpEntity(
-                null, headers)
-        val response = restTemplate
-                .exchange<Void>("$baseUrl/undefined/followers", HttpMethod.PUT, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-    }
-
-    @Test
-    fun updateProducerToBeFollowed_producerDoesNotExists_throwsError(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-
-        val entity = HttpEntity(
-                null, headers)
-        val response = restTemplate
-                .exchange<Void>("$baseUrl/aaaa49a4bdb40abd5ae1e431/followers", HttpMethod.PUT, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
-    }
-
-
-    @Test
-    fun updateProducerToBeUnfollowed_usersExists_verifyUserAndProducer(){
+    fun updateProducerToBeUnfollowed_usersExists_returnVoidAndVerifyUserAndProducer(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -291,8 +299,36 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(user.following?.size).isEqualTo(1)
     }
 
+
+
     @Test
-    fun updateSchool_mismatchVariable_throwException(){
+    fun updateProducerToBeFollowed_producerIdInvalid_throwsInternalServerError(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                null, headers)
+        val response = restTemplate
+                .exchange<Void>("$baseUrl/undefined/followers", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @Test
+    fun updateProducerToBeFollowed_producerDoesNotExists_throwsNotFound(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                null, headers)
+        val response = restTemplate
+                .exchange<Void>("$baseUrl/aaaa49a4bdb40abd5ae1e431/followers", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+    }
+
+    @Test
+    fun updateSchool_mismatchVariable_throwsBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -307,7 +343,7 @@ class TestUser: TestSystem("/v2/user") {
     }
 
     @Test
-    fun updateAge_mismatchVariable_throwException(){
+    fun updateAge_ageToString_throwsBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -317,12 +353,13 @@ class TestUser: TestSystem("/v2/user") {
                         "age" to "1"
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/age", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/age", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
+
     @Test
-    fun updateYoutubeChannel_mismatchVariable_throwException(){
+    fun updateYoutubeChannel_youtubeChannelToIng_throwsBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -332,12 +369,12 @@ class TestUser: TestSystem("/v2/user") {
                         "youtubeChannel" to 123123
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/youtube", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/youtube", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun updateInstagramProfile_mismatchVariable_throwException(){
+    fun updateInstagramProfile_instagramProfileToInt_throwsBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -352,7 +389,7 @@ class TestUser: TestSystem("/v2/user") {
     }
 
     @Test
-    fun updateDescription_mismatchVariable_throwException(){
+    fun updateDescription_descriptionToInt_throwsBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -362,12 +399,12 @@ class TestUser: TestSystem("/v2/user") {
                         "description" to 123123
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/description", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/description", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun updateWebsite_mismatchVariable_throwException(){
+    fun updateWebsite_websiteToInt_throwsBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -377,12 +414,12 @@ class TestUser: TestSystem("/v2/user") {
                         "website" to 123123.2332
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/website", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/website", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun updateYoutubeChannel_overFlowChannelName_throwException(){
+    fun updateYoutubeChannel_overFlowYoutubeChannel_throwsBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -395,12 +432,12 @@ class TestUser: TestSystem("/v2/user") {
                                 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
                 ), headers)
         val response = restTemplate
-                .exchange<Void>(baseUrl + "/3a1449a4bdb40abd5ae1e431/youtube", HttpMethod.PUT, entity)
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/youtube", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun updateProducerToBeFollowed_wrongProducerId_throwException(){
+    fun updateProducerToBeFollowed_wrongProducerId_throwsInternalServerError(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -413,7 +450,7 @@ class TestUser: TestSystem("/v2/user") {
     }
 
     @Test
-    fun updateProducerToBeUnfollowed_wrongProducerId_throwException(){
+    fun updateProducerToBeUnfollowed_wrongProducerId_throwsInternalServerError(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -424,5 +461,115 @@ class TestUser: TestSystem("/v2/user") {
                 .exchange<Void>("$baseUrl/39c54d325b7571d4cc2/followers", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
     }
+
+    @Test
+    fun updateYoutubeChannel_wrongUserProfileOwner_throwsUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "youtubeChannel" to "www.youtube.com/testeLiceu"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_2}/youtube", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun updateInstagramProfile_wrongUserProfileOwner_throwsUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "instagramProfile" to "www.youtube.com/testeLiceu"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_2}/instagram", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun updateAge_wrongUserProfileOwner_throwsUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "day" to 1,
+                        "month" to 4,
+                        "year" to 1998
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_2}/age", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun updateSchool_wrongUserProfileOwner_throwsUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "school" to "MArte Nassa"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_2}/school", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun updateLocation_wrongUserProfileOwner_throwsUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "longitude" to -10.23123,
+                        "latitute" to 123.12313
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_2}/locale", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun updateDescription_wrongUserProfileOwner_throwsUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "description" to "sou legal"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_2}/description", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun updateWebsite_wrongUserProfileOwner_throwsUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "website" to "www.sou legal.com"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_2}/website", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+
 
 }

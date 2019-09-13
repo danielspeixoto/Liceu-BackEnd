@@ -27,7 +27,7 @@ class TestUpdateRating: TestSystem("v2/trivia") {
         val entity = HttpEntity(hashMapOf(
                 "rating" to 1
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/0a1449a4bdb40abd5ae1e461/rating", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.ACITIVITY_ID_1}/rating", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val postChanged = data.getTriviaById("0a1449a4bdb40abd5ae1e461")
         Truth.assertThat(postChanged.likes).isEqualTo(4)
@@ -42,7 +42,7 @@ class TestUpdateRating: TestSystem("v2/trivia") {
         val entity = HttpEntity(hashMapOf(
                 "rating" to -1
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/0a1449a4bdb40abd5ae1e461/rating", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.ACITIVITY_ID_1}/rating", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val postChanged = data.getTriviaById("0a1449a4bdb40abd5ae1e461")
         Truth.assertThat(postChanged.likes).isEqualTo(3)
@@ -50,50 +50,50 @@ class TestUpdateRating: TestSystem("v2/trivia") {
     }
 
     @Test
-    fun updateRatingLike_ratingToZero_throwError(){
+    fun updateRatingLike_ratingToZero_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "rating" to 0
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/0a1449a4bdb40abd5ae1e461/rating", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.ACITIVITY_ID_1}/rating", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun updateRatingLike_ratingToNull_throwError(){
+    fun updateRatingLike_ratingToNull_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "rating" to null
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/0a1449a4bdb40abd5ae1e461/rating", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.ACITIVITY_ID_1}/rating", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun updateRatingLike_ratingToEmptyString_throwError(){
+    fun updateRatingLike_ratingToEmptyString_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "rating" to ""
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/0a1449a4bdb40abd5ae1e461/rating", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.ACITIVITY_ID_1}/rating", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
     @Test
-    fun updateRatingLike_ratingToDouble_throwError(){
+    fun updateRatingLike_ratingToDouble_throwBadRequest(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "rating" to 1.0
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/0a1449a4bdb40abd5ae1e461/rating", HttpMethod.PUT, entity)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.ACITIVITY_ID_1}/rating", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 }

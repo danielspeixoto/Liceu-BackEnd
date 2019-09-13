@@ -23,7 +23,7 @@ class TestGetActivitiesFromUser: TestSystem("/v2/activity") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/3a1449a4bdb40abd5ae1e431?amount=10", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.USER_ID_1}?amount=10", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(2)
@@ -33,7 +33,7 @@ class TestGetActivitiesFromUser: TestSystem("/v2/activity") {
 
 
     @Test
-    fun getActivitiesFromUser_wrongUser_throwError(){
+    fun getActivitiesFromUser_wrongUser_throwInternalServerError(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN

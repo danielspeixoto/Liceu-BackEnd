@@ -5,6 +5,7 @@ import com.liceu.server.domain.report.ReportSubmission
 import com.liceu.server.domain.global.CONTROLLER
 import com.liceu.server.domain.global.NETWORK
 import com.liceu.server.domain.global.REPORT
+import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -52,25 +53,8 @@ class ReportController (
             ResponseEntity(hashMapOf<String,Any>(
                     "id" to id
             ), HttpStatus.OK)
-        }catch(e: Exception){
-            when(e) {
-                is ValidationException, is ClassCastException -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.BAD_REQUEST)
-                }
-                else -> {
-                    Logging.error(
-                            eventName,
-                            eventTags,
-                            e, data = networkData
-                    )
-                    ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-                }
-            }
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData)
         }
 
     }

@@ -41,9 +41,9 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val body = response.body!!
-        Truth.assertThat(body["id"]).isEqualTo("09c54d325b75357a571d4cc1")
-        Truth.assertThat(body["challenger"]).isEqualTo("37235b2a67c76abebce3f6e6")
-        Truth.assertThat(body["challenged"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(body["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_3)
+        Truth.assertThat(body["challenger"]).isEqualTo(testSetup.USER_ID_3)
+        Truth.assertThat(body["challenged"]).isEqualTo(testSetup.USER_ID_1)
         val answersChallenger = (body["answersChallenger"] as List<String>)
         Truth.assertThat(answersChallenger[0]).isEqualTo("oi")
         Truth.assertThat(answersChallenger[1]).isEqualTo("abriu")
@@ -54,8 +54,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(body["scoreChallenger"]).isEqualTo(10)
         Truth.assertThat(body["scoreChallenged"]).isEqualTo(9)
         val triviaQuestionsUsed = (body["triviaQuestionsUsed"] as List<HashMap<String, Any>>)[0]
-        Truth.assertThat(triviaQuestionsUsed["id"]).isEqualTo("0a1449a4bdb40abd5ae1e411")
-        Truth.assertThat(triviaQuestionsUsed["userId"]).isEqualTo("37235b2a67c76abebce3f6e6")
+        Truth.assertThat(triviaQuestionsUsed["id"]).isEqualTo(testSetup.QUESTION_TRIVIA_ID_2)
+        Truth.assertThat(triviaQuestionsUsed["userId"]).isEqualTo(testSetup.USER_ID_3)
         Truth.assertThat(triviaQuestionsUsed["question"]).isEqualTo("1+1?")
         Truth.assertThat(triviaQuestionsUsed["correctAnswer"]).isEqualTo("2")
         Truth.assertThat(triviaQuestionsUsed["wrongAnswer"]).isEqualTo("1")
@@ -65,7 +65,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_3,10)
         Truth.assertThat(activitiesChallenger.size).isEqualTo(1)
         Truth.assertThat(activitiesChallenger[0].type).isEqualTo("challengeAccepted")
-        Truth.assertThat(activitiesChallenger[0].params["challengedId"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(activitiesChallenger[0].params["challengedId"]).isEqualTo(testSetup.USER_ID_1)
 
     }
 
@@ -86,7 +86,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
         val body = response.body!!
 
-        Truth.assertThat(body["challenger"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(body["challenger"]).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(body["challenged"]).isEqualTo(null)
         val answersChallenger = (body["answersChallenger"] as List<String>)
         answersChallenger.isEmpty()
@@ -100,7 +100,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
     @Test
     fun getChallenge_existsSameUser_returnChallenge(){
-        testSetup.challengeRepo.deleteById("09c54d325b75357a571d4cc1")
+        testSetup.challengeRepo.deleteById(testSetup.CHALLENGE_TRIVIA_ID_3)
 
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
@@ -115,7 +115,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
         val body = response.body!!
 
-        Truth.assertThat(body["challenger"]).isEqualTo("3a1449a4bdb40abd5ae1e431")
+        Truth.assertThat(body["challenger"]).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(body["challenged"]).isEqualTo(null)
         val answersChallenger = (body["answersChallenger"] as List<String>)
         answersChallenger.isEmpty()
@@ -151,7 +151,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
 
         val resultRetrieved = challengeRepo.findById(testSetup.CHALLENGE_TRIVIA_ID_2).get()
-        Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId("09c54d325b75357a571d4cb2"))
+        Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId(testSetup.CHALLENGE_TRIVIA_ID_2))
         Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
         Truth.assertThat(resultRetrieved.answersChallenged[1]).isEqualTo("4")
         Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(2)
