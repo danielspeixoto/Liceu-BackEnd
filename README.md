@@ -88,12 +88,12 @@ Retornar todas as atividades realizadas pelo ou para o usuário
 **Data Retrieved Example:**
 
 <pre>
-data : {
-	id: "0a1449a4123dsvad5ae1e462"
-	userId: "0a1449a4123dsvad5ae1e462"
-	type: "followedUser"
-	params: {
-		followedBy: "39c898725b75357a571d4cc2"
+{
+	"id": "0a1449a4123dsvad5ae1e462"
+	"userId": "0a1449a4123dsvad5ae1e462"
+	"type": "followedUser"
+	"params": {
+		"followedBy": "39c898725b75357a571d4cc2"
 	}
 }
 </pre>
@@ -494,7 +494,7 @@ Retornar vídeos referentes a uma questão
 | start | Int |
 | amount | Int |
 
-**METHOD:** GET
+**METHOD:** GET  
 **Data Retrieved Example:**
 <pre>
 [
@@ -553,9 +553,14 @@ Retornar video referente a um ID
 </pre>
 
 
+
 -----------------------
 
+
+
+
 ##Funções de ranking:
+
 
   - ### _getRanking_
 
@@ -860,11 +865,11 @@ Retornar posts de um usuário
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** GET
+**METHOD:** GET  
 **Data Retrieved Example:**
 <pre>
  [
- 	{
+     {
         "id": "09c54d325b75357a581d4ca6",
         "userId": "37235b2a67c76abebce3f6e6",
         "type": "text",
@@ -894,8 +899,8 @@ Atualizar localização de um determinado usuário
 | ------------ | ------------ |
 | userId  | String   |
 
-**METHOD:** PUT
-**BODY:** 
+**METHOD:** PUT  
+**BODY:**  
 <pre>
      {
 	"longitude": "-10.87723",
