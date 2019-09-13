@@ -1,4 +1,4 @@
-package com.liceu.serverargs
+package com.liceu.server
 
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
