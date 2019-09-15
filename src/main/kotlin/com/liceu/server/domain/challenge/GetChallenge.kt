@@ -3,14 +3,11 @@ package com.liceu.server.domain.challenge
 import com.liceu.server.data.MongoChallengeRepository
 import com.liceu.server.data.MongoTriviaRepository
 import com.liceu.server.domain.activities.ActivityBoundary
-import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.challenge.getChallengeLogsAndActivityInsertion
 import com.liceu.server.util.Logging
-import java.time.Instant
-import java.time.ZoneOffset
-import java.util.*
 
 class GetChallenge(
         private val challengeRepository: MongoChallengeRepository,
@@ -25,26 +22,12 @@ class GetChallenge(
 
     override fun run(userId: String): Challenge {
         try {
+            challengeRepository.verifyDirectChallenges(userId)?.let {
+                getChallengeLogsAndActivityInsertion(it,activityRepository)
+                return it
+            }
             challengeRepository.matchMaking(userId)?.let {
-                Logging.info(
-                        EVENT_NAME, TAGS ,
-                        hashMapOf(
-                                "challengeId" to it.id,
-                                "challengerId" to it.challenger,
-                                "challengedId" to it.challenged,
-                                "answersChallengerSize" to it.answersChallenger.size,
-                                "answersChallengedSize" to it.answersChallenged.size
-                        )
-                )
-                activityRepository.insertActivity(ActivityToInsert(
-                        it.challenger,
-                        "challengeAccepted",
-                        hashMapOf(
-                                "challengeId" to it.id,
-                                "challengedId" to userId
-                        ),
-                        TimeStamp.retrieveActualTimeStamp()
-                ))
+                getChallengeLogsAndActivityInsertion(it,activityRepository)
                 return it
             }
             val trivias = triviaRepository.randomQuestions(listOf(), 10)
@@ -74,4 +57,6 @@ class GetChallenge(
             throw e
         }
     }
+
+
 }
