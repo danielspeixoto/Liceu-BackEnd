@@ -3,10 +3,7 @@ package com.liceu.server
 import com.liceu.server.data.*
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
-import com.liceu.server.domain.challenge.ChallengeBoundary
-import com.liceu.server.domain.challenge.GetChallenge
-import com.liceu.server.domain.challenge.SubmitChallenge
-import com.liceu.server.domain.challenge.UpdateAnswers
+import com.liceu.server.domain.challenge.*
 import com.liceu.server.domain.report.ReportBoundary
 import com.liceu.server.domain.report.SubmitReport
 import com.liceu.server.domain.game.GameBoundary
@@ -233,6 +230,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun getChallenge(): ChallengeBoundary.IGetChallenge{
         return GetChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository)
+    }
+
+    @Bean
+    fun getDirectChallenge(): ChallengeBoundary.IAcceptDirectChallenge{
+        return AcceptDirectChallenge(mongoChallengeRepository)
     }
 
     @Bean

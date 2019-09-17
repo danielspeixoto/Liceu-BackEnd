@@ -215,7 +215,25 @@ class TestUser: TestSystem("/v2/user") {
 
         val entity = HttpEntity(
                 hashMapOf(
-                        "instagramProfile" to "liceu.co"
+                        "instagramProfile" to "lIceu.CO"
+                ), headers)
+        val response = restTemplate
+                .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/instagram", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+
+        val userUpdated = data.getUserById(testSetup.USER_ID_1)
+        Truth.assertThat(userUpdated.instagramProfile).isEqualTo("liceu.co")
+    }
+
+    @Test
+    fun updateInstagramProfile_specialInstagramProfileWithAt_returnVoid(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+
+        val entity = HttpEntity(
+                hashMapOf(
+                        "instagramProfile" to "  @liCEu.co  "
                 ), headers)
         val response = restTemplate
                 .exchange<Void>(baseUrl + "/${testSetup.USER_ID_1}/instagram", HttpMethod.PUT, entity)

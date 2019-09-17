@@ -4,6 +4,7 @@ import com.liceu.server.data.ActivityRepository
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.CHALLENGE
+import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.util.TimeStamp
@@ -14,6 +15,7 @@ class SubmitChallenge(
         private val triviaRepository: TriviaBoundary.IRepository,
         private val activityRepository: ActivityBoundary.IRepository
 ): ChallengeBoundary.ICreateChallenge {
+
     companion object {
         const val EVENT_NAME = "post_challenge"
         val TAGS = listOf(POST, CHALLENGE)
@@ -21,6 +23,12 @@ class SubmitChallenge(
 
     override fun run(challengerId: String, challengedId: String): Challenge {
         try {
+            if(challengedId.isBlank()){
+                throw OverflowSizeException ("challengedId cant't be null")
+            }
+            if(challengerId == challengedId){
+                throw IllegalArgumentException("challengerId and challengedId can't be equal")
+            }
             val trivias = triviaRepository.randomQuestions(listOf(), 10)
             val challengeId = challengeRepository.createChallenge(ChallengeToInsert(
                     challengerId,
