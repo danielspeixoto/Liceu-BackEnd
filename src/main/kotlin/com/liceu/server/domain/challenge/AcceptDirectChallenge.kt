@@ -1,13 +1,16 @@
 package com.liceu.server.domain.challenge
 
+import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.global.AuthenticationException
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.DIRECT
 import com.liceu.server.domain.global.RETRIEVAL
+import com.liceu.server.domain.util.challenge.challengeLogsAndActivityInsertion
 import com.liceu.server.util.Logging
 
 class AcceptDirectChallenge(
-        private val challengeRepository: ChallengeBoundary.IRepository
+        private val challengeRepository: ChallengeBoundary.IRepository,
+        private val activityRepository: ActivityBoundary.IRepository
 ): ChallengeBoundary.IAcceptDirectChallenge {
 
     companion object {
@@ -22,9 +25,9 @@ class AcceptDirectChallenge(
             ))
             val result = challengeRepository.findById(challengeId)
             if (result.challenged != userId){
-                throw AuthenticationException ("userId authenticated isn't the challenged user")
+                throw AuthenticationException ("user authenticated isn't the challenged user")
             }
-            //maybe put activity insertion to notify challenger
+            challengeLogsAndActivityInsertion(result,activityRepository)
             return result
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)

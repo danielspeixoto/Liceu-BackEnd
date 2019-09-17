@@ -193,6 +193,12 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         val tags = triviaQuestionsUsed["tags"] as List<String>
         Truth.assertThat(tags[0]).isEqualTo("graficos")
         Truth.assertThat(tags[1]).isEqualTo("algebra")
+        val activitiesFromChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10)
+        Truth.assertThat(activitiesFromChallenger.size).isEqualTo(3)
+        Truth.assertThat(activitiesFromChallenger[0].type).isEqualTo("challengeAccepted")
+        Truth.assertThat(activitiesFromChallenger[0].params["challengeId"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
+        Truth.assertThat(activitiesFromChallenger[0].params["challengedId"]).isEqualTo(testSetup.USER_ID_2)
+
     }
 
     @Test
@@ -291,7 +297,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(paramsFromActivity["challengerId"]).isEqualTo(testSetup.USER_ID_1)
     }
 
-    
+
     @Test
     fun submitChallenge_challengedIdToNull_throwBadRequest(){
         val headers = HttpHeaders()

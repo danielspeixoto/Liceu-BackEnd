@@ -8,7 +8,7 @@ import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
 
 
-    fun getChallengeLogsAndActivityInsertion(challenge: Challenge,activityRepository: ActivityBoundary.IRepository) {
+    fun challengeLogsAndActivityInsertion(challenge: Challenge,activityRepository: ActivityBoundary.IRepository) {
         Logging.info(
                 GetChallenge.EVENT_NAME, GetChallenge.TAGS,
                 hashMapOf(

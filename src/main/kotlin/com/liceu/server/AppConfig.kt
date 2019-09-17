@@ -234,7 +234,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun getDirectChallenge(): ChallengeBoundary.IAcceptDirectChallenge{
-        return AcceptDirectChallenge(mongoChallengeRepository)
+        return AcceptDirectChallenge(mongoChallengeRepository,mongoActivityRepository)
     }
 
     @Bean
