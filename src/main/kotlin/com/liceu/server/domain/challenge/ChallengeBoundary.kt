@@ -23,5 +23,9 @@ class ChallengeBoundary {
         fun run(challengerId: String,challengedId: String): Challenge
     }
 
+    interface IAcceptDirectChallenge {
+        fun run(challengeId: String, userId: String): Challenge
+    }
+
 
 }

@@ -166,6 +166,40 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(triviaQuestionsUsed).hasSize(1)
     }
 
+    @Test
+    fun getDirectChallenge_challengeExists_returnChallenge(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(null,headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl+"/${testSetup.CHALLENGE_TRIVIA_ID_7}", HttpMethod.GET,entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
+        Truth.assertThat(body["challenger"]).isEqualTo(testSetup.USER_ID_1)
+        Truth.assertThat(body["challenged"]).isEqualTo(testSetup.USER_ID_2)
+        val answersChallenger = (body["answersChallenger"] as List<String>)
+        Truth.assertThat(answersChallenger[0]).isEqualTo("1")
+        val answersChallenged = (body["answersChallenged"] as List<String>)
+        answersChallenged.isEmpty()
+        Truth.assertThat(body["scoreChallenger"]).isEqualTo(0)
+        Truth.assertThat(body["scoreChallenged"]).isNull()
+        val triviaQuestionsUsed = (body["triviaQuestionsUsed"] as List<HashMap<String, Any>>)[0]
+        Truth.assertThat(triviaQuestionsUsed["id"]).isEqualTo(testSetup.QUESTION_TRIVIA_ID_1)
+        Truth.assertThat(triviaQuestionsUsed["userId"]).isEqualTo(testSetup.USER_ID_4)
+        Truth.assertThat(triviaQuestionsUsed["question"]).isEqualTo("1+2?")
+        Truth.assertThat(triviaQuestionsUsed["correctAnswer"]).isEqualTo("3")
+        Truth.assertThat(triviaQuestionsUsed["wrongAnswer"]).isEqualTo("0")
+        val tags = triviaQuestionsUsed["tags"] as List<String>
+        Truth.assertThat(tags[0]).isEqualTo("graficos")
+        Truth.assertThat(tags[1]).isEqualTo("algebra")
+        val activitiesFromChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10)
+        Truth.assertThat(activitiesFromChallenger.size).isEqualTo(3)
+        Truth.assertThat(activitiesFromChallenger[0].type).isEqualTo("challengeAccepted")
+        Truth.assertThat(activitiesFromChallenger[0].params["challengeId"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
+        Truth.assertThat(activitiesFromChallenger[0].params["challengedId"]).isEqualTo(testSetup.USER_ID_2)
+
+    }
 
     @Test
     fun updateChallenge_existsChallenge_returnVoid(){
@@ -243,7 +277,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
                 )
                 ,headers)
 
-        val response = restTemplate.exchange<Void>(baseUrl+"/"+testSetup.CHALLENGE_TRIVIA_ID_7, HttpMethod.PUT,entity)
+        val response = restTemplate.exchange<Void>(baseUrl+"/${testSetup.CHALLENGE_TRIVIA_ID_7}", HttpMethod.PUT,entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val resultRetrieved = challengeRepo.findById(testSetup.CHALLENGE_TRIVIA_ID_7).get()
         Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId(testSetup.CHALLENGE_TRIVIA_ID_7))
@@ -263,6 +297,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(paramsFromActivity["challengerId"]).isEqualTo(testSetup.USER_ID_1)
     }
 
+
     @Test
     fun submitChallenge_challengedIdToNull_throwBadRequest(){
         val headers = HttpHeaders()
@@ -274,5 +309,27 @@ class TestChallenge: TestSystem ("/v2/challenge") {
     }
 
 
+    @Test
+    fun submitChallenge_equalChallengerAndChallenged_throwInternalServerError(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "challengedId" to testSetup.USER_ID_1
+        ),headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST,entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+
+    @Test
+    fun getDirectChallenge_wrongUserChallenged_throwUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_3_ACCESS_TOKEN
+        val entity = HttpEntity(null,headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl+"/${testSetup.CHALLENGE_TRIVIA_ID_7}", HttpMethod.GET,entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
 
 }

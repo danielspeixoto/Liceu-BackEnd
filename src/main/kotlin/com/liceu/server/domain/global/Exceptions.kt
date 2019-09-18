@@ -21,3 +21,4 @@ class OverflowSizeTagsException(msg: String="") : OverflowSizeException(msg)
 class OverflowSizeMessageException(msg: String="") : OverflowSizeException(msg)
 
 open class TypeMismatchException(msg: String="") : Exception(msg)
+

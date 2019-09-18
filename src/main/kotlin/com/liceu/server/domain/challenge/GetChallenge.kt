@@ -6,7 +6,7 @@ import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.util.TimeStamp
-import com.liceu.server.domain.util.challenge.getChallengeLogsAndActivityInsertion
+import com.liceu.server.domain.util.challenge.challengeLogsAndActivityInsertion
 import com.liceu.server.util.Logging
 
 class GetChallenge(
@@ -23,11 +23,11 @@ class GetChallenge(
     override fun run(userId: String): Challenge {
         try {
             challengeRepository.verifyDirectChallenges(userId)?.let {
-                getChallengeLogsAndActivityInsertion(it,activityRepository)
+                challengeLogsAndActivityInsertion(it,activityRepository)
                 return it
             }
             challengeRepository.matchMaking(userId)?.let {
-                getChallengeLogsAndActivityInsertion(it,activityRepository)
+                challengeLogsAndActivityInsertion(it,activityRepository)
                 return it
             }
             val trivias = triviaRepository.randomQuestions(listOf(), 10)

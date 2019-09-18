@@ -17,14 +17,19 @@ class UpdateInstagramProfile(
 
     override fun run(userId: String, instagramProfile: String) {
         try {
-            if(instagramProfile.length > 80){
+            if(instagramProfile.length > 35){
                 throw OverflowSizeException ("Too many characters in instagram profile name")
             }
+            var instagramProfileNormalized = instagramProfile
+            if(instagramProfile.contains("@")){
+                instagramProfileNormalized = instagramProfile.trim().removePrefix("@")
+            }
+            instagramProfileNormalized = instagramProfileNormalized.trim().toLowerCase()
             Logging.info(EVENT_NAME,TAGS, hashMapOf(
                     "userId" to userId,
-                    "instagramProfile" to instagramProfile
+                    "instagramProfile" to instagramProfileNormalized
             ))
-            userRepo.updateInstagramProfileFromUser(userId,instagramProfile)
+            userRepo.updateInstagramProfileFromUser(userId,instagramProfileNormalized)
         }catch (e: Exception){
             Logging.error(EVENT_NAME,TAGS,e)
             throw  e

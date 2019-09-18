@@ -22,7 +22,8 @@ import javax.validation.ValidationException
 class ChallengeController(
         @Autowired val challenge: ChallengeBoundary.IGetChallenge,
         @Autowired val updateChallenge: ChallengeBoundary.IUpdateAnswers,
-        @Autowired val submitChallenge: ChallengeBoundary.ICreateChallenge
+        @Autowired val submitChallenge: ChallengeBoundary.ICreateChallenge,
+        @Autowired val getDirectChallenge: ChallengeBoundary.IAcceptDirectChallenge
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -66,6 +67,27 @@ class ChallengeController(
             val result = challenge.run(userId)
             ResponseEntity(toChallengeResponse (result), HttpStatus.OK)
 
+        }catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData)
+        }
+    }
+
+    @GetMapping("/{challengeId}")
+    fun getDirectChallenge(
+            @PathVariable("challengeId") challengeId: String,
+            @RequestAttribute("userId") authenticatedUserId: String,
+            request: HttpServletRequest
+    ): ResponseEntity<ChallengeResponse> {
+        val eventName = "direct_challenge_get"
+        val eventTags = listOf(CONTROLLER, NETWORK, DIRECT,CHALLENGE,RETRIEVAL)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val result = getDirectChallenge.run(challengeId,authenticatedUserId)
+            ResponseEntity(toChallengeResponse (result), HttpStatus.OK)
         }catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData)
         }

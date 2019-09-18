@@ -56,10 +56,6 @@ class UpdateAnswers(
                     "challengeId" to challengeId,
                     "player" to player
             ))
-            Logging.info(EVENT_NAME, TAGS, hashMapOf(
-                    "challengeId" to challengeId,
-                    "player" to player
-            ))
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS, e)
             throw e
