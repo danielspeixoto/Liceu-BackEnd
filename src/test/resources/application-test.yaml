@@ -3,7 +3,7 @@ auth:
   prefix: 12345678901234567890123456789012
 
 google:
-  clientId:  891493215578-khn55e9sjpnmiql9a4ej5is1h8g55q2h.apps.googleusercontent.com
+  clientId:  851853196382-su4p88nlqbnb1cg7apgik95uel5oihs4.apps.googleusercontent.com
   clientSecret: e4U4RW00VmL_P2qgGWQAcTsI
 
 facebook:

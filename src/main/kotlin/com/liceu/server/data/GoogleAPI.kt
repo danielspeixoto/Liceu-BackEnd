@@ -24,7 +24,7 @@ class GoogleAPI(
             val idToken = if (authCode.length > 150) {
 
                 val verifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), JacksonFactory())
-                        .setAudience(Collections.singletonList(clientId))
+//                        .setAudience(Collections.singletonList(clientId))
                         .build()
                 verifier.verify(authCode)
             } else {
