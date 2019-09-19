@@ -27,7 +27,7 @@ class AcceptDirectChallenge(
             if (result.challenged != userId){
                 throw AuthenticationException ("user authenticated isn't the challenged user")
             }
-            challengeLogsAndActivityInsertion(result,activityRepository)
+            challengeLogsAndActivityInsertion(EVENT_NAME,TAGS,result,activityRepository)
             return result
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
