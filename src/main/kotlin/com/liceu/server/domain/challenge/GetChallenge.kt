@@ -23,11 +23,11 @@ class GetChallenge(
     override fun run(userId: String): Challenge {
         try {
             challengeRepository.verifyDirectChallenges(userId)?.let {
-                challengeLogsAndActivityInsertion(it,activityRepository)
+                challengeLogsAndActivityInsertion(EVENT_NAME,TAGS,it,activityRepository)
                 return it
             }
             challengeRepository.matchMaking(userId)?.let {
-                challengeLogsAndActivityInsertion(it,activityRepository)
+                challengeLogsAndActivityInsertion(EVENT_NAME,TAGS,it,activityRepository)
                 return it
             }
             val trivias = triviaRepository.randomQuestions(listOf(), 10)

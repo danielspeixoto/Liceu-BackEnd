@@ -9,6 +9,7 @@
   * [Funções de challenge:](#funções-de-challenge)
     + [_submitChallenge_](#submitchallenge)
     + [_getChallenge_](#getchallenge)
+	+ [_getChallengeById_](#getchallengebyid)
     + [_updateAnswers_](#updateanswers)
   * [Funções de explore:](#funções-de-explore)
     + [_getRandomPosts_](#getrandomposts)
@@ -181,6 +182,51 @@ Retornar challenge para início de challenge entre o usuário autenticado e outr
     ],
     "scoreChallenger": 1,
     "scoreChallenged": 0,
+    "triviaQuestionsUsed": [
+        {
+            "id": "0a1449a4bdb40abd5ae1e411",
+            "userId": "37235b2a67c76abebce3f6e6",
+            "question": "1+1?",
+            "correctAnswer": "2",
+            "wrongAnswer": "1",
+            "tags": [
+                "matematica",
+                "algebra"
+            ],
+            "comments": [
+                {
+                    "id": "0a4449a4bdb40abd5ae1e461",
+                    "userId": "3a1449a4bdb40abd5ae1e431",
+                    "author": "user1",
+                    "comment": "essa questao e boa"
+                }
+            ],
+            "likes": null,
+            "dislikes": null
+        }
+    ]
+}
+</pre>
+
+- ### _getChallengeById_
+
+Retornar challenge a partir de um determinado Id  
+**URL:**/v2/challenge/{challengeId}  
+**METHOD:** GET  
+
+**Data Retrieved Example:**
+
+<pre>
+{
+    "id": "09c54aa21414357a571d4cc1",
+    "challenger": "37235321avc76abebce3f6e6",
+    "challenged": "3a1449a4bdb40ahjkue1e431",
+    "answersChallenger": [
+        "2"
+    ],
+    "answersChallenged":  [],
+    "scoreChallenger": 1,
+    "scoreChallenged": null,
     "triviaQuestionsUsed": [
         {
             "id": "0a1449a4bdb40abd5ae1e411",
@@ -1066,5 +1112,5 @@ Remover produtor da lista de seguidores de um usuário e usuário da lista de pe
 400 BAD REQUEST  
 401 UNAUTHORIZED  
 500 INTERNAL SERVER ERROR
-  
-  
+
+    

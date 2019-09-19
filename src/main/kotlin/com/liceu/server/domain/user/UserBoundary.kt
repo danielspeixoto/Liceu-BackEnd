@@ -16,6 +16,7 @@ class UserBoundary {
     interface IRepository {
         fun save(user: UserForm): String
         fun getUserById(userId: String): User
+        fun getUserBySocialId(socialId: String): User?
         fun getChallengesFromUserById(userId: String): List<Challenge>
         fun getUsersByNameUsingLocation(nameSearched: String, latitude: Double?, longitude: Double?, amount: Int): List<User>
         fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double, state: String): Long

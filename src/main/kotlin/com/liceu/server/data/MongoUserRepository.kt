@@ -193,6 +193,18 @@ class MongoUserRepository(
         }
     }
 
+    override fun getUserBySocialId(socialId: String): User? {
+        val result = template.findOne(
+                Query.query(Criteria.where("facebookId").isEqualTo(socialId)),
+                MongoDatabase.MongoUser::class.java
+        )
+        result?.let {
+            return toUser(it)
+        }
+        return null
+    }
+
+
     override fun userExists(userId: String): Boolean {
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
         val agg = Aggregation.newAggregation(match)

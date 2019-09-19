@@ -73,7 +73,7 @@ class ChallengeController(
     }
 
     @GetMapping("/{challengeId}")
-    fun getDirectChallenge(
+    fun getChallengeById(
             @PathVariable("challengeId") challengeId: String,
             @RequestAttribute("userId") authenticatedUserId: String,
             request: HttpServletRequest

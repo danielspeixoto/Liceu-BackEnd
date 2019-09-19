@@ -2,6 +2,7 @@ package com.liceu.server.domain.trivia
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
+import org.intellij.lang.annotations.Language
 
 class SubmitTriviaQuestion(
         val TriviaRepository: TriviaBoundary.IRepository
@@ -16,9 +17,16 @@ class SubmitTriviaQuestion(
     override fun run(triviaQuestion: TriviaQuestionSubmission): String {
 
         try {
-
-            if (triviaQuestion.question.isEmpty()){
-                throw OverflowSizeException("No question given")
+            val prohibitedWords = listOf(
+                    "porra", "caralho", "merda", "desgraça", "fdp", "filha da puta",
+                    "filha da mãe", "vagabunda", "vadia","foda-se", "fudido", "vai se fuder",
+                    "fodido"
+            )
+            if (triviaQuestion.question.isBlank()){
+                throw OverflowSizeException("No question passed")
+            }
+            if(triviaQuestion.question.length < 20) {
+                throw UnderflowSizeException("Question is too short")
             }
             if (triviaQuestion.question.length > 300){
                 throw OverflowSizeException("Too many characters in question")
@@ -42,6 +50,12 @@ class SubmitTriviaQuestion(
                     }
                 }else{
                     throw TypeMismatchException("Wrong type in trivia tags")
+                }
+            }
+
+            prohibitedWords.forEach {
+                if(triviaQuestion.question.toLowerCase().contains(it)){
+                    throw InputValidationException("trivia question has prohibited words")
                 }
             }
 
