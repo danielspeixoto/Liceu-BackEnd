@@ -23,7 +23,7 @@ class SubmitTriviaQuestion(
                     "fodido"
             )
             if (triviaQuestion.question.isBlank()){
-                throw OverflowSizeException("No question given")
+                throw OverflowSizeException("No question passed")
             }
             if(triviaQuestion.question.length < 20) {
                 throw UnderflowSizeException("Question is too short")

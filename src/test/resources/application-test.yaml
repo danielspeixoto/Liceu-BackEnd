@@ -3,11 +3,11 @@ auth:
   prefix: 12345678901234567890123456789012
 
 google:
-  clientId:  851853196382-6dr3s1jb1ee3ejt7i4iselu4vej3rmbq.apps.googleusercontent.com
-  clientSecret: sm2sA37l2SshglMRa7PTAYz1
+  clientId:  891493215578-khn55e9sjpnmiql9a4ej5is1h8g55q2h.apps.googleusercontent.com
+  clientSecret: e4U4RW00VmL_P2qgGWQAcTsI
 
 facebook:
-  accessToken: EAAf4pgUyFpsBAIsR2dE2ZCmG7PrFZBKks5O4H3PcRl31d3qZCW3sE62y0Q3bpXKiGKsKtoxmugGqLZC1uzSS4gm1T5R08sqieLuIUmmUI2uPgBpNC4tV7EANp3dvBZCOdROw3CzYppVwWklEGja6g8cDC8DHCMqGANcBpVL4VoUZBZBj2nlaXxqgAFzmiETrskdot6F6AWNMiL6EvjAp6K3
+  accessToken: EAAf4pgUyFpsBAHFsHKUbn6QYUe3f0hSGWFuhceZBag03s4KLwTebXZB9nHoemWgM8ZBl5BSaKMeeFdobGsEXQlrSkWh7tvs4kDaLTk6gnhFRSZAf6n4UyZAVCs8bLQQulF9ZA7ug9VGvlnZCS3Hi0r7e80fPaPZC9B4exSfecBrHkSVafS92tpJ8OFdMoeBNXqZANz5Ct4OrFZCFoVaxbSpaZBI
 client:
   api_key: apikey
 
