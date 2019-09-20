@@ -1,12 +1,13 @@
 package com.liceu.server.data
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
-import org.springframework.beans.factory.annotation.Value
+import java.util.*
 import javax.naming.AuthenticationException
 
 
@@ -20,20 +21,26 @@ class GoogleAPI(
             throw AuthenticationException("access token empty")
         }
         try {
+            val idToken = if (authCode.length > 150) {
 
-            val tokenResponse = GoogleAuthorizationCodeTokenRequest(
-                    NetHttpTransport(),
-                    JacksonFactory.getDefaultInstance(),
-                    "https://oauth2.googleapis.com/token",
-                    clientId,
-                    clientSecret,
-                    authCode,
-                    "")  // Specify the same redirect URI that you use with your web
-                    // app. If you don't have a web version of your app, you can
-                    // specify an empty string.
-                    .execute()
-
-            val idToken = tokenResponse.parseIdToken()
+                val verifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), JacksonFactory())
+//                        .setAudience(Collections.singletonList(clientId))
+                        .build()
+                verifier.verify(authCode)
+            } else {
+                val tokenResponse = GoogleAuthorizationCodeTokenRequest(
+                        NetHttpTransport(),
+                        JacksonFactory.getDefaultInstance(),
+                        "https://oauth2.googleapis.com/token",
+                        clientId,
+                        clientSecret,
+                        authCode,
+                        "")  // Specify the same redirect URI that you use with your web
+                        // app. If you don't have a web version of your app, you can
+                        // specify an empty string.
+                        .execute()
+                tokenResponse.parseIdToken()
+            }
             val payload = idToken!!.payload
             val userId = payload.subject
             val email = payload.email

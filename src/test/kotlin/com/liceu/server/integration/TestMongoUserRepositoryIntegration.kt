@@ -95,7 +95,7 @@ class TestMongoUserRepositoryIntegration {
     }
 
     @Test
-    fun userId_UserExists_returnUser(){
+    fun getUserById_UserExists_returnUser(){
         val result = data.getUserById(testSetup.USER_ID_1)
         assertThat(result.name).isEqualTo("user1")
         assertThat(result.email).isEqualTo("user1@g.com")
@@ -112,18 +112,31 @@ class TestMongoUserRepositoryIntegration {
     }
 
     @Test
-    fun userId_UserDoesNotExists_returnError(){
+    fun getUserById_UserDoesNotExists_throwItemNotFound(){
         assertThrows<ItemNotFoundException> {
             data.getUserById("88235b2a67c76abebce3f6e3")
         }
     }
 
+    @Test
+    fun getUserBySocialId_userExists_returnUser(){
+        val result = data.getUserBySocialId("facebookId1")
+        assertThat(result?.id).isEqualTo(testSetup.USER_ID_1)
+        assertThat(result?.name).isEqualTo("user1")
+        assertThat(result?.email).isEqualTo("user1@g.com")
+    }
+
+    @Test
+    fun getUserBySocialId_userDontExist_returnNull(){
+        val result = data.getUserBySocialId("88235b2a6232323327c76abebce3f6e3")
+        assertThat(result).isNull()
+    }
 
     @Test
     fun challengesFromUser_challengeExists_returnChallenges(){
         val result = data.getChallengesFromUserById(testSetup.USER_ID_1)
         val ids = result.map { it.id }
-        assertThat(ids).containsExactly(testSetup.CHALLENGE_TRIVIA_ID_4, testSetup.CHALLENGE_TRIVIA_ID_2).inOrder()
+        assertThat(ids).containsExactly(testSetup.CHALLENGE_TRIVIA_ID_4, testSetup.CHALLENGE_TRIVIA_ID_2, testSetup.CHALLENGE_TRIVIA_ID_7, testSetup.CHALLENGE_TRIVIA_ID_8).inOrder()
         assertThat(result[0].challenger).isEqualTo(testSetup.USER_ID_1)
         assertThat(result[1].challenged).isEqualTo(testSetup.USER_ID_1)
     }

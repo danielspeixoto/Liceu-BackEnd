@@ -32,15 +32,11 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "algebra"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-
         val body = response.body!!
         val id = body["id"] as String
         val insertedTriviaQuestion = triviaRepo.findById(id).get()
-
         Truth.assertThat(insertedTriviaQuestion.question).isEqualTo("essa e uma questao de teste sobre matematica: Seno de 0?")
         Truth.assertThat(insertedTriviaQuestion.correctAnswer).isEqualTo("0")
         Truth.assertThat(insertedTriviaQuestion.wrongAnswer).isEqualTo("1")
@@ -68,9 +64,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "algebra"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -94,9 +88,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "algebra"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -120,9 +112,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "algebra"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -144,9 +134,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "quebrou-se"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -167,9 +155,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         1
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -189,9 +175,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "algebra"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -211,9 +195,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "algebra"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -234,9 +216,7 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "algebra"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -256,10 +236,67 @@ class TestTriviaSubmit: TestSystem ("/v2/trivia"){
                         "algebra"
                 )
         ), headers)
-        val response =
-                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
-
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
+    @Test
+    fun submitTrivia_prohibitedWordsInQuestion_throwInternalServerError(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "question" to "Descreva o fodido movimento de revolta na primeira merda mundial",
+                "correctAnswer" to "2",
+                "wrongAnswer" to "0",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
+        ), headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @Test
+    fun submitTrivia_onlySpacesInQuestion_throwBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "question" to "         ",
+                "correctAnswer" to "2",
+                "wrongAnswer" to "0",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
+        ), headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun submitTrivia_shortQuestion_throwBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "question" to "1+1?",
+                "correctAnswer" to "2",
+                "wrongAnswer" to "0",
+                "tags" to listOf(
+                        "matematica",
+                        "angulos",
+                        "trigonometria",
+                        "algebra"
+                )
+        ), headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
 }

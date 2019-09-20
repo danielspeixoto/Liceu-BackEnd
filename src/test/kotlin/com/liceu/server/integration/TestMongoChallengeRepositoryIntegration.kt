@@ -183,7 +183,7 @@ class TestMongoChallengeRepositoryIntegration {
     }
 
     @Test
-    fun retrieve_notValidChallenge_returnChallenge(){
+    fun retrieve_invalidChallenge_returnChallenge(){
         testSetup.challengeRepo.deleteById("09c54d325b75357a571d4cc1")
         testSetup.challengeRepo.deleteById("09c54d325b75357a571d4cd2")
 
@@ -205,7 +205,7 @@ class TestMongoChallengeRepositoryIntegration {
     }
 
     @Test
-    fun updateChallenge_validChallengeChallengerChange_return(){
+    fun updateChallenge_challengerChange_return(){
         val answers = listOf(
                 "oi-trocado","alo-trocado","aahah-trocado","its me-trocado"
         )
@@ -219,7 +219,7 @@ class TestMongoChallengeRepositoryIntegration {
     }
 
     @Test
-    fun updateChallenge_validChallengeChallengedChange_return(){
+    fun updateChallenge_challengedChange_return(){
         val answers = listOf(
                 "oi-trocadod","alo-trocadod","aahah-trocadod","its me-trocadod"
         )
@@ -230,6 +230,17 @@ class TestMongoChallengeRepositoryIntegration {
         Truth.assertThat(resultRetrieved.answersChallenged[2]).isEqualTo("aahah-trocadod")
         Truth.assertThat(resultRetrieved.answersChallenged[3]).isEqualTo("its me-trocadod")
         Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(0)
+    }
+
+    @Test
+    fun directChallenge_validChallenge_return(){
+        val result = data.verifyDirectChallenges(testSetup.USER_ID_2)
+        Truth.assertThat(result?.id).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
+        Truth.assertThat(result?.challenger).isEqualTo(testSetup.USER_ID_1)
+        Truth.assertThat(result?.answersChallenger?.size).isEqualTo(1)
+        Truth.assertThat(result?.scoreChallenger).isEqualTo(0)
+        Truth.assertThat(result?.challenged).isEqualTo(testSetup.USER_ID_2)
+        Truth.assertThat(result?.answersChallenged).isEmpty()
     }
 
 }
