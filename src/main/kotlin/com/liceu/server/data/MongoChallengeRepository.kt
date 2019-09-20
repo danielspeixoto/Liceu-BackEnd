@@ -8,6 +8,7 @@ import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.trivia.PostComment
 import com.liceu.server.domain.trivia.TriviaQuestion
 import org.bson.types.ObjectId
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
@@ -43,7 +44,7 @@ class MongoChallengeRepository(
                             it.tags,
                             it.comments?.map {
                                 MongoDatabase.MongoComment(
-                                        ObjectId(matchmaking.challenger + Date.from(Instant.now().atOffset(ZoneOffset.ofHours(-3)).toInstant()).toString()),
+                                        ObjectId(it.id),
                                         ObjectId(it.userId),
                                         it.author,
                                         it.comment
@@ -99,6 +100,20 @@ class MongoChallengeRepository(
                     },
                     it.submissionDate
             )
+        }
+        return null
+    }
+
+    override fun verifyDirectChallenges(challengedId: String): Challenge? {
+        val result = template.findOne(
+                Query.query(Criteria
+                        .where("challenged").isEqualTo(challengedId)
+                        .and("answersChallenged").size(0)
+                ),
+                MongoDatabase.MongoChallenge::class.java
+        )
+        result?.let {
+            return toChallenge(result)
         }
         return null
     }
