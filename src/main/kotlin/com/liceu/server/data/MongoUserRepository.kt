@@ -28,7 +28,6 @@ class MongoUserRepository(
 ) : UserBoundary.IRepository {
 
     override fun save(user: UserForm): String {
-        val query = Query(Criteria("email").isEqualTo(user.email))
         val mongoUser = MongoDatabase.MongoUser(
                 user.name, user.email,
                 MongoDatabase.MongoPicture(
@@ -48,14 +47,8 @@ class MongoUserRepository(
                 user.followers?.map { ObjectId(it) },
                 user.following?.map { ObjectId(it) }
         )
-        val user = template.findOne<MongoDatabase.MongoUser>(query)
-        if (user != null) {
-            mongoUser.id = user.id
-        }
         return template.save(mongoUser).id.toHexString()
     }
-
-
 
     override fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double,state: String): Long {
         val location = GeoJsonPoint(longitude,latitude)
