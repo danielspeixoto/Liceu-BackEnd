@@ -129,7 +129,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun ranking(): GameBoundary.IGameRanking{
-        return GameRanking(mongoGameRepository,20)
+        return GameRanking(mongoGameRepository,50)
     }
 
     @Bean
