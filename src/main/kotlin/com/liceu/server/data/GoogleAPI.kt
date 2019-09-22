@@ -6,9 +6,9 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
+import khttp.get
 import java.util.*
 import javax.naming.AuthenticationException
-
 
 class GoogleAPI(
         val clientId: String,
@@ -51,7 +51,7 @@ class GoogleAPI(
                         null
                 )
             } else {
-                val response = khttp.get("https://www.googleapis.com/oauth2/v3/userinfo", headers = mapOf(
+                val response = get("https://www.googleapis.com/oauth2/v3/userinfo", headers = mapOf(
                         "Authorization" to "Bearer $authCode"
                 ))
                 if(response.statusCode == 200) {
