@@ -60,7 +60,7 @@ class GoogleAPI(
                             data["name"] as String,
                             data["email"] as String,
                             Picture(
-                                    data["email"] as String,
+                                    data["picture"] as String,
                                     200,
                                     200
                             ),
