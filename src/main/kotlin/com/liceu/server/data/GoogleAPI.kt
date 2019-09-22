@@ -1,6 +1,5 @@
 package com.liceu.server.data
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
@@ -21,56 +20,70 @@ class GoogleAPI(
             throw AuthenticationException("access token empty")
         }
         try {
-            val idToken = if (authCode.length > 150) {
-
+            if (authCode.length > 150) {
                 val verifier = GoogleIdTokenVerifier.Builder(NetHttpTransport(), JacksonFactory())
-//                        .setAudience(Collections.singletonList(clientId))
+                        .setAudience(Collections.singletonList(clientId))
                         .build()
-                verifier.verify(authCode)
+                val idToken = verifier.verify(authCode)
+                val payload = idToken!!.payload
+                val userId = payload.subject
+                val email = payload.email
+                val name = payload["name"] as String
+                val pictureUrl = payload["picture"] as String
+                return UserForm(
+                        name,
+                        email,
+                        Picture(
+                                pictureUrl,
+                                200,
+                                200
+                        ),
+                        userId,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                )
             } else {
-                val tokenResponse = GoogleAuthorizationCodeTokenRequest(
-                        NetHttpTransport(),
-                        JacksonFactory.getDefaultInstance(),
-                        "https://oauth2.googleapis.com/token",
-                        clientId,
-                        clientSecret,
-                        authCode,
-                        "")  // Specify the same redirect URI that you use with your web
-                        // app. If you don't have a web version of your app, you can
-                        // specify an empty string.
-                        .execute()
-                tokenResponse.parseIdToken()
+                val response = khttp.get("https://www.googleapis.com/oauth2/v3/userinfo", headers = mapOf(
+                        "Authorization" to "Bearer $authCode"
+                ))
+                if(response.statusCode == 200) {
+                    val data = response.jsonObject
+                    return UserForm(
+                            data["name"] as String,
+                            data["email"] as String,
+                            Picture(
+                                    data["email"] as String,
+                                    200,
+                                    200
+                            ),
+                            data["sub"] as String,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                    )
+                } else {
+                    throw AuthenticationException(response.text)
+                }
             }
-            val payload = idToken!!.payload
-            val userId = payload.subject
-            val email = payload.email
-            val name = payload["name"] as String
-            val pictureUrl = payload["picture"] as String
-            return UserForm(
-                    name,
-                    email,
-                    Picture(
-                            pictureUrl,
-                            200,
-                            200
-                    ),
-                    userId,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-            )
         } catch (e: AuthenticationException) {
             throw AuthenticationException(e.message)
         } catch (e: Exception) {
             throw e
         }
-
     }
 }
