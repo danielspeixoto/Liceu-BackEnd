@@ -58,7 +58,7 @@ dependencies {
     implementation(group = "com.restfb", name = "restfb", version = "2.21.0")
     implementation(group = "com.maxmind.geoip2", name = "geoip2", version = "2.3.1")
     implementation ("com.google.code.gson:gson:2.8.5")
-    runtime(group="khttp", name="khttp", version="1.0.0")
+    implementation(group="khttp", name="khttp", version="1.0.0")
 
 
 }
