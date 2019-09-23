@@ -128,11 +128,9 @@ Desafio direto de um usuário para outro usuário
     "id": "09c54aa21414357a571d4cc1",
     "challenger": "37235321avc76abebce3f6e6",
     "challenged": "3a1449a4bdb40ahjkue1e431",
-    "answersChallenger": [
-        "2"
-    ],
+    "answersChallenger": [],
     "answersChallenged": [],
-    "scoreChallenger": 1,
+    "scoreChallenger": null,
     "scoreChallenged": null,
     "triviaQuestionsUsed": [
         {
