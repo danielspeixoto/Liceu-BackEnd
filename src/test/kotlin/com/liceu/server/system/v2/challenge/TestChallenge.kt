@@ -85,7 +85,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         val tags = triviaQuestionsUsed["tags"] as List<String>
         Truth.assertThat(tags[0]).isEqualTo("matematica")
         Truth.assertThat(tags[1]).isEqualTo("algebra")
-        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_3,10)
+        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_3,10,emptyList())
         Truth.assertThat(activitiesChallenger.size).isEqualTo(1)
         Truth.assertThat(activitiesChallenger[0].type).isEqualTo("challengeAccepted")
         Truth.assertThat(activitiesChallenger[0].params["challengedId"]).isEqualTo(testSetup.USER_ID_1)
@@ -193,8 +193,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         val tags = triviaQuestionsUsed["tags"] as List<String>
         Truth.assertThat(tags[0]).isEqualTo("graficos")
         Truth.assertThat(tags[1]).isEqualTo("algebra")
-        val activitiesFromChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10)
-        Truth.assertThat(activitiesFromChallenger.size).isEqualTo(3)
+        val activitiesFromChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10,emptyList())
+        Truth.assertThat(activitiesFromChallenger.size).isEqualTo(4)
         Truth.assertThat(activitiesFromChallenger[0].type).isEqualTo("challengeAccepted")
         Truth.assertThat(activitiesFromChallenger[0].params["challengeId"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
         Truth.assertThat(activitiesFromChallenger[0].params["challengedId"]).isEqualTo(testSetup.USER_ID_2)
@@ -225,11 +225,11 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
         Truth.assertThat(resultRetrieved.answersChallenged[1]).isEqualTo("4")
         Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(2)
-        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10)
-        val activitiesChallenged = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10)
+        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10,emptyList())
+        val activitiesChallenged = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10,emptyList())
         Truth.assertThat(activitiesChallenger.size).isEqualTo(2)
         Truth.assertThat(activitiesChallenger[0].type).isEqualTo("challengeFinished")
-        Truth.assertThat(activitiesChallenged.size).isEqualTo(3)
+        Truth.assertThat(activitiesChallenged.size).isEqualTo(4)
         Truth.assertThat(activitiesChallenged[0].type).isEqualTo("challengeFinished")
     }
 
@@ -259,8 +259,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(resultRetrieved.scoreChallenger).isEqualTo(3)
         Truth.assertThat(resultRetrieved.answersChallenged).isEmpty()
         Truth.assertThat(resultRetrieved.scoreChallenged).isNull()
-        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10)
-        Truth.assertThat(activitiesChallenger.size).isEqualTo(2)
+        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10,emptyList())
+        Truth.assertThat(activitiesChallenger.size).isEqualTo(3)
     }
 
     @Test
@@ -283,9 +283,9 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId(testSetup.CHALLENGE_TRIVIA_ID_7))
         Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
         Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(1)
-        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10)
-        val activitiesChallenged = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10)
-        Truth.assertThat(activitiesChallenger.size).isEqualTo(3)
+        val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10,emptyList())
+        val activitiesChallenged = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10,emptyList())
+        Truth.assertThat(activitiesChallenger.size).isEqualTo(4)
         Truth.assertThat(activitiesChallenger[0].type).isEqualTo("challengeFinished")
         var paramsFromActivity = activitiesChallenger[0].params
         Truth.assertThat(paramsFromActivity["challengeId"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)

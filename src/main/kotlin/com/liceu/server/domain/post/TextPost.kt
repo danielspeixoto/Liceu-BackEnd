@@ -1,9 +1,6 @@
 package com.liceu.server.domain.post
 
-import com.liceu.server.domain.global.INSERTION
-import com.liceu.server.domain.global.OverflowSizeException
-import com.liceu.server.domain.global.POST
-import com.liceu.server.domain.global.TEXT
+import com.liceu.server.domain.global.*
 import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.util.Logging
 class TextPost(
@@ -21,6 +18,9 @@ class TextPost(
             }
             if(post.description.length > 3000){
                 throw OverflowSizeException ("Description is too long")
+            }
+            if(post.description.length < 100){
+                throw UnderflowSizeException ("Description is too short")
             }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to post.userId,

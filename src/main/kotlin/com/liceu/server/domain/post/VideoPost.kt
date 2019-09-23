@@ -24,6 +24,9 @@ class VideoPost(
             if(post.description.length > 3000){
                 throw OverflowSizeException ("Description is too long")
             }
+            if(post.description.length < 100){
+                throw UnderflowSizeException ("Description is too short")
+            }
             if(post.video?.videoUrl?.isEmpty()!!){
                 throw OverflowSizeException ("Video URl can't be null")
             }

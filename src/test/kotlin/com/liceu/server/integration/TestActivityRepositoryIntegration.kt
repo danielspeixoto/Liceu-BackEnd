@@ -76,17 +76,26 @@ class TestActivityRepositoryIntegration {
 
     @Test
     fun getActivitiesFromUser_validUser_returnListOfActivities() {
-        val activitiesRetrieved = data.getActivitiesFromUser(testSetup.USER_ID_1,10)
-        assertThat(activitiesRetrieved.size).isEqualTo(2)
-        assertThat(activitiesRetrieved[0].type).isEqualTo("triviaFinished")
-        assertThat(activitiesRetrieved[1].type).isEqualTo("followedUser")
+        val activitiesRetrieved = data.getActivitiesFromUser(testSetup.USER_ID_1,10, emptyList())
+        assertThat(activitiesRetrieved.size).isEqualTo(3)
+        assertThat(activitiesRetrieved[0].type).isEqualTo("challengeAccepted")
+        assertThat(activitiesRetrieved[1].type).isEqualTo("challengeFinished")
+        assertThat(activitiesRetrieved[2].type).isEqualTo("followedUser")
     }
 
     @Test
     fun getActivitiesFromUser_validUser_returnOnlyOneActivitiy() {
-        val activitiesRetrieved = data.getActivitiesFromUser(testSetup.USER_ID_2,10)
+        val activitiesRetrieved = data.getActivitiesFromUser(testSetup.USER_ID_2,10,emptyList())
         assertThat(activitiesRetrieved.size).isEqualTo(1)
-        assertThat(activitiesRetrieved[0].type).isEqualTo("unfollowedUser")
+        assertThat(activitiesRetrieved[0].type).isEqualTo("followedUser")
+    }
+
+    @Test
+    fun getActivitiesFromUser_usingTags_returnOnlyOneActivity(){
+        val activitiesRetrieved = data.getActivitiesFromUser(testSetup.USER_ID_1,10, listOf("challengeFinished","challengeAccepted"))
+        assertThat(activitiesRetrieved.size).isEqualTo(2)
+        assertThat(activitiesRetrieved[0].id).isEqualTo(testSetup.ACITIVITY_ID_4)
+        assertThat(activitiesRetrieved[1].id).isEqualTo(testSetup.ACITIVITY_ID_2)
     }
 
 
