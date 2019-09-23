@@ -24,7 +24,7 @@ class TestSubmission: TestSystem("/v2/post") {
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "type" to "text",
-                "description" to "esse e um teste aha",
+                "description" to "esse e um teste de texto aha esse e um teste de texto aha esse e um teste de texto aha esse e um teste de texto aha",
                 "hasQuestions" to "true",
                 "questions" to listOf(
                         hashMapOf(
@@ -54,7 +54,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost).isNotNull()
         Truth.assertThat(insertedPost.userId.toHexString()).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(insertedPost.type).isEqualTo("text")
-        Truth.assertThat(insertedPost.description).isEqualTo("esse e um teste aha")
+        Truth.assertThat(insertedPost.description).isEqualTo("esse e um teste de texto aha esse e um teste de texto aha esse e um teste de texto aha esse e um teste de texto aha")
         Truth.assertThat(insertedPost.questions?.size).isEqualTo(2)
         Truth.assertThat(insertedPost.questions?.get(0)?.question).isEqualTo("O triangulo que tem lados iguais é?")
         Truth.assertThat(insertedPost.questions?.get(0)?.correctAnswer).isEqualTo("Equilátero")
@@ -73,7 +73,7 @@ class TestSubmission: TestSystem("/v2/post") {
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "type" to "video",
-                "description" to "esse e um teste aha",
+                "description" to "esse e um teste de video aha esse e um teste de video aha esse e um teste de video aha esse e um teste de video aha",
                 "videoUrl" to "https://www.youtube.com/watch?v=8vefLpfozPA",
                 "hasQuestions" to "true",
                 "questions" to listOf(
@@ -122,7 +122,7 @@ class TestSubmission: TestSystem("/v2/post") {
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "type" to "video",
-                "description" to "teste teste",
+                "description" to "teste de video teste de video teste de video teste de video teste de video teste de video teste de video teste de video",
                 "videoUrl" to "https://www.youtube.com/watch?v=8vefLpfozPA",
                 "hasQuestions" to "false"
         ), headers)

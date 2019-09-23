@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.inValues
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
 
@@ -26,8 +27,14 @@ class MongoActivityRepository(
         return result.id.toHexString()
     }
 
-    override fun getActivitiesFromUser(userId: String, amount: Int): List<Activity> {
-        val match = Aggregation.match(Criteria.where("userId").isEqualTo(ObjectId(userId)))
+    override fun getActivitiesFromUser(userId: String, amount: Int, tags: List<String>): List<Activity> {
+        if(amount == 0) {
+            return emptyList()
+        }
+        var match = Aggregation.match(Criteria("type").`in`(tags) .and("userId").isEqualTo(ObjectId(userId)))
+        if(tags.isEmpty()) {
+            match = Aggregation.match(Criteria.where("userId").isEqualTo(ObjectId(userId)))
+        }
         val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
         val limitOfActivitiesRetrieved = Aggregation.limit(amount.toLong())
         val agg = Aggregation.newAggregation(match,sortByDate,limitOfActivitiesRetrieved)

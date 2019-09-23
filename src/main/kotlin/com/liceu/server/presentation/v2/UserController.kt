@@ -1,5 +1,6 @@
 package com.liceu.server.presentation.v2
 
+import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.global.*
@@ -34,7 +35,9 @@ class UserController (
         @Autowired val updateProducerToBeFollowed: UserBoundary.IUpdateProducerToBeFollowed,
         @Autowired val updateProducerToBeUnfollowed: UserBoundary.IupdateProducerToBeUnfollowed,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
-        @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser
+        @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
+        @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
+
 ) {
 
     @Autowired
@@ -124,6 +127,32 @@ class UserController (
             val postsRetrieved = getPostsFromUSer.run(userId)
             ResponseEntity(postsRetrieved.map { toPostResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData)
+        }
+    }
+
+
+    @GetMapping ("/{userId}/activity")
+    fun getActivityFromUser (
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            @RequestParam(value = "amount", defaultValue = "0") amount: Int,
+            @RequestParam(value = "type", defaultValue = "") type: List<String>,
+            request: HttpServletRequest
+    ): ResponseEntity<List<ActivityResponse>>{
+        val eventName = "get_activity_from_user"
+        val eventTags = listOf(CONTROLLER, NETWORK, ACTIVITY, RETRIEVAL)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+            if(userId != authenticatedUserId){
+                throw throw AuthenticationException("user attempting to retrieve other user properties")
+            }
+            val activitiesRetrieved = getActivityFromUser.run(userId,amount,type)
+            ResponseEntity(activitiesRetrieved.map { toActivityResponse(it) },HttpStatus.OK)
+        }catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData)
         }
     }
