@@ -3,7 +3,6 @@ package com.liceu.server.domain.user
 import com.liceu.server.domain.global.AUTH
 import com.liceu.server.domain.global.AuthenticationException
 import com.liceu.server.domain.global.THIRD_PARTY
-import com.liceu.server.domain.util.user.logsUserAuthentication
 import com.liceu.server.util.Logging
 
 class MultipleAuthenticate(
@@ -26,13 +25,18 @@ class MultipleAuthenticate(
                 facebookApi.data(accessToken)
             }
             userRepo.getUserBySocialId(user.socialId)?.let {
-                logsUserAuthentication(EVENT_NAME,TAGS,it.id,timeBefore)
+                Logging.info(EVENT_NAME, TAGS, hashMapOf(
+                        "time" to System.currentTimeMillis() - timeBefore,
+                        "userId" to it.id
+                ))
                 return it.id
             }
             val id = userRepo.save(user)
-            logsUserAuthentication(EVENT_NAME,TAGS,id,timeBefore)
+            Logging.info(EVENT_NAME, TAGS, hashMapOf(
+                    "time" to System.currentTimeMillis() - timeBefore,
+                    "userId" to id
+            ))
             return id
-
         } catch (e: AuthenticationException) {
             Logging.error("oauth", listOf(AUTH, THIRD_PARTY), e, hashMapOf(
                     "accessToken" to accessToken,

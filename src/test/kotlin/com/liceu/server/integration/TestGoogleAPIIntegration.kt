@@ -41,6 +41,7 @@ class TestGoogleAPIIntegration {
 //        TODO ADD other assertions
     }
 
+    @Disabled
     @Test
     fun data_InvalidAccessToken_ThrowsError() {
         assertThrows<Exception> {
