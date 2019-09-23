@@ -5,6 +5,7 @@ import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 
 class UpdateProducerToBeFollowed(
@@ -33,14 +34,10 @@ class UpdateProducerToBeFollowed(
             ))
             userRepo.updateAddProducerToFollowingList(userId,producerId)
             userRepo.updateAddUserToProducerFollowerList(userId,producerId)
-            activityRepository.insertActivity(ActivityToInsert(
-                    producerId,
-                    "followedUser",
-                    hashMapOf(
-                            "userId" to userId
-                    ),
-                    TimeStamp.retrieveActualTimeStamp()
+            activityInsertion(activityRepository,producerId, "followedUser",hashMapOf(
+                    "userId" to userId
             ))
+
         } catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e

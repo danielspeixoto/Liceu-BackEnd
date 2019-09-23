@@ -89,6 +89,7 @@ class DataSetup {
 
     val USER_ID_4 = "37235b2a67c76abebce3f6e3"
     val USER_ID_5 = "37235b2a67c76abebce3f6e8"
+    val FACEBOOK_ID = "3aaa5b2a67c76abebce3f6e8"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
     val GAME_ID_2 = "49c54d325b75357a571d4cc2"
@@ -432,6 +433,29 @@ class DataSetup {
         )
         user4.id = ObjectId(USER_ID_4)
         userRepo.insert(user4)
+
+        val facebookUser = MongoDatabase.MongoUser(
+            "Sophia Aldajeidicfbi Okelolasky",
+            "sulwxcmqrp_1567856463@tfbnw.net",
+            MongoDatabase.MongoPicture(
+                    "imagemFace",
+                    200,
+                    200
+            ),
+            "115992013112781",
+            GeoJsonPoint(-20.83, -57.86),
+            null,
+            "Colégio legal do face",
+            17,
+            "souOFace",
+            "faceSchool",
+            "face estudando",
+            null,
+            null,
+            null
+        )
+        facebookUser.id = ObjectId(FACEBOOK_ID)
+        userRepo.insert(facebookUser)
 
     }
 
@@ -1080,26 +1104,39 @@ class DataSetup {
 
         val activity2 = MongoDatabase.MongoActivities(
                 ObjectId(USER_ID_1),
-                "triviaFinished",
+                "challengeFinished",
                 hashMapOf(
                         "challengerId" to USER_ID_2,
                         "triviaId" to CHALLENGE_TRIVIA_ID_1
                 ),
-                Date.from(Instant.parse("2019-08-28T13:40:20.00Z"))
+                Date.from(Instant.parse("2019-08-28T12:40:20.00Z"))
         )
         activity2.id = ObjectId(ACITIVITY_ID_2)
         activityRepo.insert(activity2)
 
+
         val activity3 = MongoDatabase.MongoActivities(
                 ObjectId(USER_ID_2),
-                "unfollowedUser",
+                "followedUser",
                 hashMapOf(
-                        "unfollowedBy" to USER_ID_2
+                        "unfollowedBy" to USER_ID_1
                 ),
                 Date.from(Instant.parse("2019-08-27T13:40:20.00Z"))
         )
         activity3.id = ObjectId(ACITIVITY_ID_3)
         activityRepo.insert(activity3)
+
+        val activity4 = MongoDatabase.MongoActivities(
+                ObjectId(USER_ID_1),
+                "challengeAccepted",
+                hashMapOf(
+                        "challengerId" to USER_ID_2,
+                        "triviaId" to CHALLENGE_TRIVIA_ID_2
+                ),
+                Date.from(Instant.parse("2019-08-28T13:40:20.00Z"))
+        )
+        activity4.id = ObjectId(ACITIVITY_ID_4)
+        activityRepo.insert(activity4)
     }
 }
 

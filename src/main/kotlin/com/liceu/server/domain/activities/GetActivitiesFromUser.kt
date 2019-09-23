@@ -14,7 +14,7 @@ class GetActivitiesFromUser(
         val TAGS = listOf(RETRIEVAL, ACTIVITY, USER)
     }
 
-    override fun run(userId: String, amount: Int): List<Activity> {
+    override fun run(userId: String, amount: Int, tags: List<String>): List<Activity> {
         if(amount == 0) {
             Logging.warn(UNCOMMON_PARAMS, TAGS, hashMapOf(
                     "action" to EVENT_NAME,
@@ -37,7 +37,7 @@ class GetActivitiesFromUser(
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to userId
             ))
-            return activityRepository.getActivitiesFromUser(userId,finalAmount)
+            return activityRepository.getActivitiesFromUser(userId,finalAmount,tags)
         }catch (e: Exception){
             Logging.error(EVENT_NAME,TAGS,e)
             throw e

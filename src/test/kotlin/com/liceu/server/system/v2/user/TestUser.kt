@@ -296,7 +296,7 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(producer.followers?.get(0)).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(user.following?.size).isEqualTo(3)
         Truth.assertThat(user.following).contains(testSetup.USER_ID_2)
-        val activitiesProducer = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10)
+        val activitiesProducer = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10, emptyList())
         Truth.assertThat(activitiesProducer.size).isEqualTo(2)
         Truth.assertThat(activitiesProducer[0].type).isEqualTo("followedUser")
     }
