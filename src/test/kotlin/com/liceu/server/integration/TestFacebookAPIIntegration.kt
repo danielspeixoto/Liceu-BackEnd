@@ -31,8 +31,8 @@ class TestFacebookAPIIntegration {
     @Test
     fun data_ValidAccessToken_ReturnsInfo() {
         val user = facebook.data(testSetup.facebookAccessToken)
-        assertThat(user.name).isEqualTo("Carol Aldacjddbbfii Sidhuman")
-        assertThat(user.email).isEqualTo("rnbtupcrwl_1567557129@tfbnw.net")
+        assertThat(user.name).isEqualTo("Sophia Aldajeidicfbi Okelolasky")
+        assertThat(user.email).isEqualTo("sulwxcmqrp_1567856463@tfbnw.net")
         assertThat(ImageIO.read(URL(user.picture.url))).isNotNull()
         assertThat(user.picture.width).isEqualTo(200)
         assertThat(user.picture.height).isEqualTo(200)

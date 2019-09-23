@@ -65,36 +65,6 @@ class TestMongoUserRepositoryIntegration {
         assertThat(user.name).isEqualTo("newuser")
     }
 
-    @Disabled
-    @Test
-    fun save_UserExists_Updates() {
-        val countBefore = userRepository.count()
-        val id = data.save(UserForm(
-                "updatedName",
-                "user1@g.com",
-                Picture(
-                        "https://newuser.pic",
-                        200, 200
-                ),
-                "oldId",
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
-        ))
-        val user = userRepository.findByEmail("user1@g.com")
-        assertThat(id).isEqualTo(testSetup.USER_ID_1)
-        assertThat(userRepository.count()).isEqualTo(countBefore)
-        assertThat(user).isNotNull()
-        assertThat(user.name).isEqualTo("updatedName")
-        assertThat(user.facebookId).isEqualTo("oldId")
-    }
 
     @Test
     fun getUserById_UserExists_returnUser(){

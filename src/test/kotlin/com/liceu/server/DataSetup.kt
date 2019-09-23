@@ -89,6 +89,7 @@ class DataSetup {
 
     val USER_ID_4 = "37235b2a67c76abebce3f6e3"
     val USER_ID_5 = "37235b2a67c76abebce3f6e8"
+    val FACEBOOK_ID = "3aaa5b2a67c76abebce3f6e8"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
     val GAME_ID_2 = "49c54d325b75357a571d4cc2"
@@ -432,6 +433,29 @@ class DataSetup {
         )
         user4.id = ObjectId(USER_ID_4)
         userRepo.insert(user4)
+
+        val facebookUser = MongoDatabase.MongoUser(
+            "Sophia Aldajeidicfbi Okelolasky",
+            "sulwxcmqrp_1567856463@tfbnw.net",
+            MongoDatabase.MongoPicture(
+                    "imagemFace",
+                    200,
+                    200
+            ),
+            "115992013112781",
+            GeoJsonPoint(-20.83, -57.86),
+            null,
+            "Colégio legal do face",
+            17,
+            "souOFace",
+            "faceSchool",
+            "face estudando",
+            null,
+            null,
+            null
+        )
+        facebookUser.id = ObjectId(FACEBOOK_ID)
+        userRepo.insert(facebookUser)
 
     }
 
