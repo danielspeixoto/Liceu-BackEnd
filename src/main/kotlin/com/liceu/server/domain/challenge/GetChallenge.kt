@@ -3,10 +3,11 @@ package com.liceu.server.domain.challenge
 import com.liceu.server.data.MongoChallengeRepository
 import com.liceu.server.data.MongoTriviaRepository
 import com.liceu.server.domain.activities.ActivityBoundary
+import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.util.TimeStamp
-import com.liceu.server.domain.util.challenge.challengeLogsAndActivityInsertion
+import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 
 class GetChallenge(
@@ -23,11 +24,37 @@ class GetChallenge(
     override fun run(userId: String): Challenge {
         try {
             challengeRepository.verifyDirectChallenges(userId)?.let {
-                challengeLogsAndActivityInsertion(EVENT_NAME,TAGS,it,activityRepository)
+                Logging.info(
+                        EVENT_NAME, TAGS,
+                        hashMapOf(
+                                "challengeId" to it.id,
+                                "challengerId" to it.challenger,
+                                "challengedId" to it.challenged,
+                                "answersChallengerSize" to it.answersChallenger.size,
+                                "answersChallengedSize" to it.answersChallenged.size
+                        )
+                )
+                activityInsertion(activityRepository, it.challenger,"challengeAccepted", hashMapOf(
+                        "challengeId" to it.id,
+                        "challengedId" to it.challenged!!
+                ))
                 return it
             }
             challengeRepository.matchMaking(userId)?.let {
-                challengeLogsAndActivityInsertion(EVENT_NAME,TAGS,it,activityRepository)
+                Logging.info(
+                        EVENT_NAME, TAGS,
+                        hashMapOf(
+                                "challengeId" to it.id,
+                                "challengerId" to it.challenger,
+                                "challengedId" to it.challenged,
+                                "answersChallengerSize" to it.answersChallenger.size,
+                                "answersChallengedSize" to it.answersChallenged.size
+                        )
+                )
+                activityInsertion(activityRepository, it.challenger,"challengeAccepted", hashMapOf(
+                        "challengeId" to it.id,
+                        "challengedId" to it.challenged!!
+                ))
                 return it
             }
             val trivias = triviaRepository.randomQuestions(listOf(), 10)

@@ -5,7 +5,7 @@ import com.liceu.server.domain.global.AuthenticationException
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.DIRECT
 import com.liceu.server.domain.global.RETRIEVAL
-import com.liceu.server.domain.util.challenge.challengeLogsAndActivityInsertion
+import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 
 class AcceptDirectChallenge(
@@ -27,7 +27,19 @@ class AcceptDirectChallenge(
             if (result.challenged != userId){
                 throw AuthenticationException ("user authenticated isn't the challenged user")
             }
-            challengeLogsAndActivityInsertion(EVENT_NAME,TAGS,result,activityRepository)
+            Logging.info(
+                    EVENT_NAME, TAGS, hashMapOf(
+                            "challengeId" to result.id,
+                            "challengerId" to result.challenger,
+                            "challengedId" to result.challenged,
+                            "answersChallengerSize" to result.answersChallenger.size,
+                            "answersChallengedSize" to result.answersChallenged.size
+                    )
+            )
+            activityInsertion(activityRepository, result.challenger,"challengeAccepted", hashMapOf(
+                    "challengeId" to result.id,
+                    "challengedId" to result.challenged!!
+            ))
             return result
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)

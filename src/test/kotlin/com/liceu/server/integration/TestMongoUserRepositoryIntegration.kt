@@ -9,6 +9,7 @@ import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.user.UserForm
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -64,6 +65,7 @@ class TestMongoUserRepositoryIntegration {
         assertThat(user.name).isEqualTo("newuser")
     }
 
+    @Disabled
     @Test
     fun save_UserExists_Updates() {
         val countBefore = userRepository.count()
