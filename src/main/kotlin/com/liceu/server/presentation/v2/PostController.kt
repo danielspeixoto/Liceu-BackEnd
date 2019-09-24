@@ -19,6 +19,7 @@ import javax.validation.ValidationException
 class PostController(
         @Autowired val textPost: PostBoundary.ITextPost,
         @Autowired val videoPost: PostBoundary.IVideoPost,
+        @Autowired val imagePost: PostBoundary.IImagePost,
         @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
         @Autowired val deletePosts: PostBoundary.IDeletePost
 ) {
@@ -79,6 +80,14 @@ class PostController(
                             questions
                     ))
                 }
+                "image" -> imagePost.run(PostSubmission(
+                        userId,
+                        type,
+                        description,
+                        null,
+                        null,
+                        questions
+                ))
                 else -> throw ValidationException()
             }
             ResponseEntity(hashMapOf<String, Any>(

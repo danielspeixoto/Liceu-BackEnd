@@ -7,7 +7,7 @@ data class PostSubmission (
         val userId: String,
         val type: String,
         val description: String,
-        val imageURL: Base64?,
+        val image: Base64?,
         val video: PostVideo?,
         val questions: List<PostQuestions>?
 )

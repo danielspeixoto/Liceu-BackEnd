@@ -116,7 +116,7 @@ class TestSubmission: TestSystem("/v2/post") {
     }
 
     @Test
-    fun submitVideoPost_questionsEmpty_sucess(){
+    fun submitVideoPost_questionsEmpty_success(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -140,6 +140,28 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.video?.thumbnails?.medium).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/mqdefault.jpg")
         Truth.assertThat(insertedPost.questions).isEmpty()
     }
+
+
+    @Test
+    fun submitImagePost_questionsEmpty_success(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "type" to "image",
+                "description" to "teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem",
+                "hasQuestions" to "false"
+        ), headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        val id = body["id"] as String
+        val insertedPost = postRepo.findById(id).get()
+        Truth.assertThat(insertedPost.userId.toHexString()).isEqualTo(testSetup.USER_ID_1)
+        Truth.assertThat(insertedPost.type).isEqualTo("image")
+        Truth.assertThat(insertedPost.questions).isEmpty()
+    }
+
 
     @Test
     fun submitVideoPost_descriptionNull_throwBadRequest() {

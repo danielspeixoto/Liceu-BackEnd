@@ -253,6 +253,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun imagePost(): PostBoundary.IImagePost{
+        return ImagePost(mongoPostRepository)
+    }
+
+    @Bean
     fun getPosts(): PostBoundary.IGetPosts{
         return GetPosts(mongoPostRepository,mongoUserRepository,30)
     }
