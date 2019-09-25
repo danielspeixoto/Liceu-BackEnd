@@ -6,10 +6,7 @@ import com.liceu.server.TestConfiguration
 import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.PostRepository
-import com.liceu.server.domain.post.PostQuestions
-import com.liceu.server.domain.post.PostThumbnails
-import com.liceu.server.domain.post.PostToInsert
-import com.liceu.server.domain.post.PostVideo
+import com.liceu.server.domain.post.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -87,7 +84,11 @@ class TestPostRepositoryIntegration {
                 "3a1449a4bdb40abd5ae1e431",
                 "image",
                 "imagem legal",
-                "www.teste.com.br",
+                PostImage(
+                        "divulgacao Curso de matematica",
+                        "JPEG",
+                        "www.minhaimagem.com"
+                ),
                 null,
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
                 null,
@@ -97,7 +98,9 @@ class TestPostRepositoryIntegration {
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
         assertThat(postInserted.type).isEqualTo("image")
         assertThat(postInserted.description).isEqualTo("imagem legal")
-        assertThat(postInserted.imageURL).isEqualTo("www.teste.com.br")
+        assertThat(postInserted.image?.title).isEqualTo("divulgacao Curso de matematica")
+        assertThat(postInserted.image?.type).isEqualTo("JPEG")
+        assertThat(postInserted.image?.pictureData).isEqualTo("www.minhaimagem.com")
     }
 
     @Test

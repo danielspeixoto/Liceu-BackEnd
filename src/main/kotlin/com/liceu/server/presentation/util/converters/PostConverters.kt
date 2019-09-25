@@ -1,9 +1,6 @@
 package com.liceu.server.presentation.util.converters
 
-import com.liceu.server.domain.post.Post
-import com.liceu.server.domain.post.PostComment
-import com.liceu.server.domain.post.PostQuestions
-import com.liceu.server.domain.post.PostVideo
+import com.liceu.server.domain.post.*
 import java.util.*
 
 data class PostResponse(
@@ -11,7 +8,7 @@ data class PostResponse(
         val userId: String,
         val type: String,
         val description: String,
-        val imageURL: String?,
+        val image: PostImage?,
         val video: PostVideo?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
@@ -24,7 +21,7 @@ fun toPostResponse(post: Post): PostResponse {
             post.userId,
             post.type,
             post.description,
-            post.imageURL,
+            post.image,
             post.video,
             post.submissionDate,
             post.comments,

@@ -27,7 +27,11 @@ class MongoPostRepository(
                 ObjectId(postToInsert.userId),
                 postToInsert.type,
                 postToInsert.description,
-                postToInsert.imageURL,
+                MongoDatabase.MongoPostImage(
+                        postToInsert.image?.title,
+                        postToInsert.image?.type,
+                        postToInsert.image?.pictureData
+                ),
                 MongoDatabase.MongoPostVideo(
                         postToInsert.video?.videoUrl,
                         MongoDatabase.MongoPostThumbnails(

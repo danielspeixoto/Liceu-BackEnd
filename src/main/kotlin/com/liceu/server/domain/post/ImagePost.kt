@@ -1,35 +1,16 @@
 package com.liceu.server.domain.post
 
 import com.liceu.server.data.MongoPostRepository
-import com.liceu.server.domain.global.IMAGE
-import com.liceu.server.domain.global.INSERTION
-import com.liceu.server.domain.global.POST
 import com.liceu.server.util.Logging
-import org.apache.commons.codec.binary.Base64;
-import com.google.cloud.storage.BucketInfo
-import com.google.api.gax.paging.Page
-import com.google.cloud.storage.Acl
-import com.google.cloud.storage.Acl.User
-import com.google.cloud.storage.Blob
-import com.google.cloud.storage.Bucket
-import com.google.cloud.storage.Bucket.BucketSourceOption
-import com.google.cloud.storage.Storage.BlobGetOption
-import com.google.cloud.storage.StorageException
-import org.bouncycastle.crypto.tls.ConnectionEnd.client
-import java.io.ByteArrayInputStream
-import java.io.InputStream
-import java.util.LinkedList
-import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import java.nio.charset.StandardCharsets.UTF_8
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.BlobId
-import java.nio.file.Files.readAllBytes
 import java.io.FileInputStream
 import com.google.auth.oauth2.ServiceAccountCredentials
-import java.io.File
-import java.nio.file.Files
-import java.nio.file.Paths
+import com.liceu.server.domain.global.*
+import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.fileFunctions.FileFunctions
+import java.util.*
 
 
 class ImagePost(
@@ -41,39 +22,73 @@ class ImagePost(
     }
 
     override fun run(post: PostSubmission): String {
+        val imageTypes = hashMapOf(
+                "image/jpeg" to "jpeg",
+                "image/png" to "png"
+        )
         try {
-            //val storage = StorageOptions.getDefaultInstance().service
+            if(post.image?.title!!.isBlank()){
+                throw UnderflowSizeException ("Title can't be empty")
+            }
+            if(post.image.pictureData!!.isBlank()){
+                throw UnderflowSizeException ("Image can't be empty")
+            }
+            var fileType = FileFunctions.extractMimeType(post.image.pictureData)
+            if(fileType.isEmpty()){
+                throw TypeMismatchException("this file type is not supported")
+            }
+            //verifying size of archive
+            val formattedEncryptedBytes = post.image.pictureData.substringAfterLast(",")
+            if(FileFunctions.calculateFileSize(formattedEncryptedBytes) > 1e7){
+                throw OverflowSizeException("image is greater than 10MB")
+            }
 
+            //bucket connection
             val storage = StorageOptions.newBuilder()
                     .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("/home/ingoalmeida/Documentos/private/My Project 15866-cb6b3924d24a.json")))
                     .build()
                     .service
 
             val bucketName = "liceu-dev-test"
-            val fileName = "image_test_1.jpeg"
+
+            //decoding and retrieving image type
+            imageTypes.forEach {
+                fileType = fileType.replace(it.key,it.value)
+            }
+            var fileName = "${post.image.title}.${fileType}"
+            val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
 
             //uploading files to liceu test bucket
             val blobId = BlobId.of(bucketName, fileName)
             val blobInfo = BlobInfo.newBuilder(blobId).build()
-            val filePath = "/home/ingoalmeida/Downloads/anonymouse.jpeg" //image test
-            val encodedFile = File(filePath).readBytes() //file to array of bytes
-            val blob = storage.create(blobInfo, encodedFile)
-
-            //restoring data from bucket
-            val content = storage.readAllBytes(blobId)
+            val blob = storage.create(blobInfo, imageByteArray)
             val urlLink = "https://storage.cloud.google.com/${bucketName}/${fileName}"
-            val contentString = String(content, UTF_8)
-            println(contentString)
 
             Logging.info(EVENT_NAME,TAGS, hashMapOf(
                     "userId" to post.userId,
                     "type" to post.type,
                     "imageUrl" to urlLink
             ))
-            return "oi"
+
+            return postRepository.insertPost(PostToInsert(
+                    post.userId,
+                    post.type,
+                    post.description,
+                    PostImage(
+                            post.image.title,
+                            fileType,
+                            urlLink
+                    ),
+                    post.video,
+                    TimeStamp.retrieveActualTimeStamp(),
+                    null,
+                    post.questions
+            ))
+
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e
         }
     }
+
 }

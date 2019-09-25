@@ -80,14 +80,21 @@ class PostController(
                             questions
                     ))
                 }
-                "image" -> imagePost.run(PostSubmission(
-                        userId,
-                        type,
-                        description,
-                        null,
-                        null,
-                        questions
-                ))
+                "image" -> {
+                    val image = PostImage(
+                            body["imageTitle"] as String? ?: throw ValidationException(),
+                            null,
+                            body["imageData"] as String? ?: throw ValidationException()
+                    )
+                    imagePost.run(PostSubmission(
+                            userId,
+                            type,
+                            description,
+                            image,
+                            null,
+                            questions
+                    ))
+                }
                 else -> throw ValidationException()
             }
             ResponseEntity(hashMapOf<String, Any>(
