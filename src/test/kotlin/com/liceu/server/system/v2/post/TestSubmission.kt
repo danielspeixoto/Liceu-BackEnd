@@ -163,7 +163,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.type).isEqualTo("image")
         Truth.assertThat(insertedPost.description).isEqualTo("teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem")
         Truth.assertThat(insertedPost.image?.title).isEqualTo("essa_foto_representa_algo_legal")
-        Truth.assertThat(insertedPost.image?.url).isEqualTo("https://storage.cloud.google.com/liceu-dev-test/essa_foto_representa_algo_legal.jpeg")
+        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.cloud.google.com/liceu-dev-test/essa_foto_representa_algo_legal.jpeg")
         Truth.assertThat(insertedPost.questions).isEmpty()
     }
 
@@ -188,9 +188,35 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.type).isEqualTo("image")
         Truth.assertThat(insertedPost.description).isEqualTo("teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem PNG")
         Truth.assertThat(insertedPost.image?.title).isEqualTo("essa_foto_epresenta_algo_sobre_donuts")
-        Truth.assertThat(insertedPost.image?.url).isEqualTo("https://storage.cloud.google.com/liceu-dev-test/essa_foto_epresenta_algo_sobre_donuts.png")
+        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.cloud.google.com/liceu-dev-test/essa_foto_epresenta_algo_sobre_donuts.png")
         Truth.assertThat(insertedPost.questions).isEmpty()
     }
+
+    @Test
+    fun submitImagePost_pngImageWithAnotherBase64Compression_success(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "type" to "image",
+                "description" to "teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem PNG",
+                "imageTitle" to "camera",
+                "imageData" to "data:image/png;base64,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",
+                "hasQuestions" to "false"
+        ), headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        val id = body["id"] as String
+        val insertedPost = postRepo.findById(id).get()
+        Truth.assertThat(insertedPost.userId.toHexString()).isEqualTo(testSetup.USER_ID_1)
+        Truth.assertThat(insertedPost.type).isEqualTo("image")
+        Truth.assertThat(insertedPost.description).isEqualTo("teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem PNG")
+        Truth.assertThat(insertedPost.image?.title).isEqualTo("camera")
+        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.cloud.google.com/liceu-dev-test/camera.png")
+        Truth.assertThat(insertedPost.questions).isEmpty()
+    }
+
 
     @Test
     fun submitImagePost_imageDataToNull_throwBadRequest(){

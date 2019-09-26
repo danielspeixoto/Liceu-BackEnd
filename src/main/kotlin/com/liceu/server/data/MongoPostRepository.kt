@@ -30,7 +30,7 @@ class MongoPostRepository(
                 MongoDatabase.MongoPostImage(
                         postToInsert.image?.title,
                         postToInsert.image?.type,
-                        postToInsert.image?.pictureData
+                        postToInsert.image?.imageData
                 ),
                 MongoDatabase.MongoPostVideo(
                         postToInsert.video?.videoUrl,

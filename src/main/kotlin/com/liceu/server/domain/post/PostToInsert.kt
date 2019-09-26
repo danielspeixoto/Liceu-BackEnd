@@ -15,7 +15,7 @@ data class PostToInsert(
         val userId: String,
         val type: String,
         val description: String,
-        val image: PostImage?,
+        val image: FormattedImage?,
         val video: PostVideo?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
@@ -27,7 +27,7 @@ data class Post(
         val userId: String,
         val type: String,
         val description: String,
-        val image: PostImage?,
+        val image: FormattedImage?,
         val video: PostVideo?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
@@ -61,6 +61,12 @@ data class PostQuestions(
 data class PostImage(
         var title: String?,
         var type: String?,
-        val pictureData: String?
+        val imageData: String?
+)
+
+data class FormattedImage(
+        var title: String?,
+        var type: String?,
+        val imageData: String?
 )
 

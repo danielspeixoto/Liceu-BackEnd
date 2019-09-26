@@ -24,21 +24,22 @@ class ImagePost(
     override fun run(post: PostSubmission): String {
         val imageTypes = hashMapOf(
                 "image/jpeg" to "jpeg",
-                "image/png" to "png"
+                "image/png" to "png",
+                "application/pdf" to "pdf"
         )
         try {
             if(post.image?.title!!.isBlank()){
                 throw UnderflowSizeException ("Title can't be empty")
             }
-            if(post.image.pictureData!!.isBlank()){
+            if(post.image.imageData!!.isBlank()){
                 throw UnderflowSizeException ("Image can't be empty")
             }
-            var fileType = FileFunctions.extractMimeType(post.image.pictureData)
-            if(fileType.isEmpty()){
+            var fileExtension = FileFunctions.extractMimeType(post.image.imageData)
+            if(fileExtension.isEmpty()){
                 throw TypeMismatchException("this file type is not supported")
             }
             //verifying size of archive
-            val formattedEncryptedBytes = post.image.pictureData.substringAfterLast(",")
+            val formattedEncryptedBytes = post.image.imageData.substringAfterLast(",")
             if(FileFunctions.calculateFileSize(formattedEncryptedBytes) > 1e7){
                 throw OverflowSizeException("image is greater than 10MB")
             }
@@ -49,18 +50,20 @@ class ImagePost(
                     .build()
                     .service
 
+
             val bucketName = "liceu-dev-test"
 
             //decoding and retrieving image type
+            var contentType = fileExtension
             imageTypes.forEach {
-                fileType = fileType.replace(it.key,it.value)
+                fileExtension = fileExtension.replace(it.key,it.value)
             }
-            var fileName = "${post.image.title}.${fileType}"
+            var fileName = "${post.image.title}.${fileExtension}"
             val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
 
             //uploading files to liceu test bucket
             val blobId = BlobId.of(bucketName, fileName)
-            val blobInfo = BlobInfo.newBuilder(blobId).build()
+            val blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build()
             val blob = storage.create(blobInfo, imageByteArray)
             val urlLink = "https://storage.cloud.google.com/${bucketName}/${fileName}"
 
@@ -74,9 +77,9 @@ class ImagePost(
                     post.userId,
                     post.type,
                     post.description,
-                    PostImage(
+                    FormattedImage(
                             post.image.title,
-                            fileType,
+                            fileExtension,
                             urlLink
                     ),
                     post.video,

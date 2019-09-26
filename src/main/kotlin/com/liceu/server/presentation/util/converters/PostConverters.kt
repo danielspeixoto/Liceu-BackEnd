@@ -8,7 +8,7 @@ data class PostResponse(
         val userId: String,
         val type: String,
         val description: String,
-        val image: PostImage?,
+        val image: FormattedImage?,
         val video: PostVideo?,
         val submissionDate: Date,
         val comments: List<PostComment>?,

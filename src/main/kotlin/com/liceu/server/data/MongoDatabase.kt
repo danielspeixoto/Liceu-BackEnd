@@ -228,7 +228,7 @@ class MongoDatabase {
     data class MongoPostImage(
             var title: String?,
             var type: String?,
-            val url: String?
+            val imageURL: String?
     )
 
     data class MongoPostThumbnails(

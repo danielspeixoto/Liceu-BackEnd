@@ -84,7 +84,7 @@ class TestPostRepositoryIntegration {
                 "3a1449a4bdb40abd5ae1e431",
                 "image",
                 "imagem legal",
-                PostImage(
+                FormattedImage(
                         "divulgacao Curso de matematica",
                         "JPEG",
                         "www.minhaimagem.com"
@@ -100,7 +100,7 @@ class TestPostRepositoryIntegration {
         assertThat(postInserted.description).isEqualTo("imagem legal")
         assertThat(postInserted.image?.title).isEqualTo("divulgacao Curso de matematica")
         assertThat(postInserted.image?.type).isEqualTo("JPEG")
-        assertThat(postInserted.image?.pictureData).isEqualTo("www.minhaimagem.com")
+        assertThat(postInserted.image?.imageData).isEqualTo("www.minhaimagem.com")
     }
 
     @Test

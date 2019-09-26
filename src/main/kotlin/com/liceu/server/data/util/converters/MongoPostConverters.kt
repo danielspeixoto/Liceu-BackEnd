@@ -10,10 +10,10 @@ fun toPost(mongoPost: MongoDatabase.MongoPost): Post {
             mongoPost.userId.toHexString(),
             mongoPost.type,
             mongoPost.description,
-            PostImage(
+            FormattedImage(
                 mongoPost.image?.title,
                 mongoPost.image?.type,
-                mongoPost.image?.url
+                mongoPost.image?.imageURL
             ),
             PostVideo(
                     mongoPost.video?.videoUrl,
