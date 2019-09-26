@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import java.lang.Thread.sleep
 import java.util.HashMap
 
 
@@ -279,6 +280,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
         val response = restTemplate.exchange<Void>(baseUrl+"/${testSetup.CHALLENGE_TRIVIA_ID_7}", HttpMethod.PUT,entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        sleep(1000)
         val resultRetrieved = challengeRepo.findById(testSetup.CHALLENGE_TRIVIA_ID_7).get()
         Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId(testSetup.CHALLENGE_TRIVIA_ID_7))
         Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
