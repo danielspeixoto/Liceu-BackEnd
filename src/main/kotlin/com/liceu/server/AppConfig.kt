@@ -1,6 +1,7 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.data.firebase.FirebaseNotifications
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
 import com.liceu.server.domain.challenge.*
@@ -95,6 +96,15 @@ class AppConfig : AbstractMongoConfiguration() {
 
     override fun getDatabaseName(): String {
         return mongoDBName
+    }
+
+
+    @Value("\${firebase.cloudMessaging}")
+    lateinit var firebaseCloudMessagingKey: String
+
+    @Bean
+    fun firebaseNotifications(): FirebaseNotifications {
+        return FirebaseNotifications(firebaseCloudMessagingKey)
     }
 
     @Bean
