@@ -8,6 +8,7 @@ import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 
 class SubmitChallenge(
@@ -40,14 +41,9 @@ class SubmitChallenge(
                     trivias,
                     TimeStamp.retrieveActualTimeStamp()
             ))
-            activityRepository.insertActivity(ActivityToInsert(
-                    challengedId,
-                    "directChallenge",
-                    hashMapOf(
-                            "challengerId" to challengerId,
-                            "challengeId" to challengeId
-                    ),
-                    TimeStamp.retrieveActualTimeStamp()
+            activityInsertion(activityRepository, challengedId,"directChallenge", hashMapOf(
+                    "challengerId" to challengerId,
+                    "challengedId" to challengeId
             ))
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "challengerId" to challengerId,

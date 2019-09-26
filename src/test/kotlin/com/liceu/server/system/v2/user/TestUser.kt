@@ -289,6 +289,7 @@ class TestUser: TestSystem("/v2/user") {
                 null, headers)
         val response = restTemplate
                 .exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/followers", HttpMethod.PUT, entity)
+        Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val producer =  data.getUserById(testSetup.USER_ID_2)
         val user = data.getUserById(testSetup.USER_ID_1)
