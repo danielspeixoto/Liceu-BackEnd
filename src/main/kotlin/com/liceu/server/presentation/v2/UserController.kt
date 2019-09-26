@@ -132,7 +132,7 @@ class UserController (
     }
 
 
-    @GetMapping ("/{userId}/activity")
+    @GetMapping ("/{userId}/activities")
     fun getActivityFromUser (
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,

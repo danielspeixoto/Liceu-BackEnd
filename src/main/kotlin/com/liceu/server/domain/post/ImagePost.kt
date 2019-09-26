@@ -6,11 +6,6 @@ import com.liceu.server.domain.global.INSERTION
 import com.liceu.server.domain.global.POST
 import com.liceu.server.util.Logging
 import java.util.*
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import com.sun.mail.util.BASE64DecoderStream
 
 
