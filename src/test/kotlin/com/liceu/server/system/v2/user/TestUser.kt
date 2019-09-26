@@ -12,6 +12,7 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import java.lang.Thread.sleep
 import java.util.HashMap
 
 class TestUser: TestSystem("/v2/user") {
@@ -290,6 +291,7 @@ class TestUser: TestSystem("/v2/user") {
         val response = restTemplate
                 .exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/followers", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        sleep(1000)
         val producer =  data.getUserById(testSetup.USER_ID_2)
         val user = data.getUserById(testSetup.USER_ID_1)
         Truth.assertThat(producer.followers?.size).isEqualTo(1)
