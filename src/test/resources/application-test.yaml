@@ -16,6 +16,9 @@ mongo:
   dbName: ${DB_NAME:test}
   uri:  ${MONGO_CONNECTION:mongodb://localhost:27017}
 
+firebase:
+  cloudMessaging: ${FIREBASE_CLOUD_MESSAGING_SERVER_KEY:AAAAxlZoPF4:APA91bG1owIxEznsax5DHMK0Ze8sJJqyuRyvtUMKiOlSrCk5KTOBYlcJIxhC5qmup9CA1yECpbhBt0HhG0xw7OiW1WIdn5ERalwhdhS2_TQdbdaaB2WxIzGZipYyWRjq41MG18v9CaYc}
+
 dev: true
 
 spring:
