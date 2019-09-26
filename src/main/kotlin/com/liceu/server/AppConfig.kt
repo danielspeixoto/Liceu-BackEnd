@@ -41,6 +41,9 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${mongo.dbName}")
     lateinit var mongoDBName: String
 
+    @Value("\${google.imageBucket}")
+    lateinit var googleImageBucket: String
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -245,6 +248,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun textPost(): PostBoundary.ITextPost{
         return TextPost(mongoPostRepository)
+    }
+
+    @Bean
+    fun imagePost(): PostBoundary.IImagePost{
+        return ImagePost(mongoPostRepository,googleImageBucket)
     }
 
     @Bean
