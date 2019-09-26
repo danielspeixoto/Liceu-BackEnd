@@ -23,7 +23,7 @@ class TestGetActivitiesFromUser: TestSystem("/v2/user") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.USER_ID_1}/activity?amount=10", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.USER_ID_1}/activities?amount=10", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(3)
@@ -38,7 +38,7 @@ class TestGetActivitiesFromUser: TestSystem("/v2/user") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/3a2b40abd5ae1e431/activity?amount=10", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/3a2b40abd5ae1e431/activities?amount=10", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
     }
 
@@ -48,7 +48,7 @@ class TestGetActivitiesFromUser: TestSystem("/v2/user") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.USER_ID_1}/activity?amount=10&type=challengeAccepted&type=followedUser", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.USER_ID_1}/activities?amount=10&type=challengeAccepted&type=followedUser", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(2)
