@@ -14,7 +14,8 @@ import java.util.*
 
 
 class ImagePost(
-        private val postRepository: MongoPostRepository
+        private val postRepository: MongoPostRepository,
+        private val bucketName: String
 ): PostBoundary.IImagePost {
     companion object{
         const val EVENT_NAME = "text_post_submission"
@@ -24,12 +25,14 @@ class ImagePost(
     override fun run(post: PostSubmission): String {
         val imageTypes = hashMapOf(
                 "image/jpeg" to "jpeg",
-                "image/png" to "png",
-                "application/pdf" to "pdf"
+                "image/png" to "png"
         )
         try {
             if(post.image?.title!!.isBlank()){
                 throw UnderflowSizeException ("Title can't be empty")
+            }
+            if(post.image?.title!!.length > 150){
+                throw OverflowSizeException ("Title too much characters")
             }
             if(post.image.imageData!!.isBlank()){
                 throw UnderflowSizeException ("Image can't be empty")
@@ -46,12 +49,9 @@ class ImagePost(
 
             //bucket connection
             val storage = StorageOptions.newBuilder()
-                    .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("/home/ingoalmeida/Documentos/private/My Project 15866-cb6b3924d24a.json")))
+                    .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("googleImagesLiceu.json")))
                     .build()
                     .service
-
-
-            val bucketName = "liceu-dev-test"
 
             //decoding and retrieving image type
             var contentType = fileExtension
