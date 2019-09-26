@@ -7,8 +7,7 @@ google:
   clientSecret: sm2sA37l2SshglMRa7PTAYz1
 
 facebook:
-  accessToken: EAAf4pgUyFpsBAD4eSpUtkMaxOA05fJbXgY1VVaHMvXrk7wdXgfQCUXZBoHmAtIN0yQAU45YWGn3qkcmdYdW3yGj4aEuRJ5IVNSsDhC7UFGDwi0vw3K2kura7MuWB2SEyz30jgblfembdTvQrU8PcR545wlyuT8eq6iLL2o6H7KWufy1rZB174ZBQ2sV1FPlx5phTLFVZCkdfZCrDoNFj0
-
+  accessToken: EAAf4pgUyFpsBADI0RkwWB89CTjs3DQ9nRn6pFQu3EwHoSlkALrY3cUfXnhJkTCgMsbjFEJM9KbpNgqVneasdZCdW2Em9QvRZAXatknsLw3QvfmdlyoqpPm8PEIMmqOF1niZAnVXONfNTusOrL46MbyEoTwvCtBtvMuC1yfmxK6KJrAav0r82rEZCNTJjUmYwJqF8XwYEZAAZDZD
 
 client:
   api_key: apikey
@@ -16,6 +15,9 @@ client:
 mongo:
   dbName: ${DB_NAME:test}
   uri:  ${MONGO_CONNECTION:mongodb://localhost:27017}
+
+firebase:
+  cloudMessaging: ${FIREBASE_CLOUD_MESSAGING_SERVER_KEY:AAAAxlZoPF4:APA91bG1owIxEznsax5DHMK0Ze8sJJqyuRyvtUMKiOlSrCk5KTOBYlcJIxhC5qmup9CA1yECpbhBt0HhG0xw7OiW1WIdn5ERalwhdhS2_TQdbdaaB2WxIzGZipYyWRjq41MG18v9CaYc}
 
 dev: true
 
