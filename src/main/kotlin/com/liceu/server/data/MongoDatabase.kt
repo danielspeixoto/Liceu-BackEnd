@@ -210,7 +210,7 @@ class MongoDatabase {
         val userId: ObjectId,
         val type: String,
         val description: String,
-        val imageURL: String?,
+        val image: MongoPostImage?,
         val video: MongoPostVideo?,
         val submissionDate: Date,
         val comments: List<MongoComment>?,
@@ -223,6 +223,12 @@ class MongoDatabase {
     data class MongoPostVideo(
             val videoUrl: String?,
             val thumbnails: MongoPostThumbnails?
+    )
+
+    data class MongoPostImage(
+            var title: String?,
+            var type: String?,
+            val imageURL: String?
     )
 
     data class MongoPostThumbnails(
