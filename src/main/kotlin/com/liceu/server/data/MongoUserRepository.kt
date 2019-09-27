@@ -174,6 +174,10 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
+    override fun updateProfileImage(userId: String, imageURL: String): Long {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun getUserById(userId: String): User {
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
         val agg = Aggregation.newAggregation(match)

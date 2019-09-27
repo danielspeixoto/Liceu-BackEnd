@@ -11,7 +11,6 @@ object FileFunctions {
         return matcher.group(1).toLowerCase();
     }
 
-
     fun calculateFileSize(encodedString: String): Long {
         var lastCharacters = 0
         if (encodedString.contains("==")) {
