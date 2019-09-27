@@ -35,9 +35,9 @@ class MongoPostRepository(
                 MongoDatabase.MongoPostVideo(
                         postToInsert.video?.videoUrl,
                         MongoDatabase.MongoPostThumbnails(
-                            postToInsert.video?.thumbnails?.high,
-                            postToInsert.video?.thumbnails?.default,
-                            postToInsert.video?.thumbnails?.medium
+                                postToInsert.video?.thumbnails?.high,
+                                postToInsert.video?.thumbnails?.default,
+                                postToInsert.video?.thumbnails?.medium
                         )
                 ),
                 postToInsert.submissionDate,

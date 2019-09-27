@@ -11,13 +11,16 @@ object FileFunctions {
         return matcher.group(1).toLowerCase();
     }
 
-    fun calculateFileSize(encodedString: String): Long{
+
+    fun calculateFileSize(encodedString: String): Long {
         var lastCharacters = 0
-        if(encodedString.contains("==")){
+        if (encodedString.contains("==")) {
             lastCharacters = 2
-        }else if (encodedString.contains("=")){
+        } else if (encodedString.contains("=")) {
             lastCharacters = 1
         }
-        return ((encodedString.length*3)/4 - lastCharacters).toLong()
+        return ((encodedString.length * 3) / 4 - lastCharacters).toLong()
     }
+
 }
+

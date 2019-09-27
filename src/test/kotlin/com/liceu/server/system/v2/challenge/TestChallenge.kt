@@ -13,7 +13,6 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import java.lang.Thread.sleep
 import java.util.HashMap
 
 
@@ -61,9 +60,9 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
         val response = restTemplate
                 .exchange<HashMap<String, Any>>(baseUrl, HttpMethod.GET,entity)
-
+        Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        sleep(1000)
+
         val body = response.body!!
         Truth.assertThat(body["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_3)
         Truth.assertThat(body["challenger"]).isEqualTo(testSetup.USER_ID_3)
@@ -105,7 +104,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
         val response = restTemplate
                 .exchange<HashMap<String, Any>>(baseUrl, HttpMethod.GET,entity)
-
+        Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val body = response.body!!
@@ -131,6 +130,7 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null,headers)
         val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.GET,entity)
+        Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body["challenger"]).isEqualTo(testSetup.USER_ID_1)
@@ -152,6 +152,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         headers["Authorization"] = testSetup.USER_3_ACCESS_TOKEN
         val entity = HttpEntity(null,headers)
         val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.GET,entity)
+        Thread.sleep(5000)
+
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_8)
@@ -174,8 +176,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
         val entity = HttpEntity(null,headers)
         val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl+"/${testSetup.CHALLENGE_TRIVIA_ID_7}", HttpMethod.GET,entity)
+        Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        sleep(1000)
         val body = response.body!!
         Truth.assertThat(body["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
         Truth.assertThat(body["challenger"]).isEqualTo(testSetup.USER_ID_1)
@@ -220,9 +222,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
 
         val response = restTemplate
                 .exchange<Void>(baseUrl+"/"+testSetup.CHALLENGE_TRIVIA_ID_2, HttpMethod.PUT,entity)
-
+        Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        sleep(1000)
         val resultRetrieved = challengeRepo.findById(testSetup.CHALLENGE_TRIVIA_ID_2).get()
         Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId(testSetup.CHALLENGE_TRIVIA_ID_2))
         Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
@@ -253,8 +254,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
                 ,headers)
 
         val response = restTemplate.exchange<Void>(baseUrl+"/"+testSetup.CHALLENGE_TRIVIA_ID_6, HttpMethod.PUT,entity)
+        Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        sleep(1000)
         val resultRetrieved = challengeRepo.findById(testSetup.CHALLENGE_TRIVIA_ID_6).get()
         Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId(testSetup.CHALLENGE_TRIVIA_ID_6))
         Truth.assertThat(resultRetrieved.answersChallenger[0]).isEqualTo("3")
@@ -282,8 +283,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
                 ,headers)
 
         val response = restTemplate.exchange<Void>(baseUrl+"/${testSetup.CHALLENGE_TRIVIA_ID_7}", HttpMethod.PUT,entity)
+        Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        sleep(1000)
         val resultRetrieved = challengeRepo.findById(testSetup.CHALLENGE_TRIVIA_ID_7).get()
         Truth.assertThat(resultRetrieved.id).isEqualTo(ObjectId(testSetup.CHALLENGE_TRIVIA_ID_7))
         Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
@@ -321,9 +322,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
                 "challengedId" to testSetup.USER_ID_1
-        ),headers)
+        ), headers)
         val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST,entity)
-        sleep(1000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
     }
 

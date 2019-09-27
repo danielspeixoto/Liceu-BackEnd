@@ -11,9 +11,9 @@ fun toPost(mongoPost: MongoDatabase.MongoPost): Post {
             mongoPost.type,
             mongoPost.description,
             FormattedImage(
-                mongoPost.image?.title,
-                mongoPost.image?.type,
-                mongoPost.image?.imageURL
+                    mongoPost.image?.title,
+                    mongoPost.image?.type,
+                    mongoPost.image?.imageURL
             ),
             PostVideo(
                     mongoPost.video?.videoUrl,

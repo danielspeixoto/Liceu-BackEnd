@@ -251,14 +251,15 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun imagePost(): PostBoundary.IImagePost{
+        return ImagePost(mongoPostRepository,googleImageBucket)
+    }
+
+    @Bean
     fun videoPost(): PostBoundary.IVideoPost{
         return VideoPost(mongoPostRepository)
     }
 
-    @Bean
-    fun imagePost(): PostBoundary.IImagePost{
-        return ImagePost(mongoPostRepository,googleImageBucket)
-    }
 
     @Bean
     fun getPosts(): PostBoundary.IGetPosts{

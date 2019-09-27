@@ -18,8 +18,8 @@ import javax.validation.ValidationException
 @RequestMapping("/v2/post")
 class PostController(
         @Autowired val textPost: PostBoundary.ITextPost,
-        @Autowired val videoPost: PostBoundary.IVideoPost,
         @Autowired val imagePost: PostBoundary.IImagePost,
+        @Autowired val videoPost: PostBoundary.IVideoPost,
         @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
         @Autowired val deletePosts: PostBoundary.IDeletePost
 ) {
