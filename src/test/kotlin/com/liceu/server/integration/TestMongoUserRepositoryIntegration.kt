@@ -247,4 +247,12 @@ class TestMongoUserRepositoryIntegration {
         assertThat(userAfter.following?.size).isEqualTo(2)
     }
 
+    @Test
+    fun updateProfileImage_userExists_verifyPictureUrl() {
+        val result = data.updateProfileImage(testSetup.USER_ID_1,"https://minhafotonova.jpeg")
+        assertThat(result).isEqualTo(1)
+        val userChanged = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userChanged.picture.url).isEqualTo("https://minhafotonova.jpeg")
+    }
+
 }

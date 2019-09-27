@@ -1,6 +1,7 @@
 package com.liceu.server.domain.user
 
 import com.liceu.server.domain.challenge.Challenge
+import java.util.*
 
 
 class UserBoundary {
@@ -68,6 +69,10 @@ class UserBoundary {
 
     interface IupdateProducerToBeUnfollowed {
         fun run (userId: String, producerId: String)
+    }
+
+    interface IupdateProfileImage {
+        fun run (userId: String, imageData: String)
     }
 
     interface IUserById {

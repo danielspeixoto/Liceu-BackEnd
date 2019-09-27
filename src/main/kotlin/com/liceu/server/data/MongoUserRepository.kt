@@ -175,7 +175,14 @@ class MongoUserRepository(
     }
 
     override fun updateProfileImage(userId: String, imageURL: String): Long {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val update = Update()
+        update.set("picture.$.url", imageURL)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
     }
 
     override fun getUserById(userId: String): User {

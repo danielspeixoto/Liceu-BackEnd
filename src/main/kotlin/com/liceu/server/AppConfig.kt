@@ -196,6 +196,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateProfileImage(): UserBoundary.IupdateProfileImage {
+        return UpdateProfileImage(mongoUserRepository,googleImageBucket)
+    }
+
+    @Bean
     fun getQuestionById(): QuestionBoundary.IQuestionById{
         return QuestionById(mongoQuestionRepository)
     }
@@ -259,7 +264,6 @@ class AppConfig : AbstractMongoConfiguration() {
     fun videoPost(): PostBoundary.IVideoPost{
         return VideoPost(mongoPostRepository)
     }
-
 
     @Bean
     fun getPosts(): PostBoundary.IGetPosts{
