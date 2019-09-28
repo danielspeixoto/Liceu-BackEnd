@@ -250,6 +250,8 @@ class MongoDatabase {
             var otherAnswers: List<String>
     )
 
+
+
     @Document(collection = MongoDatabase.ACTIVITIES_COLLECTION)
     data class MongoActivities(
         val userId: ObjectId,

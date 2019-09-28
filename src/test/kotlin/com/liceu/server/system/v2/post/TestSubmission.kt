@@ -116,7 +116,7 @@ class TestSubmission: TestSystem("/v2/post") {
     }
 
     @Test
-    fun submitVideoPost_questionsEmpty_sucess(){
+    fun submitVideoPost_questionsEmpty_success(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -140,6 +140,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.video?.thumbnails?.medium).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/mqdefault.jpg")
         Truth.assertThat(insertedPost.questions).isEmpty()
     }
+
 
     @Test
     fun submitImagePost_jpegImage_success(){
