@@ -51,7 +51,8 @@ class MongoPostRepository(
                         it.question,
                         it.correctAnswer,
                         it.otherAnswers
-                ) }
+                ) },
+                null
         ))
         return result.id.toHexString()
     }
@@ -107,6 +108,24 @@ class MongoPostRepository(
                 comment
         )
         update.addToSet("comments",commentToBeInserted)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(postId))),
+                update,
+                MongoDatabase.MongoPost::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateDocumentPost(postId: String, title: String, type:String, documentURL: String): Long {
+        val update = Update()
+        val id = ObjectId()
+        val documentToBeInserted = MongoDatabase.MongoPostDocument(
+            id,
+            title,
+            type,
+            documentURL
+        )
+        update.set("document", documentToBeInserted)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(postId))),
                 update,

@@ -402,7 +402,7 @@ class UserController (
             request: HttpServletRequest
     ): ResponseEntity<Void> {
         val eventName = "update_profile_image"
-        val eventTags = listOf(CONTROLLER, NETWORK, PRODUCER, FOLLOWED, UPDATE)
+        val eventTags = listOf(CONTROLLER, NETWORK, PROFILE, IMAGE, UPDATE)
         val networkData = netUtils.networkData(request)
 
         Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(

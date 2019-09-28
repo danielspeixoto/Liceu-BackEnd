@@ -44,6 +44,9 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${google.imageBucket}")
     lateinit var googleImageBucket: String
 
+    @Value("\${google.documentBucket}")
+    lateinit var googleDocumentBucket: String
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -283,6 +286,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun updateComments(): PostBoundary.IUpdateListOfComments {
         return UpdateComments(mongoPostRepository,mongoUserRepository)
+    }
+
+    @Bean
+    fun updateDocument(): PostBoundary.IUpdateDocument {
+        return UpdateDocument(mongoPostRepository,googleDocumentBucket)
     }
 
     @Bean
