@@ -1,11 +1,12 @@
 package com.liceu.server.data.firebase
 
 import com.liceu.server.domain.global.EmptyException
+import com.liceu.server.domain.notification.Notification
 import com.liceu.server.domain.notification.NotificationBoundary
 
 class FirebaseNotifications(val serverKey: String) : NotificationBoundary.INotifier {
 
-    override fun send(fcmToken: String, title: String, message: String): Boolean {
+    override fun send(fcmToken: String, notification: Notification): Boolean {
         if (fcmToken == "") {
             throw EmptyException()
         }
@@ -17,9 +18,10 @@ class FirebaseNotifications(val serverKey: String) : NotificationBoundary.INotif
                 json = mapOf(
                 "to" to fcmToken,
                         "notification" to mapOf(
-                                "body" to message,
-                                "title" to title
-                        )
+                                "body" to notification.body,
+                                "title" to notification.title
+                        ),
+                        "data" to notification.data
                 )
         )
         return response.statusCode == 200 && response.jsonObject["success"] == 1
