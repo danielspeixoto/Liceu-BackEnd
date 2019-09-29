@@ -39,7 +39,8 @@ class TestSendNotification {
                 StartChallengeNotification("title", "body"),
                 ENEMTrainingNotification("title", "body"),
                 ENEMTournamentNotification("title", "body"),
-                GoToWebPageNotification("title", "body", "https://instagram.com")
+                GoToWebPageNotification("title", "body", "https://instagram.com"),
+                AnswerChallengeNotification("title", "body", "id", "id")
         ).forEach {
             val result = firebaseNotifications.send(testSetup.USER_1_FCM_TOKEN, it)
             Truth.assertThat(result).isTrue()

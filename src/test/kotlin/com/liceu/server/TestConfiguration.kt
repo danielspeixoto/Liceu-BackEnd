@@ -7,4 +7,10 @@ import org.springframework.context.annotation.Configuration
 
 @TestConfiguration
 @ComponentScan
-class TestConfiguration
+class TestConfiguration {
+
+
+
+
+
+}

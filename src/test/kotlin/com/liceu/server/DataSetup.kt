@@ -3,6 +3,7 @@ package com.liceu.server
 import com.liceu.server.data.*
 
 import com.liceu.server.util.JWTAuth
+import khttp.get
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -11,13 +12,12 @@ import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration
 import java.time.Instant
 import java.util.*
+import org.json.JSONArray
 
 @Component
 @ContextConfiguration(classes=[TestConfiguration::class])
 class DataSetup {
 
-    @Value("\${facebook.accessToken}")
-    lateinit var facebookAccessToken: String
     @Value("\${google.clientId}")
     lateinit var googleClientId: String
     @Value("\${google.clientSecret}")
@@ -1140,6 +1140,8 @@ class DataSetup {
         activity4.id = ObjectId(ACITIVITY_ID_4)
         activityRepo.insert(activity4)
     }
+
+
 }
 
 
