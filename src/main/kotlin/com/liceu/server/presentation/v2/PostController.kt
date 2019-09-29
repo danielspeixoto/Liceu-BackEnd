@@ -18,6 +18,7 @@ import javax.validation.ValidationException
 @RequestMapping("/v2/post")
 class PostController(
         @Autowired val textPost: PostBoundary.ITextPost,
+        @Autowired val imagePost: PostBoundary.IImagePost,
         @Autowired val videoPost: PostBoundary.IVideoPost,
         @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
         @Autowired val deletePosts: PostBoundary.IDeletePost
@@ -76,6 +77,21 @@ class PostController(
                             description,
                             null,
                             video,
+                            questions
+                    ))
+                }
+                "image" -> {
+                    val image = PostImage(
+                            body["imageTitle"] as String? ?: throw ValidationException(),
+                            null,
+                            body["imageData"] as String? ?: throw ValidationException()
+                    )
+                    imagePost.run(PostSubmission(
+                            userId,
+                            type,
+                            description,
+                            image,
+                            null,
                             questions
                     ))
                 }

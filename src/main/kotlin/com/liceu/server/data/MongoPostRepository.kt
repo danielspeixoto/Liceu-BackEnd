@@ -27,13 +27,17 @@ class MongoPostRepository(
                 ObjectId(postToInsert.userId),
                 postToInsert.type,
                 postToInsert.description,
-                postToInsert.imageURL,
+                MongoDatabase.MongoPostImage(
+                        postToInsert.image?.title,
+                        postToInsert.image?.type,
+                        postToInsert.image?.imageData
+                ),
                 MongoDatabase.MongoPostVideo(
                         postToInsert.video?.videoUrl,
                         MongoDatabase.MongoPostThumbnails(
-                            postToInsert.video?.thumbnails?.high,
-                            postToInsert.video?.thumbnails?.default,
-                            postToInsert.video?.thumbnails?.medium
+                                postToInsert.video?.thumbnails?.high,
+                                postToInsert.video?.thumbnails?.default,
+                                postToInsert.video?.thumbnails?.medium
                         )
                 ),
                 postToInsert.submissionDate,

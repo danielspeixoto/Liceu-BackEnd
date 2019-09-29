@@ -36,7 +36,7 @@ class TextPost(
                 TimeStamp.retrieveActualTimeStamp(),
                 null,
                 post.questions
-                ))
+            ))
         } catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e

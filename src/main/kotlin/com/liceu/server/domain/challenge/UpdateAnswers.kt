@@ -27,6 +27,7 @@ class UpdateAnswers(
         var isChallenger = challenge.challenger == player
         try {
             var result = 0
+            //pegar menor valor entre answers e trivia questions used pra iterar
             for(i in 0..(answers.size - 1)){
                 if(challenge.triviaQuestionsUsed[i].correctAnswer == answers[i]){
                     result++

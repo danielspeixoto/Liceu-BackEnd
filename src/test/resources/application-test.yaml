@@ -5,6 +5,7 @@ auth:
 google:
   clientId:  851853196382-su4p88nlqbnb1cg7apgik95uel5oihs4.apps.googleusercontent.com
   clientSecret: sm2sA37l2SshglMRa7PTAYz1
+  imageBucket: liceu-post-images
 
 facebook:
   accessToken: EAAf4pgUyFpsBADI0RkwWB89CTjs3DQ9nRn6pFQu3EwHoSlkALrY3cUfXnhJkTCgMsbjFEJM9KbpNgqVneasdZCdW2Em9QvRZAXatknsLw3QvfmdlyoqpPm8PEIMmqOF1niZAnVXONfNTusOrL46MbyEoTwvCtBtvMuC1yfmxK6KJrAav0r82rEZCNTJjUmYwJqF8XwYEZAAZDZD
