@@ -4,13 +4,12 @@ import com.google.common.truth.Truth.assertThat
 import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
 import com.liceu.server.data.FacebookAPI
-import org.junit.Ignore
+import com.liceu.server.util.FacebookTestUsers
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
@@ -19,10 +18,13 @@ import javax.imageio.ImageIO
 import javax.naming.AuthenticationException
 
 @ExtendWith(SpringExtension::class)
-@ContextConfiguration(classes=[TestConfiguration::class])
+@ContextConfiguration(classes = [TestConfiguration::class])
 @DataMongoTest
 @ActiveProfiles("test")
 class TestFacebookAPIIntegration {
+
+    @Autowired
+    lateinit var facebookTestUsers: FacebookTestUsers
 
     val facebook = FacebookAPI()
     @Autowired
@@ -30,18 +32,22 @@ class TestFacebookAPIIntegration {
 
     @Test
     fun data_ValidAccessToken_ReturnsInfo() {
-        val user = facebook.data(testSetup.facebookAccessToken)
-        assertThat(user.name).isEqualTo("Sophia Aldajeidicfbi Okelolasky")
-        assertThat(user.email).isEqualTo("sulwxcmqrp_1567856463@tfbnw.net")
-        assertThat(ImageIO.read(URL(user.picture.url))).isNotNull()
-        assertThat(user.picture.width).isEqualTo(200)
-        assertThat(user.picture.height).isEqualTo(200)
+        if (facebookTestUsers.hasAccess) {
+            val user = facebook.data(facebookTestUsers.userAccessToken)
+            assertThat(user.name).isEqualTo("Sophia Aldajeidicfbi Okelolasky")
+            assertThat(user.email).isEqualTo("sulwxcmqrp_1567856463@tfbnw.net")
+            assertThat(ImageIO.read(URL(user.picture.url))).isNotNull()
+            assertThat(user.picture.width).isEqualTo(200)
+            assertThat(user.picture.height).isEqualTo(200)
+        }
     }
 
     @Test
     fun data_InvalidAccessToken_ThrowsError() {
-        assertThrows<AuthenticationException> {
-            facebook.data("invalid")
+        if (facebookTestUsers.hasAccess) {
+            assertThrows<AuthenticationException> {
+                facebook.data("invalid")
+            }
         }
     }
 }
