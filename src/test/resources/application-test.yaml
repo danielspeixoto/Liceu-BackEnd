@@ -8,8 +8,7 @@ google:
   imageBucket: liceu-post-images
 
 facebook:
-  accessToken: EAAf4pgUyFpsBAHRV6fFENeUeUF23OCLsgW59wI4ZBSwffNRP0QLL1azkFBxoFq3hSH4gMHZCTW4FzZC3Qj3DKnKaAZCZC2INKrwfkmbS1ju7sbXo80EAWQ4uLZCqONtOvW8Yzm4xfHfAi21CZBt0pZBmVOW2ZCnNLIk4PbVZCMihPQH0HZAEuz2OMW7l9TTA3mZCXpgNNbDZBx9LYzQzOaawJI0ZAt
-
+  accessToken: EAAf4pgUyFpsBADI0RkwWB89CTjs3DQ9nRn6pFQu3EwHoSlkALrY3cUfXnhJkTCgMsbjFEJM9KbpNgqVneasdZCdW2Em9QvRZAXatknsLw3QvfmdlyoqpPm8PEIMmqOF1niZAnVXONfNTusOrL46MbyEoTwvCtBtvMuC1yfmxK6KJrAav0r82rEZCNTJjUmYwJqF8XwYEZAAZDZD
 
 client:
   api_key: apikey
@@ -17,6 +16,9 @@ client:
 mongo:
   dbName: ${DB_NAME:test}
   uri:  ${MONGO_CONNECTION:mongodb://localhost:27017}
+
+firebase:
+  cloudMessaging: ${FIREBASE_CLOUD_MESSAGING_SERVER_KEY:AAAAxlZoPF4:APA91bG1owIxEznsax5DHMK0Ze8sJJqyuRyvtUMKiOlSrCk5KTOBYlcJIxhC5qmup9CA1yECpbhBt0HhG0xw7OiW1WIdn5ERalwhdhS2_TQdbdaaB2WxIzGZipYyWRjq41MG18v9CaYc}
 
 dev: true
 

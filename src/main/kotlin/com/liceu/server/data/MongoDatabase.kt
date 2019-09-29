@@ -100,7 +100,8 @@ class MongoDatabase {
             var description: String?,
             var website: String?,
             var followers: List<ObjectId>?,
-            var following: List<ObjectId>?
+            var following: List<ObjectId>?,
+            var fcmToken: String?=null
     ) {
         @Id
         lateinit var id: ObjectId

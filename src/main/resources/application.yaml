@@ -17,6 +17,9 @@ mongo:
   dbName: ${MONGO_DB_NAME}
   uri: ${MONGO_CONNECTION}
 
+firebase:
+  cloudMessaging: ${FIREBASE_CLOUD_MESSAGING_SERVER_KEY}
+
 spring:
   mvc.favicon.enabled: false
   main:
