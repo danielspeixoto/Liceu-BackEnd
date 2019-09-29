@@ -21,7 +21,9 @@ class FirebaseNotifications(val serverKey: String) : NotificationBoundary.INotif
                                 "body" to notification.body,
                                 "title" to notification.title
                         ),
-                        "data" to notification.data
+                        "data" to notification.data + mapOf(
+                                "click_action" to "FLUTTER_NOTIFICATION_CLICK"
+                        )
                 )
         )
         return response.statusCode == 200 && response.jsonObject["success"] == 1
