@@ -6,6 +6,7 @@ google:
   clientId:  851853196382-su4p88nlqbnb1cg7apgik95uel5oihs4.apps.googleusercontent.com
   clientSecret: sm2sA37l2SshglMRa7PTAYz1
   imageBucket: liceu-post-images
+  documentBucket: liceu-post-documents
 
 facebook:
   accessToken: ${FACEBOOK_ACCESS_TOKEN:empty}

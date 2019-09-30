@@ -7,6 +7,7 @@ import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.PostRepository
 import com.liceu.server.domain.post.*
+import khttp.post
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -247,6 +248,17 @@ class TestPostRepositoryIntegration {
         assertThat(result).isNull()
         val postsAfter = data.getPostFromUser(testSetup.USER_ID_3)
         assertThat(postsAfter.size).isEqualTo(2)
+    }
+
+    @Test
+    fun updateDocument_postExists_verifyPost(){
+        val result1 = data.updateDocumentPost(testSetup.POST_ID_1,"post interessante 1","pptx" ,"https://meuDocumento.pptx")
+        assertThat(result1).isEqualTo(1)
+        val postChanged = data.getPostById(testSetup.POST_ID_1)
+        assertThat(postChanged.document?.id).isNotNull()
+        assertThat(postChanged.document?.title).isEqualTo("post interessante 1")
+        assertThat(postChanged.document?.type).isEqualTo("pptx")
+        assertThat(postChanged.document?.documentURL).isEqualTo("https://meuDocumento.pptx")
     }
 
 }

@@ -21,6 +21,7 @@ class PostController(
         @Autowired val imagePost: PostBoundary.IImagePost,
         @Autowired val videoPost: PostBoundary.IVideoPost,
         @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
+        @Autowired val updateDocument: PostBoundary.IUpdateDocument,
         @Autowired val deletePosts: PostBoundary.IDeletePost
 ) {
     @Autowired
@@ -121,6 +122,29 @@ class PostController(
         return try {
             val comment = body["comment"] as String? ?: throw ValidationException()
             updateComments.run(postId, authenticatedUserId, comment)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData)
+        }
+    }
+
+    @PutMapping("/{postId}/docs")
+    fun updatePostDocument(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("postId") postId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "put_document_posts"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, DOCUMENT, UPDATE)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val documentData = body["documentData"] as String? ?: throw ValidationException()
+            val documentTitle = body["documentTitle"] as String? ?: throw ValidationException()
+            updateDocument.run(postId, authenticatedUserId,documentTitle,documentData)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData)

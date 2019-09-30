@@ -8,6 +8,7 @@ import com.liceu.server.domain.global.OverflowSizeException
 import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 
 class SubmitChallenge(
