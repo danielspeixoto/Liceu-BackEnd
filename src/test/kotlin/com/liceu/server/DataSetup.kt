@@ -3,6 +3,7 @@ package com.liceu.server
 import com.liceu.server.data.*
 
 import com.liceu.server.util.JWTAuth
+import khttp.get
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -11,13 +12,12 @@ import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration
 import java.time.Instant
 import java.util.*
+import org.json.JSONArray
 
 @Component
 @ContextConfiguration(classes=[TestConfiguration::class])
 class DataSetup {
 
-    @Value("\${facebook.accessToken}")
-    lateinit var facebookAccessToken: String
     @Value("\${google.clientId}")
     lateinit var googleClientId: String
     @Value("\${google.clientSecret}")
@@ -76,6 +76,7 @@ class DataSetup {
     val USER_1_ACCESS_TOKEN by lazy {
         jwtAuth.sign(USER_ID_1)
     }
+    val USER_1_FCM_TOKEN = "eSy99pK0I-w:APA91bFnmrQV2FhjcXfNaW5Lp2FRkpOx188xtfX92I-480wEIxfxfVNQqoMEDUrcU7uxN8yGu7uGuoSsaLexKYUNdF6nHYAu7_5hJqgsynPZhViTK5B5KADuC1X3p5DBuOiDXpka8gnY"
 
     val USER_ID_2 = "39c54d325b75357a571d4cc2"
     val USER_2_ACCESS_TOKEN by lazy {
@@ -354,7 +355,8 @@ class DataSetup {
                 listOf(
                         ObjectId(USER_ID_3),
                         ObjectId(USER_ID_4)
-                )
+                ),
+                USER_1_FCM_TOKEN
         )
         user1.id = ObjectId(USER_ID_1)
         userRepo.insert(user1)
@@ -1143,6 +1145,8 @@ class DataSetup {
         activity4.id = ObjectId(ACITIVITY_ID_4)
         activityRepo.insert(activity4)
     }
+
+
 }
 
 

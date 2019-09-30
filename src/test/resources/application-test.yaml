@@ -9,8 +9,7 @@ google:
   documentBucket: liceu-post-documents
 
 facebook:
-  accessToken: EAAf4pgUyFpsBAEvJuT7WUmX4tmL0XezXzm4STZBgiBuR2LmrGo83QEkSai0d2eAIkApVZAklp7csZCmK0SoYYW0ML0NklMnwsIloarGZCyZA5R939oGqOJgYHImBuawchPsQNfZAPISRe7qn1k7Vzr6kX5bwQh9GyO79x7WpCoVSwERXxNZCxqVlcKXCKsWVPECH6JnIaMysWugC2R8zp69
-
+  accessToken: ${FACEBOOK_ACCESS_TOKEN:empty}
 
 client:
   api_key: apikey
@@ -18,6 +17,9 @@ client:
 mongo:
   dbName: ${DB_NAME:test}
   uri:  ${MONGO_CONNECTION:mongodb://localhost:27017}
+
+firebase:
+  cloudMessaging: ${FIREBASE_CLOUD_MESSAGING_SERVER_KEY:AAAAxlZoPF4:APA91bGx7v83oK4tktHhBeIZGlaKvJsGdpxOfNnwtVjgCTUxCIP4aE---pojJmYGHSI8DyNoRwyZ2nTPoIGwobhZ5CMKfM7KadvCvMuj5R0947p9zp72u8mHpm2ltxGtky-StLh-GtzV}
 
 dev: true
 
