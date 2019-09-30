@@ -17,5 +17,6 @@ data class User(
         val description: String?,
         val website: String?,
         val followers: List<String>?,
-        val following: List<String>?
+        val following: List<String>?,
+        val fcmToken: String?
 )

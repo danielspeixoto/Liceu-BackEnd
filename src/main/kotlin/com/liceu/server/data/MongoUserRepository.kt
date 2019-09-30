@@ -185,6 +185,17 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
+    override fun updateFcmTokenFromUser(userId: String, fcmToken: String): Long {
+        val update = Update()
+        update.set("fcmToken", fcmToken)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
     override fun getUserById(userId: String): User {
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
         val agg = Aggregation.newAggregation(match)

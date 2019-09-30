@@ -214,6 +214,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateFcmToken(): UserBoundary.IupdateFcmToken {
+        return UpdateFcmToken(mongoUserRepository)
+    }
+
+    @Bean
     fun getQuestionById(): QuestionBoundary.IQuestionById{
         return QuestionById(mongoQuestionRepository)
     }
