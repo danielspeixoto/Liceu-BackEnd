@@ -12,6 +12,7 @@ class PostBoundary {
         fun getPostFromUser(userId: String): List<Post>
         fun getRandomPosts(amount: Int): List<Post>
         fun updateListOfComments(postId: String,userId: String,author: String,comment: String): Long
+        fun updateDocumentPost(postId: String, title: String, type: String, documentURL: String): Long
         fun deletePost(postId: String,userId: String): Post?
     }
 
@@ -41,6 +42,10 @@ class PostBoundary {
 
     interface IUpdateListOfComments{
         fun run(postId: String,userId: String,comment: String)
+    }
+
+    interface IUpdateDocument {
+        fun run(postId: String, userId: String,title:String, documentData: String)
     }
 
     interface IDeletePost {

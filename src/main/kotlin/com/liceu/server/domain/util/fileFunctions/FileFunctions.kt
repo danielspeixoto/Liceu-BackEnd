@@ -11,6 +11,11 @@ object FileFunctions {
         return matcher.group(1).toLowerCase();
     }
 
+    fun extractDocumentsMimeType(encodedString: String): String{
+        val mimeType = encodedString.substringAfterLast(":")
+        return mimeType.split(";")[0]
+    }
+
     fun calculateFileSize(encodedString: String): Long {
         var lastCharacters = 0
         if (encodedString.contains("==")) {

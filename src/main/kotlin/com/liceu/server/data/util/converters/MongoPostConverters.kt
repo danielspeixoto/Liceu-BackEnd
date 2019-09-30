@@ -38,6 +38,12 @@ fun toPost(mongoPost: MongoDatabase.MongoPost): Post {
                         it.correctAnswer,
                         it.otherAnswers
                 )
-            }
+            },
+            PostDocument(
+                mongoPost.document?.id?.toHexString(),
+                mongoPost.document?.title,
+                mongoPost.document?.type,
+                mongoPost.document?.documentURL
+            )
     )
 }

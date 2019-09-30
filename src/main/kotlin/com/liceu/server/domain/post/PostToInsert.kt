@@ -31,8 +31,10 @@ data class Post(
         val video: PostVideo?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
-        val questions: List<PostQuestions>?
+        val questions: List<PostQuestions>?,
+        val document: PostDocument?
 )
+
 
 data class PostComment (
         var id: String,
@@ -69,4 +71,12 @@ data class FormattedImage(
         var type: String?,
         val imageData: String?
 )
+
+data class PostDocument(
+        var id: String?,
+        val title: String?,
+        val type: String?,
+        val documentURL: String?
+)
+
 
