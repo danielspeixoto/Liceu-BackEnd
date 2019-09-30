@@ -35,6 +35,7 @@ class UserController (
         @Autowired val updateProducerToBeFollowed: UserBoundary.IUpdateProducerToBeFollowed,
         @Autowired val updateProducerToBeUnfollowed: UserBoundary.IupdateProducerToBeUnfollowed,
         @Autowired val updateProfileImage: UserBoundary.IupdateProfileImage,
+        @Autowired val updateFcmToken: UserBoundary.IupdateFcmToken,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
         @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
         @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
@@ -414,6 +415,32 @@ class UserController (
             }
             val imageData = body["imageData"] as String? ?: throw ValidationException()
             updateProfileImage.run(authenticatedUserId,imageData)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData)
+        }
+    }
+
+    @PutMapping("/{userId}/cloudMessaging")
+    fun updateFcmToken(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "update_fcmToken"
+        val eventTags = listOf(CONTROLLER, NETWORK, FCMTOKEN, UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
+            val fcmToken = body["fcmToken"] as String? ?: throw ValidationException()
+            updateFcmToken.run(authenticatedUserId,fcmToken)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData)

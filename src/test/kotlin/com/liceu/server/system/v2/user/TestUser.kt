@@ -349,6 +349,62 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(user.picture.url).isEqualTo("https://storage.cloud.google.com/liceu-post-images/user2.png")
     }
 
+    @Test
+    fun updateFcmToken_userExists_returnVoidAndVerifyUser(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(
+                hashMapOf(
+                    "fcmToken" to "1239010293n1[092smi[10923n1029b3[019f3n1/////////asdasdasdsa/asd/a/da/s///ca/c/m"
+                ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/cloudMessaging", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(user.fcmToken).isEqualTo("1239010293n1[092smi[10923n1029b3[019f3n1/////////asdasdasdsa/asd/a/da/s///ca/c/m")
+    }
+
+
+    @Test
+    fun updateFcmToken_fcmTokenToNull_returnBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(
+                hashMapOf(
+                        "fcmToken" to null
+                ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/cloudMessaging", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateFcmToken_emptyFcmToken_returnBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(
+                hashMapOf(
+                        "fcmToken" to ""
+                ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/cloudMessaging", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateFcmToken_wrongUserProfileOwner_returnUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(
+                hashMapOf(
+                        "fcmToken" to null
+                ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_1}/cloudMessaging", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+
 
     @Test
     fun updateProfileImage_imageToNull_throwBadRequest(){

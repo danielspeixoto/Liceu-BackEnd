@@ -255,4 +255,12 @@ class TestMongoUserRepositoryIntegration {
         assertThat(userChanged.picture.url).isEqualTo("https://minhafotonova.jpeg")
     }
 
+    @Test
+    fun updateFcmToken_userExists_verifyUser() {
+        val result = data.updateFcmTokenFromUser(testSetup.USER_ID_1, "12i93910n9209j1jnasoidj1092jkqsnd12y3")
+        assertThat(result).isEqualTo(1)
+        val userChanged = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userChanged.fcmToken).isEqualTo("12i93910n9209j1jnasoidj1092jkqsnd12y3")
+    }
+
 }
