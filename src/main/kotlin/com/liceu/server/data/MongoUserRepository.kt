@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.findOne
 import org.springframework.stereotype.Repository
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.data.mongodb.core.query.*
+import java.util.*
 
 
 @Repository
@@ -188,6 +189,17 @@ class MongoUserRepository(
     override fun updateFcmTokenFromUser(userId: String, fcmToken: String): Long {
         val update = Update()
         update.set("fcmToken", fcmToken)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateLastAccess(userId: String, loginAccess: Date): Long {
+        val update = Update()
+        update.set("lastAccess",loginAccess)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,

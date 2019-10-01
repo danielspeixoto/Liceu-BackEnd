@@ -33,6 +33,7 @@ class UserBoundary {
         fun updateRemoveUserToProducerFollowerList(userId: String,producerId: String): Long
         fun updateProfileImage(userId: String, imageURL: String): Long
         fun updateFcmTokenFromUser(userId: String, fcmToken: String): Long
+        fun updateLastAccess(userId: String, loginAccess: Date): Long
         fun userExists(userId: String): Boolean
     }
 
@@ -72,12 +73,16 @@ class UserBoundary {
         fun run (userId: String, producerId: String)
     }
 
-    interface IupdateProfileImage {
+    interface IUpdateProfileImage {
         fun run (userId: String, imageData: String)
     }
 
-    interface IupdateFcmToken {
+    interface IUpdateFcmToken {
         fun run (userId: String, fcmToken: String)
+    }
+
+    interface IUpdateLastAccess {
+        fun run (userId: String, loginAccess: Date)
     }
 
     interface IUserById {
