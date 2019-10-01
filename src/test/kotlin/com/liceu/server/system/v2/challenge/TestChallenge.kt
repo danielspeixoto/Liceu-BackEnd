@@ -230,11 +230,8 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(resultRetrieved.answersChallenged[1]).isEqualTo("4")
         Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(2)
         val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10,emptyList())
-        val activitiesChallenged = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10,emptyList())
         Truth.assertThat(activitiesChallenger.size).isEqualTo(2)
         Truth.assertThat(activitiesChallenger[0].type).isEqualTo("challengeFinished")
-        Truth.assertThat(activitiesChallenged.size).isEqualTo(4)
-        Truth.assertThat(activitiesChallenged[0].type).isEqualTo("challengeFinished")
     }
 
     @Test
@@ -290,17 +287,12 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(resultRetrieved.answersChallenged[0]).isEqualTo("3")
         Truth.assertThat(resultRetrieved.scoreChallenged).isEqualTo(1)
         val activitiesChallenger = activitiesData.getActivitiesFromUser(testSetup.USER_ID_1,10,emptyList())
-        val activitiesChallenged = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10,emptyList())
         Truth.assertThat(activitiesChallenger.size).isEqualTo(4)
         Truth.assertThat(activitiesChallenger[0].type).isEqualTo("challengeFinished")
         var paramsFromActivity = activitiesChallenger[0].params
         Truth.assertThat(paramsFromActivity["challengeId"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
         Truth.assertThat(paramsFromActivity["challengedId"]).isEqualTo(testSetup.USER_ID_2)
-        paramsFromActivity = activitiesChallenged[0].params
-        Truth.assertThat(activitiesChallenged.size).isEqualTo(2)
-        Truth.assertThat(activitiesChallenged[0].type).isEqualTo("challengeFinished")
-        Truth.assertThat(paramsFromActivity["challengeId"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
-        Truth.assertThat(paramsFromActivity["challengerId"]).isEqualTo(testSetup.USER_ID_1)
+
     }
 
 

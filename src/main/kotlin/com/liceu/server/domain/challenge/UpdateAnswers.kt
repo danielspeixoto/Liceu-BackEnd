@@ -39,10 +39,6 @@ class UpdateAnswers(
                                 "challengeId" to challenge.id,
                                 "challengedId" to challenge.challenged
                 ))
-                activityInsertion(activityRepository,challenge.challenged, "challengeFinished",hashMapOf(
-                        "challengeId" to challenge.id,
-                        "challengerId" to  challenge.challenger
-                ))
             }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "challengeId" to challengeId,
