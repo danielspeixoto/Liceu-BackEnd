@@ -40,6 +40,7 @@ class AcceptDirectChallenge(
                     "challengeId" to result.id,
                     "challengedId" to result.challenged!!
             ))
+
             return result
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)

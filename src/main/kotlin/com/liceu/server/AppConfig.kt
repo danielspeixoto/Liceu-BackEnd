@@ -83,6 +83,10 @@ class AppConfig : AbstractMongoConfiguration() {
         FacebookAPI()
     }
 
+    val firebaseNotifications by lazy {
+        FirebaseNotifications(firebaseCloudMessagingKey)
+    }
+
     @Value("\${google.clientId}")
     lateinit var googleClientId: String
     @Value("\${google.clientSecret}")
@@ -255,12 +259,12 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun submitChallenge(): ChallengeBoundary.ICreateChallenge{
-        return SubmitChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository)
+        return SubmitChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications)
     }
 
     @Bean
     fun getChallenge(): ChallengeBoundary.IGetChallenge{
-        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository)
+        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications)
     }
 
     @Bean
@@ -270,7 +274,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun UpdateAnswers(): ChallengeBoundary.IUpdateAnswers{
-        return UpdateAnswers(mongoChallengeRepository,mongoActivityRepository)
+        return UpdateAnswers(mongoChallengeRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications)
     }
 
     @Bean

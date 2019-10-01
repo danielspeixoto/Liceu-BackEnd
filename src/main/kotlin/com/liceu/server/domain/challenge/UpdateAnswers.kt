@@ -1,19 +1,26 @@
 package com.liceu.server.domain.challenge
 
 import com.liceu.server.data.MongoChallengeRepository
+import com.liceu.server.data.MongoUserRepository
+import com.liceu.server.data.firebase.FirebaseNotifications
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.ANSWERS
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.global.UPDATE
+import com.liceu.server.domain.notification.AnswerChallengeNotification
+import com.liceu.server.domain.notification.NotificationBoundary
+import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 
 class UpdateAnswers(
         private val challengeRepository: MongoChallengeRepository,
-        private val activityRepository: ActivityBoundary.IRepository
+        private val activityRepository: ActivityBoundary.IRepository,
+        private val userRepository: UserBoundary.IRepository,
+        private val firebaseNotifications: NotificationBoundary.INotifier
 
 ): ChallengeBoundary.IUpdateAnswers{
 
@@ -35,6 +42,7 @@ class UpdateAnswers(
             }
             challengeRepository.updateAnswers(challengeId,isChallenger,answers,result)
             if(challenge.challenged != null){
+                val firstName = userRepository.getUserById(challenge.challenged).name.split(" ")[0]
                 activityInsertion(activityRepository,challenge.challenger, "challengeFinished",hashMapOf(
                                 "challengeId" to challenge.id,
                                 "challengedId" to challenge.challenged
@@ -43,6 +51,8 @@ class UpdateAnswers(
                         "challengeId" to challenge.id,
                         "challengerId" to  challenge.challenger
                 ))
+                val notification = AnswerChallengeNotification("O desafio foi finalizado!", "${firstName} terminou o desafio!",challenge.id,challenge.challenger)
+                userRepository.getUserById(challenge.challenger).fcmToken?.let { it1 -> firebaseNotifications.send(it1,notification) }
             }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "challengeId" to challengeId,

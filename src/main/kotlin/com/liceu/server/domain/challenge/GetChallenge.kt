@@ -2,18 +2,25 @@ package com.liceu.server.domain.challenge
 
 import com.liceu.server.data.MongoChallengeRepository
 import com.liceu.server.data.MongoTriviaRepository
+import com.liceu.server.data.firebase.FirebaseNotifications
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
+import com.liceu.server.domain.notification.AnswerChallengeNotification
+import com.liceu.server.domain.notification.NotificationBoundary
+import com.liceu.server.domain.trivia.TriviaBoundary
+import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 
 class GetChallenge(
-        private val challengeRepository: MongoChallengeRepository,
-        private val triviaRepository: MongoTriviaRepository,
-        private val activityRepository: ActivityBoundary.IRepository
+        private val challengeRepository: ChallengeBoundary.IRepository,
+        private val triviaRepository: TriviaBoundary.IRepository,
+        private val activityRepository: ActivityBoundary.IRepository,
+        private val userRepository: UserBoundary.IRepository,
+        private val firebaseNotifications: NotificationBoundary.INotifier
 ) : ChallengeBoundary.IGetChallenge {
 
     companion object {
@@ -23,6 +30,7 @@ class GetChallenge(
 
     override fun run(userId: String): Challenge {
         try {
+            val firstName = userRepository.getUserById(userId).name.split(" ")[0]
             challengeRepository.verifyDirectChallenges(userId)?.let {
                 Logging.info(
                         EVENT_NAME, TAGS,
@@ -37,7 +45,7 @@ class GetChallenge(
                 activityInsertion(activityRepository, it.challenger,"challengeAccepted", hashMapOf(
                         "challengeId" to it.id,
                         "challengedId" to it.challenged!!
-                ))
+                    ))
                 return it
             }
             challengeRepository.matchMaking(userId)?.let {
@@ -55,6 +63,8 @@ class GetChallenge(
                         "challengeId" to it.id,
                         "challengedId" to it.challenged!!
                 ))
+                val notification = AnswerChallengeNotification("Te desafiaram!", "${firstName} te desafiou!",it.id,it.challenger)
+                userRepository.getUserById(it.challenged).fcmToken?.let { it1 -> firebaseNotifications.send(it1,notification) }
                 return it
             }
             val trivias = triviaRepository.randomQuestions(listOf(), 10)
