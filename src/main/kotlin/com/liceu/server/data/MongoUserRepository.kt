@@ -11,12 +11,8 @@ import com.liceu.server.domain.user.UserForm
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.aggregation.Aggregation
-import org.springframework.data.mongodb.core.aggregation.Aggregation.limit
-import org.springframework.data.mongodb.core.aggregation.Aggregation.sort
-import org.springframework.data.mongodb.core.aggregation.GeoNearOperation
-import org.springframework.data.mongodb.core.aggregation.MatchOperation
-import org.springframework.data.mongodb.core.findOne
+import org.springframework.data.mongodb.core.aggregation.*
+import org.springframework.data.mongodb.core.aggregation.Aggregation.*
 import org.springframework.stereotype.Repository
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.data.mongodb.core.query.*
@@ -249,7 +245,6 @@ class MongoUserRepository(
                 .and("answersChallenger").not().size(0))
         val sortByDate = sort(Sort.Direction.DESC, "submissionDate")
         val limitOfReturnedChallenges = limit(25)
-
         val agg = Aggregation.newAggregation(match,sortByDate,limitOfReturnedChallenges)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
         return results.map {
@@ -304,6 +299,29 @@ class MongoUserRepository(
         }
         val results = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
         return results.map { toUser(it) }
+    }
+
+    override fun getActiveUser(): User {
+        val query = Query()
+        var match: MatchOperation
+        val sample: SampleOperation = sample(1)
+        val sort: SortOperation
+        val limits: LimitOperation
+        val agg: Aggregation
+        query.addCriteria(Criteria.where("lastAccess").ne(null))
+        val results = template.count(query,MongoDatabase.MongoUser::class.java).toInt()
+        if(results <= 200){
+            match = match(Criteria())
+            sort = sort(Sort.Direction.DESC, "_id")
+            limits = limit(200)
+            agg = newAggregation(match,sort,sample,limits)
+        }else{
+            match = match(Criteria("lastAccess").ne(null))
+            agg = newAggregation(match,sample)
+        }
+        val usersRetrieved = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
+        val users = usersRetrieved.map { toUser(it) }
+        return users[0]
     }
 
 }

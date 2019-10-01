@@ -48,29 +48,11 @@ class GetChallenge(
                     ))
                 return it
             }
-            challengeRepository.matchMaking(userId)?.let {
-                Logging.info(
-                        EVENT_NAME, TAGS,
-                        hashMapOf(
-                                "challengeId" to it.id,
-                                "challengerId" to it.challenger,
-                                "challengedId" to it.challenged,
-                                "answersChallengerSize" to it.answersChallenger.size,
-                                "answersChallengedSize" to it.answersChallenged.size
-                        )
-                )
-                activityInsertion(activityRepository, it.challenger,"challengeAccepted", hashMapOf(
-                        "challengeId" to it.id,
-                        "challengedId" to it.challenged!!
-                ))
-                val notification = AnswerChallengeNotification("Te desafiaram!", "${firstName} te desafiou!",it.id,it.challenger)
-                userRepository.getUserById(it.challenged).fcmToken?.let { it1 -> firebaseNotifications.send(it1,notification) }
-                return it
-            }
+            val challenged = userRepository.getActiveUser()
             val trivias = triviaRepository.randomQuestions(listOf(), 10)
-            val challengeId = challengeRepository.createChallenge(ChallengeToInsert(
+            val challenge = challengeRepository.createChallenge(ChallengeToInsert(
                     userId,
-                    null,
+                    challenged?.id,
                     listOf(),
                     listOf(),
                     null,
@@ -78,17 +60,19 @@ class GetChallenge(
                     trivias,
                     TimeStamp.retrieveActualTimeStamp()
             ))
+            val notification = AnswerChallengeNotification("Te desafiaram!", "${firstName} te desafiou!",challenge.id,userId)
+            userRepository.getUserById(challenged!!.id).fcmToken?.let { it1 -> firebaseNotifications.send(it1,notification) }
             Logging.info(
                     EVENT_NAME, TAGS ,
                     hashMapOf(
-                            "challengeId" to challengeId.id,
-                            "challengerId" to challengeId.challenger,
-                            "challengedId" to challengeId.challenged,
-                            "answersChallengerSize" to challengeId.answersChallenger.size,
-                            "answersChallengedSize" to challengeId.answersChallenged.size
+                            "challengeId" to challenge.id,
+                            "challengerId" to challenge.challenger,
+                            "challengedId" to challenge.challenged,
+                            "answersChallengerSize" to challenge.answersChallenger.size,
+                            "answersChallengedSize" to challenge.answersChallenged.size
                     )
             )
-            return challengeId
+            return challenge
         } catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS, e)
             throw e

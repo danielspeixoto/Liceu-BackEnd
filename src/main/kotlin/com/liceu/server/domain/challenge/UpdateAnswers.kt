@@ -10,6 +10,7 @@ import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.global.UPDATE
 import com.liceu.server.domain.notification.AnswerChallengeNotification
+import com.liceu.server.domain.notification.Notification
 import com.liceu.server.domain.notification.NotificationBoundary
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.util.TimeStamp
@@ -51,7 +52,11 @@ class UpdateAnswers(
                         "challengeId" to challenge.id,
                         "challengerId" to  challenge.challenger
                 ))
-                val notification = AnswerChallengeNotification("O desafio foi finalizado!", "${firstName} terminou o desafio!",challenge.id,challenge.challenger)
+                val notification = Notification("O desafio foi finalizado!", "${firstName} terminou o desafio!",data =
+                hashMapOf(
+                        "challengeId" to challenge.id,
+                        "challengerId" to challenge.challenger
+                ))
                 userRepository.getUserById(challenge.challenger).fcmToken?.let { it1 -> firebaseNotifications.send(it1,notification) }
             }
             Logging.info(EVENT_NAME, TAGS, hashMapOf(

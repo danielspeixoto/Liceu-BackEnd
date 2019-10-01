@@ -274,4 +274,19 @@ class TestMongoUserRepositoryIntegration {
         assertThat(userChanged.lastAccess).isEqualTo(Date.from(Instant.parse("2019-09-30T19:40:20.00Z")))
     }
 
+    @Test
+    fun getActiveUser_userExists_verifyUser(){
+        val check = data.getActiveUser()
+        assertThat(check?.id).isNotNull()
+    }
+
+//    @Test
+//    fun getActiveUser_multipleUsers_verifyUser(){
+//        var lastId: List<String>
+//        for (i in 1..5) {
+//            val check = data.getActiveUser()
+//            lastId += check.id
+//        }
+//    }
+
 }
