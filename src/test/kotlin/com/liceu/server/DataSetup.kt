@@ -598,7 +598,7 @@ class DataSetup {
                 ),
                 Date.from(Instant.parse("2019-05-23T10:30:50.00Z")),
                 2,
-                2
+                null
         )
         game7.id = ObjectId(GAME_ID_7)
         gameRepo.insert(game7)

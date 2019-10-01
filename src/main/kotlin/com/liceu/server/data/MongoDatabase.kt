@@ -122,30 +122,9 @@ class MongoDatabase {
             @Indexed val submissionDate: Date,
             val timeSpent: Int,
             val score: Int?
-    ) :Comparable<MongoGame>{
-        override fun compareTo(other: MongoGame): Int {
-            //funcao de comparacao - answers, lista de resposta - timespent, tempo de jogo -
-            var countO1 = 0
-            for(item in this.answers){
-                if(item.correctAnswer == item.selectedAnswer){
-                    countO1 ++
-                }
-            }
-            var countO2 = 0
-            for(item in other.answers){
-                if(item.correctAnswer == item.selectedAnswer){
-                    countO2 ++
-                }
-            }
-            if(countO1 == countO2){
-                return this.timeSpent - other.timeSpent
-            }
-            return countO2 - countO1
-        }
-
+    ) {
         @Id
         lateinit var id: ObjectId
-
     }
 
     @Document(collection = MongoDatabase.REPORT_COLLECTION)

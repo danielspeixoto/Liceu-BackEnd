@@ -5,8 +5,10 @@ import com.liceu.server.domain.game.*
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 import org.bson.types.ObjectId
+import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
+import org.springframework.data.mongodb.core.findDistinct
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.stereotype.Repository
 import java.time.Instant
@@ -22,9 +24,9 @@ class MongoGameRepository(
         val template: MongoTemplate
 ): GameBoundary.IRepository {
 
-    private var lastRequest = arrayListOf<Game>()
-    private var lastMonthRequest = -1
-    private var lastTimeStampRequest = -1
+        private var gameList = arrayListOf<Game>()
+//    private var lastMonthRequest = -1
+//    private var lastTimeStampRequest = -1
 
     override fun insert(game: GameToInsert): String {
         val result = template.insert(MongoDatabase.MongoGame(
@@ -48,33 +50,31 @@ class MongoGameRepository(
         val yearMonthObject = YearMonth.of(year, month);
         val daysInMonth = yearMonthObject.lengthOfMonth();
 
-        if(month == lastMonthRequest){
-            return lastRequest
-        }
         val match = Aggregation.match(Criteria.where("submissionDate")
                 .gte(Date.from(Instant.parse(year.toString()+"-"+monthFormated+"-01T00:00:00.00Z")))
                 .lte(Date.from(Instant.parse(year.toString()+"-"+monthFormated+"-"+daysInMonth+"T00:00:00.00Z")))
-        )
-        val agg = Aggregation.newAggregation(match)
-        val resultList = template.aggregate(agg,MongoDatabase.GAME_COLLECTION, MongoDatabase.MongoGame::class.java).toList()
-        lastMonthRequest = month
-        Collections.sort(resultList)
+                .and("score").ne(null)
 
-        lastRequest = arrayListOf()
+        )
+        val sortByScore = Aggregation.sort(Sort.Direction.DESC, "score")
+        val sortByTimeSpent = Aggregation.sort(Sort.Direction.ASC, "timeSpent")
+        val amountRetrieved = Aggregation.limit(amount.toLong()+10)
+        val agg = Aggregation.newAggregation(match,sortByTimeSpent,sortByScore,amountRetrieved)
+        val resultList = template.aggregate(agg,MongoDatabase.GAME_COLLECTION, MongoDatabase.MongoGame::class.java).toList()
+
+        gameList = arrayListOf()
         val userIdList = arrayListOf<ObjectId>()
         for(item in resultList){
-            if(lastRequest.size >= amount){
+            if(gameList.size >= amount){
                 break
             }
             if(!userIdList.contains(item.userId)){
-                lastRequest.add(toGame(item))
+                gameList.add(toGame(item))
                 userIdList.add(item.userId)
             }
         }
-        //resultList -> ordenado -> pegar os 20 primeiros usuarios diferentes e salvar no lastRequest
         val endFunction = System.currentTimeMillis()
         val duration = endFunction-startFunction
-
         Logging.info(
                 "game_ranking_benchmark",
                 listOf(GAME, RANKING, BENCHMARK),
@@ -83,8 +83,7 @@ class MongoGameRepository(
                         "duration" to duration
                 )
         )
-
-        return lastRequest
+        return gameList
     }
 
 }
