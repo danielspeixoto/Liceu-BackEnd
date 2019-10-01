@@ -8,6 +8,7 @@ import com.liceu.server.data.UserRepository
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.user.UserForm
+import com.liceu.server.domain.util.TimeStamp
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -18,6 +19,8 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.Instant
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @ContextConfiguration(classes=[TestConfiguration::class])
@@ -261,6 +264,14 @@ class TestMongoUserRepositoryIntegration {
         assertThat(result).isEqualTo(1)
         val userChanged = data.getUserById(testSetup.USER_ID_1)
         assertThat(userChanged.fcmToken).isEqualTo("12i93910n9209j1jnasoidj1092jkqsnd12y3")
+    }
+
+    @Test
+    fun updateLastAccess_userExists_verifyUser() {
+        val result = data.updateLastAccess(testSetup.USER_ID_1, Date.from(Instant.parse("2019-09-30T19:40:20.00Z")))
+        assertThat(result).isEqualTo(1)
+        val userChanged = data.getUserById(testSetup.USER_ID_1)
+        assertThat(userChanged.lastAccess).isEqualTo(Date.from(Instant.parse("2019-09-30T19:40:20.00Z")))
     }
 
 }

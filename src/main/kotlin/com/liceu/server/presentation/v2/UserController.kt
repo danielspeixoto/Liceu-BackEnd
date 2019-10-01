@@ -16,7 +16,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.lang.ClassCastException
-import java.util.HashMap
+import java.time.Instant
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.validation.ValidationException
 
@@ -34,8 +35,9 @@ class UserController (
         @Autowired val updateWebsite: UserBoundary.IUpdateWebsite,
         @Autowired val updateProducerToBeFollowed: UserBoundary.IUpdateProducerToBeFollowed,
         @Autowired val updateProducerToBeUnfollowed: UserBoundary.IupdateProducerToBeUnfollowed,
-        @Autowired val updateProfileImage: UserBoundary.IupdateProfileImage,
-        @Autowired val updateFcmToken: UserBoundary.IupdateFcmToken,
+        @Autowired val updateProfileImage: UserBoundary.IUpdateProfileImage,
+        @Autowired val updateFcmToken: UserBoundary.IUpdateFcmToken,
+        @Autowired val updateLastAccess: UserBoundary.IUpdateLastAccess,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
         @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
         @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
@@ -446,5 +448,30 @@ class UserController (
             handleException(e, eventName, eventTags, networkData)
         }
     }
+
+    @PutMapping("/{userId}/check")
+    fun updateLastAccess(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "update_last_access"
+        val eventTags = listOf(CONTROLLER, NETWORK, LAST, ACCESS, UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
+            updateLastAccess.run(authenticatedUserId)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData)
+        }
+    }
+
 }
 

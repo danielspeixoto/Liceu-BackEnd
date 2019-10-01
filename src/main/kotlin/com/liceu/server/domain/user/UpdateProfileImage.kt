@@ -13,7 +13,7 @@ import java.util.*
 class UpdateProfileImage(
         private val userRepository: UserBoundary.IRepository,
         private val bucketName: String
-): UserBoundary.IupdateProfileImage {
+): UserBoundary.IUpdateProfileImage {
     companion object{
         const val EVENT_NAME = "update_profile_image"
         val TAGS = listOf(UPDATE, PROFILE ,IMAGE)

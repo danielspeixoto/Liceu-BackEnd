@@ -209,13 +209,18 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
-    fun updateProfileImage(): UserBoundary.IupdateProfileImage {
+    fun updateProfileImage(): UserBoundary.IUpdateProfileImage {
         return UpdateProfileImage(mongoUserRepository,googleImageBucket)
     }
 
     @Bean
-    fun updateFcmToken(): UserBoundary.IupdateFcmToken {
+    fun updateFcmToken(): UserBoundary.IUpdateFcmToken {
         return UpdateFcmToken(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateLastAccess(): UserBoundary.IUpdateLastAccess {
+        return UpdateLastAccess(mongoUserRepository,mongoActivityRepository)
     }
 
     @Bean

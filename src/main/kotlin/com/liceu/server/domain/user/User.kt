@@ -2,6 +2,7 @@ package com.liceu.server.domain.user
 
 import com.liceu.server.domain.aggregates.Picture
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
+import java.util.*
 
 data class User(
         val id: String,
@@ -18,5 +19,6 @@ data class User(
         val website: String?,
         val followers: List<String>?,
         val following: List<String>?,
-        val fcmToken: String?
+        val fcmToken: String?,
+        val lastAccess: Date?
 )

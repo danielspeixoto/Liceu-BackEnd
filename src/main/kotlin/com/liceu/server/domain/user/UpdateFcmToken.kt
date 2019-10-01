@@ -5,7 +5,7 @@ import com.liceu.server.util.Logging
 
 class UpdateFcmToken(
         private val userRepository: UserBoundary.IRepository
-): UserBoundary.IupdateFcmToken {
+): UserBoundary.IUpdateFcmToken {
     companion object {
         const val EVENT_NAME = "update_fcmToken"
         val TAGS = listOf(USER , UPDATE, FCMTOKEN)

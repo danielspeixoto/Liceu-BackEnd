@@ -12,7 +12,8 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import java.util.HashMap
+import java.time.Instant
+import java.util.*
 
 class TestUser: TestSystem("/v2/user") {
 
@@ -364,6 +365,36 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(user.fcmToken).isEqualTo("1239010293n1[092smi[10923n1029b3[019f3n1/////////asdasdasdsa/asd/a/da/s///ca/c/m")
     }
 
+    @Test
+    fun updateLastAccess_userExists_returnVoidAndVerifyUser(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/check", HttpMethod.PUT, entity)
+        Thread.sleep(5000)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(user.lastAccess).isNotNull()
+        val activitiesFromUser = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,1, listOf("lastAccessRegister"))
+        Truth.assertThat(activitiesFromUser.size).isEqualTo(1)
+        Truth.assertThat(activitiesFromUser[0].userId).isEqualTo(testSetup.USER_ID_2)
+        Truth.assertThat(activitiesFromUser[0].type).isEqualTo("lastAccessRegister")
+    }
+
+
+    @Test
+    fun updateLastAccess_wrongUserProfileOwner_returnUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(
+                hashMapOf(
+                        "lastAccess" to ""
+                ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_1}/check", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
 
     @Test
     fun updateFcmToken_fcmTokenToNull_returnBadRequest(){
