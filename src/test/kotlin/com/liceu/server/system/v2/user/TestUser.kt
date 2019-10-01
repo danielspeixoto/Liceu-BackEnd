@@ -370,46 +370,18 @@ class TestUser: TestSystem("/v2/user") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
-        val entity = HttpEntity(
-                hashMapOf(
-                        "lastAccess" to "2017-09-30T19:40:45.00Z"
-                ), headers)
+        val entity = HttpEntity(null, headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/check", HttpMethod.PUT, entity)
         Thread.sleep(5000)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val user = data.getUserById(testSetup.USER_ID_2)
-        Truth.assertThat(user.lastAccess).isEqualTo(Date.from(Instant.parse("2017-09-30T19:40:45.00Z")))
+        Truth.assertThat(user.lastAccess).isNotNull()
         val activitiesFromUser = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,1, listOf("lastAccessRegister"))
         Truth.assertThat(activitiesFromUser.size).isEqualTo(1)
         Truth.assertThat(activitiesFromUser[0].userId).isEqualTo(testSetup.USER_ID_2)
         Truth.assertThat(activitiesFromUser[0].type).isEqualTo("lastAccessRegister")
     }
 
-    @Test
-    fun updateLastAccess_lastAccessToNull_returnBadRequest(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
-        val entity = HttpEntity(
-                hashMapOf(
-                        "lastAccess" to null
-                ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/check", HttpMethod.PUT, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
-
-    @Test
-    fun updateLastAccess_emptyLastAccess_returnBadRequest(){
-        val headers = HttpHeaders()
-        headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
-        val entity = HttpEntity(
-                hashMapOf(
-                        "lastAccess" to ""
-                ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/check", HttpMethod.PUT, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
-    }
 
     @Test
     fun updateLastAccess_wrongUserProfileOwner_returnUnauthorized(){

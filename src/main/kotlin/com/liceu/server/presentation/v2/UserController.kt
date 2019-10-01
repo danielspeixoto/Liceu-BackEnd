@@ -453,7 +453,6 @@ class UserController (
     fun updateLastAccess(
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
-            @RequestBody body: HashMap<String, Any>,
             request: HttpServletRequest
     ): ResponseEntity<Void> {
         val eventName = "update_last_access"
@@ -467,9 +466,7 @@ class UserController (
             if (authenticatedUserId != userId) {
                 throw AuthenticationException("user attempting to change other user properties")
             }
-            val lastAccess = body["lastAccess"] as String? ?: throw ValidationException()
-            val date = Date.from(Instant.parse(lastAccess))
-            updateLastAccess.run(authenticatedUserId,date)
+            updateLastAccess.run(authenticatedUserId)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData)

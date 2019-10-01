@@ -82,7 +82,7 @@ class UserBoundary {
     }
 
     interface IUpdateLastAccess {
-        fun run (userId: String, loginAccess: Date)
+        fun run (userId: String)
     }
 
     interface IUserById {
