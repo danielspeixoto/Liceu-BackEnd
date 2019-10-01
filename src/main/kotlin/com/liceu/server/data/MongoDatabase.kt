@@ -1,5 +1,6 @@
 package com.liceu.server.data
 
+import com.liceu.server.domain.user.UserBoundary
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
@@ -101,7 +102,8 @@ class MongoDatabase {
             var website: String?,
             var followers: List<ObjectId>?,
             var following: List<ObjectId>?,
-            var fcmToken: String?=null
+            var fcmToken: String?=null,
+            var lastAccess: Date?=null
     ) {
         @Id
         lateinit var id: ObjectId

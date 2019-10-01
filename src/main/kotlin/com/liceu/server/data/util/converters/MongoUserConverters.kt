@@ -25,6 +25,7 @@ fun toUser(mongoUser: MongoDatabase.MongoUser): User {
             mongoUser.website,
             mongoUser.followers?.map { it.toHexString() },
             mongoUser.following?.map { it.toHexString() },
-            mongoUser.fcmToken
+            mongoUser.fcmToken,
+            mongoUser.lastAccess
     )
 }

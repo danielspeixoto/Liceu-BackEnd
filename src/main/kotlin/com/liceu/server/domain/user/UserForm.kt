@@ -2,6 +2,7 @@ package com.liceu.server.domain.user
 
 import com.liceu.server.domain.aggregates.Picture
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
+import java.util.*
 
 data class UserForm(
         val name: String,
@@ -18,4 +19,5 @@ data class UserForm(
         val website: String?,
         val followers: List<String>?,
         val following: List<String>?
+
 )
