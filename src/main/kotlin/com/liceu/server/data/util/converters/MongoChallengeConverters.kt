@@ -16,7 +16,9 @@ fun toChallenge(answer: MongoDatabase.MongoChallenge): Challenge {
             answer.scoreChallenger,
             answer.scoreChallenged,
             answer.triviaQuestionsUsed.map { toChallengeTrivia(it) },
-            answer.submissionDate
+            answer.submissionDate,
+            answer.downloadChallenger,
+            answer.downloadChallenged
     )
 }
 

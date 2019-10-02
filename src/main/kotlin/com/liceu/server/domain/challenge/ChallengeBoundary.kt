@@ -7,7 +7,9 @@ class ChallengeBoundary {
         fun createChallenge(matchmaking: ChallengeToInsert): Challenge
         fun matchMaking(challengedId: String): Challenge?
         fun verifyDirectChallenges(challengedId: String): Challenge?
+        fun findDirectChallengesById(challengeId: String): Challenge?
         fun updateAnswers(challengeId: String, isChallenger: Boolean,answers: List<String>, score: Int): Long
+        fun updateDownloadAttribute(challengeId: String): Challenge
         fun findById(challengeId: String): Challenge
     }
 

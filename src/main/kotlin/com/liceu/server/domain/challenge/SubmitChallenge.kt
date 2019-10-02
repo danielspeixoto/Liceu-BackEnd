@@ -47,7 +47,8 @@ class SubmitChallenge(
                     null,
                     null,
                     trivias,
-                    TimeStamp.retrieveActualTimeStamp()
+                    TimeStamp.retrieveActualTimeStamp(),
+                    true //mark Download from challenger
             ))
             activityRepository.insertActivity(ActivityToInsert(
                     challengedId,

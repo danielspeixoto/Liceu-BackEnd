@@ -776,7 +776,8 @@ class DataSetup {
                                 null
                         )
                 ),
-                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+                true
         )
         ch2.id = ObjectId(CHALLENGE_TRIVIA_ID_2)
         challengeRepo.insert(ch2)
@@ -964,7 +965,8 @@ class DataSetup {
                                 null
                         )
                 ),
-                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+                true
         )
         ch7.id = ObjectId(CHALLENGE_TRIVIA_ID_7)
         challengeRepo.insert(ch7)

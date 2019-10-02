@@ -74,7 +74,8 @@ class TestMongoChallengeRepositoryIntegration {
                                 null
                         )
                 ),
-                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+                true
         ))
 
 
@@ -135,7 +136,8 @@ class TestMongoChallengeRepositoryIntegration {
                                 null
                         )
                 ),
-                Date.from(Instant.parse("2019-10-11T11:20:20.00Z"))
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+                true
         ))
 
 
@@ -233,7 +235,7 @@ class TestMongoChallengeRepositoryIntegration {
     }
 
     @Test
-    fun directChallenge_validChallenge_return(){
+    fun directChallenge_validChallenge_returnChallenge(){
         val result = data.verifyDirectChallenges(testSetup.USER_ID_2)
         Truth.assertThat(result?.id).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
         Truth.assertThat(result?.challenger).isEqualTo(testSetup.USER_ID_1)
@@ -241,6 +243,18 @@ class TestMongoChallengeRepositoryIntegration {
         Truth.assertThat(result?.scoreChallenger).isEqualTo(0)
         Truth.assertThat(result?.challenged).isEqualTo(testSetup.USER_ID_2)
         Truth.assertThat(result?.answersChallenged).isEmpty()
+        Truth.assertThat(result?.downloadChallenger).isTrue()
+        Truth.assertThat(result?.downloadChallenged).isTrue()
     }
+
+    @Test
+    fun findDirectChallengesById_validChallenge_returnChallenge(){
+        val result = data.findDirectChallengesById(testSetup.CHALLENGE_TRIVIA_ID_2)
+        Truth.assertThat(result?.challenger).isEqualTo(testSetup.USER_ID_2)
+        Truth.assertThat(result?.challenged).isEqualTo(testSetup.USER_ID_1)
+        Truth.assertThat(result?.downloadChallenger).isTrue()
+        Truth.assertThat(result?.downloadChallenged).isTrue()
+    }
+
 
 }

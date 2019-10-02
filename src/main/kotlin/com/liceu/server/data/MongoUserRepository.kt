@@ -276,7 +276,9 @@ class MongoUserRepository(
                                 triviaQuestion.dislikes
                         )
                     },
-                    it.submissionDate
+                    it.submissionDate,
+                    it.downloadChallenger,
+                    it.downloadChallenged
             )
         }
     }
