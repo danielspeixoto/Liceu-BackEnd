@@ -22,7 +22,8 @@ class FirebaseNotifications(val serverKey: String) : NotificationBoundary.INotif
                                 "title" to notification.title
                         ),
                         "data" to notification.data + mapOf(
-                                "click_action" to "FLUTTER_NOTIFICATION_CLICK"
+                                "click_action" to "FLUTTER_NOTIFICATION_CLICK",
+                                "action" to notification.action
                         )
                 )
         )
