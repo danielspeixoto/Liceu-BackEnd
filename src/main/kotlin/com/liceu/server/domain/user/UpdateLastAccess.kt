@@ -2,11 +2,10 @@ package com.liceu.server.domain.user
 
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.global.*
-import com.liceu.server.domain.util.TimeStamp.retrieveActualTimeStamp
 import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
+import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 import com.liceu.server.util.Logging
 import java.lang.Exception
-import java.util.*
 
 class UpdateLastAccess(
         private val userRepository: UserBoundary.IRepository,

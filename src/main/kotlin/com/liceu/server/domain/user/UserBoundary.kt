@@ -20,7 +20,7 @@ class UserBoundary {
         fun getUserBySocialId(socialId: String): User?
         fun getChallengesFromUserById(userId: String): List<Challenge>
         fun getUsersByNameUsingLocation(nameSearched: String, latitude: Double?, longitude: Double?, amount: Int): List<User>
-        fun getActiveUser(): User
+        fun getActiveUser(userId: String): User
         fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double, state: String): Long
         fun updateSchoolFromUser(userId: String, school: String): Long
         fun updateAgeFromUser(userId: String, age: Int): Long

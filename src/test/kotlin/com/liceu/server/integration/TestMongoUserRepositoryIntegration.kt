@@ -8,9 +8,7 @@ import com.liceu.server.data.UserRepository
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.user.UserForm
-import com.liceu.server.domain.util.TimeStamp
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -276,17 +274,8 @@ class TestMongoUserRepositoryIntegration {
 
     @Test
     fun getActiveUser_userExists_verifyUser(){
-        val check = data.getActiveUser()
-        assertThat(check?.id).isNotNull()
+        val check = data.getActiveUser(testSetup.USER_ID_2)
+        assertThat(check.id).isNotNull()
     }
-
-//    @Test
-//    fun getActiveUser_multipleUsers_verifyUser(){
-//        var lastId: List<String>
-//        for (i in 1..5) {
-//            val check = data.getActiveUser()
-//            lastId += check.id
-//        }
-//    }
 
 }

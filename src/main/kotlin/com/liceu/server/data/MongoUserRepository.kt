@@ -8,6 +8,7 @@ import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.user.UserForm
+import com.liceu.server.domain.util.dateFunctions.DateFunctions.lastTwoWeeks
 import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Repository
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.data.mongodb.core.query.*
 import java.util.*
+
+
 
 
 @Repository
@@ -301,7 +304,7 @@ class MongoUserRepository(
         return results.map { toUser(it) }
     }
 
-    override fun getActiveUser(): User {
+    override fun getActiveUser(userId: String): User {
         val query = Query()
         var match: MatchOperation
         val sample: SampleOperation = sample(1)
@@ -310,13 +313,16 @@ class MongoUserRepository(
         val agg: Aggregation
         query.addCriteria(Criteria.where("lastAccess").ne(null))
         val results = template.count(query,MongoDatabase.MongoUser::class.java).toInt()
+
         if(results <= 200){
-            match = match(Criteria())
+            match = match(Criteria("_id").ne(ObjectId(userId)))
             sort = sort(Sort.Direction.DESC, "_id")
             limits = limit(200)
             agg = newAggregation(match,sort,sample,limits)
         }else{
-            match = match(Criteria("lastAccess").ne(null))
+            match = match(Criteria("lastAccess").ne(null)
+                    .and("_id").ne(ObjectId(userId))
+                    .and("lastAccess").gte(lastTwoWeeks()))
             agg = newAggregation(match,sample)
         }
         val usersRetrieved = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)

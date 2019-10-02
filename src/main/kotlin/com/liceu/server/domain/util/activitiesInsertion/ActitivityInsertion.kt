@@ -2,7 +2,7 @@ package com.liceu.server.domain.util.activitiesInsertion
 
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.ActivityToInsert
-import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 import kotlin.concurrent.thread
 
 
@@ -12,7 +12,7 @@ fun activityInsertion(activityRepository: ActivityBoundary.IRepository,user: Str
                 user,
                 type,
                 params,
-                TimeStamp.retrieveActualTimeStamp()
+                retrieveActualTimeStamp()
         ))
     }
 }

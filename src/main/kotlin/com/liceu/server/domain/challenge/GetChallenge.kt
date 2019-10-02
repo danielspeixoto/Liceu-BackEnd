@@ -1,18 +1,14 @@
 package com.liceu.server.domain.challenge
 
-import com.liceu.server.data.MongoChallengeRepository
-import com.liceu.server.data.MongoTriviaRepository
-import com.liceu.server.data.firebase.FirebaseNotifications
 import com.liceu.server.domain.activities.ActivityBoundary
-import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.notification.AnswerChallengeNotification
 import com.liceu.server.domain.notification.NotificationBoundary
 import com.liceu.server.domain.trivia.TriviaBoundary
 import com.liceu.server.domain.user.UserBoundary
-import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
+import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 import com.liceu.server.util.Logging
 
 class GetChallenge(
@@ -48,20 +44,20 @@ class GetChallenge(
                     ))
                 return it
             }
-            val challenged = userRepository.getActiveUser()
+            val challenged = userRepository.getActiveUser(userId)
             val trivias = triviaRepository.randomQuestions(listOf(), 10)
             val challenge = challengeRepository.createChallenge(ChallengeToInsert(
                     userId,
-                    challenged?.id,
+                    challenged.id,
                     listOf(),
                     listOf(),
                     null,
                     null,
                     trivias,
-                    TimeStamp.retrieveActualTimeStamp()
+                    retrieveActualTimeStamp()
             ))
-            val notification = AnswerChallengeNotification("Te desafiaram!", "${firstName} te desafiou!",challenge.id,userId)
-            userRepository.getUserById(challenged!!.id).fcmToken?.let { it1 -> firebaseNotifications.send(it1,notification) }
+            val notification = AnswerChallengeNotification("Te desafiaram!", "$firstName te desafiou!",challenge.id,userId)
+            userRepository.getUserById(challenged.id).fcmToken?.let { it1 -> firebaseNotifications.send(it1,notification) }
             Logging.info(
                     EVENT_NAME, TAGS ,
                     hashMapOf(

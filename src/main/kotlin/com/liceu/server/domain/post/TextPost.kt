@@ -1,7 +1,7 @@
 package com.liceu.server.domain.post
 
 import com.liceu.server.domain.global.*
-import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 import com.liceu.server.util.Logging
 class TextPost(
         private val postRepository: PostBoundary.IRepository
@@ -33,7 +33,7 @@ class TextPost(
                 post.description,
                 null,
                 post.video,
-                TimeStamp.retrieveActualTimeStamp(),
+                retrieveActualTimeStamp(),
                 null,
                 post.questions
             ))
