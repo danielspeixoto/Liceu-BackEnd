@@ -445,7 +445,7 @@ class UserController (
             updateFcmToken.run(authenticatedUserId,fcmToken)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData + ("fcmTokenSend" to body["fcmToken"]) as Pair<String, Any>)
         }
     }
 
