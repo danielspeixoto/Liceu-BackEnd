@@ -49,7 +49,7 @@ class GetChallenge(
                 return it
             }
             val challenged = userRepository.getActiveUser()
-            val trivias = triviaRepository.randomQuestions(listOf(), 10)
+            val trivias = triviaRepository.randomQuestions(listOf(), 4)
             val challenge = challengeRepository.createChallenge(ChallengeToInsert(
                     userId,
                     challenged?.id,
@@ -58,7 +58,8 @@ class GetChallenge(
                     null,
                     null,
                     trivias,
-                    TimeStamp.retrieveActualTimeStamp()
+                    TimeStamp.retrieveActualTimeStamp(),
+                    true
             ))
             val notification = AnswerChallengeNotification("Te desafiaram!", "${firstName} te desafiou!",challenge.id,userId)
             userRepository.getUserById(challenged!!.id).fcmToken?.let { it1 -> firebaseNotifications.send(it1,notification) }

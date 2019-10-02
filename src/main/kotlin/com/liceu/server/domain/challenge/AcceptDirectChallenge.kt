@@ -23,8 +23,8 @@ class AcceptDirectChallenge(
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "challengeId" to challengeId
             ))
-            val result = challengeRepository.findById(challengeId)
-            if (result.challenged != userId){
+            val result = challengeRepository.findDirectChallengesById(challengeId)
+            if (result?.challenged != userId){
                 throw AuthenticationException ("user authenticated isn't the challenged user")
             }
             Logging.info(
