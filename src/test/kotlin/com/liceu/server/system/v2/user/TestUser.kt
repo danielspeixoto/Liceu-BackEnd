@@ -30,7 +30,7 @@ class TestUser: TestSystem("/v2/user") {
     fun userID_exists_returnUser(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        headers["Authorization"] = testSetup.USER_3_ACCESS_TOKEN
 
         val entity = HttpEntity(null,headers)
 
@@ -59,7 +59,7 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(body["website"]).isEqualTo("www.umsite.com.br")
         Truth.assertThat(body["amountOfFollowers"]).isEqualTo(1)
         Truth.assertThat(body["amountOfFollowing"]).isEqualTo(2)
-        Truth.assertThat(body["following"]).isEqualTo(true)
+        Truth.assertThat(body["following"]).isEqualTo(false)
 
         // Only update this after doing a assertion of a body property
         Truth.assertThat(body.size).isEqualTo(14)
@@ -69,7 +69,7 @@ class TestUser: TestSystem("/v2/user") {
     fun userID_notFollowingUser_followingIsFalse(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
-        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        headers["Authorization"] = testSetup.USER_4_ACCESS_TOKEN
 
         val entity = HttpEntity(null,headers)
 
@@ -388,10 +388,7 @@ class TestUser: TestSystem("/v2/user") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
-        val entity = HttpEntity(
-                hashMapOf(
-                        "lastAccess" to ""
-                ), headers)
+        val entity = HttpEntity(null, headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_1}/check", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
     }

@@ -89,6 +89,9 @@ class DataSetup {
     }
 
     val USER_ID_4 = "37235b2a67c76abebce3f6e3"
+    val USER_4_ACCESS_TOKEN by lazy {
+        jwtAuth.sign(USER_ID_4)
+    }
     val USER_ID_5 = "37235b2a67c76abebce3f6e8"
     val FACEBOOK_ID = "3aaa5b2a67c76abebce3f6e8"
 

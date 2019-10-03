@@ -61,11 +61,17 @@ class UserController (
                 "version" to 2
         ))
         return try {
+            if(userId != authenticatedUserId){
+                throw throw AuthenticationException("user attempting to retrieve other user properties")
+            }
             val result = user.run(userId)
             val desiredUser = toUserResponse(result, authenticatedUserId)
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
@@ -90,7 +96,11 @@ class UserController (
             val desiredUser = result.map { toUserResponse(it, authenticatedUserId) }
             ResponseEntity(desiredUser, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("nameSearched" to name) +
+                    ("amount" to amount)
+            )
         }
     }
 
@@ -112,7 +122,9 @@ class UserController (
             val challengesResponse = challenges.map { toChallengeResponse(it) }
             ResponseEntity(challengesResponse, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
@@ -131,7 +143,8 @@ class UserController (
             val postsRetrieved = getPostsFromUSer.run(userId)
             ResponseEntity(postsRetrieved.map { toPostResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("pathVariableUserId" to userId))
         }
     }
 
@@ -157,7 +170,11 @@ class UserController (
             val activitiesRetrieved = getActivityFromUser.run(userId,amount,type)
             ResponseEntity(activitiesRetrieved.map { toActivityResponse(it) },HttpStatus.OK)
         }catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("amount" to amount)
+            )
         }
     }
 
@@ -186,7 +203,10 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
@@ -213,7 +233,10 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
@@ -242,7 +265,13 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("day" to body["day"]) +
+                    ("month" to body["month"]) +
+                    ("year" to body["year"])
+            )
         }
     }
 
@@ -269,7 +298,11 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("youtubeChannel" to body["youtubeChannel"])
+            )
         }
     }
 
@@ -296,7 +329,11 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("instagramProfile" to body["instagramProfile"])
+            )
         }
     }
 
@@ -323,7 +360,10 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
@@ -350,7 +390,10 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
@@ -372,7 +415,10 @@ class UserController (
             ResponseEntity(HttpStatus.OK)
 
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to producerId)
+            )
         }
     }
 
@@ -393,7 +439,10 @@ class UserController (
             updateProducerToBeUnfollowed.run(authenticatedUserId, producerId)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to producerId)
+            )
         }
     }
 
@@ -419,7 +468,10 @@ class UserController (
             updateProfileImage.run(authenticatedUserId,imageData)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
@@ -445,7 +497,11 @@ class UserController (
             updateFcmToken.run(authenticatedUserId,fcmToken)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData + ("fcmTokenSend" to body["fcmToken"]) as Pair<String, Any>)
+            handleException(e, eventName, eventTags, networkData +
+                    ("fcmTokenSend" to body["fcmToken"]) +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
@@ -469,7 +525,10 @@ class UserController (
             updateLastAccess.run(authenticatedUserId)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId)
+            )
         }
     }
 
