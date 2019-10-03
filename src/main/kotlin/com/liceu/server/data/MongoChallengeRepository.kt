@@ -8,7 +8,6 @@ import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.trivia.PostComment
 import com.liceu.server.domain.trivia.TriviaQuestion
 import org.bson.types.ObjectId
-import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
 import org.springframework.data.mongodb.core.query.Criteria
@@ -16,9 +15,6 @@ import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
-import java.time.Instant
-import java.time.ZoneOffset
-import java.util.*
 
 
 @Repository
@@ -98,7 +94,9 @@ class MongoChallengeRepository(
                                 triviaQuestion.dislikes
                         )
                     },
-                    it.submissionDate
+                    it.submissionDate,
+                    it.downloadChallenger,
+                    it.downloadChallenged
             )
         }
         return null
@@ -109,11 +107,12 @@ class MongoChallengeRepository(
                 Query.query(Criteria
                         .where("challenged").isEqualTo(challengedId)
                         .and("answersChallenged").size(0)
+                        .and("downloadChallenged").`is`(false)
                 ),
                 MongoDatabase.MongoChallenge::class.java
         )
         result?.let {
-            return toChallenge(result)
+            return updateDownloadAttribute(result.id.toHexString())
         }
         return null
     }
@@ -146,4 +145,31 @@ class MongoChallengeRepository(
         }
     }
 
+    override fun findDirectChallengesById(challengeId: String): Challenge? {
+        val result = template.findOne(
+                Query.query(Criteria
+                        .where("_id").isEqualTo(ObjectId(challengeId))
+                        .and("downloadChallenged").`is`(false)
+                ),
+                MongoDatabase.MongoChallenge::class.java
+        )
+        result?.let {
+            return updateDownloadAttribute(result.id.toHexString())
+        }
+        return null
+    }
+
+    override fun updateDownloadAttribute(challengeId: String): Challenge {
+        val update = Update()
+        update.set("downloadChallenged", true)
+        template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(challengeId))),
+                update,
+                MongoDatabase.MongoChallenge::class.java
+        )
+        val newChallenge = template.findOne(Query.query(Criteria.where("_id").isEqualTo(ObjectId(challengeId))),
+                MongoDatabase.MongoChallenge::class.java
+        )
+        return toChallenge(newChallenge!!)
+    }
 }

@@ -10,10 +10,7 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.exchange
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
+import org.springframework.http.*
 import java.util.HashMap
 
 
@@ -206,7 +203,6 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(activitiesFromChallenger[0].type).isEqualTo("challengeAccepted")
         Truth.assertThat(activitiesFromChallenger[0].params["challengeId"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
         Truth.assertThat(activitiesFromChallenger[0].params["challengedId"]).isEqualTo(testSetup.USER_ID_2)
-
     }
 
     @Test
@@ -305,6 +301,50 @@ class TestChallenge: TestSystem ("/v2/challenge") {
         Truth.assertThat(activitiesChallenged[0].type).isEqualTo("challengeFinished")
         Truth.assertThat(paramsFromActivity["challengeId"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_7)
         Truth.assertThat(paramsFromActivity["challengerId"]).isEqualTo(testSetup.USER_ID_1)
+    }
+
+    @Test
+    fun getDirectChallenge_multipleCallsForSameChallenge_multipleReturns(){
+        val headers = HttpHeaders()
+        val responses = arrayListOf<Any>()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(null,headers)
+        for (i in 1..2) {
+            val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl + "/${testSetup.CHALLENGE_TRIVIA_ID_7}", HttpMethod.GET, entity)
+            responses.add(response)
+            Thread.sleep(5000)
+        }
+        val insertedResponse = responses[0] as ResponseEntity<*>
+        Truth.assertThat(insertedResponse.statusCode).isEqualTo(HttpStatus.OK)
+        val reinsertedResponse = responses[1] as ResponseEntity<*>
+        Truth.assertThat(reinsertedResponse.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+
+    @Test
+    fun getChallenge_directChallenge_multipleReturns(){
+        val responses = arrayListOf<Any>()
+        val challengesId = arrayListOf<String>()
+        var lastChallengeId: String = ""
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_3_ACCESS_TOKEN
+        val entity = HttpEntity(null,headers)
+        for (i in 1..2) {
+            val response = restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.GET,entity)
+            val body = response.body!!
+            responses.add(response)
+            challengesId.add(body["id"].toString())
+            Thread.sleep(5000)
+            lastChallengeId = body["id"].toString()
+        }
+        val insertedResponse = responses[0] as ResponseEntity<*>
+        Truth.assertThat(insertedResponse.statusCode).isEqualTo(HttpStatus.OK)
+        val reinsertedResponse = responses[1] as ResponseEntity<*>
+        Truth.assertThat(reinsertedResponse.statusCode).isEqualTo(HttpStatus.OK)
+        Truth.assertThat(challengesId.size).isEqualTo(2)
+        Truth.assertThat(challengesId[0]).isNotEqualTo(lastChallengeId)
     }
 
 
