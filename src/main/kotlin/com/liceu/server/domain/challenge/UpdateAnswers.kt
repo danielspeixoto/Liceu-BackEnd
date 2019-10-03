@@ -1,19 +1,14 @@
 package com.liceu.server.domain.challenge
 
 import com.liceu.server.data.MongoChallengeRepository
-import com.liceu.server.data.MongoUserRepository
-import com.liceu.server.data.firebase.FirebaseNotifications
 import com.liceu.server.domain.activities.ActivityBoundary
-import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.ANSWERS
 import com.liceu.server.domain.global.CHALLENGE
 import com.liceu.server.domain.global.RETRIEVAL
 import com.liceu.server.domain.global.UPDATE
-import com.liceu.server.domain.notification.AnswerChallengeNotification
 import com.liceu.server.domain.notification.Notification
 import com.liceu.server.domain.notification.NotificationBoundary
 import com.liceu.server.domain.user.UserBoundary
-import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 

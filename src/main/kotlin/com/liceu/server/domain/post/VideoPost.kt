@@ -3,8 +3,7 @@ package com.liceu.server.domain.post
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
 import org.springframework.web.util.UriComponentsBuilder
-import com.liceu.server.domain.util.TimeStamp
-
+import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 
 
 class VideoPost(
@@ -60,7 +59,7 @@ class VideoPost(
                                     mediumThumbails
                             )
                     ),
-                    TimeStamp.retrieveActualTimeStamp(),
+                    retrieveActualTimeStamp(),
                     null,
                     post.questions
             ))

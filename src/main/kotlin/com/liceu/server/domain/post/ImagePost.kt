@@ -8,7 +8,7 @@ import com.google.cloud.storage.BlobId
 import java.io.FileInputStream
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.liceu.server.domain.global.*
-import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 import com.liceu.server.domain.util.fileFunctions.FileFunctions
 import java.util.*
 
@@ -83,7 +83,7 @@ class ImagePost(
                             urlLink
                     ),
                     post.video,
-                    TimeStamp.retrieveActualTimeStamp(),
+                    retrieveActualTimeStamp(),
                     null,
                     post.questions
             ))

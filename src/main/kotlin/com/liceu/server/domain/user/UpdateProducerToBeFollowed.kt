@@ -1,10 +1,7 @@
 package com.liceu.server.domain.user
 
-import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.activities.ActivityBoundary
-import com.liceu.server.domain.activities.ActivityToInsert
 import com.liceu.server.domain.global.*
-import com.liceu.server.domain.util.TimeStamp
 import com.liceu.server.domain.util.activitiesInsertion.activityInsertion
 import com.liceu.server.util.Logging
 

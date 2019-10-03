@@ -2,11 +2,8 @@ package com.liceu.server.domain.game
 
 import com.liceu.server.domain.global.GAME
 import com.liceu.server.domain.global.INSERTION
-import com.liceu.server.domain.util.TimeStamp
+import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 import com.liceu.server.util.Logging
-import java.time.Instant
-import java.time.ZoneOffset
-import java.util.*
 
 class SubmitGame(
         val gameRepository: GameBoundary.IRepository
@@ -28,7 +25,7 @@ class SubmitGame(
             val id = gameRepository.insert(GameToInsert(
                     game.userId,
                     game.answers,
-                    TimeStamp.retrieveActualTimeStamp(),
+                    retrieveActualTimeStamp(),
                     game.timeSpent,
                     score
             ))
