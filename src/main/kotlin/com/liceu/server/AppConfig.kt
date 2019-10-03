@@ -48,6 +48,9 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${google.documentBucket}")
     lateinit var googleDocumentBucket: String
 
+    @Value("\${values.triviaAmount}")
+    var triviaAmount: Int = 4
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -259,12 +262,12 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun submitChallenge(): ChallengeBoundary.ICreateChallenge{
-        return SubmitChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications)
+        return SubmitChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications,triviaAmount)
     }
 
     @Bean
     fun getChallenge(): ChallengeBoundary.IGetChallenge{
-        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications)
+        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications,triviaAmount)
     }
 
     @Bean
