@@ -16,7 +16,8 @@ class GetChallenge(
         private val triviaRepository: TriviaBoundary.IRepository,
         private val activityRepository: ActivityBoundary.IRepository,
         private val userRepository: UserBoundary.IRepository,
-        private val firebaseNotifications: NotificationBoundary.INotifier
+        private val firebaseNotifications: NotificationBoundary.INotifier,
+        private val triviaAmount: Int
 ) : ChallengeBoundary.IGetChallenge {
 
     companion object {
@@ -45,7 +46,7 @@ class GetChallenge(
                 return it
             }
             val challenged = userRepository.getActiveUser(userId)
-            val trivias = triviaRepository.randomQuestions(listOf(), 10)
+            val trivias = triviaRepository.randomQuestions(listOf(), triviaAmount)
             val challenge = challengeRepository.createChallenge(ChallengeToInsert(
                     userId,
                     challenged.id,

@@ -17,7 +17,8 @@ class SubmitChallenge(
         private val triviaRepository: TriviaBoundary.IRepository,
         private val activityRepository: ActivityBoundary.IRepository,
         private val userRepository: UserBoundary.IRepository,
-        private val firebaseNotifications: NotificationBoundary.INotifier
+        private val firebaseNotifications: NotificationBoundary.INotifier,
+        private val triviaAmount: Int
 ): ChallengeBoundary.ICreateChallenge {
 
     companion object {
@@ -34,7 +35,7 @@ class SubmitChallenge(
                 throw IllegalArgumentException("challengerId and challengedId can't be equal")
             }
             val firstName = userRepository.getUserById(challengerId).name.split(" ")[0]
-            val trivias = triviaRepository.randomQuestions(listOf(), 10)
+            val trivias = triviaRepository.randomQuestions(listOf(), triviaAmount)
             val challenge = challengeRepository.createChallenge(ChallengeToInsert(
                     challengerId,
                     challengedId,

@@ -27,3 +27,6 @@ spring:
   mvc.favicon.enabled: false
   main:
     banner-mode: "off"
+
+values:
+  triviaAmount: 3

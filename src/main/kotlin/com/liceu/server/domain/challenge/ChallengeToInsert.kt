@@ -13,7 +13,7 @@ data class ChallengeToInsert (
         val scoreChallenged: Int?,
         val triviaQuestionsUsed: List<TriviaQuestion>,
         val submissionDate: Date?,
-        val downloadChallenger: Boolean?,
+        val downloadChallenger: Boolean?=true,
         val downloadChallenged: Boolean?=false
 )
 
