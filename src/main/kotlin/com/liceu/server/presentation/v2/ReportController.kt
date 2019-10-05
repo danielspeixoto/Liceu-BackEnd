@@ -54,7 +54,12 @@ class ReportController (
                     "id" to id
             ), HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("userId" to userId) +
+                    ("message" to body["message"]) +
+                    ("tags" to body["tags"]) +
+                    ("params" to body["params"])
+            )
         }
 
     }

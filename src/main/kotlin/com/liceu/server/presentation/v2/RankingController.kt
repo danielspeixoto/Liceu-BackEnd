@@ -43,7 +43,11 @@ class RankingController(
             val result = ranking.run(month, year , amount)
             ResponseEntity(result.map { toGameResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("month" to month) +
+                    ("year" to year) +
+                    ("amount" to amount)
+            )
         }
     }
 

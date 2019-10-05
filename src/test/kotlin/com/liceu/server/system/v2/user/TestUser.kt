@@ -389,10 +389,7 @@ class TestUser: TestSystem("/v2/user") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
-        val entity = HttpEntity(
-                hashMapOf(
-                        "lastAccess" to ""
-                ), headers)
+        val entity = HttpEntity(null, headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_1}/check", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
     }
