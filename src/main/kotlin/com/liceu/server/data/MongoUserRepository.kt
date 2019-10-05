@@ -322,9 +322,8 @@ class MongoUserRepository(
             limits = limit(200)
             agg = newAggregation(match,sort,sample,limits)
         }else{
-            match = match(Criteria("lastAccess").ne(null)
-                    .and("_id").ne(ObjectId(userId))
-                    .and("lastAccess").gte(lastTwoWeeks()))
+            match = match(Criteria("lastAccess").gte(lastTwoWeeks())
+                    .and("_id").ne(ObjectId(userId)))
             agg = newAggregation(match,sample)
         }
         val usersRetrieved = template.aggregate(agg, MongoDatabase.USER_COLLECTION, MongoDatabase.MongoUser::class.java)
