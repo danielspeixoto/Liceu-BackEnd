@@ -30,3 +30,4 @@ spring:
 
 values:
   triviaAmount: 3
+  challengeHistoryAmount: 2

@@ -28,3 +28,4 @@ spring:
 
 values:
   triviaAmount: ${TRIVIA_AMOUNT}
+  challengeHistoryAmount: ${CHALLENGE_HISTORY_AMOUNT}

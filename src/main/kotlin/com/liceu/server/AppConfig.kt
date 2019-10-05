@@ -51,6 +51,9 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${values.triviaAmount}")
     var triviaAmount: Int = 4
 
+    @Value("\${values.challengeHistoryAmount}")
+    var challengeHistoryAmount: Int = 10
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -167,7 +170,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun getChallengesFromUserById(): UserBoundary.IChallengesFromUserById{
-        return ChallengesFromUserId(mongoUserRepository)
+        return ChallengesFromUserId(mongoUserRepository,challengeHistoryAmount)
     }
 
     @Bean

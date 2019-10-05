@@ -7,7 +7,10 @@ import com.liceu.server.domain.global.USER
 import com.liceu.server.util.Logging
 import java.lang.Exception
 
-class ChallengesFromUserId (val repo: UserBoundary.IRepository): UserBoundary.IChallengesFromUserById{
+class ChallengesFromUserId (
+        private val repo: UserBoundary.IRepository,
+        private val historyAmount: Int
+): UserBoundary.IChallengesFromUserById{
 
     companion object {
         const val EVENT_NAME = "challenges_from_user"
@@ -16,7 +19,7 @@ class ChallengesFromUserId (val repo: UserBoundary.IRepository): UserBoundary.IC
 
     override fun run(userId: String): List<Challenge> {
         try {
-            val challenges = repo.getChallengesFromUserById(userId)
+            val challenges = repo.getChallengesFromUserById(userId,historyAmount)
             Logging.info(
                     EVENT_NAME,
                     TAGS,
