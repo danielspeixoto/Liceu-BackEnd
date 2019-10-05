@@ -46,7 +46,10 @@ class QuestionControllerV2(
             val result = random.run(tagNames, amount)
             ResponseEntity(result.map { toQuestionResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("tags" to tagNames) +
+                    ("amount" to amount)
+            )
         }
     }
 
@@ -69,7 +72,10 @@ class QuestionControllerV2(
             result.map { toVideoResponse(it) }
             ResponseEntity(result.map { toVideoResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("questionId" to questionId) +
+                    ("amount" to amount)
+            )
         }
     }
 
@@ -90,7 +96,9 @@ class QuestionControllerV2(
             val desiredQuestion = toQuestionResponse(result)
             ResponseEntity(desiredQuestion, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("questionId" to questionId)
+            )
         }
     }
 
