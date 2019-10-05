@@ -63,7 +63,13 @@ class TriviaController(
                     "id" to id
             ), HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("userId" to userId) +
+                    ("question" to body["question"]) +
+                    ("correctAnswer" to body["correctAnswer"]) +
+                    ("wrongAnswer" to body["wrongAnswer"]) +
+                    ("tags" to  body["tags"])
+            )
         }
     }
 
@@ -84,7 +90,10 @@ class TriviaController(
             val result = randomQuestions.run(tags, amount)
             ResponseEntity(result.map { toTriviaQuestionResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("tags" to tags) +
+                    ("amount" to amount)
+            )
         }
     }
 
@@ -106,7 +115,11 @@ class TriviaController(
             updateCommentsTrivia.run(questionId, authenticatedUserId, comment)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("userId" to authenticatedUserId) +
+                    ("questionId" to questionId) +
+                    ("comment" to body["comment"])
+            )
         }
     }
 
@@ -127,7 +140,10 @@ class TriviaController(
             updateRatingTrivia.run(questionId,rating)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("questionId" to questionId) +
+                    ("rating" to body["rating"])
+            )
         }
     }
 

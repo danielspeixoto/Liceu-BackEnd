@@ -61,9 +61,6 @@ class UserController (
                 "version" to 2
         ))
         return try {
-            if(userId != authenticatedUserId){
-                throw throw AuthenticationException("user attempting to retrieve other user properties")
-            }
             val result = user.run(userId)
             val desiredUser = toUserResponse(result, authenticatedUserId)
             ResponseEntity(desiredUser, HttpStatus.OK)

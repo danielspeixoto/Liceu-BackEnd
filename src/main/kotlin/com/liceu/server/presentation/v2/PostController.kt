@@ -102,7 +102,12 @@ class PostController(
                     "id" to id
             ), HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("userId" to userId) +
+                    ("type" to body["type"]) +
+                    ("description" to  body["description"]) +
+                    ("hasQuestions" to body["hasQuestions"])
+            )
         }
     }
 
@@ -124,7 +129,11 @@ class PostController(
             updateComments.run(postId, authenticatedUserId, comment)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("postId" to postId) +
+                    ("userId" to authenticatedUserId) +
+                    ("comment" to body["comment"])
+            )
         }
     }
 
@@ -147,7 +156,11 @@ class PostController(
             updateDocument.run(postId, authenticatedUserId,documentTitle,documentData)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("postId" to postId) +
+                    ("userId" to authenticatedUserId) +
+                    ("documentTitle" to body["documentTitle"])
+            )
         }
     }
 
@@ -167,7 +180,10 @@ class PostController(
             deletePosts.run(postId, authenticatedUserId)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
-            handleException(e, eventName, eventTags, networkData)
+            handleException(e, eventName, eventTags, networkData +
+                    ("postId" to postId) +
+                    ("userId" to authenticatedUserId)
+            )
         }
     }
 
