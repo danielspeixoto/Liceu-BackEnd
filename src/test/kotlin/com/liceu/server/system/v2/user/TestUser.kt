@@ -96,6 +96,7 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
         val body = response.body!!
+        Truth.assertThat(body.size).isEqualTo(2)
         Truth.assertThat(body[0]["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_1)
         Truth.assertThat(body[1]["id"]).isEqualTo(testSetup.CHALLENGE_TRIVIA_ID_2)
     }

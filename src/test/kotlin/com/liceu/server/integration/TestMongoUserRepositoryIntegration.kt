@@ -107,7 +107,7 @@ class TestMongoUserRepositoryIntegration {
 
     @Test
     fun challengesFromUser_challengeExists_returnChallenges(){
-        val result = data.getChallengesFromUserById(testSetup.USER_ID_1)
+        val result = data.getChallengesFromUserById(testSetup.USER_ID_1,10)
         val ids = result.map { it.id }
         assertThat(ids).containsExactly(testSetup.CHALLENGE_TRIVIA_ID_4, testSetup.CHALLENGE_TRIVIA_ID_2, testSetup.CHALLENGE_TRIVIA_ID_7, testSetup.CHALLENGE_TRIVIA_ID_8).inOrder()
         assertThat(result[0].challenger).isEqualTo(testSetup.USER_ID_1)
@@ -116,13 +116,13 @@ class TestMongoUserRepositoryIntegration {
 
     @Test
     fun challengesFromUser_challengeDontExists_returnError(){
-        val result = data.getChallengesFromUserById(testSetup.USER_ID_4)
+        val result = data.getChallengesFromUserById(testSetup.USER_ID_4,10)
         assertThat(result.size).isEqualTo(0)
     }
 
     @Test
     fun challengesFromUser_challengerWithNoAnswers_returnNull(){
-        val result = data.getChallengesFromUserById(testSetup.USER_ID_5)
+        val result = data.getChallengesFromUserById(testSetup.USER_ID_5,10)
         assertThat(result.size).isEqualTo(0)
     }
 
