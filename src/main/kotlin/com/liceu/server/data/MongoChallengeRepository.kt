@@ -149,7 +149,6 @@ class MongoChallengeRepository(
         val result = template.findOne(
                 Query.query(Criteria
                         .where("_id").isEqualTo(ObjectId(challengeId))
-                        .and("downloadChallenged").`is`(false)
                 ),
                 MongoDatabase.MongoChallenge::class.java
         )
