@@ -79,7 +79,7 @@ class UpdateDocument(
             val blobId = BlobId.of(bucketName, fileName)
             val blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build()
             val blob = storage.create(blobInfo, imageByteArray)
-            val urlLink = "https://storage.cloud.google.com/${bucketName}/${fileName}"
+            val urlLink = "https://storage.googleapis.com/${bucketName}/${fileName}"
 
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "postId" to postId,

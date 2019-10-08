@@ -30,7 +30,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("arquivoSobreBiologia")
         Truth.assertThat(changedPost.document?.type).isEqualTo("pdf")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/arquivoSobreBiologia.pdf")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/arquivoSobreBiologia.pdf")
 
     }
 
@@ -48,7 +48,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("arquivoSobreGeografia")
         Truth.assertThat(changedPost.document?.type).isEqualTo("txt")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/arquivoSobreGeografia.txt")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/arquivoSobreGeografia.txt")
 
     }
 
@@ -66,7 +66,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("planilhaSobreMatematica")
         Truth.assertThat(changedPost.document?.type).isEqualTo("xls")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/planilhaSobreMatematica.xls")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/planilhaSobreMatematica.xls")
     }
 
     @Test
@@ -83,7 +83,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("planilhaDeAnotaçõesFísica")
         Truth.assertThat(changedPost.document?.type).isEqualTo("xlsx")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/planilhaDeAnotaçõesFísica.xlsx")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/planilhaDeAnotaçõesFísica.xlsx")
     }
 
     @Test
@@ -100,7 +100,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("documentoDeLiteratura")
         Truth.assertThat(changedPost.document?.type).isEqualTo("doc")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/documentoDeLiteratura.doc")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/documentoDeLiteratura.doc")
     }
 
     @Test
@@ -117,7 +117,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("documentoDePortugues")
         Truth.assertThat(changedPost.document?.type).isEqualTo("docx")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/documentoDePortugues.docx")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/documentoDePortugues.docx")
     }
 
     @Test
@@ -134,7 +134,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("slidesDeQuimica")
         Truth.assertThat(changedPost.document?.type).isEqualTo("pptx")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/slidesDeQuimica.pptx")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/slidesDeQuimica.pptx")
     }
 
 
@@ -152,7 +152,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("testandoJpeg")
         Truth.assertThat(changedPost.document?.type).isEqualTo("jpeg")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/testandoJpeg.jpeg")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/testandoJpeg.jpeg")
     }
 
 
@@ -170,7 +170,7 @@ class TestUpdateDocument: TestSystem("/v2/post") {
         val changedPost = postRepo.findById(testSetup.POST_ID_1).get()
         Truth.assertThat(changedPost.document?.title).isEqualTo("testandoPng")
         Truth.assertThat(changedPost.document?.type).isEqualTo("png")
-        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.cloud.google.com/liceu-post-documents/testandoPng.png")
+        Truth.assertThat(changedPost.document?.documentURL).isEqualTo("https://storage.googleapis.com/liceu-post-documents/testandoPng.png")
     }
 
 

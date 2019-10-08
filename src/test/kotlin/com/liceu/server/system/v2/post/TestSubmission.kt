@@ -163,7 +163,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.type).isEqualTo("image")
         Truth.assertThat(insertedPost.description).isEqualTo("teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem")
         Truth.assertThat(insertedPost.image?.title).isEqualTo("essa_foto_representa_algo_legal")
-        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.cloud.google.com/liceu-post-images/essa_foto_representa_algo_legal.jpeg")
+        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.googleapis.com/liceu-post-images/essa_foto_representa_algo_legal.jpeg")
         Truth.assertThat(insertedPost.questions).isEmpty()
     }
 
@@ -188,7 +188,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.type).isEqualTo("image")
         Truth.assertThat(insertedPost.description).isEqualTo("teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem PNG")
         Truth.assertThat(insertedPost.image?.title).isEqualTo("essa_foto_epresenta_algo_sobre_donuts")
-        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.cloud.google.com/liceu-post-images/essa_foto_epresenta_algo_sobre_donuts.png")
+        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.googleapis.com/liceu-post-images/essa_foto_epresenta_algo_sobre_donuts.png")
         Truth.assertThat(insertedPost.questions).isEmpty()
     }
 
@@ -213,7 +213,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.type).isEqualTo("image")
         Truth.assertThat(insertedPost.description).isEqualTo("teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem PNG")
         Truth.assertThat(insertedPost.image?.title).isEqualTo("camera")
-        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.cloud.google.com/liceu-post-images/camera.png")
+        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo("https://storage.googleapis.com/liceu-post-images/camera.png")
         Truth.assertThat(insertedPost.questions).isEmpty()
     }
 
