@@ -2,6 +2,8 @@ package com.liceu.server.presentation.v2
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.post.*
+import com.liceu.server.presentation.util.converters.PostResponse
+import com.liceu.server.presentation.util.converters.toPostResponse
 import com.liceu.server.presentation.util.handleException
 import com.liceu.server.util.Logging
 import com.liceu.server.util.NetworkUtils
@@ -22,7 +24,8 @@ class PostController(
         @Autowired val videoPost: PostBoundary.IVideoPost,
         @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
         @Autowired val updateDocument: PostBoundary.IUpdateDocument,
-        @Autowired val deletePosts: PostBoundary.IDeletePost
+        @Autowired val deletePosts: PostBoundary.IDeletePost,
+        @Autowired val getPostById: PostBoundary.IGetPostById
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -179,6 +182,29 @@ class PostController(
         return try {
             deletePosts.run(postId, authenticatedUserId)
             ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("postId" to postId) +
+                    ("userId" to authenticatedUserId)
+            )
+        }
+    }
+
+    @GetMapping("/{postId}")
+    fun getPostById(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("postId") postId: String,
+            request: HttpServletRequest
+    ): ResponseEntity<PostResponse> {
+        val eventName = "get_post_by_id"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, ID, RETRIEVAL)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val postRetrieved = getPostById.run(postId)
+            ResponseEntity(toPostResponse(postRetrieved),HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +
                     ("postId" to postId) +
