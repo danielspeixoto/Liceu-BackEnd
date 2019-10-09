@@ -54,6 +54,9 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${values.challengeHistoryAmount}")
     var challengeHistoryAmount: Int = 10
 
+    @Value("\${slack.slackReportWebhook}")
+    lateinit var reportWebhookURL: String
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -240,7 +243,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun submitReport(): ReportBoundary.ISubmit{
-        return SubmitReport(mongoReportRepository)
+        return SubmitReport(mongoReportRepository,reportWebhookURL)
     }
 
     @Bean

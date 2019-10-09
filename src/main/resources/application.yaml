@@ -11,6 +11,9 @@ google:
   imageBucket: ${GOOGLE_IMAGE_BUCKET}
   documentBucket: ${GOOGLE_DOCUMENT_BUCKET}
 
+slack:
+  slackReportWebhook: ${SLACK_REPORT_WEBHOOK}
+
 client:
   api_key: ${API_KEY}
 

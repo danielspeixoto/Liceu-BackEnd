@@ -2,12 +2,14 @@ package com.liceu.server.domain.report
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
+import com.liceu.server.domain.util.slackIntegration.slackReport
 import com.liceu.server.util.Logging
 import java.lang.Exception
 
 
 class SubmitReport(
-        val reportRepository: ReportBoundary.IRepository
+        val reportRepository: ReportBoundary.IRepository,
+        val reportWebhookURL: String
 ): ReportBoundary.ISubmit {
 
     companion object {
@@ -44,7 +46,6 @@ class SubmitReport(
                             throw TypeMismatchException("Type not acceptable")
                         }
                     }
-
             val id = reportRepository.insert(ReportToInsert(
                     report.userId,
                     report.message,
@@ -58,6 +59,7 @@ class SubmitReport(
                     "tagsAmount" to report.tags.size,
                     "paramsAmount" to report.params.size
             ))
+            slackReport(report,reportWebhookURL)
             return id
 
         }catch (e: Exception){
