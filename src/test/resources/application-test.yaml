@@ -8,6 +8,9 @@ google:
   imageBucket: liceu-general-tests
   documentBucket: liceu-general-tests
 
+slack:
+  slackReportWebhook: https://hooks.slack.com/services/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
+
 facebook:
   accessToken: ${FACEBOOK_ACCESS_TOKEN:empty}
 

@@ -8,7 +8,8 @@ import java.lang.Exception
 
 
 class SubmitReport(
-        val reportRepository: ReportBoundary.IRepository
+        val reportRepository: ReportBoundary.IRepository,
+        val reportWebhookURL: String
 ): ReportBoundary.ISubmit {
 
     companion object {
@@ -58,7 +59,7 @@ class SubmitReport(
                     "tagsAmount" to report.tags.size,
                     "paramsAmount" to report.params.size
             ))
-            slackReport(report)
+            slackReport(report,reportWebhookURL)
             return id
 
         }catch (e: Exception){
