@@ -205,6 +205,28 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
+    fun getPostById_postExists_returnOnePost(){
+        val retrievedPost = data.getPostById(testSetup.POST_ID_4)
+        assertThat(retrievedPost.id).isEqualTo(testSetup.POST_ID_4)
+        assertThat(retrievedPost.userId).isEqualTo(testSetup.USER_ID_3)
+        assertThat(retrievedPost.type).isEqualTo("text")
+        assertThat(retrievedPost.description).isEqualTo("teste de texto 2")
+        assertThat(retrievedPost.image?.title).isNull()
+        assertThat(retrievedPost.image?.type).isNull()
+        assertThat(retrievedPost.image?.imageData).isNull()
+        assertThat(retrievedPost.video?.videoUrl).isNull()
+        assertThat(retrievedPost.video?.thumbnails?.medium).isNull()
+        assertThat(retrievedPost.video?.thumbnails?.high).isNull()
+        assertThat(retrievedPost.video?.thumbnails?.default).isNull()
+        assertThat(retrievedPost.comments).isNull()
+        assertThat(retrievedPost.questions).isNull()
+        assertThat(retrievedPost.document?.id).isNull()
+        assertThat(retrievedPost.document?.title).isNull()
+        assertThat(retrievedPost.document?.type).isNull()
+        assertThat(retrievedPost.document?.documentURL).isNull()
+    }
+
+    @Test
     fun updateListOfComments_postExists_verifyCommentsFromPost(){
         val result1 = data.updateListOfComments(testSetup.POST_ID_1,testSetup.USER_ID_2,"user2","post interessante 1")
         val result2 = data.updateListOfComments(testSetup.POST_ID_1,testSetup.USER_ID_2,"user2","post interessante 2")

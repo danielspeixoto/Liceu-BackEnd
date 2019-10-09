@@ -40,6 +40,10 @@ class PostBoundary {
         fun run(amount: Int): List<Post>
     }
 
+    interface IGetPostById {
+        fun run(postId: String): Post
+    }
+
     interface IUpdateListOfComments{
         fun run(postId: String,userId: String,comment: String)
     }
