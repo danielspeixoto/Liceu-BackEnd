@@ -8,6 +8,7 @@ import com.google.cloud.storage.BlobId
 import java.io.FileInputStream
 import com.google.auth.oauth2.ServiceAccountCredentials
 import com.liceu.server.domain.global.*
+import com.liceu.server.domain.util.dateFunctions.DateFunctions
 import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 import com.liceu.server.domain.util.fileFunctions.FileFunctions
 import java.util.*
@@ -21,6 +22,12 @@ class ImagePost(
         const val EVENT_NAME = "text_post_submission"
         val TAGS = listOf(INSERTION, IMAGE, POST)
     }
+
+    //bucket connection
+    val storage = StorageOptions.newBuilder()
+            .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("googleImagesLiceu.json")))
+            .build()
+            .service
 
     override fun run(post: PostSubmission): String {
         val imageTypes = hashMapOf(
@@ -47,18 +54,13 @@ class ImagePost(
                 throw OverflowSizeException("image is greater than 10MB")
             }
 
-            //bucket connection
-            val storage = StorageOptions.newBuilder()
-                    .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("googleImagesLiceu.json")))
-                    .build()
-                    .service
-
             //decoding and retrieving image type
             var contentType = fileExtension
             imageTypes.forEach {
                 fileExtension = fileExtension.replace(it.key,it.value)
             }
-            var fileName = "${post.image.title}.${fileExtension}"
+            var timeStamp = DateFunctions.retrieveActualTimeStamp().toString().replace("\\s".toRegex(), "")
+            var fileName = "${post.image.title}${post.userId}${timeStamp}.${fileExtension}"
             val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
 
             //uploading files to liceu test bucket
