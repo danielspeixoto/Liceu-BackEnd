@@ -9,7 +9,7 @@ google:
   documentBucket: liceu-general-tests
 
 slack:
-  slackReportWebhook: https://hooks.slack.com/services/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
+  slackReportWebhook: https%3A%2F%2Fhooks.slack.com%2Fservices%2F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
 
 facebook:
   accessToken: ${FACEBOOK_ACCESS_TOKEN:empty}
