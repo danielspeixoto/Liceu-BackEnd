@@ -45,9 +45,6 @@ class SubmitReport(
                             throw TypeMismatchException("Type not acceptable")
                         }
                     }
-
-            slackReport(report)
-
             val id = reportRepository.insert(ReportToInsert(
                     report.userId,
                     report.message,
@@ -61,6 +58,7 @@ class SubmitReport(
                     "tagsAmount" to report.tags.size,
                     "paramsAmount" to report.params.size
             ))
+            slackReport(report)
             return id
 
         }catch (e: Exception){
