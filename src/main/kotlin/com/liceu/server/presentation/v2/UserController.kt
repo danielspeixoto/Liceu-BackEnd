@@ -38,6 +38,8 @@ class UserController (
         @Autowired val updateProfileImage: UserBoundary.IUpdateProfileImage,
         @Autowired val updateFcmToken: UserBoundary.IUpdateFcmToken,
         @Autowired val updateLastAccess: UserBoundary.IUpdateLastAccess,
+        @Autowired val updateDesiredCourse: UserBoundary.IUpdateCourse,
+        @Autowired val updateTelephoneNumber: UserBoundary.IUpdateTelephoneNumber,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
         @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
         @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
@@ -525,6 +527,66 @@ class UserController (
             handleException(e, eventName, eventTags, networkData +
                     ("authenticatedUserId" to authenticatedUserId) +
                     ("pathVariableUserId" to userId)
+            )
+        }
+    }
+
+    @PutMapping("/{userId}/course")
+    fun updateDesiredCourse(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "update_course_desired"
+        val eventTags = listOf(CONTROLLER, NETWORK, COURSE, UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
+            val desiredCourse = body["desiredCourse"] as String? ?: throw ValidationException ()
+            updateDesiredCourse.run(authenticatedUserId,desiredCourse)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("course" to body["desiredCourse"])
+            )
+        }
+    }
+
+    @PutMapping("/{userId}/telephone")
+    fun updateTelephoneNumber(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "update_telephone_number"
+        val eventTags = listOf(CONTROLLER, NETWORK, TELEPHONE, UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
+            val telephoneNumber = body["telephoneNumber"] as String? ?: throw ValidationException ()
+            updateTelephoneNumber.run(authenticatedUserId,telephoneNumber)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("telephoneNumber" to body["telephoneNumber"])
             )
         }
     }

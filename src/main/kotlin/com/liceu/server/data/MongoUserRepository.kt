@@ -207,6 +207,28 @@ class MongoUserRepository(
         return result.modifiedCount
     }
 
+    override fun updateDesiredCourse(userId: String, course: String): Long {
+        val update = Update()
+        update.set("desiredCourse",course)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateTelephoneNumber(userId: String, telephoneNumber: String): Long {
+        val update = Update()
+        update.set("telephoneNumber",telephoneNumber)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
     override fun getUserById(userId: String): User {
         val match = Aggregation.match(Criteria("_id").isEqualTo(ObjectId(userId)))
         val agg = Aggregation.newAggregation(match)

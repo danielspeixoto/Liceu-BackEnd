@@ -237,6 +237,16 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateDesiredCourse(): UserBoundary.IUpdateCourse {
+        return UpdateDesiredCourse (mongoUserRepository)
+    }
+
+    @Bean
+    fun updateTelephoneNumber(): UserBoundary.IUpdateTelephoneNumber {
+        return UpdateTelephoneNumber(mongoUserRepository)
+    }
+
+    @Bean
     fun getQuestionById(): QuestionBoundary.IQuestionById{
         return QuestionById(mongoQuestionRepository)
     }

@@ -20,5 +20,7 @@ data class User(
         val followers: List<String>?,
         val following: List<String>?,
         val fcmToken: String?,
-        val lastAccess: Date?
+        val lastAccess: Date?,
+        val desiredCourse: String?,
+        val telephoneNumber: String?
 )
