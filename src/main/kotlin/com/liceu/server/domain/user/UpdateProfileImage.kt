@@ -19,6 +19,13 @@ class UpdateProfileImage(
         val TAGS = listOf(UPDATE, PROFILE ,IMAGE)
     }
 
+
+    //bucket connection
+    val storage = StorageOptions.newBuilder()
+            .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("googleImagesLiceu.json")))
+            .build()
+            .service
+
     override fun run(userId: String, imageData: String) {
         val imageTypes = hashMapOf(
                 "image/jpeg" to "jpeg",
@@ -38,12 +45,6 @@ class UpdateProfileImage(
                 throw OverflowSizeException("image size is greater than 10MB")
             }
 
-            //bucket connection
-            val storage = StorageOptions.newBuilder()
-                    .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("googleImagesLiceu.json")))
-                    .build()
-                    .service
-
             //decoding and retrieving image type
             var contentType = fileExtension
             imageTypes.forEach {
@@ -51,7 +52,7 @@ class UpdateProfileImage(
             }
 
             var userName = userRepository.getUserById(userId).name
-            var fileName = "${userName}.${fileExtension}"
+            var fileName = "${userName}${userId}.${fileExtension}"
             val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
 
             //uploading files to liceu test bucket
