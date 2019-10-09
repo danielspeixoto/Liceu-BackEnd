@@ -12,7 +12,7 @@ fun slackMessageFormatter(report: ReportSubmission): JSONObject{
     val tagsFields = JSONArray()
     val paramsFields = JSONArray()
 
-    json["text"] = report.message+" outside";
+    json["text"] = report.message;
     json["username"] = report.userId;
     report.tags.forEach {
         var eachField = hashMapOf(
