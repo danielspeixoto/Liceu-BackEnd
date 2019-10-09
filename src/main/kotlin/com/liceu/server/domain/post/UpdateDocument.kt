@@ -6,6 +6,7 @@ import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.StorageOptions
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.user.UserBoundary
+import com.liceu.server.domain.util.dateFunctions.DateFunctions
 import com.liceu.server.domain.util.fileFunctions.FileFunctions
 import com.liceu.server.util.Logging
 import java.io.FileInputStream
@@ -21,6 +22,12 @@ class UpdateDocument(
         const val EVENT_NAME = "post_document_update"
         val TAGS = listOf(UPDATE, POST, DOCUMENT)
     }
+
+    //bucket connection
+    val storage = StorageOptions.newBuilder()
+            .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("googleImagesLiceu.json")))
+            .build()
+            .service
 
     override fun run(postId: String, userId: String, title: String, documentData: String) {
         try {
@@ -61,18 +68,13 @@ class UpdateDocument(
                 throw OverflowSizeException("image is greater than 10MB")
             }
 
-            //bucket connection
-            val storage = StorageOptions.newBuilder()
-                    .setCredentials(ServiceAccountCredentials.fromStream(FileInputStream("googleImagesLiceu.json")))
-                    .build()
-                    .service
-
             //decoding and retrieving image type
             var contentType = fileExtension
             documentTypes.forEach {
                 fileExtension = fileExtension.replace(it.key,it.value)
             }
-            var fileName = "${title}.${fileExtension}"
+            var timeStamp = DateFunctions.retrieveActualTimeStamp().toString().replace("\\s".toRegex(), "")
+            var fileName = "${title}${userId}${timeStamp}.${fileExtension}"
             val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
 
             //uploading files to liceu test bucket

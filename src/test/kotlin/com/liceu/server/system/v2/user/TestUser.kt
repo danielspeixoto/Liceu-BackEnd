@@ -333,7 +333,7 @@ class TestUser: TestSystem("/v2/user") {
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_1}/profileImage", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val user = data.getUserById(testSetup.USER_ID_1)
-        Truth.assertThat(user.picture.url).isEqualTo("https://storage.googleapis.com/liceu-post-images/user1.jpeg")
+        Truth.assertThat(user.picture.url).isEqualTo("https://storage.googleapis.com/liceu-general-tests/user1${testSetup.USER_ID_1}.jpeg")
     }
 
     @Test
@@ -348,7 +348,7 @@ class TestUser: TestSystem("/v2/user") {
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/profileImage", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val user = data.getUserById(testSetup.USER_ID_2)
-        Truth.assertThat(user.picture.url).isEqualTo("https://storage.googleapis.com/liceu-post-images/user2.png")
+        Truth.assertThat(user.picture.url).isEqualTo("https://storage.googleapis.com/liceu-general-tests/user2${testSetup.USER_ID_2}.png")
     }
 
     @Test
