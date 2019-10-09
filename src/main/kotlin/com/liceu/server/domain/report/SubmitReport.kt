@@ -2,6 +2,7 @@ package com.liceu.server.domain.report
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
+import com.liceu.server.domain.util.slackIntegration.slackReport
 import com.liceu.server.util.Logging
 import java.lang.Exception
 
@@ -44,6 +45,8 @@ class SubmitReport(
                             throw TypeMismatchException("Type not acceptable")
                         }
                     }
+
+            slackReport(report)
 
             val id = reportRepository.insert(ReportToInsert(
                     report.userId,

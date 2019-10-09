@@ -23,7 +23,7 @@ class TestReport: TestSystem("/v2/report") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(hashMapOf(
-                "message" to "esse e um teste ahahahah",
+                "message" to "Esse e um teste de integracao ahahahah",
                 "tags" to listOf(
                     "teste1",
                     "teste2",
@@ -44,7 +44,7 @@ class TestReport: TestSystem("/v2/report") {
         val insertedGame = userRepo.findById(id).get()
 
         Truth.assertThat(insertedGame.userId.toHexString()).isEqualTo(testSetup.USER_ID_1)
-        Truth.assertThat(insertedGame.message).isEqualTo("esse e um teste ahahahah")
+        Truth.assertThat(insertedGame.message).isEqualTo("Esse e um teste de integracao ahahahah")
         Truth.assertThat(insertedGame.tags.size).isEqualTo(3)
         Truth.assertThat(insertedGame.params.size).isEqualTo(2)
         Truth.assertThat(insertedGame.tags[0]).isEqualTo("teste1")
