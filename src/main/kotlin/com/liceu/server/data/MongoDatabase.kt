@@ -1,5 +1,6 @@
 package com.liceu.server.data
 
+import com.liceu.server.domain.user.UpdateDesiredCourse
 import com.liceu.server.domain.user.UserBoundary
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
@@ -103,7 +104,9 @@ class MongoDatabase {
             var followers: List<ObjectId>?,
             var following: List<ObjectId>?,
             var fcmToken: String?=null,
-            var lastAccess: Date?=null
+            var lastAccess: Date?=null,
+            var desiredCourse: String?=null,
+            var telephoneNumber: String?=null
     ) {
         @Id
         lateinit var id: ObjectId

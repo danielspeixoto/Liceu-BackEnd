@@ -35,6 +35,8 @@ class UserBoundary {
         fun updateProfileImage(userId: String, imageURL: String): Long
         fun updateFcmTokenFromUser(userId: String, fcmToken: String): Long
         fun updateLastAccess(userId: String, loginAccess: Date): Long
+        fun updateDesiredCourse(userId: String, course: String): Long
+        fun updateTelephoneNumber(userId: String, telephoneNumber: String): Long
         fun userExists(userId: String): Boolean
     }
 
@@ -84,6 +86,14 @@ class UserBoundary {
 
     interface IUpdateLastAccess {
         fun run (userId: String)
+    }
+
+    interface IUpdateCourse {
+        fun run (userId: String,course: String)
+    }
+
+    interface IUpdateTelephoneNumber {
+        fun run (userId: String,telephoneNumber: String)
     }
 
     interface IUserById {

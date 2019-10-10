@@ -278,4 +278,18 @@ class TestMongoUserRepositoryIntegration {
         assertThat(check.id).isNotNull()
     }
 
+    @Test
+    fun updateDesiredCourse_userExists_verifyUser(){
+        val change = data.updateDesiredCourse(testSetup.USER_ID_2,"matematica")
+        val userChanged = data.getUserById(testSetup.USER_ID_2)
+        assertThat(userChanged.desiredCourse).isEqualTo("matematica")
+    }
+
+    @Test
+    fun updateTelephoneNumber_userExists_verifyUser(){
+        val change = data.updateTelephoneNumber(testSetup.USER_ID_3,"71988556644")
+        val userChanged = data.getUserById(testSetup.USER_ID_3)
+        assertThat(userChanged.telephoneNumber).isEqualTo("71988556644")
+    }
+
 }

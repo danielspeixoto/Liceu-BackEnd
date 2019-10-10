@@ -383,6 +383,180 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(activitiesFromUser[0].type).isEqualTo("lastAccessRegister")
     }
 
+    @Test
+    fun updateDesiredCourse_userExists_returnVoidAndVerifyUser(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "desiredCourse" to "fisica"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/course", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        Truth.assertThat(user.desiredCourse).isEqualTo("fisica")
+    }
+
+    @Test
+    fun updateTelephoneNumber_userExists_returnVoidAndVerifyUser(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to "71988553321"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        Truth.assertThat(user.telephoneNumber).isEqualTo("71988553321")
+    }
+
+    @Test
+    fun updateTelephoneNumber_userExistsDifferentNumber_returnVoidAndVerifyUser(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to "719-8855-3321"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        Truth.assertThat(user.telephoneNumber).isEqualTo("71988553321")
+    }
+
+    @Test
+    fun updateTelephoneNumber_differentNumber_returnVoidAndVerifyUser(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to "(71)9-8855-3321"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        Truth.assertThat(user.telephoneNumber).isEqualTo("71988553321")
+    }
+
+    @Test
+    fun updateTelephoneNumber_differentNumberWithoutDash_returnVoidAndVerifyUser(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to "(71)98855-3321"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        Truth.assertThat(user.telephoneNumber).isEqualTo("71988553321")
+    }
+
+    @Test
+    fun updateTelephoneNumber_wrongUserProfileOwner_returnUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to "fisica"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun updateTelephoneNumber_wrongNumberFormat_returnInternalServerError(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to "(71988223344"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @Test
+    fun updateTelephoneNumber_wrongTelephoneNumberFormat_returnInternalServerError(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to "71--988223344"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @Test
+    fun updateTelephoneNumber_telephoneNumberToEmpty_returnBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to ""
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateTelephoneNumber_telephoneNumberToNull_returnBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "telephoneNumber" to null
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateDesiredCourse_wrongUserProfileOwner_returnUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "desiredCourse" to "fisica"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/course", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+    @Test
+    fun updateDesiredCourse_desiredCourseToEmpty_returnBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "desiredCourse" to ""
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/course", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateDesiredCourse_desiredCourseToNull_returnBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "desiredCourse" to null
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/course", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
 
     @Test
     fun updateLastAccess_wrongUserProfileOwner_returnUnauthorized(){
