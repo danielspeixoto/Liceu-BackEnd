@@ -150,7 +150,8 @@ class MongoDatabase {
             val tags: List<String>,
             val comments: List<MongoComment>?,
             val likes: Int?,
-            val dislikes: Int?
+            val dislikes: Int?,
+            val approvalFlag: Boolean?=null
     ) {
         @Id
         lateinit var id: ObjectId

@@ -36,6 +36,7 @@ class DataSetup {
     val QUESTION_TRIVIA_ID_3 = "0a1449a4bdb40abd5ae1e421"
     val QUESTION_TRIVIA_ID_4 = "0a1449a4bdb40abd5ae1e432"
     val QUESTION_TRIVIA_ID_5 = "0a1449a4bdb40abd5ae1e433"
+    val QUESTION_TRIVIA_ID_6 = "0a1449a4bdb40aba5ae1e433"
 
     val CHALLENGE_TRIVIA_ID_1 = "09c54d325b75357a571d4ca2"
     val CHALLENGE_TRIVIA_ID_2 = "09c54d325b75357a571d4cb2"
@@ -620,7 +621,8 @@ class DataSetup {
                 ),
                 null,
                 3,
-                4
+                4,
+                true
         )
         q1.id = ObjectId(QUESTION_TRIVIA_ID_1)
         triviaRepo.insert(q1)
@@ -637,7 +639,8 @@ class DataSetup {
                     ),
                 null,
                 null,
-                null
+                null,
+                true
             )
             q2.id = ObjectId(QUESTION_TRIVIA_ID_2)
             triviaRepo.insert(q2)
@@ -654,7 +657,8 @@ class DataSetup {
                     ),
                 null,
                 null,
-                null
+                null,
+                true
             )
             q3.id = ObjectId(QUESTION_TRIVIA_ID_3)
             triviaRepo.insert(q3)
@@ -671,7 +675,8 @@ class DataSetup {
                     ),
                 null,
                 null,
-                null
+                null,
+                true
             )
             q4.id = ObjectId(QUESTION_TRIVIA_ID_4)
             triviaRepo.insert(q4)
@@ -687,10 +692,28 @@ class DataSetup {
                 ),
                 null,
                 null,
-                null
+                null,
+                true
         )
         q5.id = ObjectId(QUESTION_TRIVIA_ID_5)
         triviaRepo.insert(q5)
+
+        val q6 = MongoDatabase.MongoTriviaQuestion(
+                ObjectId(USER_ID_3),
+                "Quem descobriu o cnancanan?",
+                "Pedro Alvares Cabral",
+                "Geralt",
+                listOf(
+                        "historia",
+                        "descoberta"
+                ),
+                null,
+                null,
+                null,
+                false
+        )
+        q6.id = ObjectId(QUESTION_TRIVIA_ID_6)
+        triviaRepo.insert(q6)
     }
 
     fun challenge() {
