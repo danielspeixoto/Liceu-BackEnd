@@ -422,7 +422,7 @@ class TestUser: TestSystem("/v2/user") {
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
         val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        Truth.assertThat(user.telephoneNumber).isEqualTo("719-8855-3321")
+        Truth.assertThat(user.telephoneNumber).isEqualTo("71988553321")
     }
 
     @Test
@@ -436,7 +436,7 @@ class TestUser: TestSystem("/v2/user") {
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
         val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        Truth.assertThat(user.telephoneNumber).isEqualTo("(71)9-8855-3321")
+        Truth.assertThat(user.telephoneNumber).isEqualTo("71988553321")
     }
 
     @Test
@@ -450,7 +450,7 @@ class TestUser: TestSystem("/v2/user") {
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
         val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        Truth.assertThat(user.telephoneNumber).isEqualTo("(71)98855-3321")
+        Truth.assertThat(user.telephoneNumber).isEqualTo("71988553321")
     }
 
     @Test

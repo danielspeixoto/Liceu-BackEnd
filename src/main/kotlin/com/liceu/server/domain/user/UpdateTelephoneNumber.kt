@@ -5,7 +5,8 @@ import com.liceu.server.util.Logging
 
 class UpdateTelephoneNumber(
         private val userRepository: UserBoundary.IRepository,
-        private val TELEPHONE_NUMBER_CHECK: Regex  = "(\\([1-9]{2}\\)|[1-9]{2})9[-\\.]?[0-9]{4}[-\\.]?[0-9]{4}".toRegex()
+        private val TELEPHONE_NUMBER_CHECK: Regex  = "(\\([1-9]{2}\\)|[1-9]{2})9[-\\.]?[0-9]{4}[-\\.]?[0-9]{4}".toRegex(),
+        private val REMOVE_CHARACTERS: Regex = "[^0-9.]".toRegex()
 ): UserBoundary.IUpdateTelephoneNumber{
     companion object {
         const val EVENT_NAME = "update_user_telephone_number"
@@ -20,11 +21,12 @@ class UpdateTelephoneNumber(
             if(!TELEPHONE_NUMBER_CHECK.matches(telephoneNumber)){
                 throw TypeMismatchException("Incorrect form of telephone number")
             }
+            val normalizedTelephoneNumber = REMOVE_CHARACTERS.replace(telephoneNumber, "").trim()
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to userId,
-                    "telephoneNumber" to telephoneNumber
+                    "telephoneNumber" to normalizedTelephoneNumber
             ))
-            userRepository.updateTelephoneNumber(userId,telephoneNumber)
+            userRepository.updateTelephoneNumber(userId,normalizedTelephoneNumber)
         } catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e
