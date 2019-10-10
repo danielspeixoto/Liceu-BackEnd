@@ -80,7 +80,8 @@ class MongoPostRepository(
     }
 
     override fun getPostFromUser(userId: String): List<Post> {
-        val match = Aggregation.match(Criteria("userId").isEqualTo(ObjectId(userId)))
+        val match = Aggregation.match(Criteria("userId").isEqualTo(ObjectId(userId))
+                .and("approvalFlag").isEqualTo(true))
         val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
         val agg = Aggregation.newAggregation(match,sortByDate)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
@@ -91,9 +92,9 @@ class MongoPostRepository(
         if(amount == 0){
             return emptyList()
         }
+        val match = Aggregation.match(Criteria("approvalFlag").isEqualTo(true))
         val sample = Aggregation.sample(amount.toLong())
-        val agg = Aggregation.newAggregation(sample)
-
+        val agg = Aggregation.newAggregation(match,sample)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         return results.map { toPost(it) }
     }

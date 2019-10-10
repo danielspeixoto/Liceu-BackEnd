@@ -153,7 +153,8 @@ class MongoDatabase {
             val tags: List<String>,
             val comments: List<MongoComment>?,
             val likes: Int?,
-            val dislikes: Int?
+            val dislikes: Int?,
+            val approvalFlag: Boolean?=null
     ) {
         @Id
         lateinit var id: ObjectId
@@ -202,7 +203,8 @@ class MongoDatabase {
         val submissionDate: Date,
         val comments: List<MongoComment>?,
         val questions: List<MongoPostQuestions>?,
-        val document: MongoPostDocument?
+        val document: MongoPostDocument?,
+        val approvalFlag: Boolean?=null
     ){
         @Id
         lateinit var id: ObjectId

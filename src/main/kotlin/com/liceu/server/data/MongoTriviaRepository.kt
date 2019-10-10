@@ -38,8 +38,9 @@ class MongoTriviaRepository(
         if(amount == 0){
             return emptyList()
         }
+        val match = Aggregation.match(Criteria("approvalFlag").isEqualTo(true))
         val sample = Aggregation.sample(amount.toLong())
-        val agg = Aggregation.newAggregation(sample)
+        val agg = Aggregation.newAggregation(match,sample)
 
         val results = template.aggregate(agg, MongoDatabase.TRIVIA_COLLECTION, MongoDatabase.MongoTriviaQuestion::class.java)
         return results.map { toTriviaQuestion(it) }
