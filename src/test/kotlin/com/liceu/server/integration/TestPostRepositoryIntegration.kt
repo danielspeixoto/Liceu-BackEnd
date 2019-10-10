@@ -195,7 +195,7 @@ class TestPostRepositoryIntegration {
     @Test
     fun getRandomPosts_postsExists_returnListOfPosts(){
         val retrievedPosts = data.getRandomPosts(10)
-        assertThat(retrievedPosts.size).isEqualTo(5)
+        assertThat(retrievedPosts.size).isEqualTo(4)
     }
 
     @Test
