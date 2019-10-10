@@ -1053,7 +1053,8 @@ class DataSetup {
                                 )
                         )
                 ),
-                null
+                null,
+                true
         )
         post1.id = ObjectId(POST_ID_1)
         postRepo.insert(post1)
@@ -1074,7 +1075,8 @@ class DataSetup {
                                 )
                         )
                 ),
-                null
+                null,
+                true
         )
         post2.id = ObjectId(POST_ID_2)
         postRepo.insert(post2)
@@ -1107,7 +1109,8 @@ class DataSetup {
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
                 null,
                 null,
-                null
+                null,
+                true
         )
         post4.id = ObjectId(POST_ID_4)
         postRepo.insert(post4)
@@ -1120,7 +1123,8 @@ class DataSetup {
                 Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
                 null,
                 null,
-                null
+                null,
+                true
         )
         post5.id = ObjectId(POST_ID_5)
         postRepo.insert(post5)
