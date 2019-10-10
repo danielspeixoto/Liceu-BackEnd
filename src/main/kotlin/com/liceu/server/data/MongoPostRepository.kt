@@ -91,9 +91,9 @@ class MongoPostRepository(
         if(amount == 0){
             return emptyList()
         }
+        val match = Aggregation.match(Criteria("approvalFlag").isEqualTo(true))
         val sample = Aggregation.sample(amount.toLong())
-        val agg = Aggregation.newAggregation(sample)
-
+        val agg = Aggregation.newAggregation(match,sample)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         return results.map { toPost(it) }
     }
