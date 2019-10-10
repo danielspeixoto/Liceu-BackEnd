@@ -327,6 +327,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun getPostById(): PostBoundary.IGetPostById {
+        return GetPostById(mongoPostRepository)
+    }
+
+    @Bean
     fun updateComments(): PostBoundary.IUpdateListOfComments {
         return UpdateComments(mongoPostRepository,mongoUserRepository)
     }
