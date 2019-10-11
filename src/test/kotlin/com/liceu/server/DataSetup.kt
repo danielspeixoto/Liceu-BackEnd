@@ -409,7 +409,9 @@ class DataSetup {
                 listOf(
                         ObjectId(USER_ID_2),
                         ObjectId(USER_ID_4)
-                )
+                ),
+                desiredCourse = "Cientista",
+                telephoneNumber = "71923232323"
         )
         user3.id = ObjectId(USER_ID_3)
         userRepo.insert(user3)

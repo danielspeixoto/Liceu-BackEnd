@@ -20,7 +20,9 @@ import com.liceu.server.domain.user.User
             val website: String?,
             val amountOfFollowers: Int,
             val amountOfFollowing: Int,
-            val following: Boolean
+            val following: Boolean,
+            val desiredCourse: String?,
+            val telephoneNumber: String?
     )
 
 
@@ -51,6 +53,8 @@ import com.liceu.server.domain.user.User
                 user.website,
                 amountOfFollowers,
                 amountOfFollowing,
-                isFollowing
+                isFollowing,
+                user.desiredCourse,
+                user.telephoneNumber
         )
     }
