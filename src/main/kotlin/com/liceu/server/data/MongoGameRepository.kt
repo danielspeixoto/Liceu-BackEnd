@@ -56,10 +56,10 @@ class MongoGameRepository(
                 .and("score").ne(null)
 
         )
-        val sortByScore = Aggregation.sort(Sort.Direction.DESC, "score")
-        val sortByTimeSpent = Aggregation.sort(Sort.Direction.ASC, "timeSpent")
+        val sortFields = Aggregation.sort(Sort.Direction.DESC, "score")
+                .and(Sort.Direction.ASC,"timeSpent")
         val amountRetrieved = Aggregation.limit(amount.toLong()+10)
-        val agg = Aggregation.newAggregation(match,sortByTimeSpent,sortByScore,amountRetrieved)
+        val agg = Aggregation.newAggregation(match,sortFields,amountRetrieved)
         val resultList = template.aggregate(agg,MongoDatabase.GAME_COLLECTION, MongoDatabase.MongoGame::class.java).toList()
 
         gameList = arrayListOf()
