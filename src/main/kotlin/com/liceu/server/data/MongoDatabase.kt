@@ -106,11 +106,11 @@ class MongoDatabase {
             var fcmToken: String?=null,
             var lastAccess: Date?=null,
             var desiredCourse: String?=null,
-            var telephoneNumber: String?=null
+            var telephoneNumber: String?=null,
+            val postsAutomaticApproval: Boolean?=false
     ) {
         @Id
         lateinit var id: ObjectId
-
 
     }
 

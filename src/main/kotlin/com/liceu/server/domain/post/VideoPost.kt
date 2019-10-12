@@ -1,13 +1,18 @@
 package com.liceu.server.domain.post
 
+import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.global.*
+import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.util.Logging
 import org.springframework.web.util.UriComponentsBuilder
 import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
+import com.liceu.server.domain.util.postsFunctions.postsAutomaticApproval
 
 
 class VideoPost(
-        private val postRepository: PostBoundary.IRepository
+        private val postRepository: PostBoundary.IRepository,
+        private val userRepository: UserBoundary.IRepository,
+        private val postsMinimumApproval: Int
 ): PostBoundary.IVideoPost {
 
     companion object{
@@ -61,7 +66,8 @@ class VideoPost(
                     ),
                     retrieveActualTimeStamp(),
                     null,
-                    post.questions
+                    post.questions,
+                    postsAutomaticApproval(postRepository,userRepository,post.userId,postsMinimumApproval)
             ))
         }catch (e: Exception){
             Logging.error(EVENT_NAME,TAGS,e)

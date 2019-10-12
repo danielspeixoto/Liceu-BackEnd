@@ -7,16 +7,21 @@ import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.BlobId
 import java.io.FileInputStream
 import com.google.auth.oauth2.ServiceAccountCredentials
+import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.global.*
+import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.util.dateFunctions.DateFunctions
 import com.liceu.server.domain.util.dateFunctions.DateFunctions.retrieveActualTimeStamp
 import com.liceu.server.domain.util.fileFunctions.FileFunctions
+import com.liceu.server.domain.util.postsFunctions.postsAutomaticApproval
 import java.util.*
 
 
 class ImagePost(
-        private val postRepository: MongoPostRepository,
-        private val bucketName: String
+        private val postRepository: PostBoundary.IRepository,
+        private val bucketName: String,
+        private val userRepository: UserBoundary.IRepository,
+        private val postsMinimumApproval: Int
 ): PostBoundary.IImagePost {
     companion object{
         const val EVENT_NAME = "text_post_submission"
@@ -87,7 +92,8 @@ class ImagePost(
                     post.video,
                     retrieveActualTimeStamp(),
                     null,
-                    post.questions
+                    post.questions,
+                    postsAutomaticApproval(postRepository,userRepository,post.userId,postsMinimumApproval)
             ))
 
         }catch (e: Exception){

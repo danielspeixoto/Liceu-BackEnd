@@ -52,7 +52,8 @@ class MongoPostRepository(
                         it.correctAnswer,
                         it.otherAnswers
                 ) },
-                null
+                null,
+                postToInsert.approvalFlag
         ))
         return result.id.toHexString()
     }
@@ -143,5 +144,13 @@ class MongoPostRepository(
         )
         return result?.let { toPost(it) }
     }
+
+    override fun countApprovedPosts(userId: String): Int {
+        val query = Query()
+        query.addCriteria(Criteria.where("userId").isEqualTo(ObjectId(userId))
+                .and("approvalFlag").isEqualTo(true))
+        return template.count(query,MongoDatabase.MongoPost::class.java).toInt()
+    }
+
 
 }

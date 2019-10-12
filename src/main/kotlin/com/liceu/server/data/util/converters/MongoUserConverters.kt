@@ -28,6 +28,7 @@ fun toUser(mongoUser: MongoDatabase.MongoUser): User {
             mongoUser.fcmToken,
             mongoUser.lastAccess,
             mongoUser.desiredCourse,
-            mongoUser.telephoneNumber
+            mongoUser.telephoneNumber,
+            mongoUser.postsAutomaticApproval
     )
 }

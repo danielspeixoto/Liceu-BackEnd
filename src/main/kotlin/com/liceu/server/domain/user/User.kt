@@ -22,5 +22,6 @@ data class User(
         val fcmToken: String?,
         val lastAccess: Date?,
         val desiredCourse: String?,
-        val telephoneNumber: String?
+        val telephoneNumber: String?,
+        val postsAutomaticApproval: Boolean?
 )

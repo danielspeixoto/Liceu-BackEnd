@@ -292,4 +292,12 @@ class TestMongoUserRepositoryIntegration {
         assertThat(userChanged.telephoneNumber).isEqualTo("71988556644")
     }
 
+    @Test
+    fun updatePostsAutomaticApprovalFlag_userExists_verifyUser(){
+        val change = data.updatePostsAutomaticApprovalFlag(testSetup.USER_ID_3)
+        assertThat(change).isEqualTo(1)
+        val userChanged = data.getUserById(testSetup.USER_ID_3)
+        assertThat(userChanged.postsAutomaticApproval).isEqualTo(true)
+    }
+
 }

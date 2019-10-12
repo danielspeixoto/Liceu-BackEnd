@@ -64,6 +64,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.questions?.get(1)?.correctAnswer).isEqualTo("Escaleno")
         Truth.assertThat(insertedPost.questions?.get(1)?.otherAnswers?.size).isEqualTo(2)
         Truth.assertThat(insertedPost.questions?.get(1)?.otherAnswers).containsExactly("Anormal", "Doido")
+        Truth.assertThat(insertedPost.approvalFlag).isEqualTo(true)
     }
 
     @Test
@@ -113,6 +114,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.questions?.get(0)?.correctAnswer).isEqualTo("Equilátero")
         Truth.assertThat(insertedPost.questions?.get(0)?.otherAnswers?.size).isEqualTo(2)
         Truth.assertThat(insertedPost.questions?.get(0)?.otherAnswers).containsExactly("Anormal", "Perfeito")
+        Truth.assertThat(insertedPost.approvalFlag).isEqualTo(true)
     }
 
     @Test
@@ -139,6 +141,35 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.video?.thumbnails?.default).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/default.jpg")
         Truth.assertThat(insertedPost.video?.thumbnails?.medium).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/mqdefault.jpg")
         Truth.assertThat(insertedPost.questions).isEmpty()
+        Truth.assertThat(insertedPost.approvalFlag).isEqualTo(true)
+    }
+
+
+    @Test
+    fun submitVideoPost_questionsEmpty_successWithNoAutomaticApproval(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_4_ACCESS_TOKEN
+        val entity = HttpEntity(hashMapOf(
+                "type" to "video",
+                "description" to "teste de video teste de video teste de video teste de video teste de video teste de video teste de video teste de video",
+                "videoUrl" to "https://www.youtube.com/watch?v=8vefLpfozPA",
+                "hasQuestions" to "false"
+        ), headers)
+        val response =
+                restTemplate.exchange<HashMap<String, Any>>(baseUrl, HttpMethod.POST, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        val id = body["id"] as String
+        val insertedPost = postRepo.findById(id).get()
+        Truth.assertThat(insertedPost.userId.toHexString()).isEqualTo(testSetup.USER_ID_4)
+        Truth.assertThat(insertedPost.type).isEqualTo("video")
+        Truth.assertThat(insertedPost.video?.videoUrl).isEqualTo("https://www.youtube.com/watch?v=8vefLpfozPA")
+        Truth.assertThat(insertedPost.video?.thumbnails?.high).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/hqdefault.jpg")
+        Truth.assertThat(insertedPost.video?.thumbnails?.default).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/default.jpg")
+        Truth.assertThat(insertedPost.video?.thumbnails?.medium).isEqualTo("http://i.ytimg.com/vi/8vefLpfozPA/mqdefault.jpg")
+        Truth.assertThat(insertedPost.questions).isEmpty()
+        Truth.assertThat(insertedPost.approvalFlag).isEqualTo(null)
     }
 
 
@@ -165,6 +196,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.image?.title).isEqualTo("essa_foto_representa_algo_legal")
         Truth.assertThat(insertedPost.image?.imageURL).isNotNull()
         Truth.assertThat(insertedPost.questions).isEmpty()
+        Truth.assertThat(insertedPost.approvalFlag).isEqualTo(true)
     }
 
     @Test
@@ -190,6 +222,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.image?.title).isEqualTo("essa_foto_epresenta_algo_sobre_donuts")
         Truth.assertThat(insertedPost.image?.imageURL).isNotNull()
         Truth.assertThat(insertedPost.questions).isEmpty()
+        Truth.assertThat(insertedPost.approvalFlag).isEqualTo(true)
     }
 
     @Test
@@ -215,6 +248,7 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.image?.title).isEqualTo("camera")
         Truth.assertThat(insertedPost.image?.imageURL).isNotNull()
         Truth.assertThat(insertedPost.questions).isEmpty()
+        Truth.assertThat(insertedPost.approvalFlag).isEqualTo(true)
     }
 
 
