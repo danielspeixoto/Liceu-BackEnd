@@ -57,6 +57,9 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${slack.slackReportWebhook}")
     lateinit var reportWebhookURL: String
 
+    @Value("\${values.postsNumberApproval}")
+    var postsNumberApproval: Int = 10
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -298,17 +301,17 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun textPost(): PostBoundary.ITextPost{
-        return TextPost(mongoPostRepository)
+        return TextPost(mongoPostRepository,mongoUserRepository,postsNumberApproval)
     }
 
     @Bean
     fun imagePost(): PostBoundary.IImagePost{
-        return ImagePost(mongoPostRepository,googleImageBucket)
+        return ImagePost(mongoPostRepository,googleImageBucket,mongoUserRepository,postsNumberApproval)
     }
 
     @Bean
     fun videoPost(): PostBoundary.IVideoPost{
-        return VideoPost(mongoPostRepository)
+        return VideoPost(mongoPostRepository,mongoUserRepository,postsNumberApproval)
     }
 
     @Bean

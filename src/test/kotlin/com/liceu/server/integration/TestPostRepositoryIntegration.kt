@@ -65,7 +65,8 @@ class TestPostRepositoryIntegration {
                             "José","Albertonio","Albert"
                     )
                 )
-            )
+            ),
+            true
         ))
         val postInserted = data.getPostById(newPost)
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
@@ -93,7 +94,8 @@ class TestPostRepositoryIntegration {
                 null,
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
                 null,
-                null
+                null,
+                true
         ))
         val postInserted = data.getPostById(newPost)
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
@@ -129,7 +131,8 @@ class TestPostRepositoryIntegration {
                                         "José","Albertonio","Lucas"
                                 )
                         )
-                )
+                ),
+                true
         ))
         val postInserted = data.getPostById(newPost)
         assertThat(postInserted.userId).isEqualTo("3a1449a4bdb40abd5ae1e431")
@@ -281,6 +284,18 @@ class TestPostRepositoryIntegration {
         assertThat(postChanged.document?.title).isEqualTo("post interessante 1")
         assertThat(postChanged.document?.type).isEqualTo("pptx")
         assertThat(postChanged.document?.documentURL).isEqualTo("https://meuDocumento.pptx")
+    }
+
+    @Test
+    fun countApprovedPosts_userExists_verifyPostsAmount(){
+        val result = data.countApprovedPosts(testSetup.USER_ID_3)
+        assertThat(result).isEqualTo(2)
+    }
+
+    @Test
+    fun countApprovedPosts_userExistsWithNoPostsApproved_verifyPostAmount(){
+        val result = data.countApprovedPosts(testSetup.USER_ID_4)
+        assertThat(result).isEqualTo(0)
     }
 
 }

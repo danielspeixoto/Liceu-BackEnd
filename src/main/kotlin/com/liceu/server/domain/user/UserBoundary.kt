@@ -37,6 +37,7 @@ class UserBoundary {
         fun updateLastAccess(userId: String, loginAccess: Date): Long
         fun updateDesiredCourse(userId: String, course: String): Long
         fun updateTelephoneNumber(userId: String, telephoneNumber: String): Long
+        fun updatePostsAutomaticApprovalFlag (userId: String): Long
         fun userExists(userId: String): Boolean
     }
 

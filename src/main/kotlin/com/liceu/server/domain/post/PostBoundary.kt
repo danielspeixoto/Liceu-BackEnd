@@ -14,6 +14,7 @@ class PostBoundary {
         fun updateListOfComments(postId: String,userId: String,author: String,comment: String): Long
         fun updateDocumentPost(postId: String, title: String, type: String, documentURL: String): Long
         fun deletePost(postId: String,userId: String): Post?
+        fun countApprovedPosts(userId: String): Int
     }
 
     interface ITextPost {

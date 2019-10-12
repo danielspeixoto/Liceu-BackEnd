@@ -19,7 +19,9 @@ data class PostToInsert(
         val video: PostVideo?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
-        val questions: List<PostQuestions>?
+        val questions: List<PostQuestions>?,
+        val approvalFlag: Boolean?
+
 )
 
 data class Post(
