@@ -37,6 +37,7 @@ data class Post(
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
         val document: PostDocument?,
+        val approvalFlag: Boolean?,
         val likes: Int?
 )
 

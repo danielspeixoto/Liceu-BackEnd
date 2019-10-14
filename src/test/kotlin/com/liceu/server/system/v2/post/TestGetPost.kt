@@ -19,7 +19,7 @@ class TestGetPost: TestSystem("/v2/post") {
     lateinit var data: MongoPostRepository
 
     @Test
-    fun deletePost_postExist_returnOnePost(){
+    fun getPost_postExist_returnOnePostApproved(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
@@ -30,6 +30,37 @@ class TestGetPost: TestSystem("/v2/post") {
         Truth.assertThat(body["id"]).isEqualTo(testSetup.POST_ID_1)
         Truth.assertThat(body["type"]).isEqualTo("text")
         Truth.assertThat(body["description"]).isEqualTo("teste de texto")
+        Truth.assertThat(body["statusCode"]).isEqualTo("approved")
+    }
+
+    @Test
+    fun getPost_postExist_returnOnePostInReview(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>("$baseUrl/${testSetup.POST_ID_3}", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body["id"]).isEqualTo(testSetup.POST_ID_3)
+        Truth.assertThat(body["type"]).isEqualTo("video")
+        Truth.assertThat(body["description"]).isEqualTo("teste de video")
+        Truth.assertThat(body["statusCode"]).isEqualTo("inReview")
+    }
+
+    @Test
+    fun getPost_postExist_returnOnePostDenied(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<HashMap<String, Any>>("$baseUrl/${testSetup.POST_ID_6}", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body["id"]).isEqualTo(testSetup.POST_ID_6)
+        Truth.assertThat(body["type"]).isEqualTo("text")
+        Truth.assertThat(body["description"]).isEqualTo("teste de texto 2222")
+        Truth.assertThat(body["statusCode"]).isEqualTo("denied")
     }
 
 }
