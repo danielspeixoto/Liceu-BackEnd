@@ -345,6 +345,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updatePostRating(): PostBoundary.IUpdateRating {
+        return UpdatePostRating(mongoPostRepository)
+    }
+
+    @Bean
     fun deletePost(): PostBoundary.IDeletePost{
         return DeletePosts(mongoPostRepository)
     }
