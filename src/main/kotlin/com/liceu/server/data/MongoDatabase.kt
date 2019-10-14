@@ -200,6 +200,7 @@ class MongoDatabase {
         val description: String,
         val image: MongoPostImage?,
         val video: MongoPostVideo?,
+        val multipleImages: List<MongoPostImage>?,
         val submissionDate: Date,
         val comments: List<MongoComment>?,
         val questions: List<MongoPostQuestions>?,

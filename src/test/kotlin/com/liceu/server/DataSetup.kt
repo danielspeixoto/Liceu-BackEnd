@@ -53,6 +53,7 @@ class DataSetup {
     val POST_ID_4 = "09c54d325b75357a581d4ca5"
     val POST_ID_5 = "09c54d325b75357a581d4ca6"
     val POST_ID_6 = "09c54d325b75357a581d4ca7"
+    val POST_ID_7 = "09c54d325b75357a581d4ca8"
 
     val ACITIVITY_ID_1 = "0a1449a4bdb40abd5ae1e461"
     val ACITIVITY_ID_2 = "0a2449a4bdb40abd5ae1e461"
@@ -1038,6 +1039,7 @@ class DataSetup {
                 "teste de texto",
                 null,
                 null,
+                null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
                 null,
                 listOf(
@@ -1065,6 +1067,7 @@ class DataSetup {
                 ObjectId(USER_ID_2),
                 "text",
                 "teste de texto 2",
+                null,
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
@@ -1096,6 +1099,7 @@ class DataSetup {
                                 "medium"
                         )
                 ),
+                null,
                 Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
                 null,
                 null,
@@ -1107,6 +1111,7 @@ class DataSetup {
                 ObjectId(USER_ID_3),
                 "text",
                 "teste de texto 2",
+                null,
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
@@ -1124,6 +1129,7 @@ class DataSetup {
                 "teste de texto 2",
                 null,
                 null,
+                null,
                 Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
                 null,
                 null,
@@ -1138,6 +1144,7 @@ class DataSetup {
                 "teste de texto 2222",
                 null,
                 null,
+                null,
                 Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
                 null,
                 null,
@@ -1146,6 +1153,39 @@ class DataSetup {
         )
         post6.id = ObjectId(POST_ID_6)
         postRepo.insert(post6)
+
+
+        val post7 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_3),
+                "multipleImages",
+                "teste de multipleImages",
+                MongoDatabase.MongoPostImage(
+                        "teste1",
+                        "png",
+                        "www.minhaimagem1.com.br"
+                ),
+                null,
+                listOf(
+                        MongoDatabase.MongoPostImage(
+                                "teste1",
+                                "png",
+                                "www.minhaimagem1.com.br"
+                        ),
+                        MongoDatabase.MongoPostImage(
+                                "teste2",
+                                "jpeg",
+                                "www.minhaimagem2.com.br"
+                        )
+                ),
+                Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
+                null,
+                null,
+                null,
+                false
+        )
+        post7.id = ObjectId(POST_ID_7)
+        postRepo.insert(post7)
+
     }
     fun activity(){
         val activity1 = MongoDatabase.MongoActivities(

@@ -1,13 +1,11 @@
 package com.liceu.server.domain.post
 
-import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.util.Logging
 import com.google.cloud.storage.StorageOptions;
 import com.google.cloud.storage.BlobInfo
 import com.google.cloud.storage.BlobId
 import java.io.FileInputStream
 import com.google.auth.oauth2.ServiceAccountCredentials
-import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.domain.global.*
 import com.liceu.server.domain.user.UserBoundary
 import com.liceu.server.domain.util.dateFunctions.DateFunctions
@@ -24,7 +22,7 @@ class ImagePost(
         private val postsMinimumApproval: Int
 ): PostBoundary.IImagePost {
     companion object{
-        const val EVENT_NAME = "text_post_submission"
+        const val EVENT_NAME = "image_post_submission"
         val TAGS = listOf(INSERTION, IMAGE, POST)
     }
 
@@ -74,11 +72,12 @@ class ImagePost(
             val blob = storage.create(blobInfo, imageByteArray)
             val urlLink = "https://storage.googleapis.com/${bucketName}/${fileName}"
 
-            Logging.info(EVENT_NAME,TAGS, hashMapOf(
+            Logging.info(ImagePost.EVENT_NAME, ImagePost.TAGS, hashMapOf(
                     "userId" to post.userId,
                     "type" to post.type,
                     "imageUrl" to urlLink
             ))
+
 
             return postRepository.insertPost(PostToInsert(
                     post.userId,
@@ -90,6 +89,7 @@ class ImagePost(
                             urlLink
                     ),
                     post.video,
+                    null,
                     retrieveActualTimeStamp(),
                     null,
                     post.questions,

@@ -310,6 +310,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun multipleImagesPost(): PostBoundary.IMultipleImagesPosts{
+        return MultipleImagesPost(mongoPostRepository,googleImageBucket,mongoUserRepository,postsNumberApproval)
+    }
+
+    @Bean
     fun videoPost(): PostBoundary.IVideoPost{
         return VideoPost(mongoPostRepository,mongoUserRepository,postsNumberApproval)
     }

@@ -3,6 +3,7 @@ package com.liceu.server.integration
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
+import com.liceu.server.data.MongoDatabase
 import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.PostRepository
@@ -48,6 +49,7 @@ class TestPostRepositoryIntegration {
             "Eu sou um teste de texto",
             null,
             null,
+                null,
             Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
             null,
             listOf(
@@ -92,6 +94,7 @@ class TestPostRepositoryIntegration {
                         "www.minhaimagem.com"
                 ),
                 null,
+                null,
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
                 null,
                 null,
@@ -121,6 +124,7 @@ class TestPostRepositoryIntegration {
                                 "medium"
                         )
                 ),
+                null,
                 Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
                 null,
                 listOf(
@@ -145,6 +149,43 @@ class TestPostRepositoryIntegration {
         assertThat(postInserted.questions?.get(0)?.question).isEqualTo("Qual o primeiro nome de Einstein?")
         assertThat(postInserted.questions?.get(0)?.correctAnswer).isEqualTo("Albert")
         assertThat(postInserted.questions?.get(0)?.otherAnswers?.size).isEqualTo(3)
+    }
+
+    @Test
+    fun insert_newMultipleImagePost_verifyPostCreated(){
+        val newPost = data.insertPost(PostToInsert(
+                testSetup.USER_ID_1,
+                "multipleImages",
+                "imagens legais de historia",
+                null,
+                null,
+                listOf(
+                        FormattedImage(
+                                "title 1",
+                                "type 1",
+                                "www.minhaimagem1.com.br"
+                        ),
+                        FormattedImage(
+                                "title 2",
+                                "type 2",
+                                "www.minhaimagem2.com.br"
+                        )
+                ),
+                Date.from(Instant.parse("2019-10-11T11:20:20.00Z")),
+                null,
+                null,
+                true
+        ))
+        val postInserted = data.getPostById(newPost)
+        assertThat(postInserted.userId).isEqualTo(testSetup.USER_ID_1)
+        assertThat(postInserted.type).isEqualTo("multipleImages")
+        assertThat(postInserted.description).isEqualTo("imagens legais de historia")
+        assertThat(postInserted.multipleImages?.get(0)?.title).isEqualTo("title 1")
+        assertThat(postInserted.multipleImages?.get(0)?.type).isEqualTo("type 1")
+        assertThat(postInserted.multipleImages?.get(0)?.imageData).isEqualTo("www.minhaimagem1.com.br")
+        assertThat(postInserted.multipleImages?.get(1)?.title).isEqualTo("title 2")
+        assertThat(postInserted.multipleImages?.get(1)?.type).isEqualTo("type 2")
+        assertThat(postInserted.multipleImages?.get(1)?.imageData).isEqualTo("www.minhaimagem2.com.br")
     }
 
     @Test

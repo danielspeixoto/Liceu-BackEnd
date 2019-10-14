@@ -23,6 +23,13 @@ fun toPost(mongoPost: MongoDatabase.MongoPost): Post {
                             mongoPost.video?.thumbnails?.medium
                     )
             ),
+            mongoPost.multipleImages?.map {
+                FormattedImage(
+                        it.title,
+                        it.type,
+                        it.imageURL
+                )
+            },
             mongoPost.submissionDate,
             mongoPost.comments?.map {
                 PostComment(

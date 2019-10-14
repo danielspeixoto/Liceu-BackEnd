@@ -1,5 +1,6 @@
 package com.liceu.server.presentation.util.converters
 
+import com.liceu.server.data.MongoDatabase
 import com.liceu.server.domain.post.*
 import java.util.*
 
@@ -10,6 +11,7 @@ data class PostResponse(
         val description: String,
         val image: FormattedImage?,
         val video: PostVideo?,
+        val multipleImages: List<FormattedImage>?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
@@ -21,10 +23,11 @@ fun toPostResponse(post: Post): PostResponse {
     return PostResponse(
             post.id,
             post.userId,
-            post.type,
+            postTypeManager(post.type),
             post.description,
             post.image,
             post.video,
+            post.multipleImages,
             post.submissionDate,
             post.comments,
             post.questions,
@@ -42,4 +45,11 @@ fun statusCodeManager(approvalFlag: Boolean?): String {
             true -> "approved"
         }
     }
+}
+
+fun postTypeManager(type: String) : String {
+    if(type == "multipleImages"){
+        return "image"
+    }
+    return type
 }
