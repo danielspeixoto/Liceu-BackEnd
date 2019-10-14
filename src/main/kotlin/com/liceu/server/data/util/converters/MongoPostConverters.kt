@@ -52,6 +52,7 @@ fun toPost(mongoPost: MongoDatabase.MongoPost): Post {
                 mongoPost.document?.type,
                 mongoPost.document?.documentURL
             ),
+            mongoPost.approvalFlag,
             mongoPost.likes
     )
 }

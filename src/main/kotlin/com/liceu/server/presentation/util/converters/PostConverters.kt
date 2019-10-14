@@ -15,6 +15,7 @@ data class PostResponse(
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
+        val statusCode: String?,
         val likes: Int?
 )
 
@@ -30,6 +31,18 @@ fun toPostResponse(post: Post): PostResponse {
             post.submissionDate,
             post.comments,
             post.questions,
+            statusCodeManager(post.approvalFlag),
             post.likes
     )
+}
+
+fun statusCodeManager(approvalFlag: Boolean?): String {
+    return if(approvalFlag == null){
+        "inReview"
+    } else {
+        when (approvalFlag){
+            false -> "denied"
+            true -> "approved"
+        }
+    }
 }
