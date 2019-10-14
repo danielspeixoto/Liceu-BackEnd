@@ -91,7 +91,7 @@ class MultipleImagesPost(
                     post.userId,
                     post.type,
                     post.description,
-                    null,
+                    formattedImages[0],
                     post.video,
                     formattedImages.toList(),
                     DateFunctions.retrieveActualTimeStamp(),

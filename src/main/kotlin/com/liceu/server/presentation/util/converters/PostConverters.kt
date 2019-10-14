@@ -23,7 +23,7 @@ fun toPostResponse(post: Post): PostResponse {
     return PostResponse(
             post.id,
             post.userId,
-            post.type,
+            postTypeManager(post.type),
             post.description,
             post.image,
             post.video,
@@ -45,4 +45,11 @@ fun statusCodeManager(approvalFlag: Boolean?): String {
             true -> "approved"
         }
     }
+}
+
+fun postTypeManager(type: String) : String {
+    if(type == "multipleImages"){
+        return "image"
+    }
+    return type
 }

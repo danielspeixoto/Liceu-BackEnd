@@ -280,6 +280,8 @@ class TestSubmission: TestSystem("/v2/post") {
         Truth.assertThat(insertedPost.userId.toHexString()).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(insertedPost.type).isEqualTo("multipleImages")
         Truth.assertThat(insertedPost.description).isEqualTo("teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem teste de imagem PNG")
+        Truth.assertThat(insertedPost.image?.title).isEqualTo("camera")
+        Truth.assertThat(insertedPost.image?.imageURL).isEqualTo(insertedPost.multipleImages?.get(0)?.imageURL)
         Truth.assertThat(insertedPost.multipleImages?.get(0)?.title).isEqualTo("camera")
         Truth.assertThat(insertedPost.multipleImages?.get(0)?.imageURL).isNotNull()
         Truth.assertThat(insertedPost.multipleImages?.get(1)?.title).isEqualTo("essa foto representa algo de Donuts")
