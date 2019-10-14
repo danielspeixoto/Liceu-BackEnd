@@ -44,6 +44,7 @@ fun toPost(mongoPost: MongoDatabase.MongoPost): Post {
                 mongoPost.document?.title,
                 mongoPost.document?.type,
                 mongoPost.document?.documentURL
-            )
+            ),
+            mongoPost.approvalFlag
     )
 }

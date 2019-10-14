@@ -34,7 +34,8 @@ data class Post(
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
-        val document: PostDocument?
+        val document: PostDocument?,
+        val approvalFlag: Boolean?
 )
 
 

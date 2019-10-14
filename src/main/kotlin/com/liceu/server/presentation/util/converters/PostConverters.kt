@@ -12,7 +12,8 @@ data class PostResponse(
         val video: PostVideo?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
-        val questions: List<PostQuestions>?
+        val questions: List<PostQuestions>?,
+        val statusCode: String?
 )
 
 fun toPostResponse(post: Post): PostResponse {
@@ -25,6 +26,18 @@ fun toPostResponse(post: Post): PostResponse {
             post.video,
             post.submissionDate,
             post.comments,
-            post.questions
+            post.questions,
+            statusCodeManager(post.approvalFlag)
     )
+}
+
+fun statusCodeManager(approvalFlag: Boolean?): String {
+    return if(approvalFlag == null){
+        "inReview"
+    } else {
+        when (approvalFlag){
+            false -> "denied"
+            true -> "approved"
+        }
+    }
 }
