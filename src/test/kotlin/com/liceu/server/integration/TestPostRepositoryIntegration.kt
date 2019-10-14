@@ -285,6 +285,14 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
+    fun updateLikes_postExists_verifyLikesFromPost(){
+        val result = data.updateLike(testSetup.POST_ID_2)
+        assertThat(result).isEqualTo(1)
+        val postChanged = data.getPostById(testSetup.POST_ID_2)
+        assertThat(postChanged.likes).isEqualTo(1)
+    }
+
+    @Test
     fun deletePosts_postExists_verifyPosts() {
         val postsBefore = data.getPostFromUser(testSetup.USER_ID_3)
         assertThat(postsBefore.size).isEqualTo(2)

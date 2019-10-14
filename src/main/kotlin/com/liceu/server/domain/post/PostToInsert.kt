@@ -23,7 +23,6 @@ data class PostToInsert(
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
         val approvalFlag: Boolean?
-
 )
 
 data class Post(
@@ -37,7 +36,8 @@ data class Post(
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
-        val document: PostDocument?
+        val document: PostDocument?,
+        val likes: Int?
 )
 
 

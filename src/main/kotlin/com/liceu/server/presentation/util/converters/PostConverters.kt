@@ -14,7 +14,8 @@ data class PostResponse(
         val multipleImages: List<FormattedImage>?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
-        val questions: List<PostQuestions>?
+        val questions: List<PostQuestions>?,
+        val likes: Int?
 )
 
 fun toPostResponse(post: Post): PostResponse {
@@ -28,6 +29,7 @@ fun toPostResponse(post: Post): PostResponse {
             post.multipleImages,
             post.submissionDate,
             post.comments,
-            post.questions
+            post.questions,
+            post.likes
     )
 }
