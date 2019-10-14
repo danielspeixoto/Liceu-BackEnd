@@ -24,6 +24,7 @@ class PostController(
         @Autowired val videoPost: PostBoundary.IVideoPost,
         @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
         @Autowired val updateDocument: PostBoundary.IUpdateDocument,
+        @Autowired val updateRating: PostBoundary.IUpdateRating,
         @Autowired val deletePosts: PostBoundary.IDeletePost,
         @Autowired val getPostById: PostBoundary.IGetPostById
 ) {
@@ -163,6 +164,27 @@ class PostController(
                     ("postId" to postId) +
                     ("userId" to authenticatedUserId) +
                     ("documentTitle" to body["documentTitle"])
+            )
+        }
+    }
+
+    @PutMapping("/{postId}/rating")
+    fun updatePostRating(
+            @PathVariable("postId") postId: String,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "put_post_likes"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, RATING,UPDATE)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            updateRating.run(postId)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("postId" to postId)
             )
         }
     }

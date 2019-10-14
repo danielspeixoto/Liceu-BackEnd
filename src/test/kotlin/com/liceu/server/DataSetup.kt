@@ -1112,7 +1112,8 @@ class DataSetup {
                 null,
                 null,
                 null,
-                true
+                true,
+                10
         )
         post4.id = ObjectId(POST_ID_4)
         postRepo.insert(post4)
