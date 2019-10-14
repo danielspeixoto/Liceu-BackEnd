@@ -64,6 +64,7 @@ class VideoPost(
                                     mediumThumbails
                             )
                     ),
+                    null,
                     retrieveActualTimeStamp(),
                     null,
                     post.questions,

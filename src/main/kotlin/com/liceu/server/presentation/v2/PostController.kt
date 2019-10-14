@@ -15,6 +15,7 @@ import java.time.Instant
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.validation.ValidationException
+import kotlin.collections.HashMap
 
 @RestController
 @RequestMapping("/v2/post")
@@ -22,6 +23,7 @@ class PostController(
         @Autowired val textPost: PostBoundary.ITextPost,
         @Autowired val imagePost: PostBoundary.IImagePost,
         @Autowired val videoPost: PostBoundary.IVideoPost,
+        @Autowired val multipleImagesPost: PostBoundary.IMultipleImagesPosts,
         @Autowired val updateComments: PostBoundary.IUpdateListOfComments,
         @Autowired val updateDocument: PostBoundary.IUpdateDocument,
         @Autowired val deletePosts: PostBoundary.IDeletePost,
@@ -63,6 +65,7 @@ class PostController(
                         description,
                         null,
                         null,
+                        null,
                         questions
                 ))
                 "video" -> {
@@ -81,6 +84,7 @@ class PostController(
                             description,
                             null,
                             video,
+                            null,
                             questions
                     ))
                 }
@@ -96,6 +100,26 @@ class PostController(
                             description,
                             image,
                             null,
+                            null,
+                            questions
+                    ))
+                }
+                "multipleImages" -> {
+                    val multipleImages = body["imagesData"] as List<HashMap<String,Any?>>
+                    val images = multipleImages.map {
+                        PostImage(
+                                it["imageTitle"] as String? ?: throw ValidationException(),
+                                null,
+                                it["imageData"] as String? ?: throw ValidationException()
+                        )
+                    }
+                    multipleImagesPost.run(PostSubmission(
+                            userId,
+                            type,
+                            description,
+                            null,
+                            null,
+                            images,
                             questions
                     ))
                 }

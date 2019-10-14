@@ -40,6 +40,13 @@ class MongoPostRepository(
                                 postToInsert.video?.thumbnails?.medium
                         )
                 ),
+                postToInsert.multipleImages?.map {
+                    MongoDatabase.MongoPostImage (
+                            it.title,
+                            it.type,
+                            it.imageData
+                    )
+                },
                 postToInsert.submissionDate,
                 postToInsert.comments?.map { MongoDatabase.MongoComment(
                         ObjectId(it.id),

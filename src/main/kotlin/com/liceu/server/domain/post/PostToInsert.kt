@@ -8,6 +8,7 @@ data class PostSubmission (
         val description: String,
         val image: PostImage?,
         val video: PostVideo?,
+        val multipleImages: List<PostImage>?,
         val questions: List<PostQuestions>?
 )
 
@@ -17,6 +18,7 @@ data class PostToInsert(
         val description: String,
         val image: FormattedImage?,
         val video: PostVideo?,
+        val multipleImages: List<FormattedImage>?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
@@ -31,6 +33,7 @@ data class Post(
         val description: String,
         val image: FormattedImage?,
         val video: PostVideo?,
+        val multipleImages: List<FormattedImage>?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,

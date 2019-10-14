@@ -37,6 +37,7 @@ class TextPost(
                 post.description,
                 null,
                 post.video,
+                null,
                 retrieveActualTimeStamp(),
                 null,
                 post.questions,

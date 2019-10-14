@@ -25,6 +25,10 @@ class PostBoundary {
         fun run(post: PostSubmission): String
     }
 
+    interface IMultipleImagesPosts {
+        fun run (post: PostSubmission): String
+    }
+
     interface IVideoPost {
         fun run(post: PostSubmission): String
     }

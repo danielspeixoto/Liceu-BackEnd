@@ -1037,6 +1037,7 @@ class DataSetup {
                 "teste de texto",
                 null,
                 null,
+                null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
                 null,
                 listOf(
@@ -1064,6 +1065,7 @@ class DataSetup {
                 ObjectId(USER_ID_2),
                 "text",
                 "teste de texto 2",
+                null,
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
@@ -1095,6 +1097,7 @@ class DataSetup {
                                 "medium"
                         )
                 ),
+                null,
                 Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
                 null,
                 null,
@@ -1106,6 +1109,7 @@ class DataSetup {
                 ObjectId(USER_ID_3),
                 "text",
                 "teste de texto 2",
+                null,
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T11:40:20.00Z")),
@@ -1120,6 +1124,7 @@ class DataSetup {
                 ObjectId(USER_ID_3),
                 "text",
                 "teste de texto 2",
+                null,
                 null,
                 null,
                 Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
