@@ -136,6 +136,17 @@ class MongoPostRepository(
         return result.modifiedCount
     }
 
+    override fun updateLike(postId: String): Long {
+        val update = Update()
+        update.inc("likes",1)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(postId))),
+                update,
+                MongoDatabase.MongoPost::class.java
+        )
+        return result.modifiedCount
+    }
+
     override fun deletePost(postId: String, userId: String): Post? {
         val result = template.findAndRemove(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(postId))
