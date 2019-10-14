@@ -52,6 +52,7 @@ class DataSetup {
     val POST_ID_3 = "09c54d325b75357a581d4ca4"
     val POST_ID_4 = "09c54d325b75357a581d4ca5"
     val POST_ID_5 = "09c54d325b75357a581d4ca6"
+    val POST_ID_6 = "09c54d325b75357a581d4ca7"
 
     val ACITIVITY_ID_1 = "0a1449a4bdb40abd5ae1e461"
     val ACITIVITY_ID_2 = "0a2449a4bdb40abd5ae1e461"
@@ -1131,6 +1132,20 @@ class DataSetup {
         )
         post5.id = ObjectId(POST_ID_5)
         postRepo.insert(post5)
+        val post6 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_3),
+                "text",
+                "teste de texto 2222",
+                null,
+                null,
+                Date.from(Instant.parse("2019-08-27T13:40:20.00Z")),
+                null,
+                null,
+                null,
+                false
+        )
+        post6.id = ObjectId(POST_ID_6)
+        postRepo.insert(post6)
     }
     fun activity(){
         val activity1 = MongoDatabase.MongoActivities(
