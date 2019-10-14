@@ -38,39 +38,45 @@ class ImagePost(
                 "image/png" to "png"
         )
         try {
-                if(post.image?.title!!.isBlank()){
-                    throw UnderflowSizeException ("Title can't be empty")
-                }
-                if(post.image?.title!!.length > 150){
-                    throw OverflowSizeException ("Title too much characters")
-                }
-                if(post.image.imageData!!.isBlank()){
-                    throw UnderflowSizeException ("Image can't be empty")
-                }
-                var fileExtension = FileFunctions.extractMimeType(post.image.imageData)
-                if(fileExtension.isEmpty()){
-                    throw TypeMismatchException("this file type is not supported")
-                }
-                //verifying size of archive
-                val formattedEncryptedBytes = post.image.imageData.substringAfterLast(",")
-                if(FileFunctions.calculateFileSize(formattedEncryptedBytes) > 1e7){
-                    throw OverflowSizeException("image is greater than 10MB")
-                }
+            if(post.image?.title!!.isBlank()){
+                throw UnderflowSizeException ("Title can't be empty")
+            }
+            if(post.image?.title!!.length > 150){
+                throw OverflowSizeException ("Title too much characters")
+            }
+            if(post.image.imageData!!.isBlank()){
+                throw UnderflowSizeException ("Image can't be empty")
+            }
+            var fileExtension = FileFunctions.extractMimeType(post.image.imageData)
+            if(fileExtension.isEmpty()){
+                throw TypeMismatchException("this file type is not supported")
+            }
+            //verifying size of archive
+            val formattedEncryptedBytes = post.image.imageData.substringAfterLast(",")
+            if(FileFunctions.calculateFileSize(formattedEncryptedBytes) > 1e7){
+                throw OverflowSizeException("image is greater than 10MB")
+            }
 
-                //decoding and retrieving image type
-                var contentType = fileExtension
-                imageTypes.forEach {
-                    fileExtension = fileExtension.replace(it.key,it.value)
-                }
-                var timeStamp = DateFunctions.retrieveActualTimeStamp().toString().replace("\\s".toRegex(), "")
-                var fileName = "${post.image.title}${post.userId}${timeStamp}.${fileExtension}"
-                val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
+            //decoding and retrieving image type
+            var contentType = fileExtension
+            imageTypes.forEach {
+                fileExtension = fileExtension.replace(it.key,it.value)
+            }
+            var timeStamp = DateFunctions.retrieveActualTimeStamp().toString().replace("\\s".toRegex(), "")
+            var fileName = "${post.image.title}${post.userId}${timeStamp}.${fileExtension}"
+            val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
 
-                //uploading files to liceu test bucket
-                val blobId = BlobId.of(bucketName, fileName)
-                val blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build()
-                val blob = storage.create(blobInfo, imageByteArray)
-                val urlLink = "https://storage.googleapis.com/${bucketName}/${fileName}"
+            //uploading files to liceu test bucket
+            val blobId = BlobId.of(bucketName, fileName)
+            val blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build()
+            val blob = storage.create(blobInfo, imageByteArray)
+            val urlLink = "https://storage.googleapis.com/${bucketName}/${fileName}"
+
+            Logging.info(ImagePost.EVENT_NAME, ImagePost.TAGS, hashMapOf(
+                    "userId" to post.userId,
+                    "type" to post.type,
+                    "imageUrl" to urlLink
+            ))
 
 
             return postRepository.insertPost(PostToInsert(
