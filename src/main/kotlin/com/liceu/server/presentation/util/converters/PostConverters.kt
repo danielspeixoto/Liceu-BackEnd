@@ -1,5 +1,6 @@
 package com.liceu.server.presentation.util.converters
 
+import com.liceu.server.data.MongoDatabase
 import com.liceu.server.domain.post.*
 import java.util.*
 
@@ -10,6 +11,7 @@ data class PostResponse(
         val description: String,
         val image: FormattedImage?,
         val video: PostVideo?,
+        val multipleImages: List<FormattedImage>?,
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?
@@ -23,6 +25,7 @@ fun toPostResponse(post: Post): PostResponse {
             post.description,
             post.image,
             post.video,
+            post.multipleImages,
             post.submissionDate,
             post.comments,
             post.questions
