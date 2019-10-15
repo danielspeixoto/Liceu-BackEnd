@@ -1,6 +1,7 @@
 package com.liceu.server.domain.user
 
 import com.liceu.server.domain.challenge.Challenge
+import com.liceu.server.domain.post.Post
 import java.util.*
 
 
@@ -38,6 +39,8 @@ class UserBoundary {
         fun updateDesiredCourse(userId: String, course: String): Long
         fun updateTelephoneNumber(userId: String, telephoneNumber: String): Long
         fun updatePostsAutomaticApprovalFlag (userId: String): Long
+        fun updateAddPostToBeSaved(userId: String, postId: String): Long
+        fun updateRemovePostSaved(userId: String, postId: String): Long
         fun userExists(userId: String): Boolean
     }
 
@@ -73,7 +76,7 @@ class UserBoundary {
         fun run (userId: String, producerId: String)
     }
 
-    interface IupdateProducerToBeUnfollowed {
+    interface IUpdateProducerToBeUnfollowed {
         fun run (userId: String, producerId: String)
     }
 
@@ -95,6 +98,14 @@ class UserBoundary {
 
     interface IUpdateTelephoneNumber {
         fun run (userId: String,telephoneNumber: String)
+    }
+
+    interface IUpdatePostToBeSaved {
+        fun run (userId: String,postId: String)
+    }
+
+    interface IUpdateSavedPostToBeRemoved {
+        fun run (userId: String,postId: String)
     }
 
     interface IUserById {

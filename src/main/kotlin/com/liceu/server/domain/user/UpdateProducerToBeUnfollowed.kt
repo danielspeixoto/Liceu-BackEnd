@@ -5,7 +5,7 @@ import com.liceu.server.util.Logging
 
 class UpdateProducerToBeUnfollowed(
         private val userRepo: UserBoundary.IRepository
-): UserBoundary.IupdateProducerToBeUnfollowed{
+): UserBoundary.IUpdateProducerToBeUnfollowed{
 
     companion object{
         const val EVENT_NAME = "put_producer_unfollowed_by_user"

@@ -23,6 +23,7 @@ import com.liceu.server.domain.user.User
             val following: Boolean,
             val desiredCourse: String?,
             val telephoneNumber: String?,
+            val amountOfSavedPosts: Int,
             val founderFlag: Boolean?
     )
 
@@ -37,6 +38,10 @@ import com.liceu.server.domain.user.User
         var amountOfFollowing = 0
         if(user.following != null) {
             amountOfFollowing = user.following.size
+        }
+        var amountOfSavedPosts = 0
+        if(user.savedPosts != null){
+            amountOfSavedPosts = user.savedPosts.size
         }
 
 
@@ -57,6 +62,7 @@ import com.liceu.server.domain.user.User
                 isFollowing,
                 user.desiredCourse,
                 user.telephoneNumber,
+                amountOfSavedPosts,
                 user.isFounder
         )
     }

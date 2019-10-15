@@ -220,7 +220,7 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
-    fun updateProducerToBeUnfollowed(): UserBoundary.IupdateProducerToBeUnfollowed {
+    fun updateProducerToBeUnfollowed(): UserBoundary.IUpdateProducerToBeUnfollowed {
         return UpdateProducerToBeUnfollowed(mongoUserRepository)
     }
 
@@ -247,6 +247,16 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun updateTelephoneNumber(): UserBoundary.IUpdateTelephoneNumber {
         return UpdateTelephoneNumber(mongoUserRepository)
+    }
+
+    @Bean
+    fun updateAddToSavedPosts(): UserBoundary.IUpdatePostToBeSaved {
+        return UpdatePostToBeSaved(mongoUserRepository,mongoPostRepository)
+    }
+
+    @Bean
+    fun updateRemoveFromSavedPosts(): UserBoundary.IUpdateSavedPostToBeRemoved {
+        return UpdatePostSavedToBeRemoved(mongoUserRepository)
     }
 
     @Bean

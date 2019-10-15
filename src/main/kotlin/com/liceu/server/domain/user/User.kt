@@ -1,6 +1,7 @@
 package com.liceu.server.domain.user
 
 import com.liceu.server.domain.aggregates.Picture
+import com.liceu.server.domain.post.Post
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import java.util.*
 
@@ -23,6 +24,7 @@ data class User(
         val lastAccess: Date?,
         val desiredCourse: String?,
         val telephoneNumber: String?,
+        val savedPosts: List<String>?,
         val postsAutomaticApproval: Boolean?,
         val isFounder: Boolean?
 )

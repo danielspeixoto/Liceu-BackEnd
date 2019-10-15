@@ -347,4 +347,16 @@ class TestPostRepositoryIntegration {
         assertThat(result).isEqualTo(0)
     }
 
+    @Test
+    fun postExists_postExists_verifyBoolean(){
+        val result = data.postExists(testSetup.POST_ID_3)
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun postExists_postDoesNotExists_verifyBoolean(){
+        val result = data.postExists(testSetup.USER_ID_2)
+        assertThat(result).isFalse()
+    }
+
 }

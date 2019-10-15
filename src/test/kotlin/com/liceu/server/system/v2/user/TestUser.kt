@@ -63,10 +63,11 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(body["desiredCourse"]).isEqualTo("Cientista")
         Truth.assertThat(body["telephoneNumber"]).isEqualTo("71923232323")
         Truth.assertThat(body["founderFlag"]).isEqualTo(true)
+        Truth.assertThat(body["amountOfSavedPosts"]).isEqualTo(1)
 
 
         // Only update this after doing a assertion of a body property
-        Truth.assertThat(body.size).isEqualTo(17)
+        Truth.assertThat(body.size).isEqualTo(18)
     }
 
     @Test

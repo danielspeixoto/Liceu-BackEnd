@@ -16,6 +16,7 @@ class PostBoundary {
         fun updateLike(postId: String): Long
         fun deletePost(postId: String,userId: String): Post?
         fun countApprovedPosts(userId: String): Int
+        fun postExists(postId: String): Boolean
     }
 
     interface ITextPost {

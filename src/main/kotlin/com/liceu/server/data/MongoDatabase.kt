@@ -2,6 +2,7 @@ package com.liceu.server.data
 
 import com.liceu.server.domain.user.UpdateDesiredCourse
 import com.liceu.server.domain.user.UserBoundary
+import com.restfb.types.Post
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
@@ -107,6 +108,7 @@ class MongoDatabase {
             var lastAccess: Date?=null,
             var desiredCourse: String?=null,
             var telephoneNumber: String?=null,
+            var savedPosts: List<ObjectId>?=null,
             val postsAutomaticApproval: Boolean?=false,
             val isFounder: Boolean?=false
     ) {
