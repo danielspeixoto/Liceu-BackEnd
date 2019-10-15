@@ -107,7 +107,8 @@ class MongoDatabase {
             var lastAccess: Date?=null,
             var desiredCourse: String?=null,
             var telephoneNumber: String?=null,
-            val postsAutomaticApproval: Boolean?=false
+            val postsAutomaticApproval: Boolean?=false,
+            val isFounder: Boolean?=false
     ) {
         @Id
         lateinit var id: ObjectId

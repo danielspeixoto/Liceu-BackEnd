@@ -62,9 +62,11 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(body["following"]).isEqualTo(true)
         Truth.assertThat(body["desiredCourse"]).isEqualTo("Cientista")
         Truth.assertThat(body["telephoneNumber"]).isEqualTo("71923232323")
+        Truth.assertThat(body["founderFlag"]).isEqualTo(true)
+
 
         // Only update this after doing a assertion of a body property
-        Truth.assertThat(body.size).isEqualTo(16)
+        Truth.assertThat(body.size).isEqualTo(17)
     }
 
     @Test
@@ -464,7 +466,6 @@ class TestUser: TestSystem("/v2/user") {
                 "telephoneNumber" to "fisica"
         ), headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
-        val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
     }
 
@@ -477,7 +478,6 @@ class TestUser: TestSystem("/v2/user") {
                 "telephoneNumber" to "(71988223344"
         ), headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
-        val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
@@ -490,7 +490,6 @@ class TestUser: TestSystem("/v2/user") {
                 "telephoneNumber" to "71--988223344"
         ), headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
-        val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
@@ -503,7 +502,6 @@ class TestUser: TestSystem("/v2/user") {
                 "telephoneNumber" to ""
         ), headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
-        val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -516,7 +514,6 @@ class TestUser: TestSystem("/v2/user") {
                 "telephoneNumber" to null
         ), headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/telephone", HttpMethod.PUT, entity)
-        val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -529,7 +526,6 @@ class TestUser: TestSystem("/v2/user") {
                 "desiredCourse" to "fisica"
         ), headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/course", HttpMethod.PUT, entity)
-        val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
     }
 
@@ -542,7 +538,6 @@ class TestUser: TestSystem("/v2/user") {
                 "desiredCourse" to ""
         ), headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/course", HttpMethod.PUT, entity)
-        val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -555,7 +550,6 @@ class TestUser: TestSystem("/v2/user") {
                 "desiredCourse" to null
         ), headers)
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/course", HttpMethod.PUT, entity)
-        val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 

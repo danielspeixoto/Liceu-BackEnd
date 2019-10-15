@@ -85,6 +85,12 @@ class TestMongoUserRepositoryIntegration {
     }
 
     @Test
+    fun getUserById_newUserExist_returnUser(){
+        val result = data.getUserById(testSetup.USER_ID_3)
+        assertThat(result.isFounder).isTrue()
+    }
+
+    @Test
     fun getUserById_UserDoesNotExists_throwItemNotFound(){
         assertThrows<ItemNotFoundException> {
             data.getUserById("88235b2a67c76abebce3f6e3")
