@@ -54,6 +54,8 @@ class DataSetup {
     val POST_ID_5 = "09c54d325b75357a581d4ca6"
     val POST_ID_6 = "09c54d325b75357a581d4ca7"
     val POST_ID_7 = "09c54d325b75357a581d4ca8"
+    val POST_ID_8 = "09c54d325b75357a581d4ca9"
+    val POST_ID_9= "09c54d325b75357a581d4ca0"
 
     val ACITIVITY_ID_1 = "0a1449a4bdb40abd5ae1e461"
     val ACITIVITY_ID_2 = "0a2449a4bdb40abd5ae1e461"
@@ -96,6 +98,9 @@ class DataSetup {
         jwtAuth.sign(USER_ID_4)
     }
     val USER_ID_5 = "37235b2a67c76abebce3f6e8"
+    val USER_5_ACCESS_TOKEN by lazy {
+        jwtAuth.sign(USER_ID_5)
+    }
     val FACEBOOK_ID = "3aaa5b2a67c76abebce3f6e8"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
@@ -450,6 +455,29 @@ class DataSetup {
         )
         user4.id = ObjectId(USER_ID_4)
         userRepo.insert(user4)
+
+        val user5 = MongoDatabase.MongoUser(
+                "mano5",
+                "user54@g.com",
+                MongoDatabase.MongoPicture(
+                        "https://picture5.jpg",
+                        200,
+                        200
+                ),
+                "facebookId5",
+                GeoJsonPoint(-20.83, -57.86),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        )
+        user5.id = ObjectId(USER_ID_5)
+        userRepo.insert(user5)
 
         val facebookUser = MongoDatabase.MongoUser(
             "Sophia Aldajeidicfbi Okelolasky",
@@ -1193,6 +1221,51 @@ class DataSetup {
         post7.id = ObjectId(POST_ID_7)
         postRepo.insert(post7)
 
+        val post8 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_5),
+                "video",
+                "teste de video 2",
+                null,
+                MongoDatabase.MongoPostVideo(
+                        "asassa",
+                        MongoDatabase.MongoPostThumbnails(
+                                "high",
+                                "default",
+                                "medium"
+                        )
+                ),
+                null,
+                Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
+                null,
+                null,
+                false
+        )
+        post8.id = ObjectId(POST_ID_8)
+        postRepo.insert(post8)
+
+        val post9 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_5),
+                "video",
+                "teste de video 3",
+                null,
+                MongoDatabase.MongoPostVideo(
+                        "asassa",
+                        MongoDatabase.MongoPostThumbnails(
+                                "high",
+                                "default",
+                                "medium"
+                        )
+                ),
+                null,
+                Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
+                null,
+                null,
+                true
+        )
+        post9.id = ObjectId(POST_ID_9)
+        postRepo.insert(post9)
     }
     fun activity(){
         val activity1 = MongoDatabase.MongoActivities(

@@ -239,7 +239,7 @@ class TestPostRepositoryIntegration {
     @Test
     fun getRandomPosts_postsExists_returnListOfPosts(){
         val retrievedPosts = data.getRandomPosts(10)
-        assertThat(retrievedPosts.size).isEqualTo(4)
+        assertThat(retrievedPosts.size).isEqualTo(5)
     }
 
     @Test
@@ -268,6 +268,18 @@ class TestPostRepositoryIntegration {
         assertThat(retrievedPost.document?.title).isNull()
         assertThat(retrievedPost.document?.type).isNull()
         assertThat(retrievedPost.document?.documentURL).isNull()
+    }
+
+    @Test
+    fun getPostsFromUser_userExists_returnOneApprovedPost(){
+        val postsRetrieved = data.getPostFromUser(testSetup.USER_ID_5)
+        assertThat(postsRetrieved.size).isEqualTo(1)
+    }
+
+    @Test
+    fun getPostsFromOwner_userExists_returnListOfPosts(){
+        val postsRetrieved = data.getPostsFromOwner(testSetup.USER_ID_5)
+        assertThat(postsRetrieved.size).isEqualTo(2)
     }
 
     @Test

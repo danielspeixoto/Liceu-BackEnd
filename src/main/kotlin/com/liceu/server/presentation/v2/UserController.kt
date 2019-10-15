@@ -43,7 +43,7 @@ class UserController (
         @Autowired val updatePostToBeSaved: UserBoundary.IUpdatePostToBeSaved,
         @Autowired val updatePostSavedToBeRemoved: UserBoundary.IUpdateSavedPostToBeRemoved,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
-        @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
+        @Autowired val getPostsFromUser: PostBoundary.IGetPostsFromUser,
         @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
 
 ) {
@@ -131,6 +131,7 @@ class UserController (
 
     @GetMapping("/{userId}/posts")
     fun getPostsFromUser(
+            @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             request: HttpServletRequest
     ): ResponseEntity<List<PostResponse>> {
@@ -141,11 +142,13 @@ class UserController (
                 "version" to 2
         ))
         return try {
-            val postsRetrieved = getPostsFromUSer.run(userId)
+            val postsRetrieved = getPostsFromUser.run(userId,authenticatedUserId)
             ResponseEntity(postsRetrieved.map { toPostResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +
-                    ("pathVariableUserId" to userId))
+                    ("pathVariableUserId" to userId) +
+                    ("authenticatedUserId" to authenticatedUserId)
+            )
         }
     }
 

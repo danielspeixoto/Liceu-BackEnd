@@ -29,4 +29,28 @@ class TestGetPosts: TestSystem("/v2/user")  {
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(1)
     }
+
+    @Test
+    fun getPostsFromUser_notOwner_returnPosts() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.USER_ID_5}/posts", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body.size).isEqualTo(1)
+    }
+
+    @Test
+    fun getPostsFromUser_ownerOfPosts_returnPosts() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_5_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.USER_ID_5}/posts", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body.size).isEqualTo(2)
+    }
 }
