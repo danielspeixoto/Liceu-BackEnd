@@ -62,9 +62,10 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(body["following"]).isEqualTo(true)
         Truth.assertThat(body["desiredCourse"]).isEqualTo("Cientista")
         Truth.assertThat(body["telephoneNumber"]).isEqualTo("71923232323")
+        Truth.assertThat(body["badge"]).isEqualTo("Master Founder")
 
         // Only update this after doing a assertion of a body property
-        Truth.assertThat(body.size).isEqualTo(16)
+        Truth.assertThat(body.size).isEqualTo(17)
     }
 
     @Test
@@ -454,6 +455,58 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         Truth.assertThat(user.telephoneNumber).isEqualTo("71988553321")
     }
+
+    @Test
+    fun updateBadge_userExists_returnVoidAndVerifyUser(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "badge" to "Marketing"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/badge", HttpMethod.PUT, entity)
+        val user = data.getUserById(testSetup.USER_ID_2)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        Truth.assertThat(user.badge).isEqualTo("Marketing")
+    }
+
+    @Test
+    fun updateBadge_emptyBadge_returnBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "badge" to ""
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/badge", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateBadge_badgeToNull_returnBadRequest(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "badge" to null
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/badge", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+    }
+
+    @Test
+    fun updateBadge_badgeToNull_returnUnauthorized(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity( hashMapOf(
+                "badge" to "failed"
+        ), headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_3}/badge", HttpMethod.PUT, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
+
 
     @Test
     fun updateTelephoneNumber_wrongUserProfileOwner_returnUnauthorized(){

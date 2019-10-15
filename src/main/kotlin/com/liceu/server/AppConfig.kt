@@ -250,6 +250,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun updateBadge(): UserBoundary.IUpdateBadge {
+        return UpdateBadge(mongoUserRepository)
+    }
+
+    @Bean
     fun getQuestionById(): QuestionBoundary.IQuestionById{
         return QuestionById(mongoQuestionRepository)
     }

@@ -29,6 +29,7 @@ fun toUser(mongoUser: MongoDatabase.MongoUser): User {
             mongoUser.lastAccess,
             mongoUser.desiredCourse,
             mongoUser.telephoneNumber,
+            mongoUser.badge,
             mongoUser.postsAutomaticApproval
     )
 }

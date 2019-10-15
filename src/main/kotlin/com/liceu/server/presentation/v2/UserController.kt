@@ -40,6 +40,7 @@ class UserController (
         @Autowired val updateLastAccess: UserBoundary.IUpdateLastAccess,
         @Autowired val updateDesiredCourse: UserBoundary.IUpdateCourse,
         @Autowired val updateTelephoneNumber: UserBoundary.IUpdateTelephoneNumber,
+        @Autowired val updateBadge: UserBoundary.IUpdateBadge,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
         @Autowired val getPostsFromUSer: PostBoundary.IGetPostsFromUser,
         @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
@@ -587,6 +588,36 @@ class UserController (
                     ("authenticatedUserId" to authenticatedUserId) +
                     ("pathVariableUserId" to userId) +
                     ("telephoneNumber" to body["telephoneNumber"])
+            )
+        }
+    }
+
+    @PutMapping("/{userId}/badge")
+    fun updateBadge(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "update_badge"
+        val eventTags = listOf(CONTROLLER, NETWORK, BADGE, UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
+            val badge = body["badge"] as String? ?: throw ValidationException ()
+            updateBadge.run(authenticatedUserId,badge)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("badge" to body["badge"])
             )
         }
     }

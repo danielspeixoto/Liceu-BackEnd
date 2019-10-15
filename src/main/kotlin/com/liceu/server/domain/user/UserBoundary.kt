@@ -37,6 +37,7 @@ class UserBoundary {
         fun updateLastAccess(userId: String, loginAccess: Date): Long
         fun updateDesiredCourse(userId: String, course: String): Long
         fun updateTelephoneNumber(userId: String, telephoneNumber: String): Long
+        fun updateBadge(userId: String, badge: String): Long
         fun updatePostsAutomaticApprovalFlag (userId: String): Long
         fun userExists(userId: String): Boolean
     }
@@ -95,6 +96,10 @@ class UserBoundary {
 
     interface IUpdateTelephoneNumber {
         fun run (userId: String,telephoneNumber: String)
+    }
+
+    interface IUpdateBadge {
+        fun run (userId: String,badge: String)
     }
 
     interface IUserById {

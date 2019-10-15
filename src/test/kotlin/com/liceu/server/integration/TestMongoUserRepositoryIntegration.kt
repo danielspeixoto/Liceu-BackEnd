@@ -300,4 +300,12 @@ class TestMongoUserRepositoryIntegration {
         assertThat(userChanged.postsAutomaticApproval).isEqualTo(true)
     }
 
+    @Test
+    fun updateBadge_userExists_verifyUser() {
+        val change = data.updateBadge(testSetup.USER_ID_3,"Founder")
+        assertThat(change).isEqualTo(1)
+        val userChanged = data.getUserById(testSetup.USER_ID_3)
+        assertThat(userChanged.badge).isEqualTo("Founder")
+    }
+
 }

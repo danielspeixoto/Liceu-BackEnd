@@ -413,7 +413,8 @@ class DataSetup {
                         ObjectId(USER_ID_4)
                 ),
                 desiredCourse = "Cientista",
-                telephoneNumber = "71923232323"
+                telephoneNumber = "71923232323",
+                badge = "Master Founder"
         )
         user3.id = ObjectId(USER_ID_3)
         userRepo.insert(user3)

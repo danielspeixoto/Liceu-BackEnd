@@ -107,6 +107,7 @@ class MongoDatabase {
             var lastAccess: Date?=null,
             var desiredCourse: String?=null,
             var telephoneNumber: String?=null,
+            var badge: String?=null,
             val postsAutomaticApproval: Boolean?=false
     ) {
         @Id
