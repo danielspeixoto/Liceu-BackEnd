@@ -22,7 +22,8 @@ import com.liceu.server.domain.user.User
             val amountOfFollowing: Int,
             val following: Boolean,
             val desiredCourse: String?,
-            val telephoneNumber: String?
+            val telephoneNumber: String?,
+            val founderFlag: Boolean?
     )
 
 
@@ -55,6 +56,7 @@ import com.liceu.server.domain.user.User
                 amountOfFollowing,
                 isFollowing,
                 user.desiredCourse,
-                user.telephoneNumber
+                user.telephoneNumber,
+                user.isFounder
         )
     }

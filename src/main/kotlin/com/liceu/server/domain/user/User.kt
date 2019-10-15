@@ -23,5 +23,6 @@ data class User(
         val lastAccess: Date?,
         val desiredCourse: String?,
         val telephoneNumber: String?,
-        val postsAutomaticApproval: Boolean?
+        val postsAutomaticApproval: Boolean?,
+        val isFounder: Boolean?
 )
