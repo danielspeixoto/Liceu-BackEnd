@@ -33,3 +33,6 @@ values:
   triviaAmount: ${TRIVIA_AMOUNT}
   challengeHistoryAmount: ${CHALLENGE_HISTORY_AMOUNT}
   postsNumberApproval: ${POSTS_NUMBER_APPROVAL}
+  reportTagsAmount: ${REPORT_TAGS_AMOUNT}
+  reportParamsAmount: ${REPORT_PARAMS_AMOUNT}
+  reportMessageLength: ${REPORT_MESSAGE_LENGTH}
