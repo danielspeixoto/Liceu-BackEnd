@@ -26,7 +26,7 @@ class TestGetPosts: TestSystem("/v2/explore")  {
         val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?amount=10", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
-        Truth.assertThat(body.size).isEqualTo(4)
+        Truth.assertThat(body.size).isEqualTo(5)
     }
 
     @Test
