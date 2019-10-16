@@ -35,3 +35,6 @@ values:
   triviaAmount: 3
   challengeHistoryAmount: 2
   postsNumberApproval: 1
+  reportTagsAmount: 5
+  reportParamsAmount: 5
+  reportMessageLength: 200

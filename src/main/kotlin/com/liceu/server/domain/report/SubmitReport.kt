@@ -8,8 +8,11 @@ import java.lang.Exception
 
 
 class SubmitReport(
-        val reportRepository: ReportBoundary.IRepository,
-        val reportWebhookURL: String
+        private val reportRepository: ReportBoundary.IRepository,
+        private val reportWebhookURL: String,
+        private val reportTagsAmount: Int,
+        private val reportMessageLength: Int,
+        private val reportParamsAmount: Int
 ): ReportBoundary.ISubmit {
 
     companion object {
@@ -22,19 +25,19 @@ class SubmitReport(
             if(report.tags.isEmpty()){
                 throw OverflowSizeException("No tags given")
             }
-            if(report.tags.size > 5){
+            if(report.tags.size > reportTagsAmount){
                 throw OverflowSizeTagsException("Too many tags in report")
             }
-            if(report.message.isNullOrEmpty()){
+            if(report.message.isEmpty()){
                 throw OverflowSizeException("No message given")
             }
-            if(report.message.length > 200){
+            if(report.message.length > reportMessageLength){
                 throw OverflowSizeMessageException("Too many characters in message report")
             }
             if(report.params.isEmpty()){
                 throw OverflowSizeException("No parameters given")
             }
-            if(report.params.size > 5){
+            if(report.params.size > reportParamsAmount){
                 throw OverflowSizeException("Too many parameters passed")
             }
             report.params.values.forEach {
@@ -55,7 +58,7 @@ class SubmitReport(
             ))
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to report.userId,
-                    "reportMessag" to report.message,
+                    "reportMessage" to report.message,
                     "tagsAmount" to report.tags.size,
                     "paramsAmount" to report.params.size
             ))
