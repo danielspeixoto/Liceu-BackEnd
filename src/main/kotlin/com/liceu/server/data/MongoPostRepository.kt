@@ -178,5 +178,13 @@ class MongoPostRepository(
         return template.count(query,MongoDatabase.MongoPost::class.java).toInt()
     }
 
-
+    override fun postExists(postId: String): Boolean {
+        val query = Query()
+        query.addCriteria(Criteria.where("_id").isEqualTo(ObjectId(postId)))
+        val results = template.count(query,MongoDatabase.MongoPost::class.java).toInt()
+        if(results > 0){
+            return true
+        }
+        return false
+    }
 }

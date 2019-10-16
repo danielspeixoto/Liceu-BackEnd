@@ -3,6 +3,7 @@ package com.liceu.server.data
 import com.liceu.server.data.util.converters.toUser
 import com.liceu.server.domain.challenge.Challenge
 import com.liceu.server.domain.global.ItemNotFoundException
+import com.liceu.server.domain.post.Post
 import com.liceu.server.domain.trivia.PostComment
 import com.liceu.server.domain.trivia.TriviaQuestion
 import com.liceu.server.domain.user.User
@@ -18,8 +19,6 @@ import org.springframework.stereotype.Repository
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.data.mongodb.core.query.*
 import java.util.*
-
-
 
 
 @Repository
@@ -232,6 +231,28 @@ class MongoUserRepository(
     override fun updatePostsAutomaticApprovalFlag(userId: String): Long {
         val update = Update()
         update.set("postsAutomaticApproval",true)
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateAddPostToBeSaved(userId: String, postId: String): Long {
+        val update = Update()
+        update.addToSet("savedPosts",ObjectId(postId))
+        val result = template.updateFirst(
+                Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoUser::class.java
+        )
+        return result.modifiedCount
+    }
+
+    override fun updateRemovePostSaved(userId: String, postId: String): Long {
+        val update = Update()
+        update.pull("savedPosts",ObjectId(postId))
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(userId))),
                 update,

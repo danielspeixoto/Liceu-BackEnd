@@ -3,11 +3,13 @@ package com.liceu.server.integration
 import com.google.common.truth.Truth.assertThat
 import com.liceu.server.DataSetup
 import com.liceu.server.TestConfiguration
+import com.liceu.server.data.MongoPostRepository
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.UserRepository
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.user.UserForm
+import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -30,6 +32,9 @@ class TestMongoUserRepositoryIntegration {
     lateinit var data: MongoUserRepository
     @Autowired
     lateinit var userRepository: UserRepository
+    @Autowired
+    lateinit var postRepo: MongoPostRepository
+
 
     @Autowired
     lateinit var testSetup: DataSetup
@@ -304,6 +309,24 @@ class TestMongoUserRepositoryIntegration {
         assertThat(change).isEqualTo(1)
         val userChanged = data.getUserById(testSetup.USER_ID_3)
         assertThat(userChanged.postsAutomaticApproval).isEqualTo(true)
+    }
+
+    @Test
+    fun updateAddPostToBeSaved_userExistsPostExists_verifyUser(){
+        val change = data.updateAddPostToBeSaved(testSetup.USER_ID_2,testSetup.POST_ID_1)
+        assertThat(change).isEqualTo(1)
+        val userChanged = data.getUserById(testSetup.USER_ID_2)
+        assertThat(userChanged.savedPosts?.size).isEqualTo(2)
+        assertThat(userChanged.savedPosts?.get(0)).isEqualTo(testSetup.POST_ID_2)
+        assertThat(userChanged.savedPosts?.get(1)).isEqualTo(testSetup.POST_ID_1)
+    }
+
+    @Test
+    fun updateRemovePostSaved_userExistsPostExists_verifyUser(){
+        val change = data.updateRemovePostSaved(testSetup.USER_ID_2,testSetup.POST_ID_2)
+        assertThat(change).isEqualTo(1)
+        val userChanged = data.getUserById(testSetup.USER_ID_2)
+        assertThat(userChanged.savedPosts?.size).isEqualTo(0)
     }
 
 }

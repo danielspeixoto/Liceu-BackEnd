@@ -34,12 +34,14 @@ class UserController (
         @Autowired val updateDescription: UserBoundary.IUpdateDescription,
         @Autowired val updateWebsite: UserBoundary.IUpdateWebsite,
         @Autowired val updateProducerToBeFollowed: UserBoundary.IUpdateProducerToBeFollowed,
-        @Autowired val updateProducerToBeUnfollowed: UserBoundary.IupdateProducerToBeUnfollowed,
+        @Autowired val updateProducerToBeUnfollowed: UserBoundary.IUpdateProducerToBeUnfollowed,
         @Autowired val updateProfileImage: UserBoundary.IUpdateProfileImage,
         @Autowired val updateFcmToken: UserBoundary.IUpdateFcmToken,
         @Autowired val updateLastAccess: UserBoundary.IUpdateLastAccess,
         @Autowired val updateDesiredCourse: UserBoundary.IUpdateCourse,
         @Autowired val updateTelephoneNumber: UserBoundary.IUpdateTelephoneNumber,
+        @Autowired val updatePostToBeSaved: UserBoundary.IUpdatePostToBeSaved,
+        @Autowired val updatePostSavedToBeRemoved: UserBoundary.IUpdateSavedPostToBeRemoved,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
         @Autowired val getPostsFromUser: PostBoundary.IGetPostsFromUser,
         @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
@@ -590,6 +592,66 @@ class UserController (
                     ("authenticatedUserId" to authenticatedUserId) +
                     ("pathVariableUserId" to userId) +
                     ("telephoneNumber" to body["telephoneNumber"])
+            )
+        }
+    }
+
+    @PutMapping("/{userId}/savePost")
+    fun updateSavedPosts(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "update_saved_posts"
+        val eventTags = listOf(CONTROLLER, NETWORK, SAVED, POST, UPDATE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
+            val postId = body["postId"] as String? ?: throw ValidationException ()
+            updatePostToBeSaved.run(authenticatedUserId,postId)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("postId" to body["postId"])
+            )
+        }
+    }
+
+    @DeleteMapping("/{userId}/savePost")
+    fun removeSavedPost(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "remove_saved_posts"
+        val eventTags = listOf(CONTROLLER, NETWORK, SAVED, POST, DELETE)
+        val networkData = netUtils.networkData(request)
+
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            if (authenticatedUserId != userId) {
+                throw AuthenticationException("user attempting to change other user properties")
+            }
+            val postId = body["postId"] as String? ?: throw ValidationException ()
+            updatePostSavedToBeRemoved.run(authenticatedUserId,postId)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("postId" to body["postId"])
             )
         }
     }

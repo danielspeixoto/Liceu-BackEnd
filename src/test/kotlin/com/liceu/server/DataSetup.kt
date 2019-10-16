@@ -389,7 +389,10 @@ class DataSetup {
                 null,
                 null,
                 null,
-                null
+                null,
+                savedPosts = listOf(
+                        ObjectId(POST_ID_2)
+                )
         )
         user2.id = ObjectId(USER_ID_2)
         userRepo.insert(user2)
@@ -419,7 +422,10 @@ class DataSetup {
                 ),
                 desiredCourse = "Cientista",
                 telephoneNumber = "71923232323",
-                isFounder = true
+                isFounder = true,
+                savedPosts = listOf(
+                    ObjectId(POST_ID_3)
+                )
         )
         user3.id = ObjectId(USER_ID_3)
         userRepo.insert(user3)
