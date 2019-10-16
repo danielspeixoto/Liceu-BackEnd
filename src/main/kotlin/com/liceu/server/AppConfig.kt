@@ -57,6 +57,15 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${slack.slackReportWebhook}")
     lateinit var reportWebhookURL: String
 
+    @Value("\${values.reportTagsAmount}")
+    var reportTagsAmount: Int = 30
+
+    @Value("\${values.reportParamsAmount}")
+    var reportParamsAmount: Int = 30
+
+    @Value("\${values.reportMessageLength}")
+    var reportMessageLength: Int = 200
+
     @Value("\${values.postsNumberApproval}")
     var postsNumberApproval: Int = 10
 
@@ -266,7 +275,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun submitReport(): ReportBoundary.ISubmit{
-        return SubmitReport(mongoReportRepository,reportWebhookURL)
+        return SubmitReport(mongoReportRepository,reportWebhookURL,reportTagsAmount,reportMessageLength,reportParamsAmount)
     }
 
     @Bean
