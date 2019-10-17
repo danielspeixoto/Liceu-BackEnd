@@ -15,6 +15,7 @@ data class PostResponse(
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
+        val documents: List<PostDocument>?,
         val statusCode: String?,
         val likes: Int?
 )
@@ -31,6 +32,7 @@ fun toPostResponse(post: Post): PostResponse {
             post.submissionDate,
             post.comments,
             post.questions,
+            post.documents,
             statusCodeManager(post.approvalFlag),
             post.likes
     )

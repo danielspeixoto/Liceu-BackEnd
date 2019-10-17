@@ -29,9 +29,8 @@ class UpdateDocument(
             .build()
             .service
 
-    override fun run(postId: String, userId: String, title: String, documentData: String) {
+    override fun run(postId: String, userId: String,documents: List<PostDocumentSubmission>) {
         try {
-
             val documentTypes = hashMapOf(
                     "image/jpeg" to "jpeg",
                     "image/png" to "png",
@@ -45,50 +44,52 @@ class UpdateDocument(
                     "text/plain" to "txt"
             )
 
-            if(postRepository.getPostById(postId).userId != userId){
-                throw AuthenticationException("user attempting to change other user properties")
-            }
+            documents.forEach {
+                if(postRepository.getPostById(postId).userId != userId){
+                    throw AuthenticationException("user attempting to change other user properties")
+                }
 
-            if(title.isBlank()){
-                throw UnderflowSizeException ("Title can't be empty")
-            }
-            if(title.length > 150){
-                throw OverflowSizeException ("Title too much characters")
-            }
-            if(documentData.isBlank()){
-                throw UnderflowSizeException ("Document can't be empty")
-            }
-            var fileExtension = FileFunctions.extractDocumentsMimeType(documentData)
-            if(fileExtension.isEmpty()){
-                throw TypeMismatchException("this file type is not supported")
-            }
-            //verifying size of archive
-            val formattedEncryptedBytes = documentData.substringAfterLast(",")
-            if(FileFunctions.calculateFileSize(formattedEncryptedBytes) > 1e7){
-                throw OverflowSizeException("image is greater than 10MB")
-            }
+                if(it.title!!.isBlank()){
+                    throw UnderflowSizeException ("Title can't be empty")
+                }
+                if(it.title.length > 150){
+                    throw OverflowSizeException ("Title too much characters")
+                }
+                if(it.documentData!!.isBlank()){
+                    throw UnderflowSizeException ("Document can't be empty")
+                }
+                var fileExtension = FileFunctions.extractDocumentsMimeType(it.documentData)
+                if(fileExtension.isEmpty()){
+                    throw TypeMismatchException("this file type is not supported")
+                }
+                //verifying size of archive
+                val formattedEncryptedBytes = it.documentData.substringAfterLast(",")
+                if(FileFunctions.calculateFileSize(formattedEncryptedBytes) > 1e7){
+                    throw OverflowSizeException("image is greater than 10MB")
+                }
 
-            //decoding and retrieving image type
-            var contentType = fileExtension
-            documentTypes.forEach {
-                fileExtension = fileExtension.replace(it.key,it.value)
+                //decoding and retrieving image type
+                var contentType = fileExtension
+                documentTypes.forEach {
+                    fileExtension = fileExtension.replace(it.key,it.value)
+                }
+                var timeStamp = DateFunctions.retrieveActualTimeStamp().toString().replace("\\s".toRegex(), "")
+                var fileName = "${it.title}${userId}${timeStamp}.${fileExtension}"
+                val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
+
+                //uploading files to liceu test bucket
+                val blobId = BlobId.of(bucketName, fileName)
+                val blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build()
+                val blob = storage.create(blobInfo, imageByteArray)
+                val urlLink = "https://storage.googleapis.com/${bucketName}/${fileName}"
+
+                Logging.info(EVENT_NAME, TAGS, hashMapOf(
+                        "postId" to postId,
+                        "documentType" to fileExtension,
+                        "documentUrl" to urlLink
+                ))
+                postRepository.updateDocumentPost(postId,it.title,fileExtension,urlLink)
             }
-            var timeStamp = DateFunctions.retrieveActualTimeStamp().toString().replace("\\s".toRegex(), "")
-            var fileName = "${title}${userId}${timeStamp}.${fileExtension}"
-            val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
-
-            //uploading files to liceu test bucket
-            val blobId = BlobId.of(bucketName, fileName)
-            val blobInfo = BlobInfo.newBuilder(blobId).setContentType(contentType).build()
-            val blob = storage.create(blobInfo, imageByteArray)
-            val urlLink = "https://storage.googleapis.com/${bucketName}/${fileName}"
-
-            Logging.info(EVENT_NAME, TAGS, hashMapOf(
-                    "postId" to postId,
-                    "documentType" to fileExtension,
-                    "documentUrl" to urlLink
-            ))
-            postRepository.updateDocumentPost(postId,title,fileExtension,urlLink)
 
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
