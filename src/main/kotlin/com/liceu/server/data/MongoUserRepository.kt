@@ -293,7 +293,7 @@ class MongoUserRepository(
         return results.count() > 0
     }
 
-    override fun getChallengesFromUserById(userId: String, amount: Int): List<Challenge> {
+    override fun getChallengesFromUserById(userId: String, amount: Int, start: Int): List<Challenge> {
         val match = Aggregation.match(Criteria()
                 .orOperator(
                         Criteria.where("challenger").isEqualTo(userId),
@@ -302,7 +302,8 @@ class MongoUserRepository(
                 .and("answersChallenger").not().size(0))
         val sortByDate = sort(Sort.Direction.DESC, "submissionDate")
         val limitOfReturnedChallenges = limit(amount.toLong())
-        val agg = Aggregation.newAggregation(match,sortByDate,limitOfReturnedChallenges)
+        val skip = Aggregation.skip(start.toLong())
+        val agg = Aggregation.newAggregation(match,sortByDate,skip,limitOfReturnedChallenges)
         val results = template.aggregate(agg, MongoDatabase.CHALLENGE_COLLECTION, MongoDatabase.MongoChallenge::class.java)
         return results.map {
             Challenge(

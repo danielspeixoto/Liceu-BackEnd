@@ -29,6 +29,7 @@ class RankingController(
             @RequestParam(value = "month", defaultValue = "") month: Int,
             @RequestParam(value = "year", defaultValue = "") year: Int,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
+            @RequestParam(value = "start", defaultValue = "0") start: Int,
             request: HttpServletRequest
 
     ): ResponseEntity<List<GameResponse>> {
@@ -40,7 +41,7 @@ class RankingController(
                 "version" to 2
         ))
         return try {
-            val result = ranking.run(month, year , amount)
+            val result = ranking.run(month, year , amount, start)
             ResponseEntity(result.map { toGameResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +

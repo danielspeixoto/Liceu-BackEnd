@@ -29,7 +29,7 @@ class TestDeletePost: TestSystem ("/v2/post") {
         val entity = HttpEntity(null, headers)
         val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.POST_ID_1}", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        val postsAfter = data.getPostFromUser(testSetup.USER_ID_1)
+        val postsAfter = data.getPostFromUser(testSetup.USER_ID_1,10,0)
         Truth.assertThat(postsAfter.size).isEqualTo(0)
     }
 
@@ -41,7 +41,7 @@ class TestDeletePost: TestSystem ("/v2/post") {
         val entity = HttpEntity(null, headers)
         val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl/${testSetup.POST_ID_2}", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        val postsAfter = data.getPostFromUser(testSetup.USER_ID_1)
+        val postsAfter = data.getPostFromUser(testSetup.USER_ID_1,10,0)
         Truth.assertThat(postsAfter.size).isEqualTo(1)
     }
 

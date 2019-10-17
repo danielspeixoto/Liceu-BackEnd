@@ -12,7 +12,7 @@ class GameRanking(val repo: GameBoundary.IRepository, val maxResults: Int): Game
         val TAGS = listOf(RETRIEVAL, GAME, RANKING)
     }
 
-    override fun run(month: Int, year: Int, amount: Int): List<Game> {
+    override fun run(month: Int, year: Int, amount: Int, start: Int): List<Game> {
         if(amount == 0) {
             Logging.warn(UNCOMMON_PARAMS, TAGS, hashMapOf(
                     "action" to EVENT_NAME,
@@ -34,7 +34,7 @@ class GameRanking(val repo: GameBoundary.IRepository, val maxResults: Int): Game
             )
         }
         try {
-            val games = repo.ranking(month, year, finalAmount)
+            val games = repo.ranking(month, year, finalAmount, start)
             Logging.info(
                     EVENT_NAME,
                     TAGS,
@@ -42,7 +42,9 @@ class GameRanking(val repo: GameBoundary.IRepository, val maxResults: Int): Game
                             "amount" to finalAmount,
                             "month" to month,
                             "year" to year,
-                            "retrieved" to games.size
+                            "retrieved" to games.size,
+                            "amount" to amount,
+                            "start" to start
                     )
             )
             return games

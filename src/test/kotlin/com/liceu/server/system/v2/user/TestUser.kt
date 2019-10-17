@@ -303,7 +303,7 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(producer.followers?.get(0)).isEqualTo(testSetup.USER_ID_1)
         Truth.assertThat(user.following?.size).isEqualTo(3)
         Truth.assertThat(user.following).contains(testSetup.USER_ID_2)
-        val activitiesProducer = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10, emptyList())
+        val activitiesProducer = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,10, emptyList(),0)
         Truth.assertThat(activitiesProducer.size).isEqualTo(2)
         Truth.assertThat(activitiesProducer[0].type).isEqualTo("followedUser")
     }
@@ -382,7 +382,7 @@ class TestUser: TestSystem("/v2/user") {
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val user = data.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(user.lastAccess).isNotNull()
-        val activitiesFromUser = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,1, listOf("lastAccessRegister"))
+        val activitiesFromUser = activitiesData.getActivitiesFromUser(testSetup.USER_ID_2,1, listOf("lastAccessRegister"),0)
         Truth.assertThat(activitiesFromUser.size).isEqualTo(1)
         Truth.assertThat(activitiesFromUser[0].userId).isEqualTo(testSetup.USER_ID_2)
         Truth.assertThat(activitiesFromUser[0].type).isEqualTo("lastAccessRegister")

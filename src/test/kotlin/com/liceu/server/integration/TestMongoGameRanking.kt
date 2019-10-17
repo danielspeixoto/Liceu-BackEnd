@@ -38,18 +38,18 @@ class TestMongoGameRanking {
 
     @Test
     fun ranking_sameMonth_returnsEqual(){
-        val result = data.ranking(10,2019, 20)
+        val result = data.ranking(10,2019, 20,0)
         val ids = result.map { it.id }
-        val result2 = data.ranking(10,2019,20)
+        val result2 = data.ranking(10,2019,20,0)
         val ids2 = result2.map { it.id }
         Truth.assertThat(ids.size).isGreaterThan(0)
         Truth.assertThat(ids).isEqualTo(ids2)
     }
     @Test
     fun ranking_differentMonth_returnsDifferent(){
-        val result = data.ranking(9,2019,20)
+        val result = data.ranking(9,2019,20,0)
         val ids = result.map { it.id }
-        val result2 = data.ranking(10,2019,20)
+        val result2 = data.ranking(10,2019,20,0)
         val ids2 = result2.map { it.id }
         Truth.assertThat(ids.size).isGreaterThan(0)
         Truth.assertThat(ids).isNotEqualTo(ids2)
@@ -57,7 +57,7 @@ class TestMongoGameRanking {
 
     @Test
     fun ranking_valid_returnsOrdered(){
-        val result = data.ranking(10, 2019,20)
+        val result = data.ranking(10, 2019,20,0)
         val ids = result.map { it.id }
         Truth.assertThat(ids).containsExactly(testSetup.GAME_ID_5, testSetup.GAME_ID_3,testSetup.GAME_ID_1,testSetup.GAME_ID_2).inOrder()
     }

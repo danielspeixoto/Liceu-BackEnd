@@ -43,7 +43,7 @@ class MongoGameRepository(
         return result.id.toHexString()
     }
 
-    override fun ranking(month: Int, year: Int, amount: Int): List<Game> {
+    override fun ranking(month: Int, year: Int, amount: Int, start: Int): List<Game> {
         val startFunction = System.currentTimeMillis()
         val mFormat = DecimalFormat("00")
         val monthFormated = mFormat.format(month)
@@ -58,8 +58,9 @@ class MongoGameRepository(
         )
         val sortFields = Aggregation.sort(Sort.Direction.DESC, "score")
                 .and(Sort.Direction.ASC,"timeSpent")
+        val skip = Aggregation.skip(start.toLong())
         val amountRetrieved = Aggregation.limit(amount.toLong()+10)
-        val agg = Aggregation.newAggregation(match,sortFields,amountRetrieved)
+        val agg = Aggregation.newAggregation(match,sortFields,skip,amountRetrieved)
         val resultList = template.aggregate(agg,MongoDatabase.GAME_COLLECTION, MongoDatabase.MongoGame::class.java).toList()
 
         gameList = arrayListOf()
