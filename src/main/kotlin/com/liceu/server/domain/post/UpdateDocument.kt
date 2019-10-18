@@ -44,10 +44,11 @@ class UpdateDocument(
                     "text/plain" to "txt"
             )
 
+            if(postRepository.getPostById(postId).userId != userId){
+                throw AuthenticationException("user attempting to change other user properties")
+            }
+
             documents.forEach {
-                if(postRepository.getPostById(postId).userId != userId){
-                    throw AuthenticationException("user attempting to change other user properties")
-                }
 
                 if(it.title!!.isBlank()){
                     throw UnderflowSizeException ("Title can't be empty")
