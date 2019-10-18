@@ -254,7 +254,7 @@ class TestPostRepositoryIntegration {
         assertThat(retrievedPost.id).isEqualTo(testSetup.POST_ID_4)
         assertThat(retrievedPost.userId).isEqualTo(testSetup.USER_ID_3)
         assertThat(retrievedPost.type).isEqualTo("text")
-        assertThat(retrievedPost.description).isEqualTo("teste de texto 2")
+        assertThat(retrievedPost.description).isEqualTo("texto legal sobre texto de humanas")
         assertThat(retrievedPost.image?.title).isNull()
         assertThat(retrievedPost.image?.type).isNull()
         assertThat(retrievedPost.image?.imageData).isNull()
@@ -280,6 +280,20 @@ class TestPostRepositoryIntegration {
     fun getPostsFromOwner_userExists_returnListOfPosts(){
         val postsRetrieved = data.getPostsFromOwner(testSetup.USER_ID_5,10,0)
         assertThat(postsRetrieved.size).isEqualTo(2)
+    }
+
+    @Test
+    fun getPostsByDescription_descriptionExists_returnListOfPosts(){
+        val postsRetrieved = data.getPostsByDescription("texto",5)
+        assertThat(postsRetrieved.size).isEqualTo(5)
+        val idsFromPosts = postsRetrieved.map { it.id }
+        assertThat(idsFromPosts).containsExactly(testSetup.POST_ID_6,testSetup.POST_ID_4,testSetup.POST_ID_1,testSetup.POST_ID_2,testSetup.POST_ID_5).inOrder()
+    }
+
+    @Test
+    fun getPostsByDescription_descriptionDontMatch_returnListOfPosts(){
+        val postsRetrieved = data.getPostsByDescription("musica",5)
+        assertThat(postsRetrieved).isEmpty()
     }
 
     @Test

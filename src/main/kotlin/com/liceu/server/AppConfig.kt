@@ -69,6 +69,9 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${values.postsNumberApproval}")
     var postsNumberApproval: Int = 10
 
+    @Value("\${values.postFinderAmount}")
+    var postFinderAmount: Int = 20
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -356,6 +359,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun getPostById(): PostBoundary.IGetPostById {
         return GetPostById(mongoPostRepository)
+    }
+
+    @Bean
+    fun getPostByDescription(): PostBoundary.IGetPostsByDescription {
+        return GetPostsByDescription(mongoPostRepository,postFinderAmount)
     }
 
     @Bean

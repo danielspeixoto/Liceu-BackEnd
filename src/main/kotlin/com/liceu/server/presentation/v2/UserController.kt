@@ -82,7 +82,7 @@ class UserController (
             @RequestParam(value = "name", defaultValue = "") name: String,
             @RequestParam(value = "longitude", defaultValue = "") longitude: Double,
             @RequestParam(value = "latitude", defaultValue = "") latitude: Double,
-            @RequestParam(value = "amount", defaultValue = "0") amount: Int,
+            @RequestParam(value = "amount", defaultValue = "10") amount: Int,
             request: HttpServletRequest
     ): ResponseEntity<List<UserResponse>> {
         val eventName = "get_users_by_name_near_location"
