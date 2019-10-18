@@ -109,6 +109,7 @@ class UserController (
     @GetMapping("/{userId}/challenge")
     fun getChallengesFromUserById(
             @PathVariable("userId") userId: String,
+            @RequestParam(value = "start", defaultValue = "0") start: Int,
             request: HttpServletRequest
     ): ResponseEntity<List<ChallengeResponse>> {
         val eventName = "get_challenges_from_user"
@@ -119,7 +120,7 @@ class UserController (
                 "version" to 2
         ))
         return try {
-            val challenges = challengesFromUser.run(userId)
+            val challenges = challengesFromUser.run(userId,start)
             val challengesResponse = challenges.map { toChallengeResponse(it) }
             ResponseEntity(challengesResponse, HttpStatus.OK)
         } catch (e: Exception) {
@@ -133,6 +134,8 @@ class UserController (
     fun getPostsFromUser(
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
+            @RequestParam(value = "start", defaultValue = "0") start: Int,
+            @RequestParam(value = "amount", defaultValue = "20") amount: Int,
             request: HttpServletRequest
     ): ResponseEntity<List<PostResponse>> {
         val eventName = "get_posts_from_user"
@@ -142,7 +145,7 @@ class UserController (
                 "version" to 2
         ))
         return try {
-            val postsRetrieved = getPostsFromUser.run(userId,authenticatedUserId)
+            val postsRetrieved = getPostsFromUser.run(userId,authenticatedUserId,amount,start)
             ResponseEntity(postsRetrieved.map { toPostResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +
@@ -158,6 +161,7 @@ class UserController (
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
+            @RequestParam(value = "start", defaultValue = "0") start: Int,
             @RequestParam(value = "type", defaultValue = "") type: List<String>,
             request: HttpServletRequest
     ): ResponseEntity<List<ActivityResponse>>{
@@ -171,7 +175,7 @@ class UserController (
             if(userId != authenticatedUserId){
                 throw throw AuthenticationException("user attempting to retrieve other user properties")
             }
-            val activitiesRetrieved = getActivityFromUser.run(userId,amount,type)
+            val activitiesRetrieved = getActivityFromUser.run(userId,amount,type,start)
             ResponseEntity(activitiesRetrieved.map { toActivityResponse(it) },HttpStatus.OK)
         }catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +

@@ -1,7 +1,6 @@
 package com.liceu.server.domain.user
 
 import com.liceu.server.domain.challenge.Challenge
-import com.liceu.server.domain.post.Post
 import java.util.*
 
 
@@ -19,7 +18,7 @@ class UserBoundary {
         fun save(user: UserForm): String
         fun getUserById(userId: String): User
         fun getUserBySocialId(socialId: String): User?
-        fun getChallengesFromUserById(userId: String, amount: Int): List<Challenge>
+        fun getChallengesFromUserById(userId: String, amount: Int, start: Int): List<Challenge>
         fun getUsersByNameUsingLocation(nameSearched: String, latitude: Double?, longitude: Double?, amount: Int): List<User>
         fun getActiveUser(userId: String): User
         fun updateLocationFromUser(userId: String,longitude: Double,latitude: Double, state: String): Long
@@ -114,7 +113,7 @@ class UserBoundary {
     }
 
     interface IChallengesFromUserById{
-        fun run(userId: String): List<Challenge>
+        fun run(userId: String, start: Int): List<Challenge>
     }
 
     interface IGetUsersByNameUsingLocation {

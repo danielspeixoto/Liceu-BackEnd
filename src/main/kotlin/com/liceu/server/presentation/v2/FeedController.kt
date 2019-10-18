@@ -28,6 +28,7 @@ class FeedController(
     fun getPostsForFeed(
             @RequestAttribute("userId") userId: String,
             @RequestParam("before") before: String,
+            @RequestParam("start", defaultValue = "0") start: Int,
             @RequestParam("amount") amount: Int,
             request: HttpServletRequest
     ): ResponseEntity<List<PostResponse>> {
@@ -39,7 +40,7 @@ class FeedController(
         ))
         return try {
             val date = Date.from(Instant.parse(before))
-            val postsRetrieved = getPostsForFeed.run(userId, date, amount)
+            val postsRetrieved = getPostsForFeed.run(userId, date,amount,start)
             ResponseEntity(postsRetrieved?.map { toPostResponse(it) }, HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData)

@@ -17,9 +17,9 @@ class ChallengesFromUserId (
         val TAGS = listOf(RETRIEVAL, CHALLENGE, USER)
     }
 
-    override fun run(userId: String): List<Challenge> {
+    override fun run(userId: String, start: Int): List<Challenge> {
         try {
-            val challenges = repo.getChallengesFromUserById(userId,historyAmount)
+            val challenges = repo.getChallengesFromUserById(userId,historyAmount,start)
             Logging.info(
                     EVENT_NAME,
                     TAGS,

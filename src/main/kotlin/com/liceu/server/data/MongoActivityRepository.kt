@@ -27,7 +27,7 @@ class MongoActivityRepository(
         return result.id.toHexString()
     }
 
-    override fun getActivitiesFromUser(userId: String, amount: Int, tags: List<String>): List<Activity> {
+    override fun getActivitiesFromUser(userId: String, amount: Int, tags: List<String>, start: Int): List<Activity> {
         if(amount == 0) {
             return emptyList()
         }
@@ -37,7 +37,8 @@ class MongoActivityRepository(
         }
         val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
         val limitOfActivitiesRetrieved = Aggregation.limit(amount.toLong())
-        val agg = Aggregation.newAggregation(match,sortByDate,limitOfActivitiesRetrieved)
+        val skip = Aggregation.skip(start.toLong())
+        val agg = Aggregation.newAggregation(match,sortByDate,skip,limitOfActivitiesRetrieved)
         val results = template.aggregate(agg,MongoDatabase.ACTIVITIES_COLLECTION,MongoDatabase.MongoActivities::class.java)
         return results.map {
             Activity(
