@@ -147,7 +147,7 @@ class MongoPostRepository(
             type,
             documentURL
         )
-        update.set("document", documentToBeInserted)
+        update.addToSet("documents", documentToBeInserted)
         val result = template.updateFirst(
                 Query.query(Criteria.where("_id").isEqualTo(ObjectId(postId))),
                 update,

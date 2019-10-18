@@ -264,10 +264,7 @@ class TestPostRepositoryIntegration {
         assertThat(retrievedPost.video?.thumbnails?.default).isNull()
         assertThat(retrievedPost.comments).isNull()
         assertThat(retrievedPost.questions).isNull()
-        assertThat(retrievedPost.document?.id).isNull()
-        assertThat(retrievedPost.document?.title).isNull()
-        assertThat(retrievedPost.document?.type).isNull()
-        assertThat(retrievedPost.document?.documentURL).isNull()
+        assertThat(retrievedPost.documents).isNull()
     }
 
     @Test
@@ -339,12 +336,18 @@ class TestPostRepositoryIntegration {
     @Test
     fun updateDocument_postExists_verifyPost(){
         val result1 = data.updateDocumentPost(testSetup.POST_ID_1,"post interessante 1","pptx" ,"https://meuDocumento.pptx")
+        val result2 = data.updateDocumentPost(testSetup.POST_ID_1,"post interessante 2","csv" ,"https://meuDocumento.csv")
         assertThat(result1).isEqualTo(1)
+        assertThat(result2).isEqualTo(1)
         val postChanged = data.getPostById(testSetup.POST_ID_1)
-        assertThat(postChanged.document?.id).isNotNull()
-        assertThat(postChanged.document?.title).isEqualTo("post interessante 1")
-        assertThat(postChanged.document?.type).isEqualTo("pptx")
-        assertThat(postChanged.document?.documentURL).isEqualTo("https://meuDocumento.pptx")
+        assertThat(postChanged.documents?.get(0)?.id).isNotNull()
+        assertThat(postChanged.documents?.get(0)?.title).isEqualTo("post interessante 1")
+        assertThat(postChanged.documents?.get(0)?.type).isEqualTo("pptx")
+        assertThat(postChanged.documents?.get(0)?.documentURL).isEqualTo("https://meuDocumento.pptx")
+        assertThat(postChanged.documents?.get(1)?.id).isNotNull()
+        assertThat(postChanged.documents?.get(1)?.title).isEqualTo("post interessante 2")
+        assertThat(postChanged.documents?.get(1)?.type).isEqualTo("csv")
+        assertThat(postChanged.documents?.get(1)?.documentURL).isEqualTo("https://meuDocumento.csv")
     }
 
     @Test

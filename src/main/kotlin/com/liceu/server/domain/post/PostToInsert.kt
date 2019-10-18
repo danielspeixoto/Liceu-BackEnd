@@ -36,7 +36,7 @@ data class Post(
         val submissionDate: Date,
         val comments: List<PostComment>?,
         val questions: List<PostQuestions>?,
-        val document: PostDocument?,
+        val documents: List<PostDocument>?,
         val approvalFlag: Boolean?,
         val likes: Int?
 )
@@ -83,6 +83,11 @@ data class PostDocument(
         val title: String?,
         val type: String?,
         val documentURL: String?
+)
+
+data class PostDocumentSubmission(
+        val title: String?,
+        val documentData: String?
 )
 
 

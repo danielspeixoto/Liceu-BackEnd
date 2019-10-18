@@ -46,12 +46,15 @@ fun toPost(mongoPost: MongoDatabase.MongoPost): Post {
                         it.otherAnswers
                 )
             },
-            PostDocument(
-                mongoPost.document?.id?.toHexString(),
-                mongoPost.document?.title,
-                mongoPost.document?.type,
-                mongoPost.document?.documentURL
-            ),
+            mongoPost.documents?.map {
+                PostDocument(
+                        it.id?.toHexString(),
+                        it.title,
+                        it.type,
+                        it.documentURL
+                )
+            }
+            ,
             mongoPost.approvalFlag,
             mongoPost.likes
     )
