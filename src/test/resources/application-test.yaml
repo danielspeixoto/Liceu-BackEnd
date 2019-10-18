@@ -38,3 +38,4 @@ values:
   reportTagsAmount: 5
   reportParamsAmount: 5
   reportMessageLength: 200
+  postFinderAmount: 5

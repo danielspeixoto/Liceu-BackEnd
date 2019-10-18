@@ -36,3 +36,4 @@ values:
   reportTagsAmount: ${REPORT_TAGS_AMOUNT}
   reportParamsAmount: ${REPORT_PARAMS_AMOUNT}
   reportMessageLength: ${REPORT_MESSAGE_LENGTH}
+  postFinderAmount: ${POST_FINDER_AMOUNT}

@@ -28,7 +28,8 @@ class PostController(
         @Autowired val updateDocument: PostBoundary.IUpdateDocument,
         @Autowired val updateRating: PostBoundary.IUpdateRating,
         @Autowired val deletePosts: PostBoundary.IDeletePost,
-        @Autowired val getPostById: PostBoundary.IGetPostById
+        @Autowired val getPostById: PostBoundary.IGetPostById,
+        @Autowired val getPostsByDescriptions: PostBoundary.IGetPostsByDescription
 ) {
     @Autowired
     lateinit var netUtils: NetworkUtils
@@ -259,6 +260,31 @@ class PostController(
             handleException(e, eventName, eventTags, networkData +
                     ("postId" to postId) +
                     ("userId" to authenticatedUserId)
+            )
+        }
+    }
+
+    @GetMapping
+    fun getPostsByDescriptions(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @RequestParam("description") description: String,
+            @RequestParam("amount",defaultValue = "15") amount: Int,
+            request: HttpServletRequest
+    ): ResponseEntity<List<PostResponse>> {
+        val eventName = "get_post_by_id"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, ID, RETRIEVAL)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val postsRetrieved = getPostsByDescriptions.run(description,amount)
+            ResponseEntity(postsRetrieved.map { toPostResponse(it) },HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("userId" to authenticatedUserId) +
+                    ("description" to description) +
+                    ("amount" to amount)
             )
         }
     }

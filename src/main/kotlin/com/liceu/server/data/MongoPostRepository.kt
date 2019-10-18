@@ -7,10 +7,7 @@ import org.bson.types.ObjectId
 import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.Aggregation
-import org.springframework.data.mongodb.core.query.Criteria
-import org.springframework.data.mongodb.core.query.Query
-import org.springframework.data.mongodb.core.query.Update
-import org.springframework.data.mongodb.core.query.isEqualTo
+import org.springframework.data.mongodb.core.query.*
 import org.springframework.stereotype.Repository
 import java.time.Instant
 import java.time.ZoneOffset
@@ -107,6 +104,12 @@ class MongoPostRepository(
         val agg = Aggregation.newAggregation(match,sortByDate,skip,limit)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         return results.map { toPost(it) }
+    }
+
+    override fun getPostsByDescription(descriptionSearched: String, amount: Int): List<Post> {
+        val textQuery = TextQuery.queryText(TextCriteria().matchingAny(descriptionSearched)).sortByScore().limit(amount)
+        val result = template.find(textQuery, MongoDatabase.MongoPost::class.java, MongoDatabase.POST_COLLECTION)
+        return result.map { toPost(it) }
     }
 
     override fun getRandomPosts(amount: Int): List<Post> {

@@ -1145,7 +1145,7 @@ class DataSetup {
         val post4 = MongoDatabase.MongoPost(
                 ObjectId(USER_ID_3),
                 "text",
-                "teste de texto 2",
+                "texto legal sobre texto de humanas",
                 null,
                 null,
                 null,
@@ -1161,7 +1161,7 @@ class DataSetup {
         val post5 = MongoDatabase.MongoPost(
                 ObjectId(USER_ID_3),
                 "text",
-                "teste de texto 2",
+                "teste de texto sobre a vida",
                 null,
                 null,
                 null,
@@ -1176,7 +1176,7 @@ class DataSetup {
         val post6 = MongoDatabase.MongoPost(
                 ObjectId(USER_ID_3),
                 "text",
-                "teste de texto 2222",
+                "texto do texto, vindo do texto do texto de filosofia",
                 null,
                 null,
                 null,
@@ -1247,7 +1247,7 @@ class DataSetup {
         val post9 = MongoDatabase.MongoPost(
                 ObjectId(USER_ID_5),
                 "video",
-                "teste de video 3",
+                "teste de video legal 3",
                 null,
                 MongoDatabase.MongoPostVideo(
                         "asassa",

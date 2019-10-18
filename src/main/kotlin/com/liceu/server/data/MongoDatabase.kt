@@ -6,10 +6,7 @@ import com.restfb.types.Post
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexType
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexed
-import org.springframework.data.mongodb.core.index.GeospatialIndex
-import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.index.*
 import org.springframework.data.mongodb.core.mapping.Document
 import java.sql.Timestamp
 import java.util.*
@@ -198,19 +195,18 @@ class MongoDatabase {
 
     @Document(collection = MongoDatabase.POST_COLLECTION)
     data class MongoPost(
-        val userId: ObjectId,
-        val type: String,
-        val description: String,
-        val image: MongoPostImage?,
-        val video: MongoPostVideo?,
-        val multipleImages: List<MongoPostImage>?,
-        val submissionDate: Date,
-        val comments: List<MongoComment>?,
-        val questions: List<MongoPostQuestions>?,
-        val documents: List<MongoPostDocument>?,
-        val approvalFlag: Boolean?=null,
-        val likes: Int?=null
-
+            val userId: ObjectId,
+            val type: String,
+            @TextIndexed val description: String,
+            val image: MongoPostImage?,
+            val video: MongoPostVideo?,
+            val multipleImages: List<MongoPostImage>?,
+            val submissionDate: Date,
+            val comments: List<MongoComment>?,
+            val questions: List<MongoPostQuestions>?,
+            val document: MongoPostDocument?,
+            val approvalFlag: Boolean?=null,
+            val likes: Int?=null
         ){
         @Id
         lateinit var id: ObjectId
