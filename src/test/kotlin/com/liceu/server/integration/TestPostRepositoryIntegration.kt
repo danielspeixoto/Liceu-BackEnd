@@ -192,7 +192,7 @@ class TestPostRepositoryIntegration {
     fun getPosts_postsInserted_returnOnePost(){
         val date = Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
         val user = userRepository.getUserById(testSetup.USER_ID_4)
-        val retrievedPosts = data.getPostsForFeed(user,date,10)
+        val retrievedPosts = data.getPostsForFeed(user,date,10,0)
         assertThat(retrievedPosts?.size).isEqualTo(1)
         assertThat(retrievedPosts?.get(0)?.type).isEqualTo("text")
         assertThat(retrievedPosts?.get(0)?.description).isEqualTo("teste de texto")
@@ -205,7 +205,7 @@ class TestPostRepositoryIntegration {
     fun getPosts_postsInserted_returnMultiplesPost(){
         val date = Date.from(Instant.parse("2019-08-27T12:40:20.00Z"))
         val user = userRepository.getUserById(testSetup.USER_ID_3)
-        val retrievedPosts = data.getPostsForFeed(user,date,10)
+        val retrievedPosts = data.getPostsForFeed(user,date,10,0)
         assertThat(retrievedPosts?.size).isEqualTo(2)
         assertThat(retrievedPosts?.get(1).questions?.size).isEqualTo(1)
         val userIdsFromPosts = retrievedPosts?.map { it.userId }
@@ -218,13 +218,13 @@ class TestPostRepositoryIntegration {
     fun getPosts_followingArrayEmpty_returnEmptyList(){
         val date = Date.from(Instant.parse("2019-08-27T11:40:20.00Z"))
         val user = userRepository.getUserById(testSetup.USER_ID_2)
-        val retrievedPosts = data.getPostsForFeed(user,date,10)
+        val retrievedPosts = data.getPostsForFeed(user,date,10,0)
         assertThat(retrievedPosts?.isEmpty())
     }
 
     @Test
     fun getPostsFromUser_userExists_returnListOfPosts(){
-        val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_3)
+        val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(retrievedPosts.size).isEqualTo(2)
         val idsFromPosts = retrievedPosts.map { it.id }
         assertThat(idsFromPosts).containsExactly(testSetup.POST_ID_5,testSetup.POST_ID_4).inOrder()
@@ -232,7 +232,7 @@ class TestPostRepositoryIntegration {
 
     @Test
     fun getPostsFromUser_userExists_returnOnePost(){
-        val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_1)
+        val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_1,10,0)
         assertThat(retrievedPosts.size).isEqualTo(1)
     }
 
@@ -269,13 +269,13 @@ class TestPostRepositoryIntegration {
 
     @Test
     fun getPostsFromUser_userExists_returnOneApprovedPost(){
-        val postsRetrieved = data.getPostFromUser(testSetup.USER_ID_5)
+        val postsRetrieved = data.getPostFromUser(testSetup.USER_ID_5,10,0)
         assertThat(postsRetrieved.size).isEqualTo(1)
     }
 
     @Test
     fun getPostsFromOwner_userExists_returnListOfPosts(){
-        val postsRetrieved = data.getPostsFromOwner(testSetup.USER_ID_5)
+        val postsRetrieved = data.getPostsFromOwner(testSetup.USER_ID_5,10,0)
         assertThat(postsRetrieved.size).isEqualTo(2)
     }
 
@@ -303,33 +303,33 @@ class TestPostRepositoryIntegration {
 
     @Test
     fun deletePosts_postExists_verifyPosts() {
-        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3)
+        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(postsBefore.size).isEqualTo(2)
         val result = data.deletePost(testSetup.POST_ID_5, testSetup.USER_ID_3)
         assertThat(result?.id).isEqualTo(testSetup.POST_ID_5)
-        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3)
+        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(postsAfter.size).isEqualTo(1)
     }
 
     @Test
     fun deleteMultiplePosts_postExists_verifyPosts() {
-        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3)
+        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(postsBefore.size).isEqualTo(2)
         val result1 = data.deletePost(testSetup.POST_ID_4, testSetup.USER_ID_3)
         val result2 = data.deletePost(testSetup.POST_ID_5, testSetup.USER_ID_3)
         assertThat(result1?.id).isEqualTo(testSetup.POST_ID_4)
         assertThat(result2?.id).isEqualTo(testSetup.POST_ID_5)
-        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3)
+        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(postsAfter.size).isEqualTo(0)
     }
 
     @Test
     fun deletePosts_postExistsWrongUser_verifyThatPostIsNotDeleted() {
-        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3)
+        val postsBefore = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(postsBefore.size).isEqualTo(2)
         val result = data.deletePost(testSetup.POST_ID_5, testSetup.USER_ID_1)
         assertThat(result).isNull()
-        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3)
+        val postsAfter = data.getPostFromUser(testSetup.USER_ID_3, 10,0)
         assertThat(postsAfter.size).isEqualTo(2)
     }
 

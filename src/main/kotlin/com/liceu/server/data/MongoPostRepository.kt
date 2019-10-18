@@ -73,7 +73,7 @@ class MongoPostRepository(
         return postRetrieved[0]
     }
 
-    override fun getPostsForFeed(user: User, date: Date, amount: Int): List<Post> {
+    override fun getPostsForFeed(user: User, date: Date, amount: Int, start: Int): List<Post> {
         if(user.following.isNullOrEmpty()){
             return emptyList()
         }
@@ -82,24 +82,29 @@ class MongoPostRepository(
                 .and("submissionDate").lte(date))
         val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
         val limitOfReturnedPosts = Aggregation.limit(amount.toLong())
-        val agg = Aggregation.newAggregation(match,sortByDate,limitOfReturnedPosts)
+        val skip = Aggregation.skip(start.toLong())
+        val agg = Aggregation.newAggregation(match,sortByDate,skip,limitOfReturnedPosts)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         return results.map { toPost(it) }
     }
 
-    override fun getPostFromUser(userId: String): List<Post> {
+    override fun getPostFromUser(userId: String,amount: Int,start: Int): List<Post> {
         val match = Aggregation.match(Criteria("userId").isEqualTo(ObjectId(userId))
                 .and("approvalFlag").isEqualTo(true))
         val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
-        val agg = Aggregation.newAggregation(match,sortByDate)
+        val skip = Aggregation.skip(start.toLong())
+        val limit = Aggregation.limit(amount.toLong())
+        val agg = Aggregation.newAggregation(match,sortByDate,skip,limit)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         return results.map { toPost(it) }
     }
 
-    override fun getPostsFromOwner(userId: String): List<Post> {
+    override fun getPostsFromOwner(userId: String,amount: Int,start: Int): List<Post> {
         val match = Aggregation.match(Criteria("userId").isEqualTo(ObjectId(userId)))
         val sortByDate = Aggregation.sort(Sort.Direction.DESC, "submissionDate")
-        val agg = Aggregation.newAggregation(match,sortByDate)
+        val skip = Aggregation.skip(start.toLong())
+        val limit = Aggregation.limit(amount.toLong())
+        val agg = Aggregation.newAggregation(match,sortByDate,skip,limit)
         val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
         return results.map { toPost(it) }
     }

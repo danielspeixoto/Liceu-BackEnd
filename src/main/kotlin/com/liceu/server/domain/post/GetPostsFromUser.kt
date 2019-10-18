@@ -11,16 +11,18 @@ class GetPostsFromUser(
         const val EVENT_NAME = "get_posts_from_user"
         val TAGS = listOf(RETRIEVAL,POST, USER)
     }
-    override fun run(userId: String,authenticatedUserId: String): List<Post> {
+    override fun run(userId: String,authenticatedUserId: String, amount: Int, start: Int): List<Post> {
         try {
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to userId,
-                    "authenticatedUserId" to authenticatedUserId
+                    "authenticatedUserId" to authenticatedUserId,
+                    "amount" to amount,
+                    "start" to start
             ))
             if(userId == authenticatedUserId){
-              return postRepository.getPostsFromOwner(userId)
+              return postRepository.getPostsFromOwner(userId,amount,start)
             }
-            return postRepository.getPostFromUser(userId)
+            return postRepository.getPostFromUser(userId,amount,start)
         }catch (e: Exception){
             Logging.error(EVENT_NAME,TAGS,e)
             throw e

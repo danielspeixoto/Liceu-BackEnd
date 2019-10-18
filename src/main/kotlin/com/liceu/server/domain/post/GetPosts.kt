@@ -15,7 +15,7 @@ class GetPosts(
         const val EVENT_NAME = "get_posts"
         val TAGS = listOf(RETRIEVAL,POST)
     }
-    override fun run(userId: String, date: Date, amount: Int): List<Post>? {
+    override fun run(userId: String, date: Date, amount: Int, start: Int): List<Post>? {
         if(amount == 0) {
             Logging.warn(UNCOMMON_PARAMS, TAGS, hashMapOf(
                     "action" to EVENT_NAME,
@@ -39,9 +39,10 @@ class GetPosts(
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "userId" to userId,
                     "dateRequired" to date,
-                    "amount" to amount
+                    "amount" to amount,
+                    "start" to start
             ))
-            return postRepository.getPostsForFeed(user,date,finalAmount)
+            return postRepository.getPostsForFeed(user,date,finalAmount,start)
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e
