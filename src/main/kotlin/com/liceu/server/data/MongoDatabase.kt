@@ -207,7 +207,6 @@ class MongoDatabase {
             val document: MongoPostDocument?,
             val approvalFlag: Boolean?=null,
             val likes: Int?=null
-
         ){
         @Id
         lateinit var id: ObjectId

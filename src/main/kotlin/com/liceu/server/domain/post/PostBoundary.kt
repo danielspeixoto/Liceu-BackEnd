@@ -62,7 +62,7 @@ class PostBoundary {
     }
 
     interface IUpdateDocument {
-        fun run(postId: String, userId: String,title:String, documentData: String)
+        fun run(postId: String, userId: String,documents: List<PostDocumentSubmission>)
     }
 
     interface IUpdateRating {

@@ -180,15 +180,19 @@ class PostController(
                 "version" to 2
         ))
         return try {
-            val documentData = body["documentData"] as String? ?: throw ValidationException()
-            val documentTitle = body["documentTitle"] as String? ?: throw ValidationException()
-            updateDocument.run(postId, authenticatedUserId,documentTitle,documentData)
+            val multipleDocuments = body["documentsData"] as List<HashMap<String,Any?>>
+            val documents = multipleDocuments.map {
+                PostDocumentSubmission(
+                        it["documentTitle"] as String? ?: throw ValidationException(),
+                        it["documentData"] as String? ?: throw ValidationException()
+                )
+            }
+            updateDocument.run(postId,authenticatedUserId,documents)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +
                     ("postId" to postId) +
-                    ("userId" to authenticatedUserId) +
-                    ("documentTitle" to body["documentTitle"])
+                    ("userId" to authenticatedUserId)
             )
         }
     }
