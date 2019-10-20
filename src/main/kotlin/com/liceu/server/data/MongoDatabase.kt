@@ -204,7 +204,7 @@ class MongoDatabase {
             val submissionDate: Date,
             val comments: List<MongoComment>?,
             val questions: List<MongoPostQuestions>?,
-            val document: MongoPostDocument?,
+            val documents: List<MongoPostDocument>?,
             val approvalFlag: Boolean?=null,
             val likes: Int?=null
         ){
