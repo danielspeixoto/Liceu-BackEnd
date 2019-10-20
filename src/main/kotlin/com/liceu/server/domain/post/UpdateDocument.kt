@@ -74,7 +74,7 @@ class UpdateDocument(
                 documentTypes.forEach {
                     fileExtension = fileExtension.replace(it.key,it.value)
                 }
-                var timeStamp = DateFunctions.retrieveActualTimeStamp().toString().replace("\\s".toRegex(), "")
+                var timeStamp = System.currentTimeMillis()
                 var fileName = "${it.title}${userId}${timeStamp}.${fileExtension}"
                 val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
 

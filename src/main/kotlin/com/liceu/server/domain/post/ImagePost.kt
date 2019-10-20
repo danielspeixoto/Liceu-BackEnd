@@ -62,7 +62,7 @@ class ImagePost(
             imageTypes.forEach {
                 fileExtension = fileExtension.replace(it.key,it.value)
             }
-            var timeStamp = DateFunctions.retrieveActualTimeStamp().toString().replace("\\s".toRegex(), "")
+            var timeStamp = System.currentTimeMillis()
             var fileName = "${post.image.title}${post.userId}${timeStamp}.${fileExtension}"
             val imageByteArray = Base64.getDecoder().decode(formattedEncryptedBytes)
 
