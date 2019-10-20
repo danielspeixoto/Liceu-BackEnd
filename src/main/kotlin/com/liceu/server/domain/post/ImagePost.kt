@@ -35,6 +35,7 @@ class ImagePost(
     override fun run(post: PostSubmission): String {
         val imageTypes = hashMapOf(
                 "image/jpeg" to "jpeg",
+                "image/jpg" to "jpg",
                 "image/png" to "png"
         )
         try {

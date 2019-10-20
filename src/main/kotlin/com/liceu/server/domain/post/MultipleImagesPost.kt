@@ -34,6 +34,7 @@ class MultipleImagesPost(
     override fun run(post: PostSubmission): String {
         val imageTypes = hashMapOf(
                 "image/jpeg" to "jpeg",
+                "image/jpg" to "jpg",
                 "image/png" to "png"
         )
         var formattedImages: MutableList<FormattedImage> = arrayListOf()
