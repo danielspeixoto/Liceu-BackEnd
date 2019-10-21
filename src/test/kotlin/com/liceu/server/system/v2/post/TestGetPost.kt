@@ -98,11 +98,9 @@ class TestGetPost: TestSystem("/v2/post") {
         val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=video legal&amount=10", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
-        Truth.assertThat(body.size).isEqualTo(4)
+        Truth.assertThat(body.size).isEqualTo(2)
         Truth.assertThat(body[0]["description"]).isEqualTo("teste de video legal 3")
-        Truth.assertThat(body[1]["description"]).isEqualTo("teste de video")
-        Truth.assertThat(body[2]["description"]).isEqualTo("teste de video 2")
-        Truth.assertThat(body[3]["description"]).isEqualTo("texto legal sobre texto de humanas")
+        Truth.assertThat(body[1]["description"]).isEqualTo("texto legal sobre texto de humanas")
     }
 
     @Test
