@@ -282,9 +282,9 @@ class TestPostRepositoryIntegration {
     @Test
     fun getPostsByDescription_descriptionExists_returnListOfPosts(){
         val postsRetrieved = data.getPostsByDescription("texto",5)
-        assertThat(postsRetrieved.size).isEqualTo(5)
+        assertThat(postsRetrieved.size).isEqualTo(4)
         val idsFromPosts = postsRetrieved.map { it.id }
-        assertThat(idsFromPosts).containsExactly(testSetup.POST_ID_6,testSetup.POST_ID_4,testSetup.POST_ID_1,testSetup.POST_ID_2,testSetup.POST_ID_5).inOrder()
+        assertThat(idsFromPosts).containsExactly(testSetup.POST_ID_4,testSetup.POST_ID_1,testSetup.POST_ID_2,testSetup.POST_ID_5).inOrder()
     }
 
     @Test

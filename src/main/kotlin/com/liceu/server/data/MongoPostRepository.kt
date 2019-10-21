@@ -108,7 +108,8 @@ class MongoPostRepository(
 
     override fun getPostsByDescription(descriptionSearched: String, amount: Int): List<Post> {
         val textQuery = TextQuery.queryText(TextCriteria().matchingAny(descriptionSearched)).sortByScore().limit(amount)
-        val result = template.find(textQuery, MongoDatabase.MongoPost::class.java, MongoDatabase.POST_COLLECTION)
+        textQuery.addCriteria(Criteria.where("approvalFlag").isEqualTo(true))
+        val result = template.find(textQuery,MongoDatabase.MongoPost::class.java, MongoDatabase.POST_COLLECTION)
         return result.map { toPost(it) }
     }
 
