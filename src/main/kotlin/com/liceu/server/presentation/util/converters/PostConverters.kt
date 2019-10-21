@@ -30,11 +30,11 @@ fun toPostResponse(post: Post): PostResponse {
             post.video,
             post.multipleImages,
             post.submissionDate,
-            post.comments,
+            commentsManager(post.comments),
             post.questions,
             post.documents,
             statusCodeManager(post.approvalFlag),
-            post.likes
+            likesManager(post.likes)
     )
 }
 
@@ -54,4 +54,18 @@ fun postTypeManager(type: String) : String {
         return "image"
     }
     return type
+}
+
+fun commentsManager(comments: List<PostComment>?): List<PostComment> {
+    if(comments == null){
+        return emptyList()
+    }
+    return comments
+}
+
+fun likesManager(likes: Int?): Int {
+    if(likes == null){
+        return 0
+    }
+    return likes
 }
