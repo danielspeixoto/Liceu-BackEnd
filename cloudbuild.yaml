@@ -6,3 +6,6 @@ steps:
     args: ['push', 'gcr.io/liceu-main/kotlinserver']
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['set', 'image', 'deployment.yaml', 'my-container=gcr.io/liceu-main/kotlinserver']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=liceu-dev-cluster'
