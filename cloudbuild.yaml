@@ -1,8 +1,8 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/liceu-main/kotlinServer', '.']
+    args: ['build', '-t', 'gcr.io/liceu-main/kotlinserver', '.']
     timeout: 500s
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/liceu-main/kotlinServer']
+    args: ['push', 'gcr.io/liceu-main/kotlinserver']
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['set', 'image', 'deployment.yaml', 'my-container=gcr.io/liceu-main/kotlinServer']
+    args: ['set', 'image', 'deployment.yaml', 'my-container=gcr.io/liceu-main/kotlinserver']
