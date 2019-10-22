@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: liceu-dev
-  name: liceu-dev
+    app: liceu-dev-new
+  name: liceu-dev-new
   namespace: default
 spec:
   progressDeadlineSeconds: 600
