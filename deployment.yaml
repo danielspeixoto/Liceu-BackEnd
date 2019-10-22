@@ -2,8 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: liceu-dev-new
-  name: liceu-dev-new
+    app: liceu-dev
+  name: liceu-dev
   namespace: default
 spec:
   progressDeadlineSeconds: 600
@@ -13,7 +13,10 @@ spec:
     matchLabels:
       app: liceu-dev
   strategy:
-    type: Recreate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       creationTimestamp: null
