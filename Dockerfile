@@ -7,3 +7,4 @@ RUN cp /home/gradle/src/build/libs/*.jar /app.jar
 ENV PORT 8080
 CMD java -jar /app.jar
 EXPOSE $PORT
+

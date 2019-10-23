@@ -1,0 +1,11 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/liceu-main/kotlinserver', '.']
+    timeout: 500s
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/liceu-main/kotlinserver']
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f' ,'deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=liceu-dev-cluster'
