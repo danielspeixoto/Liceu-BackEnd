@@ -388,12 +388,9 @@ class MongoUserRepository(
     }
 
     override fun getPostsSaved(userId: String, amount: Int, start: Int): List<String>? {
-        val result = template.findOne(Query(Criteria("_id")
-                .isEqualTo(ObjectId(userId)))
-                .limit(amount)
-                .skip(start.toLong()),
-                MongoDatabase.MongoUser::class.java,
-                MongoDatabase.USER_COLLECTION)
+        val query = Query(Criteria.where("_id").isEqualTo(ObjectId(userId)))
+        query.fields().slice("savedPosts", start,amount)
+        val result = template.findOne(query, MongoDatabase.MongoUser::class.java, MongoDatabase.USER_COLLECTION)
         return result?.savedPosts?.map { it.toHexString() }
     }
 }

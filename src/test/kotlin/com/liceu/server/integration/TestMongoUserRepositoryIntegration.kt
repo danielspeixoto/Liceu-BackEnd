@@ -125,6 +125,14 @@ class TestMongoUserRepositoryIntegration {
     }
 
     @Test
+    fun getPostsSaved_userExist_returnSinglePost(){
+        val result = data.getPostsSaved(testSetup.USER_ID_2,1,1)
+        assertThat(result?.size).isEqualTo(1)
+        assertThat(result?.get(0)).isEqualTo(testSetup.POST_ID_1)
+    }
+
+
+    @Test
     fun challengesFromUser_challengeExists_returnChallenges(){
         val result = data.getChallengesFromUserById(testSetup.USER_ID_1,10,0)
         val ids = result.map { it.id }
