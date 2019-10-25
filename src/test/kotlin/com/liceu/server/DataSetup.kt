@@ -56,7 +56,11 @@ class DataSetup {
     val POST_ID_6 = "09c54d325b75357a581d4ca7"
     val POST_ID_7 = "09c54d325b75357a581d4ca8"
     val POST_ID_8 = "09c54d325b75357a581d4ca9"
-    val POST_ID_9= "09c54d325b75357a581d4ca0"
+    val POST_ID_9 = "09c54d325b75357a581d4ca0"
+
+
+    val POST_COMMENT_ID_1 = "12c54d325b75357a581d4ca0"
+    val POST_COMMENT_ID_2 = "11c54d325b75357a581d4ca0"
 
     val ACITIVITY_ID_1 = "0a1449a4bdb40abd5ae1e461"
     val ACITIVITY_ID_2 = "0a2449a4bdb40abd5ae1e461"
@@ -1238,7 +1242,20 @@ class DataSetup {
                 ),
                 null,
                 Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
-                null,
+                listOf(
+                        MongoDatabase.MongoComment(
+                                ObjectId(POST_COMMENT_ID_1),
+                                ObjectId(USER_ID_1),
+                                "cara legal",
+                                "ahah massa o post"
+                        ),
+                        MongoDatabase.MongoComment(
+                                ObjectId(POST_COMMENT_ID_2),
+                                ObjectId(USER_ID_2),
+                                "outro cara legal",
+                                "ahah gostei do post"
+                        )
+                ),
                 null,
                 null,
                 false

@@ -395,6 +395,11 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
+    fun deleteCommentPost(): PostBoundary.IDeleteCommentPost {
+        return DeleteCommentPost(mongoPostRepository)
+    }
+
+    @Bean
     fun getActivitiesFromUser(): ActivityBoundary.IGetActivitiesFromUser{
         return GetActivitiesFromUser(mongoActivityRepository,50)
     }

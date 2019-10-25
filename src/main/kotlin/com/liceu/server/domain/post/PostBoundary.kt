@@ -17,6 +17,7 @@ class PostBoundary {
         fun updateDocumentPost(postId: String, title: String, type: String, documentURL: String): Long
         fun updateLike(postId: String): Long
         fun deletePost(postId: String,userId: String): Post?
+        fun deleteCommentInPost(postId: String, commentId: String, userId: String): Long
         fun countApprovedPosts(userId: String): Int
         fun postExists(postId: String): Boolean
     }
@@ -71,6 +72,10 @@ class PostBoundary {
 
     interface IDeletePost {
         fun run(postId: String,userId: String)
+    }
+
+    interface IDeleteCommentPost {
+        fun run (postId: String, commentId: String, userId: String)
     }
 
 
