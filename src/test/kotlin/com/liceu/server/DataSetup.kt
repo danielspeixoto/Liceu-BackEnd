@@ -396,7 +396,8 @@ class DataSetup {
                 null,
                 null,
                 savedPosts = listOf(
-                        ObjectId(POST_ID_2)
+                        ObjectId(POST_ID_2),
+                        ObjectId(POST_ID_1)
                 )
         )
         user2.id = ObjectId(USER_ID_2)

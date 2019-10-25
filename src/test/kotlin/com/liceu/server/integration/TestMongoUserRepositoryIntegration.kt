@@ -117,6 +117,22 @@ class TestMongoUserRepositoryIntegration {
     }
 
     @Test
+    fun getPostsSaved_userExist_returnPostsSavedList(){
+        val result = data.getPostsSaved(testSetup.USER_ID_2,3,0)
+        assertThat(result?.size).isEqualTo(2)
+        assertThat(result?.get(0)).isEqualTo(testSetup.POST_ID_2)
+        assertThat(result?.get(1)).isEqualTo(testSetup.POST_ID_1)
+    }
+
+    @Test
+    fun getPostsSaved_userExist_returnSinglePost(){
+        val result = data.getPostsSaved(testSetup.USER_ID_2,1,1)
+        assertThat(result?.size).isEqualTo(1)
+        assertThat(result?.get(0)).isEqualTo(testSetup.POST_ID_1)
+    }
+
+
+    @Test
     fun challengesFromUser_challengeExists_returnChallenges(){
         val result = data.getChallengesFromUserById(testSetup.USER_ID_1,10,0)
         val ids = result.map { it.id }
@@ -313,12 +329,13 @@ class TestMongoUserRepositoryIntegration {
 
     @Test
     fun updateAddPostToBeSaved_userExistsPostExists_verifyUser(){
-        val change = data.updateAddPostToBeSaved(testSetup.USER_ID_2,testSetup.POST_ID_1)
+        val change = data.updateAddPostToBeSaved(testSetup.USER_ID_2,testSetup.POST_ID_3)
         assertThat(change).isEqualTo(1)
         val userChanged = data.getUserById(testSetup.USER_ID_2)
-        assertThat(userChanged.savedPosts?.size).isEqualTo(2)
+        assertThat(userChanged.savedPosts?.size).isEqualTo(3)
         assertThat(userChanged.savedPosts?.get(0)).isEqualTo(testSetup.POST_ID_2)
         assertThat(userChanged.savedPosts?.get(1)).isEqualTo(testSetup.POST_ID_1)
+        assertThat(userChanged.savedPosts?.get(2)).isEqualTo(testSetup.POST_ID_3)
     }
 
     @Test
@@ -326,7 +343,7 @@ class TestMongoUserRepositoryIntegration {
         val change = data.updateRemovePostSaved(testSetup.USER_ID_2,testSetup.POST_ID_2)
         assertThat(change).isEqualTo(1)
         val userChanged = data.getUserById(testSetup.USER_ID_2)
-        assertThat(userChanged.savedPosts?.size).isEqualTo(0)
+        assertThat(userChanged.savedPosts?.size).isEqualTo(1)
     }
 
 }

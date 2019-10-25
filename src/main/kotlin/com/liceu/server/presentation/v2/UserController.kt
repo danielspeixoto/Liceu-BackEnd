@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.lang.ClassCastException
-import java.time.Instant
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.validation.ValidationException
@@ -44,7 +42,8 @@ class UserController (
         @Autowired val updatePostSavedToBeRemoved: UserBoundary.IUpdateSavedPostToBeRemoved,
         @Autowired val getUsersByNameUsingLocation: UserBoundary.IGetUsersByNameUsingLocation,
         @Autowired val getPostsFromUser: PostBoundary.IGetPostsFromUser,
-        @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser
+        @Autowired val getActivityFromUser: ActivityBoundary.IGetActivitiesFromUser,
+        @Autowired val getPostsSaved: UserBoundary.IGetSavedPosts
 
 ) {
 
@@ -160,7 +159,7 @@ class UserController (
     fun getActivityFromUser (
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
-            @RequestParam(value = "amount", defaultValue = "0") amount: Int,
+            @RequestParam(value = "amount", defaultValue = "20") amount: Int,
             @RequestParam(value = "start", defaultValue = "0") start: Int,
             @RequestParam(value = "type", defaultValue = "") type: List<String>,
             request: HttpServletRequest
@@ -181,6 +180,36 @@ class UserController (
             handleException(e, eventName, eventTags, networkData +
                     ("authenticatedUserId" to authenticatedUserId) +
                     ("pathVariableUserId" to userId) +
+                    ("amount" to amount)
+            )
+        }
+    }
+
+    @GetMapping ("/{userId}/savedPosts")
+    fun getSavedPosts (
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("userId") userId: String,
+            @RequestParam(value = "amount", defaultValue = "20") amount: Int,
+            @RequestParam(value = "start", defaultValue = "0") start: Int,
+            request: HttpServletRequest
+    ): ResponseEntity<List<String>>{
+        val eventName = "get_posts_saved_from_user"
+        val eventTags = listOf(CONTROLLER, NETWORK, USER,POST, SAVED,RETRIEVAL)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try{
+            if(userId != authenticatedUserId){
+                throw throw AuthenticationException("user attempting to retrieve other user properties")
+            }
+            val postsSavedRetrieved = getPostsSaved.run(userId,amount,start)
+            ResponseEntity(postsSavedRetrieved,HttpStatus.OK)
+        }catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("authenticatedUserId" to authenticatedUserId) +
+                    ("pathVariableUserId" to userId) +
+                    ("start" to start) +
                     ("amount" to amount)
             )
         }

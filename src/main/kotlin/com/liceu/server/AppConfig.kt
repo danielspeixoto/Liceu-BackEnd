@@ -72,6 +72,9 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${values.postFinderAmount}")
     var postFinderAmount: Int = 20
 
+    @Value("\${values.postSavedAmount}")
+    var postSavedAmount: Int = 20
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -269,6 +272,11 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun updateRemoveFromSavedPosts(): UserBoundary.IUpdateSavedPostToBeRemoved {
         return UpdatePostSavedToBeRemoved(mongoUserRepository)
+    }
+
+    @Bean
+    fun getPostsSaved(): UserBoundary.IGetSavedPosts {
+        return GetPostsSaved(mongoUserRepository,postSavedAmount)
     }
 
     @Bean

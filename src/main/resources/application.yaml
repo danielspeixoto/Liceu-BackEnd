@@ -37,3 +37,4 @@ values:
   reportParamsAmount: ${REPORT_PARAMS_AMOUNT}
   reportMessageLength: ${REPORT_MESSAGE_LENGTH}
   postFinderAmount: ${POST_FINDER_AMOUNT}
+  postSavedAmount: ${POST_SAVED_AMOUNT}
