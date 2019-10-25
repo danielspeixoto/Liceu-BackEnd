@@ -28,6 +28,7 @@ class PostController(
         @Autowired val updateDocument: PostBoundary.IUpdateDocument,
         @Autowired val updateRating: PostBoundary.IUpdateRating,
         @Autowired val deletePosts: PostBoundary.IDeletePost,
+        @Autowired val deleteCommentPost: PostBoundary.IDeleteCommentPost,
         @Autowired val getPostById: PostBoundary.IGetPostById,
         @Autowired val getPostsByDescriptions: PostBoundary.IGetPostsByDescription
 ) {
@@ -237,6 +238,32 @@ class PostController(
             handleException(e, eventName, eventTags, networkData +
                     ("postId" to postId) +
                     ("userId" to authenticatedUserId)
+            )
+        }
+    }
+
+    @DeleteMapping("/{postId}/comments")
+    fun deleteComment(
+            @RequestAttribute("userId") authenticatedUserId: String,
+            @PathVariable("postId") postId: String,
+            @RequestBody body: HashMap<String, Any>,
+            request: HttpServletRequest
+    ): ResponseEntity<Void> {
+        val eventName = "delete_comment_post"
+        val eventTags = listOf(CONTROLLER, NETWORK, POST, COMMENT,DELETE)
+        val networkData = netUtils.networkData(request)
+        Logging.info(eventName, eventTags, data = networkData + hashMapOf<String, Any>(
+                "version" to 2
+        ))
+        return try {
+            val commentId = body["commentId"] as String? ?: throw ValidationException()
+            deleteCommentPost.run(postId, commentId,authenticatedUserId)
+            ResponseEntity(HttpStatus.OK)
+        } catch (e: Exception) {
+            handleException(e, eventName, eventTags, networkData +
+                    ("postId" to postId) +
+                    ("userId" to authenticatedUserId) +
+                    ("commentId" to  body["commentId"])
             )
         }
     }

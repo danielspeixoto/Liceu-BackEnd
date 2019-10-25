@@ -326,6 +326,26 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
+    fun deleteCommentInPost_postExists_verifyPost() {
+        val postBefore = data.getPostById(testSetup.POST_ID_8)
+        assertThat(postBefore.comments?.size).isEqualTo(2)
+        val result = data.deleteCommentInPost(testSetup.POST_ID_8,testSetup.POST_COMMENT_ID_1,testSetup.USER_ID_1)
+        assertThat(result).isEqualTo(1)
+        val postAfter = data.getPostById(testSetup.POST_ID_8)
+        assertThat(postAfter.comments?.size).isEqualTo(1)
+    }
+
+    @Test
+    fun deleteCommentInPost_postExistsWrongUser_verifyPost() {
+        val postBefore = data.getPostById(testSetup.POST_ID_8)
+        assertThat(postBefore.comments?.size).isEqualTo(2)
+        val result = data.deleteCommentInPost(testSetup.POST_ID_8,testSetup.POST_COMMENT_ID_2,testSetup.USER_ID_3)
+        assertThat(result).isEqualTo(0)
+        val postAfter = data.getPostById(testSetup.POST_ID_8)
+        assertThat(postAfter.comments?.size).isEqualTo(2)
+    }
+
+    @Test
     fun deleteMultiplePosts_postExists_verifyPosts() {
         val postsBefore = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(postsBefore.size).isEqualTo(2)

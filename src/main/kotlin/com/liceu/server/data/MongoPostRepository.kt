@@ -12,6 +12,14 @@ import org.springframework.stereotype.Repository
 import java.time.Instant
 import java.time.ZoneOffset
 import java.util.*
+import com.mongodb.client.model.Updates.pull
+import org.springframework.data.mongodb.core.query.Query.query
+import com.mongodb.BasicDBObject
+import com.mongodb.client.model.Updates.pull
+
+
+
+
 
 
 @Repository
@@ -178,6 +186,19 @@ class MongoPostRepository(
                 MongoDatabase.MongoPost::class.java
         )
         return result?.let { toPost(it) }
+    }
+
+    override fun deleteCommentInPost(postId: String,commentId: String, userId: String): Long {
+        val update = Update().pull("comments", BasicDBObject("id", ObjectId(commentId)))
+        val result = template.updateFirst(
+                query(Criteria.where("_id").isEqualTo(ObjectId(postId))
+                        .and("comments.id").isEqualTo(ObjectId(commentId))
+                        .and("comments.userId").isEqualTo(ObjectId(userId))),
+                update,
+                MongoDatabase.MongoPost::class.java
+        )
+        return result.modifiedCount
+0
     }
 
     override fun countApprovedPosts(userId: String): Int {
