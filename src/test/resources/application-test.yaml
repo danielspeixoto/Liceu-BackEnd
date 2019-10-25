@@ -39,3 +39,4 @@ values:
   reportParamsAmount: 5
   reportMessageLength: 200
   postFinderAmount: 5
+  postSavedAmount: 5
