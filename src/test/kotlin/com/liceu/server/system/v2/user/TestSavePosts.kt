@@ -46,8 +46,33 @@ class TestSavePosts: TestSystem("/v2/user") {
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/savePost", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val userChanged = userRepo.getUserById(testSetup.USER_ID_2)
-        Truth.assertThat(userChanged.savedPosts?.size).isEqualTo(0)
+        Truth.assertThat(userChanged.savedPosts?.size).isEqualTo(1)
     }
+
+    @Test
+    fun getSavedPosts_userExists_returnListOfSavedPosts() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<String>>("$baseUrl/${testSetup.USER_ID_2}/savedPosts", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body.size).isEqualTo(2)
+        Truth.assertThat(body[0]).isEqualTo(testSetup.POST_ID_2)
+        Truth.assertThat(body[1]).isEqualTo(testSetup.POST_ID_1)
+    }
+
+    @Test
+    fun getSavedPosts_userDontExists_returnListOfSavedPosts() {
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<String>>("$baseUrl/${testSetup.INVALID_ID}/savedPosts", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+    }
+
 
     @Test
     fun updateSavedPosts_postsIdDoesNotExists_returnVoid() {
@@ -60,6 +85,7 @@ class TestSavePosts: TestSystem("/v2/user") {
         val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_1}/savePost", HttpMethod.PUT, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
     }
+
 
     @Test
     fun updateSavedPosts_postIdToNull_returnVoid() {

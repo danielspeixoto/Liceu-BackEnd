@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.aggregation.*
 import org.springframework.data.mongodb.core.aggregation.Aggregation.*
+import org.springframework.data.mongodb.core.findOne
 import org.springframework.stereotype.Repository
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.data.mongodb.core.query.*
@@ -386,5 +387,14 @@ class MongoUserRepository(
         return users[0]
     }
 
+    override fun getPostsSaved(userId: String, amount: Int, start: Int): List<String>? {
+        val result = template.findOne(Query(Criteria("_id")
+                .isEqualTo(ObjectId(userId)))
+                .limit(amount)
+                .skip(start.toLong()),
+                MongoDatabase.MongoUser::class.java,
+                MongoDatabase.USER_COLLECTION)
+        return result?.savedPosts?.map { it.toHexString() }
+    }
 }
 
