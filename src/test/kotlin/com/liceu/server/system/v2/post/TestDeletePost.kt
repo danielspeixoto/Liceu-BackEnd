@@ -50,10 +50,8 @@ class TestDeletePost: TestSystem ("/v2/post") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "commentId" to testSetup.POST_COMMENT_ID_1
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_8}/comments", HttpMethod.DELETE, entity)
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_8}/${testSetup.POST_COMMENT_ID_1}", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val postAfter = data.getPostById(testSetup.POST_ID_8)
         Truth.assertThat(postAfter.comments?.size).isEqualTo(1)
@@ -64,10 +62,8 @@ class TestDeletePost: TestSystem ("/v2/post") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_3_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "commentId" to testSetup.INVALID_ID
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_8}/comments", HttpMethod.DELETE, entity)
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_8}/${testSetup.INVALID_ID}", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val postAfter = data.getPostById(testSetup.POST_ID_8)
         Truth.assertThat(postAfter.comments?.size).isEqualTo(2)
@@ -78,10 +74,8 @@ class TestDeletePost: TestSystem ("/v2/post") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "commentId" to testSetup.POST_COMMENT_ID_1
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.INVALID_ID}/comments", HttpMethod.DELETE, entity)
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.INVALID_ID}/${testSetup.POST_COMMENT_ID_1}", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
     }
 
@@ -90,10 +84,8 @@ class TestDeletePost: TestSystem ("/v2/post") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "commentId" to ""
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_8}/comments", HttpMethod.DELETE, entity)
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_8}/ ", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
@@ -105,8 +97,8 @@ class TestDeletePost: TestSystem ("/v2/post") {
         val entity = HttpEntity(hashMapOf(
                 "commentId" to null
         ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_8}/comments", HttpMethod.DELETE, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.POST_ID_8}/${null}", HttpMethod.DELETE, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
 

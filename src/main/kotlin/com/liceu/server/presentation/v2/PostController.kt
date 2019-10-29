@@ -242,11 +242,11 @@ class PostController(
         }
     }
 
-    @DeleteMapping("/{postId}/comments")
+    @DeleteMapping("/{postId}/{commentId}")
     fun deleteComment(
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("postId") postId: String,
-            @RequestBody body: HashMap<String, Any>,
+            @PathVariable("commentId") commentId: String,
             request: HttpServletRequest
     ): ResponseEntity<Void> {
         val eventName = "delete_comment_post"
@@ -256,14 +256,13 @@ class PostController(
                 "version" to 2
         ))
         return try {
-            val commentId = body["commentId"] as String? ?: throw ValidationException()
             deleteCommentPost.run(postId, commentId,authenticatedUserId)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +
                     ("postId" to postId) +
                     ("userId" to authenticatedUserId) +
-                    ("commentId" to  body["commentId"])
+                    ("commentId" to commentId)
             )
         }
     }
