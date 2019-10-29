@@ -40,10 +40,8 @@ class TestSavePosts: TestSystem("/v2/user") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "postId" to testSetup.POST_ID_2
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/savePost", HttpMethod.DELETE, entity)
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/${testSetup.POST_ID_2}", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val userChanged = userRepo.getUserById(testSetup.USER_ID_2)
         Truth.assertThat(userChanged.savedPosts?.size).isEqualTo(1)
@@ -139,11 +137,9 @@ class TestSavePosts: TestSystem("/v2/user") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "postId" to null
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/savePost", HttpMethod.DELETE, entity)
-        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/${null}", HttpMethod.DELETE, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
     @Test
@@ -151,10 +147,8 @@ class TestSavePosts: TestSystem("/v2/user") {
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_2_ACCESS_TOKEN
-        val entity = HttpEntity(hashMapOf(
-                "postId" to ""
-        ), headers)
-        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/savePost", HttpMethod.DELETE, entity)
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<Void>("$baseUrl/${testSetup.USER_ID_2}/ ", HttpMethod.DELETE, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.BAD_REQUEST)
     }
 
