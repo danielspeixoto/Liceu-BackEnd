@@ -29,42 +29,42 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: CHALLENGE_HISTORY_AMOUNT
-                  name: liceu-prod-config
+                  name: liceu-env-variables
             - name: GOOGLE_DOCUMENT_BUCKET
               valueFrom:
                 configMapKeyRef:
                   key: GOOGLE_DOCUMENT_BUCKET
-                  name: liceu-prod-config
+                  name: liceu-env-variables
             - name: GOOGLE_IMAGE_BUCKET
               valueFrom:
                 configMapKeyRef:
                   key: GOOGLE_IMAGE_BUCKET
-                  name: liceu-prod-config
+                  name: liceu-env-variables
             - name: POSTS_NUMBER_APPROVAL
               valueFrom:
                 configMapKeyRef:
                   key: POSTS_NUMBER_APPROVAL
-                  name: liceu-prod-config
+                  name: liceu-env-variables
             - name: REPORT_MESSAGE_LENGTH
               valueFrom:
                 configMapKeyRef:
                   key: REPORT_MESSAGE_LENGTH
-                  name: liceu-prod-config
+                  name: liceu-env-variables
             - name: REPORT_PARAMS_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: REPORT_PARAMS_AMOUNT
-                  name: liceu-prod-config
+                  name: liceu-env-variables
             - name: REPORT_TAGS_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: REPORT_TAGS_AMOUNT
-                  name: liceu-prod-config
+                  name: liceu-env-variables
             - name: TRIVIA_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: TRIVIA_AMOUNT
-                  name: liceu-prod-config
+                  name: liceu-env-variables
             - name: API_KEY_KEY
                 valueFrom:
                   secretKeyRef:
@@ -165,7 +165,7 @@ spec:
                 secretKeyRef:
                   name: slack-report-webhook
                   key: value
-          image: gcr.io/liceu-main/kotlinserver:latest
+          image: gcr.io/liceu-gke-cluster/kotlinserver:latest
           imagePullPolicy: IfNotPresent
           name: kotlinserver
       dnsPolicy: ClusterFirst
