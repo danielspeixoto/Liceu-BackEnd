@@ -659,11 +659,11 @@ class UserController (
         }
     }
 
-    @DeleteMapping("/{userId}/savePost")
+    @DeleteMapping("/{userId}/{postId}")
     fun removeSavedPost(
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
-            @RequestBody body: HashMap<String, Any>,
+            @PathVariable("postId") postId: String,
             request: HttpServletRequest
     ): ResponseEntity<Void> {
         val eventName = "remove_saved_posts"
@@ -677,14 +677,13 @@ class UserController (
             if (authenticatedUserId != userId) {
                 throw AuthenticationException("user attempting to change other user properties")
             }
-            val postId = body["postId"] as String? ?: throw ValidationException ()
             updatePostSavedToBeRemoved.run(authenticatedUserId,postId)
             ResponseEntity(HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +
                     ("authenticatedUserId" to authenticatedUserId) +
                     ("pathVariableUserId" to userId) +
-                    ("postId" to body["postId"])
+                    ("postId" to postId)
             )
         }
     }
