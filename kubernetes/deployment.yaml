@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   labels:
     app: liceu-prod
+  annotations:
+    reloader.stakater.com/auto: "true"
   name: liceu-prod
   namespace: default
 spec:
