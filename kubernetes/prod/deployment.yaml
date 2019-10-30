@@ -9,7 +9,7 @@ metadata:
   namespace: default
 spec:
   progressDeadlineSeconds: 600
-  replicas: 3
+  replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -46,58 +46,57 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: SERVICE_TYPE
-                  name: liceu-env-variables
-
+                  name: liceu-prod
             - name: CHALLENGE_HISTORY_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: CHALLENGE_HISTORY_AMOUNT
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: GOOGLE_DOCUMENT_BUCKET
               valueFrom:
                 configMapKeyRef:
                   key: GOOGLE_DOCUMENT_BUCKET
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: GOOGLE_IMAGE_BUCKET
               valueFrom:
                 configMapKeyRef:
                   key: GOOGLE_IMAGE_BUCKET
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: POSTS_NUMBER_APPROVAL
               valueFrom:
                 configMapKeyRef:
                   key: POSTS_NUMBER_APPROVAL
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: POST_FINDER_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: POST_FINDER_AMOUNT
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: POST_SAVED_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: POST_SAVED_AMOUNT
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: REPORT_MESSAGE_LENGTH
               valueFrom:
                 configMapKeyRef:
                   key: REPORT_MESSAGE_LENGTH
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: REPORT_PARAMS_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: REPORT_PARAMS_AMOUNT
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: REPORT_TAGS_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: REPORT_TAGS_AMOUNT
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: TRIVIA_AMOUNT
               valueFrom:
                 configMapKeyRef:
                   key: TRIVIA_AMOUNT
-                  name: liceu-env-variables
+                  name: liceu-prod
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
@@ -148,17 +147,16 @@ spec:
                 secretKeyRef:
                   name: slack-report-webhook
                   key: value
-
             - name: APM_SERVER
-                valueFrom:
-                  secretKeyRef:
-                    name: apm-server
-                    key: value
+              valueFrom:
+                secretKeyRef:
+                  name: apm-server
+                  key: value
             - name: APM_SECRET_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: apm-secret-token
-                    key: value
+              valueFrom:
+                secretKeyRef:
+                  name: apm-secret-token
+                  key: value
       dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
       schedulerName: default-scheduler

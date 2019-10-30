@@ -9,7 +9,7 @@ metadata:
   namespace: dev
 spec:
   progressDeadlineSeconds: 600
-  replicas: 3
+  replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
@@ -47,7 +47,6 @@ spec:
                 configMapKeyRef:
                   key: SERVICE_TYPE
                   name: liceu-dev
-
             - name: CHALLENGE_HISTORY_AMOUNT
               valueFrom:
                 configMapKeyRef:
@@ -148,17 +147,16 @@ spec:
                 secretKeyRef:
                   name: slack-report-webhook-dev
                   key: value
-
             - name: APM_SERVER
-                valueFrom:
-                  secretKeyRef:
-                    name: apm-server
-                    key: value
+              valueFrom:
+                secretKeyRef:
+                  name: apm-server
+                  key: value
             - name: APM_SECRET_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: apm-secret-token
-                    key: value
+              valueFrom:
+                secretKeyRef:
+                  name: apm-secret-token
+                  key: value
       dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
       schedulerName: default-scheduler
