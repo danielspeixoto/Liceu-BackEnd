@@ -1,0 +1,31 @@
+apiVersion: v1
+data:
+  API_KEY: 2VsYHwfQKtjiAdLs8Z2fTLwuLpofSXWy
+  AUTH_PREFIX: "A2K7ZyciT3L2C7qZGO5gFPcc0F1vKhb2"
+  AUTH_SECRET: "0uOY0VAmNSugOYTAerXmFjvNEsmK8WHr"
+  CHALLENGE_HISTORY_AMOUNT: "10"
+  FIREBASE_CLOUD_MESSAGING_SERVER_KEY: AAAAxlZoPF4:APA91bGx7v83oK4tktHhBeIZGlaKvJsGdpxOfNnwtVjgCTUxCIP4aE---pojJmYGHSI8DyNoRwyZ2nTPoIGwobhZ5CMKfM7KadvCvMuj5R0947p9zp72u8mHpm2ltxGtky-StLh-GtzV
+  GOOGLE_CLIENT_ID: 851853196382-6dr3s1jb1ee3ejt7i4iselu4vej3rmbq.apps.googleusercontent.com
+  GOOGLE_CLIENT_SECRET: sm2sA37l2SshglMRa7PTAYz1
+  GOOGLE_DOCUMENT_BUCKET: liceu-post-documents-dev
+  GOOGLE_IMAGE_BUCKET: liceu-post-images-dev
+  JWT_SECRET: YeOxtzrwG4hnIQHwhopzbxjGmTtGITVB
+  MONGO_CONNECTION: mongodb+srv://dbAdminMasterLiceuDev:v41JK7NiDZGiNFFT@cluster0-3csiz.mongodb.net/test?retryWrites=true&w=majority
+  MONGO_DB_NAME: heroku_wn1s1nxv
+  PORT: "8080"
+  POST_FINDER_AMOUNT: "20"
+  POST_SAVED_AMOUNT: "20"
+  POSTS_NUMBER_APPROVAL: "1"
+  REPORT_MESSAGE_LENGTH: "200"
+  REPORT_PARAMS_AMOUNT: "30"
+  REPORT_TAGS_AMOUNT: "30"
+  SLACK_REPORT_WEBHOOK: https%3A%2F%2Fhooks.slack.com%2Fservices%2F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
+  TRIVIA_AMOUNT: "4"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2019-10-29T01:31:04Z"
+  name: liceu-dev-config
+  namespace: default
+  resourceVersion: "22983"
+  selfLink: /api/v1/namespaces/default/configmaps/liceu-dev-config
+  uid: aeff1bff-b124-4d37-a1a7-b3233fed675c

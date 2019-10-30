@@ -1,0 +1,178 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: liceu-prod
+  name: liceu-prod
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: liceu-prod
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: liceu-prod
+    spec:
+      containers:
+        - env:
+            - name: CHALLENGE_HISTORY_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: CHALLENGE_HISTORY_AMOUNT
+                  name: liceu-env-variables
+            - name: GOOGLE_DOCUMENT_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: GOOGLE_DOCUMENT_BUCKET
+                  name: liceu-env-variables
+            - name: GOOGLE_IMAGE_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: GOOGLE_IMAGE_BUCKET
+                  name: liceu-env-variables
+            - name: POSTS_NUMBER_APPROVAL
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTS_NUMBER_APPROVAL
+                  name: liceu-env-variables
+            - name: REPORT_MESSAGE_LENGTH
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_MESSAGE_LENGTH
+                  name: liceu-env-variables
+            - name: REPORT_PARAMS_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_PARAMS_AMOUNT
+                  name: liceu-env-variables
+            - name: REPORT_TAGS_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_TAGS_AMOUNT
+                  name: liceu-env-variables
+            - name: TRIVIA_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: TRIVIA_AMOUNT
+                  name: liceu-env-variables
+            - name: API_KEY_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-key
+                  key: key
+            - name: API_KEY_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: api-key
+                  key: value
+            - name: AUTH_PREFIX_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-prefix
+                  key: key
+            - name: AUTH_PREFIX_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: auth-prefix
+                  key: value
+            - name: AUTH_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: key
+            - name: AUTH_SECRET_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: value
+            - name: FIREBASE_SERVER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-server-key
+                  key: key
+            - name: FIREBASE_SERVER_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-server-key
+                  key: value
+            - name: GOOGLE_CLIENT_ID_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-id
+                  key: key
+            - name: GOOGLE_CLIENT_ID_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-id
+                  key: value
+            - name: GOOGLE_CLIENT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-secret
+                  key: key
+            - name: GOOGLE_CLIENT_SECRET_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-secret
+                  key: value
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: key
+            - name: JWT_SECRET_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: value
+            - name: MONGO_CONNECTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-connection
+                  key: key
+            - name: MONGO_CONNECTION_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-connection
+                  key: value
+            - name: MONGO_DB_NAME_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-db-name
+                  key: key
+            - name: MONGO_DB_NAME_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-db-name
+                  key: value
+            - name: SLACK_REPORT_WEBHOOK_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: slack-report-webhook
+                  key: key
+            - name: SLACK_REPORT_WEBHOOK_VALUE
+              valueFrom:
+                secretKeyRef:
+                  name: slack-report-webhook
+                  key: value
+          image: gcr.io/liceu-gke-cluster/kotlinserver:latest
+          imagePullPolicy: IfNotPresent
+          name: kotlinserver
+      dnsPolicy: ClusterFirstWithHostNet
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+
+
+
