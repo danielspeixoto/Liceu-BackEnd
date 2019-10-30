@@ -15,7 +15,7 @@ slack:
   slackReportWebhook: ${SLACK_REPORT_WEBHOOK}
 
 client:
-  api_key: ${API_KEY2}
+  api_key: ${API_KEY}
 
 mongo:
   dbName: ${MONGO_DB_NAME}
