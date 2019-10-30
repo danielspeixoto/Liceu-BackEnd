@@ -5,9 +5,9 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/liceu-main/kotlinserver']
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f' ,'deployment.yaml']
+    args: ['apply', '-f' ,'deployment.yaml']  # -> for updates in case of addition of new rule in yaml or new configMap variable/secret
 #  - name: 'gcr.io/cloud-builders/kubectl'
-#    args: ['set', 'image', 'deployment/liceu-main', 'my-container=gcr.io/liceu-main/kotlinserver'] -> for updates
+#    args: ['set', 'image', 'deployment/liceu-main', 'my-container=gcr.io/liceu-main/kotlinserver'] # -> for updates in image or resource
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
       - 'CLOUDSDK_CONTAINER_CLUSTER=liceu-dev-cluster'
