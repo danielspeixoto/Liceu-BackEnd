@@ -1,0 +1,169 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: liceu-dev
+  annotations:
+    reloader.stakater.com/auto: "true"
+  name: liceu-dev
+  namespace: dev
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: liceu-dev
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: liceu-dev
+    spec:
+      containers:
+        - name: kotlinserver
+          image: gcr.io/liceu-gke-cluster/kotlinserver:latest
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 60
+          env:
+            - name: SERVICE_TYPE
+              valueFrom:
+                configMapKeyRef:
+                  key: SERVICE_TYPE
+                  name: liceu-dev
+
+            - name: CHALLENGE_HISTORY_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: CHALLENGE_HISTORY_AMOUNT
+                  name: liceu-dev
+            - name: GOOGLE_DOCUMENT_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: GOOGLE_DOCUMENT_BUCKET
+                  name: liceu-dev
+            - name: GOOGLE_IMAGE_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: GOOGLE_IMAGE_BUCKET
+                  name: liceu-dev
+            - name: POSTS_NUMBER_APPROVAL
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTS_NUMBER_APPROVAL
+                  name: liceu-dev
+            - name: POST_FINDER_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: POST_FINDER_AMOUNT
+                  name: liceu-dev
+            - name: POST_SAVED_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: POST_SAVED_AMOUNT
+                  name: liceu-dev
+            - name: REPORT_MESSAGE_LENGTH
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_MESSAGE_LENGTH
+                  name: liceu-dev
+            - name: REPORT_PARAMS_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_PARAMS_AMOUNT
+                  name: liceu-dev
+            - name: REPORT_TAGS_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_TAGS_AMOUNT
+                  name: liceu-dev
+            - name: TRIVIA_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: TRIVIA_AMOUNT
+                  name: liceu-dev
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-key-dev
+                  key: value
+            - name: AUTH_PREFIX
+              valueFrom:
+                secretKeyRef:
+                  name: auth-prefix-dev
+                  key: value
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret-dev
+                  key: value
+            - name: FIREBASE_CLOUD_MESSAGING_SERVER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-server-key-dev
+                  key: value
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-id-dev
+                  key: value
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-secret-dev
+                  key: value
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret-dev
+                  key: value
+            - name: MONGO_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-connection-dev
+                  key: value
+            - name: MONGO_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-db-name-dev
+                  key: value
+            - name: SLACK_REPORT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: slack-report-webhook-dev
+                  key: value
+
+            - name: APM_SERVER
+                valueFrom:
+                  secretKeyRef:
+                    name: apm-server
+                    key: value
+            - name: APM_SECRET_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: apm-secret-token
+                    key: value
+      dnsPolicy: ClusterFirstWithHostNet
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+
+
+

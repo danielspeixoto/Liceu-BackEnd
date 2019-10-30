@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: liceu-dev-svc
+spec:
+  selector:
+    app: liceu-dev
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer

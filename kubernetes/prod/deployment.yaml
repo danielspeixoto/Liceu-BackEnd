@@ -42,6 +42,12 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 60
           env:
+            - name: SERVICE_TYPE
+              valueFrom:
+                configMapKeyRef:
+                  key: SERVICE_TYPE
+                  name: liceu-env-variables
+
             - name: CHALLENGE_HISTORY_AMOUNT
               valueFrom:
                 configMapKeyRef:
@@ -142,6 +148,17 @@ spec:
                 secretKeyRef:
                   name: slack-report-webhook
                   key: value
+
+            - name: APM_SERVER
+                valueFrom:
+                  secretKeyRef:
+                    name: apm-server
+                    key: value
+            - name: APM_SECRET_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: apm-secret-token
+                    key: value
       dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
       schedulerName: default-scheduler
