@@ -4,7 +4,7 @@ metadata:
   name: liceu-dev-svc
 spec:
   selector:
-    app: liceu-dev
+    app: liceu-prod
   ports:
     - protocol: TCP
       port: 80
