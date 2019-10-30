@@ -24,7 +24,22 @@ spec:
         app: liceu-prod
     spec:
       containers:
-        - env:
+        - name: kotlinserver
+          image: gcr.io/liceu-gke-cluster/kotlinserver:latest
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 60
+          env:
             - name: CHALLENGE_HISTORY_AMOUNT
               valueFrom:
                 configMapKeyRef:
@@ -44,6 +59,16 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: POSTS_NUMBER_APPROVAL
+                  name: liceu-env-variables
+            - name: POST_FINDER_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: POST_FINDER_AMOUNT
+                  name: liceu-env-variables
+            - name: POST_SAVED_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: POST_SAVED_AMOUNT
                   name: liceu-env-variables
             - name: REPORT_MESSAGE_LENGTH
               valueFrom:
@@ -80,7 +105,7 @@ spec:
                 secretKeyRef:
                   name: auth-secret
                   key: value
-            - name: FIREBASE_SERVER
+            - name: FIREBASE_CLOUD_MESSAGING_SERVER_KEY
               valueFrom:
                 secretKeyRef:
                   name: firebase-server-key
@@ -115,19 +140,6 @@ spec:
                 secretKeyRef:
                   name: slack-report-webhook
                   key: value
-      image: gcr.io/liceu-gke-cluster/kotlinserver:latest
-      imagePullPolicy: IfNotPresent
-      name: kotlinserver
-      readinessProbe:
-        tcpSocket:
-          port: 8080
-        initialDelaySeconds: 5
-        periodSeconds: 10
-      livenessProbe:
-        tcpSocket:
-          port: 8080
-        initialDelaySeconds: 15
-        periodSeconds: 20
       dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
       schedulerName: default-scheduler
