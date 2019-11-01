@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: kotlinserver
-          image: gcr.io/liceu-gke-cluster/kotlinserver:latest
+          image: gcr.io/liceu-main/kotlinserver:latest
           imagePullPolicy: IfNotPresent
           readinessProbe:
             httpGet:
