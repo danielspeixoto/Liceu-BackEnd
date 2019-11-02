@@ -4,9 +4,9 @@ metadata:
   name: liceu-prod-svc
 spec:
   selector:
-    app: liceu-prod
+     app: liceu-prod
+  type: NodePort
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
-  type: LoadBalancer
