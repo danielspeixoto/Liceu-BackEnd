@@ -4,8 +4,25 @@ steps:
     timeout: 500s
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/liceu-main/kotlinserver']
+
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f' ,'deployment.yaml']
+    args: ['apply', '-f' ,'kubernetes/dev/service.yaml']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=liceu-dev-cluster'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=liceu-cluster'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f' ,'kubernetes/dev/deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=liceu-cluster'
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f' ,'kubernetes/prod/service.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=liceu-cluster'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f' ,'kubernetes/prod/deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=liceu-cluster'

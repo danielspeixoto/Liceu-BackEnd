@@ -1,0 +1,8 @@
+apiVersion: networking.gke.io/v1beta1
+kind: ManagedCertificate
+metadata:
+  name: liceu-certificate
+  namespace: dev
+spec:
+  domains:
+    - dev.api.liceu.co

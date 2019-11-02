@@ -32,3 +32,4 @@ HELP.md
 lib
 dump
 app.jar
+kube-config

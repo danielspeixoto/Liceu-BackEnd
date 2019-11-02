@@ -1,0 +1,167 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: liceu-prod
+  annotations:
+    reloader.stakater.com/auto: "true"
+  name: liceu-prod
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: liceu-prod
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: liceu-prod
+    spec:
+      containers:
+        - name: kotlinserver
+          image: gcr.io/liceu-main/kotlinserver:latest
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 60
+          env:
+            - name: SERVICE_TYPE
+              valueFrom:
+                configMapKeyRef:
+                  key: SERVICE_TYPE
+                  name: liceu-prod
+            - name: CHALLENGE_HISTORY_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: CHALLENGE_HISTORY_AMOUNT
+                  name: liceu-prod
+            - name: GOOGLE_DOCUMENT_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: GOOGLE_DOCUMENT_BUCKET
+                  name: liceu-prod
+            - name: GOOGLE_IMAGE_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: GOOGLE_IMAGE_BUCKET
+                  name: liceu-prod
+            - name: POSTS_NUMBER_APPROVAL
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTS_NUMBER_APPROVAL
+                  name: liceu-prod
+            - name: POST_FINDER_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: POST_FINDER_AMOUNT
+                  name: liceu-prod
+            - name: POST_SAVED_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: POST_SAVED_AMOUNT
+                  name: liceu-prod
+            - name: REPORT_MESSAGE_LENGTH
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_MESSAGE_LENGTH
+                  name: liceu-prod
+            - name: REPORT_PARAMS_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_PARAMS_AMOUNT
+                  name: liceu-prod
+            - name: REPORT_TAGS_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: REPORT_TAGS_AMOUNT
+                  name: liceu-prod
+            - name: TRIVIA_AMOUNT
+              valueFrom:
+                configMapKeyRef:
+                  key: TRIVIA_AMOUNT
+                  name: liceu-prod
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-key
+                  key: value
+            - name: AUTH_PREFIX
+              valueFrom:
+                secretKeyRef:
+                  name: auth-prefix
+                  key: value
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: value
+            - name: FIREBASE_CLOUD_MESSAGING_SERVER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: firebase-server-key
+                  key: value
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-id
+                  key: value
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: google-client-secret
+                  key: value
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: value
+            - name: MONGO_CONNECTION
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-connection
+                  key: value
+            - name: MONGO_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-db-name
+                  key: value
+            - name: SLACK_REPORT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: slack-report-webhook
+                  key: value
+            - name: APM_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: apm-server
+                  key: value
+            - name: APM_SECRET_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: apm-secret-token
+                  key: value
+      dnsPolicy: ClusterFirstWithHostNet
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+
+
+
