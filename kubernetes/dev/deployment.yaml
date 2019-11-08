@@ -158,20 +158,20 @@ spec:
                   name: apm-secret-token
                   key: value
             - name: ELASTIC_CLUSTER
-                valueFrom:
-                  secretKeyRef:
-                    name: elastic-cluster
-                    key: value
+              valueFrom:
+                secretKeyRef:
+                  name: elastic-cluster
+                  key: value
             - name: ELASTIC_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: elastic-user
-                    key: value
+              valueFrom:
+                secretKeyRef:
+                  name: elastic-user
+                  key: value
             - name: ELASTIC_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: elastic-password
-                    key: value
+              valueFrom:
+                secretKeyRef:
+                  name: elastic-password
+                  key: value
       dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
       schedulerName: default-scheduler
