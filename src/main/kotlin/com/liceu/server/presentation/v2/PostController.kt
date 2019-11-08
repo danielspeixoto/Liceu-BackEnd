@@ -295,6 +295,7 @@ class PostController(
             @RequestAttribute("userId") authenticatedUserId: String,
             @RequestParam("description") description: String,
             @RequestParam("amount",defaultValue = "15") amount: Int,
+            @RequestParam("method",defaultValue = "mongo") method: String,
             request: HttpServletRequest
     ): ResponseEntity<List<PostResponse>> {
         val eventName = "get_post_by_id"
@@ -304,12 +305,13 @@ class PostController(
                 "version" to 2
         ))
         return try {
-            val postsRetrieved = getPostsByDescriptions.run(description,amount)
+            val postsRetrieved = getPostsByDescriptions.run(description,method,amount)
             ResponseEntity(postsRetrieved.map { toPostResponse(it) },HttpStatus.OK)
         } catch (e: Exception) {
             handleException(e, eventName, eventTags, networkData +
                     ("userId" to authenticatedUserId) +
                     ("description" to description) +
+                    ("method" to method) +
                     ("amount" to amount)
             )
         }

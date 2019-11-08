@@ -1,11 +1,14 @@
 package com.liceu.server.domain.post
 
+import com.liceu.server.data.elasticsearch.ElasticSearchFinder
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
+import org.springframework.beans.factory.annotation.Autowired
 
 class GetPostsByDescription(
         private val postRepository: PostBoundary.IRepository,
-        private val maxResults: Int
+        private val maxResults: Int,
+        @Autowired val elasticSearchFinder: PostBoundary.IElasticSearchFinder
 ): PostBoundary.IGetPostsByDescription {
 
     companion object {
@@ -13,7 +16,7 @@ class GetPostsByDescription(
         val TAGS = listOf(RETRIEVAL, POST, DESCRIPTION)
     }
 
-    override fun run(descriptionSearched: String, amount: Int): List<Post> {
+    override fun run(descriptionSearched: String, searchMethod: String, amount: Int): List<Post> {
             if(amount == 0) {
                 Logging.warn(UNCOMMON_PARAMS, TAGS, hashMapOf(
                         "action" to EVENT_NAME,
@@ -38,9 +41,19 @@ class GetPostsByDescription(
             }
             Logging.info(GetPosts.EVENT_NAME, TAGS, hashMapOf(
                     "description" to descriptionSearched,
-                    "amount" to amount
+                    "method" to searchMethod,
+                    "amount" to finalAmount
             ))
-            return postRepository.getPostsByDescription(descriptionSearched,finalAmount)
+            return if(searchMethod=="elasticSearch"){
+                val idsFromPosts = elasticSearchFinder.run(descriptionSearched, amount)
+                val postsRetrieved : MutableList<Post> = arrayListOf()
+                idsFromPosts.forEach {
+                    postsRetrieved.add(postRepository.getPostById(it))
+                }
+                postsRetrieved.toList()
+            }else{
+                postRepository.getPostsByDescription(descriptionSearched,finalAmount)
+            }
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e

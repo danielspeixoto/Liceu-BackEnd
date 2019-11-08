@@ -223,6 +223,18 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
+    fun getMultiplePosts_randomPostsFromId_returnListOfPosts(){
+        val postsRetrieved : MutableList<Post> = arrayListOf()
+        val listOfIds = listOf(testSetup.POST_ID_1,testSetup.POST_ID_2,testSetup.POST_ID_4,testSetup.POST_ID_8)
+        listOfIds.forEach { postsRetrieved.add(data.getPostById(it)) }
+        assertThat(listOfIds.size).isEqualTo(4)
+        assertThat(postsRetrieved.get(0).id).isEqualTo(testSetup.POST_ID_1)
+        assertThat(postsRetrieved.get(1).id).isEqualTo(testSetup.POST_ID_2)
+        assertThat(postsRetrieved.get(2).id).isEqualTo(testSetup.POST_ID_4)
+        assertThat(postsRetrieved.get(3).id).isEqualTo(testSetup.POST_ID_8)
+    }
+
+    @Test
     fun getPostsFromUser_userExists_returnListOfPosts(){
         val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(retrievedPosts.size).isEqualTo(2)

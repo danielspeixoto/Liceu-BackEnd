@@ -1,6 +1,7 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
+import com.liceu.server.data.elasticsearch.ElasticSearchFinder
 import com.liceu.server.data.firebase.FirebaseNotifications
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
@@ -75,6 +76,16 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${values.postSavedAmount}")
     var postSavedAmount: Int = 20
 
+    @Value("\${elasticsearch.elasticCluster}")
+    lateinit var elasticCluster: String
+
+    @Value("\${elasticsearch.elasticUser}")
+    lateinit var elasticUser: String
+
+    @Value("\${elasticsearch.elasticPassword}")
+    lateinit var elasticPassword: String
+
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -112,6 +123,15 @@ class AppConfig : AbstractMongoConfiguration() {
 
     val firebaseNotifications by lazy {
         FirebaseNotifications(firebaseCloudMessagingKey)
+    }
+
+    val elasticSearchFinder by lazy {
+        ElasticSearchFinder(elasticCluster,elasticUser,elasticPassword)
+    }
+
+    @Bean
+    fun elasticSearchFinder(): ElasticSearchFinder {
+        return ElasticSearchFinder(elasticCluster,elasticUser,elasticPassword)
     }
 
     @Value("\${google.clientId}")
@@ -371,7 +391,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun getPostByDescription(): PostBoundary.IGetPostsByDescription {
-        return GetPostsByDescription(mongoPostRepository,postFinderAmount)
+        return GetPostsByDescription(mongoPostRepository,postFinderAmount,elasticSearchFinder)
     }
 
     @Bean
