@@ -4,7 +4,7 @@ metadata:
   name: liceu-prod-svc
 spec:
   selector:
-    app: liceu-prod
+     app: liceu-prod
   type: NodePort
   ports:
     - protocol: TCP
