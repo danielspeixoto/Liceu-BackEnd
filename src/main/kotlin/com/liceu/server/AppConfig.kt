@@ -85,6 +85,12 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${elasticsearch.elasticPassword}")
     lateinit var elasticPassword: String
 
+    @Value("\${elasticsearch.elasticPort}")
+    var elasticPort: Int = 9243
+
+    @Value("\${elasticsearch.elasticScheme}")
+    lateinit var elasticScheme: String
+
 
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
@@ -126,12 +132,12 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     val elasticSearchFinder by lazy {
-        ElasticSearchFinder(elasticCluster,elasticUser,elasticPassword)
+        ElasticSearchFinder(elasticCluster,elasticUser,elasticPassword,elasticPort,elasticScheme)
     }
 
     @Bean
     fun elasticSearchFinder(): ElasticSearchFinder {
-        return ElasticSearchFinder(elasticCluster,elasticUser,elasticPassword)
+        return ElasticSearchFinder(elasticCluster,elasticUser,elasticPassword,elasticPort,elasticScheme)
     }
 
     @Value("\${google.clientId}")

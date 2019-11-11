@@ -16,7 +16,9 @@ import org.json.JSONObject
 class ElasticSearchFinder(
         private val elasticCluster: String,
         private val elasticUser: String,
-        private val elasticPassword: String
+        private val elasticPassword: String,
+        private val elasticPort: Int,
+        private val elasticScheme: String
 ): PostBoundary.IElasticSearchFinder {
 
     val client = setCredentialsElasticSearch(elasticUser,elasticPassword)
@@ -28,7 +30,7 @@ class ElasticSearchFinder(
                 UsernamePasswordCredentials(elasticUser, elasticPassword)
         )
         val builder = RestClient.builder(
-                HttpHost(elasticCluster, 9243, "https")
+                HttpHost(elasticCluster, elasticPort, elasticScheme)
         )
         .setHttpClientConfigCallback { httpClientBuilder -> httpClientBuilder
                 .setDefaultCredentialsProvider(credentialsProvider)

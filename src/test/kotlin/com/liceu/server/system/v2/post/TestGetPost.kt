@@ -95,7 +95,7 @@ class TestGetPost: TestSystem("/v2/post") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=video legal&amount=10", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=video legal&amount=3&method=elasticSearch", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(2)
@@ -109,14 +109,14 @@ class TestGetPost: TestSystem("/v2/post") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=futebol&amount=10", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=futebol&amount=10&method=elasticSearch", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body).isEmpty()
     }
 
     @Test
-    fun getPostsByDescriptionsUsingElastichSearch_descriptionMatch_returnListOfPosts(){
+    fun getPostsByDescriptionsUsingElasticSearch_descriptionMatch_returnListOfPosts(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
