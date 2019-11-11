@@ -235,6 +235,14 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
+    fun getPosts_elasticPosts_ReturnListOfPosts(){
+        val postsReceived1 = data.getPostById(testSetup.ELASTIC_POST_ID_1)
+        assertThat(postsReceived1.multipleImages?.get(0)?.title).isEqualTo("instagram")
+        assertThat(postsReceived1.multipleImages?.get(0)?.type).isEqualTo("jpg")
+        assertThat(postsReceived1.multipleImages?.get(0)?.imageData).isEqualTo("https://storage.googleapis.com/liceu-post-images-prod/instagram5dac8a80dc72fe4c7a16ac941571624388232.jpg")
+    }
+
+    @Test
     fun getPostsFromUser_userExists_returnListOfPosts(){
         val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(retrievedPosts.size).isEqualTo(2)
@@ -251,7 +259,7 @@ class TestPostRepositoryIntegration {
     @Test
     fun getRandomPosts_postsExists_returnListOfPosts(){
         val retrievedPosts = data.getRandomPosts(10)
-        assertThat(retrievedPosts.size).isEqualTo(5)
+        assertThat(retrievedPosts.size).isEqualTo(7)
     }
 
     @Test

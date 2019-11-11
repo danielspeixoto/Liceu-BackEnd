@@ -116,6 +116,33 @@ class TestGetPost: TestSystem("/v2/post") {
     }
 
     @Test
+    fun getPostsByDescriptionsUsingElastichSearch_descriptionMatch_returnListOfPosts(){
+        val headers = HttpHeaders()
+        headers["API_KEY"] = apiKey
+        headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
+        val entity = HttpEntity(null, headers)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=matematica exponencial grafico contas soma divisão logaritmica&amount=2&method=elasticSearch", HttpMethod.GET, entity)
+        Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        val body = response.body!!
+        Truth.assertThat(body[0]["userId"]).isEqualTo(testSetup.USER_ID_ELASTIC_1)
+        Truth.assertThat(body[0]["description"]).isEqualTo("Hoje trouxe fichas de matemática sobre progressão geométrica e aritmética, espero que gostem .#progressaoaritmetica #pa #pg #progressaogeometrica #matematica #enem #matematicaenem #studygrambr #studyblr #foconosestudos #studiesvvmat")
+        val imagesFromPost1 = body[0]["multipleImages"] as List<HashMap<Any,String>>
+        Truth.assertThat(imagesFromPost1[0]["title"]).isEqualTo("instagram")
+        Truth.assertThat(imagesFromPost1[0]["type"]).isEqualTo("jpg")
+        Truth.assertThat(imagesFromPost1[0]["imageData"]).isEqualTo("https://storage.googleapis.com/liceu-post-images-prod/instagram5dac8a80dc72fe4c7a16ac941571624388232.jpg")
+        Truth.assertThat(imagesFromPost1[1]["title"]).isEqualTo("instagram")
+        Truth.assertThat(imagesFromPost1[1]["type"]).isEqualTo("jpg")
+        Truth.assertThat(imagesFromPost1[1]["imageData"]).isEqualTo("https://storage.googleapis.com/liceu-post-images-prod/instagram5dac8a80dc72fe4c7a16ac941571624388574.jpg")
+        val imagesFromPost2 = body[1]["multipleImages"] as List<HashMap<Any,String>>
+        Truth.assertThat(body[1]["userId"]).isEqualTo(testSetup.USER_ID_ELASTIC_2)
+        Truth.assertThat(body[1]["description"]).isEqualTo("✔ Resumo de Média aritmética, moda e mediana. Matéria bem simples e que cai SMP no Enem. Então atenção !" +
+                "➡ Espero que gostem .#resumomedicadofuturo #revisao #revisando #resumindo #importante #anotaai #matematica #enem #dica")
+        Truth.assertThat(imagesFromPost2[0]["title"]).isEqualTo("instagram")
+        Truth.assertThat(imagesFromPost2[0]["type"]).isEqualTo("jpg")
+        Truth.assertThat(imagesFromPost2[0]["imageData"]).isEqualTo("https://storage.googleapis.com/liceu-post-images-prod/instagram5dab5072b8c43a430f9b6a9a1571694798294.jpg")
+    }
+
+    @Test
     fun getPostsByDescriptions_descriptionDesiredEmpty_returnListOfPosts(){
         val headers = HttpHeaders()
         headers["API_KEY"] = apiKey

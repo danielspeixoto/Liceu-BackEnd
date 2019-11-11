@@ -57,6 +57,9 @@ class DataSetup {
     val POST_ID_7 = "09c54d325b75357a581d4ca8"
     val POST_ID_8 = "09c54d325b75357a581d4ca9"
     val POST_ID_9 = "09c54d325b75357a581d4ca0"
+    val ELASTIC_POST_ID_1 = "5dad15c41d69d70ae9b91c95"
+    val ELASTIC_POST_ID_2 = "5dae28ce1d69d70ae9b923e5"
+
 
 
     val POST_COMMENT_ID_1 = "12c54d325b75357a581d4ca0"
@@ -106,6 +109,8 @@ class DataSetup {
     val USER_5_ACCESS_TOKEN by lazy {
         jwtAuth.sign(USER_ID_5)
     }
+    val USER_ID_ELASTIC_1 = "5dac8a80dc72fe4c7a16ac94"
+    val USER_ID_ELASTIC_2 = "5dab5072b8c43a430f9b6a9a"
     val FACEBOOK_ID = "3aaa5b2a67c76abebce3f6e8"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
@@ -1285,6 +1290,57 @@ class DataSetup {
         )
         post9.id = ObjectId(POST_ID_9)
         postRepo.insert(post9)
+
+        val postElasticSearch1 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_ELASTIC_1),
+                "image",
+                "Hoje trouxe fichas de matemática sobre progressão geométrica e aritmética, espero que gostem .#progressaoaritmetica #pa #pg #progressaogeometrica #matematica #enem #matematicaenem #studygrambr #studyblr #foconosestudos #studiesvvmat",
+                null,
+                null,
+                listOf(
+                        MongoDatabase.MongoPostImage(
+                        "instagram",
+                        "jpg",
+                        "https://storage.googleapis.com/liceu-post-images-prod/instagram5dac8a80dc72fe4c7a16ac941571624388232.jpg"
+                        ),
+                        MongoDatabase.MongoPostImage(
+                                "instagram",
+                                "jpg",
+                                "https://storage.googleapis.com/liceu-post-images-prod/instagram5dac8a80dc72fe4c7a16ac941571624388574.jpg"
+                        )
+                ),
+                Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
+                null,
+                null,
+                true
+        )
+        postElasticSearch1.id = ObjectId(ELASTIC_POST_ID_1)
+        postRepo.insert(postElasticSearch1)
+
+        val postElasticSearch2 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_ELASTIC_2),
+                "image",
+                "✔ Resumo de Média aritmética, moda e mediana. Matéria bem simples e que cai SMP no Enem. Então atenção !" +
+                        "➡ Espero que gostem .#resumomedicadofuturo #revisao #revisando #resumindo #importante #anotaai #matematica #enem #dica",
+                null,
+                null,
+                listOf(
+                        MongoDatabase.MongoPostImage(
+                                "instagram",
+                                "jpg",
+                                "https://storage.googleapis.com/liceu-post-images-prod/instagram5dab5072b8c43a430f9b6a9a1571694798294.jpg"
+                        )
+                ),
+                Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
+                null,
+                null,
+                true
+        )
+        postElasticSearch2.id = ObjectId(ELASTIC_POST_ID_2)
+        postRepo.insert(postElasticSearch2)
+
     }
     fun activity(){
         val activity1 = MongoDatabase.MongoActivities(

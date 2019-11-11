@@ -19,6 +19,8 @@ class ElasticSearchFinder(
         private val elasticPassword: String
 ): PostBoundary.IElasticSearchFinder {
 
+    val client = setCredentialsElasticSearch(elasticUser,elasticPassword)
+
     fun setCredentialsElasticSearch(elasticUser: String,elasticPassword: String): RestHighLevelClient {
         val credentialsProvider = BasicCredentialsProvider()
         credentialsProvider.setCredentials(
@@ -36,7 +38,6 @@ class ElasticSearchFinder(
     }
 
     override fun run(descriptionSearched: String, amount: Int): List<String> {
-        val client = setCredentialsElasticSearch(elasticUser,elasticPassword)
 
         val sourceBuilder = SearchSourceBuilder()
         sourceBuilder.query(QueryBuilders.multiMatchQuery(descriptionSearched, "description", "visionText⁶"))
@@ -54,7 +55,7 @@ class ElasticSearchFinder(
         for (i in 0 until returnLength){
             idsFromSearch.add(obj.getJSONObject("hits").getJSONArray("hits").getJSONObject(i).getString("id"))
         }
-        //idsFromSearch.forEach { println(it) }
+        idsFromSearch.forEach { println(it) }
         return idsFromSearch
     }
 }
