@@ -223,7 +223,7 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
-    fun getMultiplePosts_randomPostsFromId_returnListOfPosts(){
+    fun getMultiplePosts_postsFromId_returnListOfPosts(){
         val postsRetrieved : MutableList<Post> = arrayListOf()
         val listOfIds = listOf(testSetup.POST_ID_1,testSetup.POST_ID_2,testSetup.POST_ID_4,testSetup.POST_ID_8)
         listOfIds.forEach { postsRetrieved.add(data.getPostById(it)) }
@@ -235,7 +235,7 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
-    fun getPosts_elasticPosts_ReturnListOfPosts(){
+    fun getPost_elasticPost_ReturnPost(){
         val postsReceived1 = data.getPostById(testSetup.ELASTIC_POST_ID_1)
         assertThat(postsReceived1.multipleImages?.get(0)?.title).isEqualTo("instagram")
         assertThat(postsReceived1.multipleImages?.get(0)?.type).isEqualTo("jpg")
