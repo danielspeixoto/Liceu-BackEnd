@@ -55,7 +55,7 @@ class PostBoundary {
     }
 
     interface IGetPostsByDescription {
-        fun run(descriptionSearched: String, searchMethod: String ,amount: Int): List<Post>
+        fun run(descriptionSearched: String, amount: Int): List<Post>
     }
 
     interface IElasticSearchFinder {

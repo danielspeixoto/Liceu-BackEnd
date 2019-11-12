@@ -95,7 +95,7 @@ class TestGetPost: TestSystem("/v2/post") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=video legal&amount=3&method=elasticSearch", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=video legal&amount=3", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body.size).isEqualTo(2)
@@ -109,7 +109,7 @@ class TestGetPost: TestSystem("/v2/post") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=futebol&amount=10&method=elasticSearch", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=futebol&amount=10", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body).isEmpty()
@@ -121,7 +121,7 @@ class TestGetPost: TestSystem("/v2/post") {
         headers["API_KEY"] = apiKey
         headers["Authorization"] = testSetup.USER_1_ACCESS_TOKEN
         val entity = HttpEntity(null, headers)
-        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=matematica exponencial grafico contas soma divisão logaritmica&amount=2&method=elasticSearch", HttpMethod.GET, entity)
+        val response = restTemplate.exchange<List<HashMap<String, Any>>>("$baseUrl?description=matematica exponencial grafico contas soma divisão logaritmica&amount=2", HttpMethod.GET, entity)
         Truth.assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         val body = response.body!!
         Truth.assertThat(body[0]["userId"]).isEqualTo(testSetup.USER_ID_ELASTIC_1)

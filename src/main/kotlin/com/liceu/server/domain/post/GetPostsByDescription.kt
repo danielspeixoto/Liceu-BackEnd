@@ -16,7 +16,7 @@ class GetPostsByDescription(
         val TAGS = listOf(RETRIEVAL, POST, DESCRIPTION)
     }
 
-    override fun run(descriptionSearched: String, searchMethod: String, amount: Int): List<Post> {
+    override fun run(descriptionSearched: String, amount: Int): List<Post> {
             if(amount == 0) {
                 Logging.warn(UNCOMMON_PARAMS, TAGS, hashMapOf(
                         "action" to EVENT_NAME,
@@ -41,19 +41,14 @@ class GetPostsByDescription(
             }
             Logging.info(GetPosts.EVENT_NAME, TAGS, hashMapOf(
                     "description" to descriptionSearched,
-                    "method" to searchMethod,
                     "amount" to finalAmount
             ))
-            return if(searchMethod=="elasticSearch"){
-                val idsFromPosts = elasticSearchFinder.run(descriptionSearched, amount)
-                val postsRetrieved : MutableList<Post> = arrayListOf()
-                idsFromPosts.forEach {
-                    postsRetrieved.add(postRepository.getPostById(it))
-                }
-                postsRetrieved.toList()
-            }else{
-                postRepository.getPostsByDescription(descriptionSearched,finalAmount)
+            val idsFromPosts = elasticSearchFinder.run(descriptionSearched, amount)
+            val postsRetrieved : MutableList<Post> = arrayListOf()
+            idsFromPosts.forEach {
+                postsRetrieved.add(postRepository.getPostById(it))
             }
+            return postsRetrieved.toList()
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e
