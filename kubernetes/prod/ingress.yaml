@@ -1,0 +1,11 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: liceu-prod-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: liceu-prod-ip
+    networking.gke.io/managed-certificates: liceu-certificate
+spec:
+  backend:
+    serviceName: liceu-prod-svc
+    servicePort: 80
