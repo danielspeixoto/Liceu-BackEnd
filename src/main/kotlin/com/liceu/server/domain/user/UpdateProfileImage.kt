@@ -29,6 +29,7 @@ class UpdateProfileImage(
     override fun run(userId: String, imageData: String) {
         val imageTypes = hashMapOf(
                 "image/jpeg" to "jpeg",
+                "image/jpg" to "jpg",
                 "image/png" to "png"
         )
         try {

@@ -127,6 +127,10 @@ class AppConfig : AbstractMongoConfiguration() {
         MongoClientURI(mongoURI)
     }
 
+    val updateProfileImage by lazy {
+        UpdateProfileImage(mongoUserRepository,googleImageBucket)
+    }
+
     override fun mongoClient(): MongoClient {
         return MongoClient(clientUri)
     }
@@ -166,7 +170,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun multipleAuthenticate(): UserBoundary.IMultipleAuthenticate{
-        return MultipleAuthenticate(mongoUserRepository,facebookAPI,googleAPI)
+        return MultipleAuthenticate(mongoUserRepository,facebookAPI,googleAPI,updateProfileImage)
     }
 
     @Bean

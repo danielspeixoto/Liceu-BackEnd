@@ -8,7 +8,8 @@ import com.liceu.server.util.Logging
 class MultipleAuthenticate(
         val userRepo: UserBoundary.IRepository,
         val facebookApi: UserBoundary.IAccessTokenResolver,
-        val googleApi: UserBoundary.IAccessTokenGoogleResolver
+        val googleApi: UserBoundary.IAccessTokenGoogleResolver,
+        val updateProfileImage: UserBoundary.IUpdateProfileImage
 ) : UserBoundary.IMultipleAuthenticate {
 
     companion object {
@@ -32,6 +33,7 @@ class MultipleAuthenticate(
                 return it.id
             }
             val id = userRepo.save(user)
+            updateProfileImage.run(id,user.picture.url) //Needs handler to convert url to string in base64 to be treated in the updateProfileImage class
             Logging.info(EVENT_NAME, TAGS, hashMapOf(
                     "time" to System.currentTimeMillis() - timeBefore,
                     "userId" to id
