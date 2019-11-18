@@ -172,6 +172,16 @@ spec:
                 secretKeyRef:
                   name: elastic-password
                   key: value
+            - name: ELASTIC_SCHEME
+              valueFrom:
+                secretKeyRef:
+                  name: elastic-scheme
+                  key: value
+            - name: ELASTIC_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: elastic-port
+                  key: value
       dnsPolicy: ClusterFirstWithHostNet
       restartPolicy: Always
       schedulerName: default-scheduler
