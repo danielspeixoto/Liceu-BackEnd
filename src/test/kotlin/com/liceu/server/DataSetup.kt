@@ -4,7 +4,15 @@ import com.liceu.server.data.*
 
 import com.liceu.server.util.JWTAuth
 import khttp.get
+import org.apache.http.HttpHost
 import org.bson.types.ObjectId
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest
+import org.elasticsearch.action.index.IndexRequest
+import org.elasticsearch.client.RequestOptions
+import org.elasticsearch.client.RestClient
+import org.elasticsearch.client.RestClientBuilder
+import org.elasticsearch.client.RestHighLevelClient
+import org.elasticsearch.common.xcontent.XContentFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint
@@ -57,6 +65,11 @@ class DataSetup {
     val POST_ID_7 = "09c54d325b75357a581d4ca8"
     val POST_ID_8 = "09c54d325b75357a581d4ca9"
     val POST_ID_9 = "09c54d325b75357a581d4ca0"
+    val ELASTIC_POST_ID_1 = "5dad15c41d69d70ae9b91c95"
+    val ELASTIC_POST_ID_2 = "5dae28ce1d69d70ae9b923e5"
+
+    val elasticBuilder = RestClient.builder(HttpHost("localhost", 9200, "http"))
+    val elasticClient =  RestHighLevelClient(elasticBuilder)
 
 
     val POST_COMMENT_ID_1 = "12c54d325b75357a581d4ca0"
@@ -106,6 +119,8 @@ class DataSetup {
     val USER_5_ACCESS_TOKEN by lazy {
         jwtAuth.sign(USER_ID_5)
     }
+    val USER_ID_ELASTIC_1 = "5dac8a80dc72fe4c7a16ac94"
+    val USER_ID_ELASTIC_2 = "5dab5072b8c43a430f9b6a9a"
     val FACEBOOK_ID = "3aaa5b2a67c76abebce3f6e8"
 
     val GAME_ID_1 = "4a1449a4bdb40abd5ae1e431"
@@ -151,6 +166,7 @@ class DataSetup {
         trivia()
         challenge()
         post()
+        elasticPost()
         activity()
     }
 
@@ -1285,6 +1301,171 @@ class DataSetup {
         )
         post9.id = ObjectId(POST_ID_9)
         postRepo.insert(post9)
+
+        val postElasticSearch1 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_ELASTIC_1),
+                "image",
+                "Hoje trouxe fichas de matemática sobre progressão geométrica e aritmética, espero que gostem .#progressaoaritmetica #pa #pg #progressaogeometrica #matematica #enem #matematicaenem #studygrambr #studyblr #foconosestudos #studiesvvmat",
+                null,
+                null,
+                listOf(
+                        MongoDatabase.MongoPostImage(
+                        "instagram",
+                        "jpg",
+                        "https://storage.googleapis.com/liceu-post-images-prod/instagram5dac8a80dc72fe4c7a16ac941571624388232.jpg"
+                        ),
+                        MongoDatabase.MongoPostImage(
+                                "instagram",
+                                "jpg",
+                                "https://storage.googleapis.com/liceu-post-images-prod/instagram5dac8a80dc72fe4c7a16ac941571624388574.jpg"
+                        )
+                ),
+                Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
+                null,
+                null,
+                true
+        )
+        postElasticSearch1.id = ObjectId(ELASTIC_POST_ID_1)
+        postRepo.insert(postElasticSearch1)
+
+        val postElasticSearch2 = MongoDatabase.MongoPost(
+                ObjectId(USER_ID_ELASTIC_2),
+                "image",
+                "✔ Resumo de Média aritmética, moda e mediana. Matéria bem simples e que cai SMP no Enem. Então atenção !" +
+                        "➡ Espero que gostem .#resumomedicadofuturo #revisao #revisando #resumindo #importante #anotaai #matematica #enem #dica",
+                null,
+                null,
+                listOf(
+                        MongoDatabase.MongoPostImage(
+                                "instagram",
+                                "jpg",
+                                "https://storage.googleapis.com/liceu-post-images-prod/instagram5dab5072b8c43a430f9b6a9a1571694798294.jpg"
+                        )
+                ),
+                Date.from(Instant.parse("2019-08-27T12:40:20.00Z")),
+                null,
+                null,
+                null,
+                true
+        )
+        postElasticSearch2.id = ObjectId(ELASTIC_POST_ID_2)
+        postRepo.insert(postElasticSearch2)
+
+    }
+    fun elasticPost(){
+        val elasticPost1 = XContentFactory.jsonBuilder()
+                .startObject()
+                .field("userId", USER_ID_ELASTIC_1)
+                .field("description", "Hoje trouxe fichas de matemática sobre progressão geométrica e aritmética, espero que gostem .#progressaoaritmetica #pa #pg #progressaogeometrica #matematica #enem #matematicaenem #studygrambr #studyblr #foconosestudos #studiesvvmat")
+                .field("likes",	1)
+                .field("submissionDate", "Oct 20, 2019 @ 23:19:48.866")
+                .field("visionText","aregresag\n" +
+                        "geerretrica\n" +
+                        "ex: 2, 6, 18,54..\n" +
+                        "Calcular\n" +
+                        "a razao\n" +
+                        "(ex3)\n" +
+                        "an\n" +
+                        "a1\n" +
+                        "qurazao nao varia\n" +
+                        "an:a. (g-1\n" +
+                        "egresatrea\n" +
+                        "ex: 6, 10, 14, 18,22\n" +
+                        "intinita\n" +
+                        "a 1elemento\n" +
+                        "cex:6)\n" +
+                        "quantidade de elementos C ex:5)\n" +
+                        "razao Cdiferença entre a n)Lex: lo-6)\n" +
+                        "r\n" +
+                        "nae vakia\n" +
+                        "an\n" +
+                        "com excessao dlo atodos os termos padem ero an\n" +
+                        "cex: 22)\n" +
+                        "an = a, Cn - .r\n" +
+                        "NEUSGVUNYr\n" +
+                        "utmetsca\n" +
+                        "eernetrica\n" +
+                        "ex: 2, 6, 18,54...\n" +
+                        "Calcular a razao\n" +
+                        "an\n" +
+                        "a1\n" +
+                        "n\n" +
+                        "qirazao no varia\n" +
+                        "3-1\n" +
+                        "STABILO point 88\n" +
+                        "fine 0,4\n" +
+                        "STABILO point 88\n" +
+                        "fine 0.4")
+                .endObject()
+        val indexRequest = IndexRequest("posts").id(ELASTIC_POST_ID_1).source(elasticPost1)
+        elasticClient.index(indexRequest, RequestOptions.DEFAULT)
+
+        val elasticPost2 = XContentFactory.jsonBuilder()
+                .startObject()
+                .field("userId", USER_ID_ELASTIC_2)
+                .field("description", "✔ Resumo de Média aritmética, moda e mediana. Matéria bem simples e que cai SMP no Enem. Então atenção !" +
+                        "➡ Espero que gostem .#resumomedicadofuturo #revisao #revisando #resumindo #importante #anotaai #matematica #enem #dica")
+                .field("likes",	0)
+                .field("submissionDate", "Oct 21, 2019 @ 18:53:18.541")
+                .field("visionText","Mépiae\n" +
+                        "Yoch e Mediang\n" +
+                        ":\n" +
+                        "O VAbOR/Ne\n" +
+                        "QUE MAIS APARE\n" +
+                        "CE (+ FREQUENTE)\n" +
+                        "ORDENA OS NUMEROS\n" +
+                        "EM ORDRM CRES CEN\n" +
+                        "TE OU DECRESCENTE\n" +
+                        "E :\n" +
+                        "EAQUANTIDADE FOR\n" +
+                        "TMPAR: A MEDIANA SERA\n" +
+                        "0 VAloOR CENITRAO\n" +
+                        "5E A QUANTIDADE FOR\n" +
+                        "PAR: A MEDIANA SERA A\n" +
+                        "SOMA DOS DOIS VAloORES\n" +
+                        "CENTRAIS, DIVIDIDO POR 2\n" +
+                        "SOMA DE TODOS 0S\n" +
+                        "NÚMEROS DE UM 0ONJUNO,\n" +
+                        "DIVIDIDO PEloA QANTIDADE\n" +
+                        "EXEMPloO: X- 2,4,5,7,3,3\n" +
+                        "Mad: 3+2+3+4+5+-21-1\n" +
+                        "CMa\n" +
+                        "lecb: Mo 3\n" +
+                        "CMo\n" +
+                        "Mediama x-23,35, (ORDEM CRESCENTE)\n" +
+                        "id) =3,5.\n" +
+                        "medica dauatuno\n" +
+                        "2\n" +
+                        "2\n" +
+                        "PILOT M COLOR 00-S")
+                .endObject()
+        val indexRequest2 = IndexRequest("posts").id(ELASTIC_POST_ID_2).source(elasticPost2)
+        elasticClient.index(indexRequest2, RequestOptions.DEFAULT)
+
+
+        val elasticPostFromMongo1 = XContentFactory.jsonBuilder()
+                .startObject()
+                .field("userId", USER_ID_5)
+                .field("description", "teste de video legal 3")
+                .field("likes",	0)
+                .field("submissionDate", "2019-08-27T12:40:20.00Z")
+                .field("visionText","teste de video legal 3")
+                .endObject()
+        val indexRequest3 = IndexRequest("posts").id(POST_ID_9).source(elasticPostFromMongo1)
+        elasticClient.index(indexRequest3, RequestOptions.DEFAULT)
+
+        val elasticPostFromMongo2 = XContentFactory.jsonBuilder()
+                .startObject()
+                .field("userId", USER_ID_3)
+                .field("description", "texto legal sobre texto de humanas")
+                .field("likes",	0)
+                .field("submissionDate", "Oct 21, 2019 @ 18:53:18.541")
+                .field("visionText","texto legal sobre texto de humanas")
+                .endObject()
+        val indexRequest4 = IndexRequest("posts").id(POST_ID_4).source(elasticPostFromMongo2)
+        elasticClient.index(indexRequest4, RequestOptions.DEFAULT)
+
     }
     fun activity(){
         val activity1 = MongoDatabase.MongoActivities(

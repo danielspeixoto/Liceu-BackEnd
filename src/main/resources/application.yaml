@@ -24,6 +24,13 @@ mongo:
 firebase:
   cloudMessaging: ${FIREBASE_CLOUD_MESSAGING_SERVER_KEY}
 
+elasticsearch:
+  elasticCluster: ${ELASTIC_CLUSTER}
+  elasticUser: ${ELASTIC_USER}
+  elasticPassword: ${ELASTIC_PASSWORD}
+  elasticPort: ${ELASTIC_PORT}
+  elasticScheme: ${ELASTIC_SCHEME}
+
 spring:
   mvc.favicon.enabled: false
   main:
