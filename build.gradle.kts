@@ -62,7 +62,7 @@ dependencies {
     implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.4.2")
     implementation("org.elasticsearch.client:elasticsearch-rest-client:7.4.2")
     implementation("org.elasticsearch:elasticsearch:7.4.2")
-
+    implementation(group = "org.springframework.cloud", name = "spring-cloud-starter-netflix-hystrix", version = "2.2.0.M3")
 
 }
 

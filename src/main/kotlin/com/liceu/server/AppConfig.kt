@@ -1,8 +1,8 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
-import com.liceu.server.data.elasticsearch.ElasticSearchFinder
 import com.liceu.server.data.firebase.FirebaseNotifications
+import com.liceu.server.data.search.SearchRepository
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
 import com.liceu.server.domain.challenge.*
@@ -138,7 +138,7 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     val elasticSearchFinder by lazy {
-        ElasticSearchFinder(mongoPostRepository,restClientBuilder)
+        SearchRepository(mongoPostRepository,restClientBuilder)
     }
 
     val restClientBuilder by lazy {
@@ -146,8 +146,8 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
-    fun elasticSearchFinder(): ElasticSearchFinder {
-        return ElasticSearchFinder(mongoPostRepository,restClientBuilder)
+    fun elasticSearchFinder(): SearchRepository {
+        return SearchRepository(mongoPostRepository,restClientBuilder)
     }
 
     @Bean
