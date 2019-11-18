@@ -59,6 +59,9 @@ dependencies {
     implementation(group = "com.maxmind.geoip2", name = "geoip2", version = "2.3.1")
     implementation ("com.google.code.gson:gson:2.8.5")
     implementation(group="khttp", name="khttp", version="1.0.0")
+    implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.4.2")
+    implementation("org.elasticsearch.client:elasticsearch-rest-client:7.4.2")
+    implementation("org.elasticsearch:elasticsearch:7.4.2")
 
 
 }
