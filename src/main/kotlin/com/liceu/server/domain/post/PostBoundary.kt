@@ -59,7 +59,7 @@ class PostBoundary {
     }
 
     interface IElasticSearchFinder {
-        fun run (descriptionSearched: String, amount: Int): List<String>
+        fun run (descriptionSearched: String, amount: Int): List<Post>
     }
 
     interface IUpdateListOfComments{
