@@ -38,11 +38,7 @@ class SearchRepository(
                 for (i in 0 until returnLength){
                     idsFromSearch.add(obj.getJSONObject("hits").getJSONArray("hits").getJSONObject(i).getString("id"))
                 }
-                val postsRetrieved : MutableList<Post> = arrayListOf()
-                idsFromSearch.forEach {
-                    postsRetrieved.add(postRepository.getPostById(it))
-                }
-                return postsRetrieved.toList()
+                return postRepository.getMultiplePostsFromIds(idsFromSearch,amount)
     }
 
     fun mongoDbSearchFinder (descriptionSearched: String,amount: Int): List<Post> {
