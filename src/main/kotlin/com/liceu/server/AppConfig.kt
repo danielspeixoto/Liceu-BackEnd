@@ -27,7 +27,6 @@ import org.apache.http.impl.client.BasicCredentialsProvider
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestClientBuilder
 import org.elasticsearch.client.RestHighLevelClient
-import org.elasticsearch.common.util.iterable.Iterables
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
@@ -39,7 +38,6 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.stereotype.Component
-import java.util.ArrayList
 
 
 
@@ -144,6 +142,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     val elasticSearchFinder by lazy {
         SearchRepository(mongoPostRepository,restHighLevelClient)
+
     }
 
     val restClientBuilder by lazy {
@@ -157,6 +156,7 @@ class AppConfig : AbstractMongoConfiguration() {
     @Bean
     fun elasticSearchFinder(): SearchRepository {
         return SearchRepository(mongoPostRepository,restHighLevelClient)
+
     }
 
     @Bean

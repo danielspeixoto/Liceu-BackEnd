@@ -1,6 +1,6 @@
 package com.liceu.server.data.search
 
-    import com.liceu.server.domain.global.FALLBACK
+import com.liceu.server.domain.global.FALLBACK
 import com.liceu.server.domain.global.FINDER
 import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.post.Post
@@ -23,6 +23,7 @@ class SearchRepository(
 ): PostBoundary.ISearch {
 
     val client = restHighLevelClient
+
 
     @HystrixCommand(fallbackMethod = "mongoDbSearchFinder")
     override fun run(descriptionSearched: String, amount: Int): List<Post> {
