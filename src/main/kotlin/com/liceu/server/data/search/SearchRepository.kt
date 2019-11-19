@@ -2,7 +2,7 @@ package com.liceu.server.data.search
 
 import com.liceu.server.domain.post.Post
 import com.liceu.server.domain.post.PostBoundary
-//import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
 import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestClientBuilder
@@ -20,7 +20,7 @@ class SearchRepository(
 
     val client = RestHighLevelClient(restClientBuilder)
 
-    //@HystrixCommand(fallbackMethod = "mongoDbSearchFinder")
+    @HystrixCommand(fallbackMethod = "mongoDbSearchFinder")
     override fun run(descriptionSearched: String, amount: Int): List<Post> {
                 val sourceBuilder = SearchSourceBuilder()
                 sourceBuilder.query(QueryBuilders.multiMatchQuery(descriptionSearched, "description", "visionText⁶"))
@@ -38,8 +38,6 @@ class SearchRepository(
                 for (i in 0 until returnLength){
                     idsFromSearch.add(obj.getJSONObject("hits").getJSONArray("hits").getJSONObject(i).getString("id"))
                 }
-                //idsFromSearch.forEach { println(it) }
-                //return idsFromSearch
                 val postsRetrieved : MutableList<Post> = arrayListOf()
                 idsFromSearch.forEach {
                     postsRetrieved.add(postRepository.getPostById(it))
@@ -50,4 +48,5 @@ class SearchRepository(
     fun mongoDbSearchFinder (descriptionSearched: String,amount: Int): List<Post> {
         return postRepository.getPostsByDescription(descriptionSearched,amount)
     }
+
 }
