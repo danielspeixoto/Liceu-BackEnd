@@ -2,10 +2,11 @@ package com.liceu.server.domain.post
 
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
+import org.springframework.beans.factory.annotation.Autowired
 
 class GetPostsByDescription(
-        private val postRepository: PostBoundary.IRepository,
-        private val maxResults: Int
+        private val maxResults: Int,
+        @Autowired val searchRepository: PostBoundary.ISearch
 ): PostBoundary.IGetPostsByDescription {
 
     companion object {
@@ -38,9 +39,10 @@ class GetPostsByDescription(
             }
             Logging.info(GetPosts.EVENT_NAME, TAGS, hashMapOf(
                     "description" to descriptionSearched,
-                    "amount" to amount
+                    "amount" to finalAmount
             ))
-            return postRepository.getPostsByDescription(descriptionSearched,finalAmount)
+            return searchRepository.run(descriptionSearched, amount)
+
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e

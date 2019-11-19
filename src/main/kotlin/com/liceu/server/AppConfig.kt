@@ -2,6 +2,7 @@ package com.liceu.server
 
 import com.liceu.server.data.*
 import com.liceu.server.data.firebase.FirebaseNotifications
+import com.liceu.server.data.search.SearchRepository
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
 import com.liceu.server.domain.challenge.*
@@ -19,6 +20,13 @@ import com.liceu.server.domain.trivia.*
 import com.liceu.server.domain.user.*
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
+import org.apache.http.HttpHost
+import org.apache.http.auth.AuthScope
+import org.apache.http.auth.UsernamePasswordCredentials
+import org.apache.http.impl.client.BasicCredentialsProvider
+import org.elasticsearch.client.RestClient
+import org.elasticsearch.client.RestClientBuilder
+import org.elasticsearch.client.RestHighLevelClient
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
@@ -30,6 +38,8 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.stereotype.Component
+
+
 
 @Configuration
 @ServletComponentScan
@@ -75,6 +85,22 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${values.postSavedAmount}")
     var postSavedAmount: Int = 20
 
+    @Value("\${elasticsearch.elasticCluster}")
+    lateinit var elasticCluster: String
+
+    @Value("\${elasticsearch.elasticUser}")
+    lateinit var elasticUser: String
+
+    @Value("\${elasticsearch.elasticPassword}")
+    lateinit var elasticPassword: String
+
+    @Value("\${elasticsearch.elasticPort}")
+    var elasticPort: Int = 9243
+
+    @Value("\${elasticsearch.elasticScheme}")
+    lateinit var elasticScheme: String
+
+
     val mongoQuestionRepository by lazy {
         MongoQuestionRepository(mongoTemplate())
     }
@@ -113,6 +139,51 @@ class AppConfig : AbstractMongoConfiguration() {
     val firebaseNotifications by lazy {
         FirebaseNotifications(firebaseCloudMessagingKey)
     }
+
+    val elasticSearchFinder by lazy {
+        SearchRepository(mongoPostRepository,restHighLevelClient)
+
+    }
+
+    val restClientBuilder by lazy {
+        restClientBuilder()
+    }
+
+    val restHighLevelClient by lazy {
+        restHighLevelClient()
+    }
+
+    @Bean
+    fun elasticSearchFinder(): SearchRepository {
+        return SearchRepository(mongoPostRepository,restHighLevelClient)
+
+    }
+
+    @Bean
+    fun restClientBuilder(): RestClientBuilder{
+        val credentialsProvider = BasicCredentialsProvider()
+        credentialsProvider.setCredentials(
+                AuthScope.ANY,
+                UsernamePasswordCredentials(elasticUser, elasticPassword)
+        )
+        return RestClient.builder(
+                HttpHost(elasticCluster, elasticPort, elasticScheme)
+        )
+                .setHttpClientConfigCallback { httpClientBuilder -> httpClientBuilder
+                        .setDefaultCredentialsProvider(credentialsProvider)
+                }
+    }
+
+    @Bean
+    fun restHighLevelClient(): RestHighLevelClient {
+        return RestHighLevelClient(restClientBuilder)
+    }
+
+    @Bean(destroyMethod = "close")
+    fun restClient(): RestClient {
+        return restHighLevelClient().lowLevelClient
+    }
+
 
     @Value("\${google.clientId}")
     lateinit var googleClientId: String
@@ -371,7 +442,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun getPostByDescription(): PostBoundary.IGetPostsByDescription {
-        return GetPostsByDescription(mongoPostRepository,postFinderAmount)
+        return GetPostsByDescription(postFinderAmount,elasticSearchFinder)
     }
 
     @Bean

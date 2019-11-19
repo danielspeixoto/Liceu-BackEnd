@@ -7,12 +7,13 @@ class PostBoundary {
 
     interface IRepository{
         fun insertPost(postToInsert: PostToInsert): String
-        fun getPostsByDescription(descriptionSearched: String, amount: Int): List<Post>
+        fun getPostsByDescription(descriptionSearched: String,amount: Int): List<Post>
         fun getPostsForFeed(user: User, date: Date, amount: Int, start: Int): List<Post>
         fun getPostById(postId: String): Post
         fun getPostFromUser(userId: String,amount: Int,start: Int): List<Post>
         fun getPostsFromOwner(userId: String,amount: Int,start: Int): List<Post>
         fun getRandomPosts(amount: Int): List<Post>
+        fun getMultiplePostsFromIds(listOfIds: List<String>,amount: Int): List<Post>
         fun updateListOfComments(postId: String,userId: String,author: String,comment: String): Long
         fun updateDocumentPost(postId: String, title: String, type: String, documentURL: String): Long
         fun updateLike(postId: String): Long
@@ -56,6 +57,10 @@ class PostBoundary {
 
     interface IGetPostsByDescription {
         fun run(descriptionSearched: String, amount: Int): List<Post>
+    }
+
+    interface ISearch {
+        fun run (descriptionSearched: String, amount: Int): List<Post>
     }
 
     interface IUpdateListOfComments{
