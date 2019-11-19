@@ -223,6 +223,26 @@ class TestPostRepositoryIntegration {
     }
 
     @Test
+    fun getMultiplePosts_postsFromId_returnListOfPosts(){
+        val postsRetrieved : MutableList<Post> = arrayListOf()
+        val listOfIds = listOf(testSetup.POST_ID_1,testSetup.POST_ID_2,testSetup.POST_ID_4,testSetup.POST_ID_8)
+        listOfIds.forEach { postsRetrieved.add(data.getPostById(it)) }
+        assertThat(listOfIds.size).isEqualTo(4)
+        assertThat(postsRetrieved.get(0).id).isEqualTo(testSetup.POST_ID_1)
+        assertThat(postsRetrieved.get(1).id).isEqualTo(testSetup.POST_ID_2)
+        assertThat(postsRetrieved.get(2).id).isEqualTo(testSetup.POST_ID_4)
+        assertThat(postsRetrieved.get(3).id).isEqualTo(testSetup.POST_ID_8)
+    }
+
+    @Test
+    fun getPost_elasticPost_ReturnPost(){
+        val postsReceived1 = data.getPostById(testSetup.ELASTIC_POST_ID_1)
+        assertThat(postsReceived1.multipleImages?.get(0)?.title).isEqualTo("instagram")
+        assertThat(postsReceived1.multipleImages?.get(0)?.type).isEqualTo("jpg")
+        assertThat(postsReceived1.multipleImages?.get(0)?.imageData).isEqualTo("https://storage.googleapis.com/liceu-post-images-prod/instagram5dac8a80dc72fe4c7a16ac941571624388232.jpg")
+    }
+
+    @Test
     fun getPostsFromUser_userExists_returnListOfPosts(){
         val retrievedPosts = data.getPostFromUser(testSetup.USER_ID_3,10,0)
         assertThat(retrievedPosts.size).isEqualTo(2)
@@ -239,7 +259,7 @@ class TestPostRepositoryIntegration {
     @Test
     fun getRandomPosts_postsExists_returnListOfPosts(){
         val retrievedPosts = data.getRandomPosts(10)
-        assertThat(retrievedPosts.size).isEqualTo(5)
+        assertThat(retrievedPosts.size).isEqualTo(7)
     }
 
     @Test

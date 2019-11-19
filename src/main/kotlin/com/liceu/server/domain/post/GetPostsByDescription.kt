@@ -1,11 +1,14 @@
 package com.liceu.server.domain.post
 
+import com.liceu.server.data.elasticsearch.ElasticSearchFinder
 import com.liceu.server.domain.global.*
 import com.liceu.server.util.Logging
+import org.springframework.beans.factory.annotation.Autowired
 
 class GetPostsByDescription(
         private val postRepository: PostBoundary.IRepository,
-        private val maxResults: Int
+        private val maxResults: Int,
+        @Autowired val elasticSearchFinder: PostBoundary.IElasticSearchFinder
 ): PostBoundary.IGetPostsByDescription {
 
     companion object {
@@ -38,9 +41,14 @@ class GetPostsByDescription(
             }
             Logging.info(GetPosts.EVENT_NAME, TAGS, hashMapOf(
                     "description" to descriptionSearched,
-                    "amount" to amount
+                    "amount" to finalAmount
             ))
-            return postRepository.getPostsByDescription(descriptionSearched,finalAmount)
+            val idsFromPosts = elasticSearchFinder.run(descriptionSearched, amount)
+            val postsRetrieved : MutableList<Post> = arrayListOf()
+            idsFromPosts.forEach {
+                postsRetrieved.add(postRepository.getPostById(it))
+            }
+            return postsRetrieved.toList()
         }catch (e: Exception){
             Logging.error(EVENT_NAME, TAGS,e)
             throw e

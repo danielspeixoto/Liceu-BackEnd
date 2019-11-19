@@ -24,6 +24,13 @@ mongo:
 firebase:
   cloudMessaging: ${FIREBASE_CLOUD_MESSAGING_SERVER_KEY:AAAAxlZoPF4:APA91bGx7v83oK4tktHhBeIZGlaKvJsGdpxOfNnwtVjgCTUxCIP4aE---pojJmYGHSI8DyNoRwyZ2nTPoIGwobhZ5CMKfM7KadvCvMuj5R0947p9zp72u8mHpm2ltxGtky-StLh-GtzV}
 
+elasticsearch:
+  elasticCluster: localhost
+  elasticUser: teste
+  elasticPassword: teste
+  elasticPort: 9200
+  elasticScheme: http
+
 dev: true
 
 spring:
