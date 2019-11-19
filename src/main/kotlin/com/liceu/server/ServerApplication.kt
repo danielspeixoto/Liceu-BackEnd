@@ -4,10 +4,10 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.Managemen
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 import org.springframework.boot.runApplication
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker
+//import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker
 import javax.annotation.PostConstruct
 
-@EnableCircuitBreaker
+//@EnableCircuitBreaker
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class, ManagementWebSecurityAutoConfiguration::class])
 class ServerApplication {
 

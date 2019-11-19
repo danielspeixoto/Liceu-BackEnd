@@ -31,7 +31,7 @@ dependencies {
     implementation(group = "com.google.cloud", name = "google-cloud-storage", version = "1.92.0")
     implementation(group = "com.google.auth", name = "google-auth-library-credentials", version = "0.16.2")
     implementation(group = "com.google.apis", name = "google-api-services-oauth2", version = "v2-rev151-1.25.0")
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    //implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -62,7 +62,9 @@ dependencies {
     implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.4.2")
     implementation("org.elasticsearch.client:elasticsearch-rest-client:7.4.2")
     implementation("org.elasticsearch:elasticsearch:7.4.2")
-    implementation(group = "org.springframework.cloud", name = "spring-cloud-starter-netflix-hystrix", version = "2.2.0.M3")
+    //implementation(group = "org.springframework.cloud", name = "spring-cloud-config-client", version = "2.2.0.M3")
+    implementation(group = "org.springframework.boot", name = "spring-boot-starter-actuator", version = "2.2.0.M3")
+
 
 }
 
