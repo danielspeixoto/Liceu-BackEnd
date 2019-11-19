@@ -26,6 +26,7 @@ import org.apache.http.auth.UsernamePasswordCredentials
 import org.apache.http.impl.client.BasicCredentialsProvider
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestClientBuilder
+import org.elasticsearch.client.RestHighLevelClient
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
@@ -37,6 +38,8 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.WebServerFactoryCustomizer
 import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.stereotype.Component
+
+
 
 @Configuration
 @ServletComponentScan
@@ -138,16 +141,22 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     val elasticSearchFinder by lazy {
-        SearchRepository(mongoPostRepository,restClientBuilder)
+        SearchRepository(mongoPostRepository,restHighLevelClient)
+
     }
 
     val restClientBuilder by lazy {
         restClientBuilder()
     }
 
+    val restHighLevelClient by lazy {
+        restHighLevelClient()
+    }
+
     @Bean
     fun elasticSearchFinder(): SearchRepository {
-        return SearchRepository(mongoPostRepository,restClientBuilder)
+        return SearchRepository(mongoPostRepository,restHighLevelClient)
+
     }
 
     @Bean
@@ -164,6 +173,17 @@ class AppConfig : AbstractMongoConfiguration() {
                         .setDefaultCredentialsProvider(credentialsProvider)
                 }
     }
+
+    @Bean
+    fun restHighLevelClient(): RestHighLevelClient {
+        return RestHighLevelClient(restClientBuilder)
+    }
+
+    @Bean(destroyMethod = "close")
+    fun restClient(): RestClient {
+        return restHighLevelClient().lowLevelClient
+    }
+
 
     @Value("\${google.clientId}")
     lateinit var googleClientId: String
