@@ -1,7 +1,11 @@
 package com.liceu.server.data.search
 
+    import com.liceu.server.domain.global.FALLBACK
+import com.liceu.server.domain.global.FINDER
+import com.liceu.server.domain.global.POST
 import com.liceu.server.domain.post.Post
 import com.liceu.server.domain.post.PostBoundary
+import com.liceu.server.util.Logging
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand
 import org.elasticsearch.action.search.SearchRequest
 import org.elasticsearch.client.RequestOptions
@@ -15,10 +19,10 @@ import org.springframework.stereotype.Service
 @Service
 class SearchRepository(
         private val postRepository: PostBoundary.IRepository,
-        private val restClientBuilder: RestClientBuilder
+        private val restHighLevelClient: RestHighLevelClient
 ): PostBoundary.ISearch {
 
-    val client = RestHighLevelClient(restClientBuilder)
+    val client = restHighLevelClient
 
     @HystrixCommand(fallbackMethod = "mongoDbSearchFinder")
     override fun run(descriptionSearched: String, amount: Int): List<Post> {
@@ -42,6 +46,10 @@ class SearchRepository(
     }
 
     fun mongoDbSearchFinder (descriptionSearched: String,amount: Int): List<Post> {
+        Logging.warn("post_search_fallback", listOf(FALLBACK,POST,FINDER), hashMapOf(
+                        "description" to descriptionSearched,
+                        "amount" to amount
+        ))
         return postRepository.getPostsByDescription(descriptionSearched,amount)
     }
 
