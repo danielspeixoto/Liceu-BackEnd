@@ -13,6 +13,7 @@ class PostBoundary {
         fun getPostFromUser(userId: String,amount: Int,start: Int): List<Post>
         fun getPostsFromOwner(userId: String,amount: Int,start: Int): List<Post>
         fun getRandomPosts(amount: Int): List<Post>
+        fun getMultiplePostsFromIds(listOfIds: List<String>,amount: Int): List<Post>
         fun updateListOfComments(postId: String,userId: String,author: String,comment: String): Long
         fun updateDocumentPost(postId: String, title: String, type: String, documentURL: String): Long
         fun updateLike(postId: String): Long
@@ -58,8 +59,8 @@ class PostBoundary {
         fun run(descriptionSearched: String, amount: Int): List<Post>
     }
 
-    interface IElasticSearchFinder {
-        fun run (descriptionSearched: String, amount: Int): List<String>
+    interface ISearch {
+        fun run (descriptionSearched: String, amount: Int): List<Post>
     }
 
     interface IUpdateListOfComments{

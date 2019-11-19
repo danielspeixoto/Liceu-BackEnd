@@ -125,7 +125,19 @@ class MongoPostRepository(
         return results.map { toPost(it) }
     }
 
-    override fun updateListOfComments(postId: String, userId: String,author: String ,comment: String): Long {
+    override fun getMultiplePostsFromIds(listOfIds: List<String>, amount: Int): List<Post> {
+        if(listOfIds.isNullOrEmpty()){
+            return emptyList()
+        }
+        val objectsIds = listOfIds.map {ObjectId(it)}
+        val match = Aggregation.match(Criteria.where("_id").`in`(objectsIds))
+        val limitOfReturnedPosts = Aggregation.limit(amount.toLong())
+        val agg = Aggregation.newAggregation(match,limitOfReturnedPosts)
+        val results = template.aggregate(agg, MongoDatabase.POST_COLLECTION, MongoDatabase.MongoPost::class.java)
+        return results.map { toPost(it) }
+    }
+
+    override fun updateListOfComments(postId: String, userId: String, author: String, comment: String): Long {
         val update = Update()
         val id = ObjectId()
         val commentToBeInserted = MongoDatabase.MongoComment(

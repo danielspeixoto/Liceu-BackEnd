@@ -1,8 +1,8 @@
 package com.liceu.server
 
 import com.liceu.server.data.*
-import com.liceu.server.data.elasticsearch.ElasticSearchFinder
 import com.liceu.server.data.firebase.FirebaseNotifications
+import com.liceu.server.data.search.SearchRepository
 import com.liceu.server.domain.activities.ActivityBoundary
 import com.liceu.server.domain.activities.GetActivitiesFromUser
 import com.liceu.server.domain.challenge.*
@@ -20,6 +20,12 @@ import com.liceu.server.domain.trivia.*
 import com.liceu.server.domain.user.*
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientURI
+import org.apache.http.HttpHost
+import org.apache.http.auth.AuthScope
+import org.apache.http.auth.UsernamePasswordCredentials
+import org.apache.http.impl.client.BasicCredentialsProvider
+import org.elasticsearch.client.RestClient
+import org.elasticsearch.client.RestClientBuilder
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
@@ -132,12 +138,31 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     val elasticSearchFinder by lazy {
-        ElasticSearchFinder(elasticCluster,elasticUser,elasticPassword,elasticPort,elasticScheme)
+        SearchRepository(mongoPostRepository,restClientBuilder)
+    }
+
+    val restClientBuilder by lazy {
+        restClientBuilder()
     }
 
     @Bean
-    fun elasticSearchFinder(): ElasticSearchFinder {
-        return ElasticSearchFinder(elasticCluster,elasticUser,elasticPassword,elasticPort,elasticScheme)
+    fun elasticSearchFinder(): SearchRepository {
+        return SearchRepository(mongoPostRepository,restClientBuilder)
+    }
+
+    @Bean
+    fun restClientBuilder(): RestClientBuilder{
+        val credentialsProvider = BasicCredentialsProvider()
+        credentialsProvider.setCredentials(
+                AuthScope.ANY,
+                UsernamePasswordCredentials(elasticUser, elasticPassword)
+        )
+        return RestClient.builder(
+                HttpHost(elasticCluster, elasticPort, elasticScheme)
+        )
+                .setHttpClientConfigCallback { httpClientBuilder -> httpClientBuilder
+                        .setDefaultCredentialsProvider(credentialsProvider)
+                }
     }
 
     @Value("\${google.clientId}")
@@ -397,7 +422,7 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Bean
     fun getPostByDescription(): PostBoundary.IGetPostsByDescription {
-        return GetPostsByDescription(mongoPostRepository,postFinderAmount,elasticSearchFinder)
+        return GetPostsByDescription(postFinderAmount,elasticSearchFinder)
     }
 
     @Bean
