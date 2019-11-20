@@ -35,6 +35,7 @@ spec:
               port: 8080
             initialDelaySeconds: 120
             periodSeconds: 30
+            timeoutSeconds: 10
             failureThreshold: 5
           livenessProbe:
             httpGet:
@@ -42,6 +43,7 @@ spec:
               port: 8080
             initialDelaySeconds: 120
             periodSeconds: 30
+            timeoutSeconds: 10
             failureThreshold: 5
           env:
             - name: SERVICE_TYPE
