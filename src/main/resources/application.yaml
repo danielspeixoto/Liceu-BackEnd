@@ -36,6 +36,10 @@ spring:
   main:
     banner-mode: "off"
 
+management:
+  health:
+    elasticsearch:
+      enabled: false
 
 values:
   triviaAmount: ${TRIVIA_AMOUNT}
