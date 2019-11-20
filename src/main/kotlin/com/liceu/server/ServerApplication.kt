@@ -1,6 +1,5 @@
 package com.liceu.server
 
-import org.springframework.boot.actuate.autoconfigure.elasticsearch.ElasticSearchRestHealthContributorAutoConfiguration
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
@@ -16,6 +15,7 @@ import org.springframework.boot.autoconfigure.elasticsearch.rest.RestClientAutoC
 
 @EnableCircuitBreaker
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class, ManagementWebSecurityAutoConfiguration::class, ElasticsearchAutoConfiguration::class, ElasticsearchDataAutoConfiguration::class, RestClientAutoConfiguration::class])
+
 class ServerApplication {
 
 	@PostConstruct
