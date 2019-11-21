@@ -35,11 +35,10 @@ spring:
   mvc.favicon.enabled: false
   main:
     banner-mode: "off"
+  elasticsearch:
+    rest:
+      uris: ${ELASTIC_SCHEME}://${ELASTIC_CLUSTER}:${ELASTIC_PORT}
 
-management:
-  health:
-    elasticsearch:
-      enabled: false
 
 values:
   triviaAmount: ${TRIVIA_AMOUNT}
