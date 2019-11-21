@@ -38,7 +38,7 @@ dependencies {
     implementation(group = "com.google.auth", name = "google-auth-library-credentials", version = "0.16.2")
     implementation(group = "com.google.apis", name = "google-api-services-oauth2", version = "v2-rev151-1.25.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+    implementation(group = "org.springframework.boot" ,name = "spring-boot-starter-data-mongodb" ,version = "2.2.1.RELEASE")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.okta.spring:okta-spring-boot-starter:1.3.0")

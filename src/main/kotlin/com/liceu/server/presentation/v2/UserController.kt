@@ -50,7 +50,7 @@ class UserController (
     @Autowired
     lateinit var netUtils: NetworkUtils
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{userId}", produces="application/json;charset=UTF-8")
     fun getUserById(
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
