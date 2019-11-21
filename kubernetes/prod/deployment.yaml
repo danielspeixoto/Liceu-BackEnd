@@ -28,7 +28,7 @@ spec:
       containers:
         - name: kotlinserver
           image: gcr.io/liceu-main/kotlinserver:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           readinessProbe:
             httpGet:
               path: /actuator/health
