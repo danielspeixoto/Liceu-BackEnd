@@ -39,7 +39,7 @@ spring:
 endpoints.health.sensitive : false
 management.endpoint.health.show-details: always
 
-
+management.health.elasticsearch.enabled: false
 
 values:
   triviaAmount: ${TRIVIA_AMOUNT}
