@@ -39,6 +39,9 @@ spring:
     rest:
       uris: ${ELASTIC_SCHEME}://${ELASTIC_CLUSTER}:${ELASTIC_PORT}
 
+endpoints.health.sensitive : false
+management.endpoint.health.show-details: always
+
 
 values:
   triviaAmount: ${TRIVIA_AMOUNT}
