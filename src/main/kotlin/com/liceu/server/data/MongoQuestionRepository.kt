@@ -16,7 +16,6 @@ import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
 
-@Repository
 class MongoQuestionRepository(
         val template: MongoTemplate
 ) : QuestionBoundary.IRepository {

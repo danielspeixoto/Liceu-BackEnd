@@ -27,6 +27,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider
 import org.elasticsearch.client.RestClient
 import org.elasticsearch.client.RestClientBuilder
 import org.elasticsearch.client.RestHighLevelClient
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
@@ -40,7 +41,6 @@ import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.stereotype.Component
 
 
-
 @Configuration
 @ServletComponentScan
 @EnableMongoRepositories
@@ -51,39 +51,6 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Value("\${mongo.dbName}")
     lateinit var mongoDBName: String
-
-    @Value("\${google.imageBucket}")
-    lateinit var googleImageBucket: String
-
-    @Value("\${google.documentBucket}")
-    lateinit var googleDocumentBucket: String
-
-    @Value("\${values.triviaAmount}")
-    var triviaAmount: Int = 4
-
-    @Value("\${values.challengeHistoryAmount}")
-    var challengeHistoryAmount: Int = 10
-
-    @Value("\${slack.slackReportWebhook}")
-    lateinit var reportWebhookURL: String
-
-    @Value("\${values.reportTagsAmount}")
-    var reportTagsAmount: Int = 30
-
-    @Value("\${values.reportParamsAmount}")
-    var reportParamsAmount: Int = 30
-
-    @Value("\${values.reportMessageLength}")
-    var reportMessageLength: Int = 200
-
-    @Value("\${values.postsNumberApproval}")
-    var postsNumberApproval: Int = 10
-
-    @Value("\${values.postFinderAmount}")
-    var postFinderAmount: Int = 20
-
-    @Value("\${values.postSavedAmount}")
-    var postSavedAmount: Int = 20
 
     @Value("\${elasticsearch.elasticCluster}")
     lateinit var elasticCluster: String
@@ -100,50 +67,38 @@ class AppConfig : AbstractMongoConfiguration() {
     @Value("\${elasticsearch.elasticScheme}")
     lateinit var elasticScheme: String
 
+    @Bean
+    fun mongoQuestionRepository() = MongoQuestionRepository(mongoTemplate())
 
-    val mongoQuestionRepository by lazy {
-        MongoQuestionRepository(mongoTemplate())
-    }
-    val mongoUserRepository by lazy {
-        MongoUserRepository(mongoTemplate())
-    }
+    @Bean
+    fun mongoUserRepository() = MongoUserRepository(mongoTemplate())
 
-    val mongoGameRepository by lazy {
-        MongoGameRepository(mongoTemplate())
-    }
+    @Bean
+    fun mongoGameRepository() = MongoGameRepository(mongoTemplate())
 
-    val mongoReportRepository by lazy{
-        MongoReportRepository(mongoTemplate())
-    }
+    @Bean
+    fun mongoReportRepository() = MongoReportRepository(mongoTemplate())
 
-    val mongoTriviaRepository by lazy{
-        MongoTriviaRepository(mongoTemplate())
-    }
+    @Bean
+    fun mongoTriviaRepository() = MongoTriviaRepository(mongoTemplate())
 
-    val mongoChallengeRepository by lazy{
-        MongoChallengeRepository(mongoTemplate())
-    }
+    @Bean
+    fun mongoChallengeRepository() = MongoChallengeRepository(mongoTemplate())
 
-    val mongoPostRepository by lazy {
-        MongoPostRepository(mongoTemplate())
-    }
+    @Bean
+    fun mongoPostRepository() = MongoPostRepository(mongoTemplate())
 
-    val mongoActivityRepository by lazy {
-        MongoActivityRepository(mongoTemplate())
-    }
+    @Bean
+    fun mongoActivityRepository() = MongoActivityRepository(mongoTemplate())
 
-    val facebookAPI by lazy {
-        FacebookAPI()
-    }
+    @Bean
+    fun facebookAPI() = FacebookAPI()
 
-    val firebaseNotifications by lazy {
-        FirebaseNotifications(firebaseCloudMessagingKey)
-    }
+    @Bean
+    fun googleAPI() = GoogleAPI(googleClientId, googleClientSecret)
 
-    val elasticSearchFinder by lazy {
-        SearchRepository(mongoPostRepository,restHighLevelClient)
-
-    }
+    @Bean
+    fun firebaseNotifications() = FirebaseNotifications(firebaseCloudMessagingKey)
 
     val restClientBuilder by lazy {
         restClientBuilder()
@@ -154,13 +109,12 @@ class AppConfig : AbstractMongoConfiguration() {
     }
 
     @Bean
-    fun elasticSearchFinder(): SearchRepository {
-        return SearchRepository(mongoPostRepository,restHighLevelClient)
-
+    override fun mongoTemplate(): MongoTemplate {
+        return MongoTemplate(mongoClient(), mongoDBName)
     }
 
     @Bean
-    fun restClientBuilder(): RestClientBuilder{
+    fun restClientBuilder(): RestClientBuilder {
         val credentialsProvider = BasicCredentialsProvider()
         credentialsProvider.setCredentials(
                 AuthScope.ANY,
@@ -169,8 +123,9 @@ class AppConfig : AbstractMongoConfiguration() {
         return RestClient.builder(
                 HttpHost(elasticCluster, elasticPort, elasticScheme)
         )
-                .setHttpClientConfigCallback { httpClientBuilder -> httpClientBuilder
-                        .setDefaultCredentialsProvider(credentialsProvider)
+                .setHttpClientConfigCallback { httpClientBuilder ->
+                    httpClientBuilder
+                            .setDefaultCredentialsProvider(credentialsProvider)
                 }
     }
 
@@ -184,15 +139,11 @@ class AppConfig : AbstractMongoConfiguration() {
         return restHighLevelClient().lowLevelClient
     }
 
-
     @Value("\${google.clientId}")
     lateinit var googleClientId: String
     @Value("\${google.clientSecret}")
     lateinit var googleClientSecret: String
 
-    val googleAPI by lazy {
-        GoogleAPI(googleClientId, googleClientSecret)
-    }
 
     val clientUri by lazy {
         MongoClientURI(mongoURI)
@@ -209,280 +160,14 @@ class AppConfig : AbstractMongoConfiguration() {
 
     @Value("\${firebase.cloudMessaging}")
     lateinit var firebaseCloudMessagingKey: String
-
-    @Bean
-    fun firebaseNotifications(): FirebaseNotifications {
-        return FirebaseNotifications(firebaseCloudMessagingKey)
-    }
-
-    @Bean
-    override fun mongoTemplate(): MongoTemplate {
-        return MongoTemplate(mongoClient(), mongoDBName)
-    }
-
-    @Bean
-    fun random(): QuestionBoundary.IRandom {
-        return RandomQuestions(mongoQuestionRepository, 30)
-    }
-
-    @Bean
-    fun videos(): QuestionBoundary.IVideos {
-        return QuestionVideos(mongoQuestionRepository, 30)
-    }
-
-    @Bean
-    fun authenticate(): UserBoundary.IAuthenticate {
-        return Authenticate(mongoUserRepository, facebookAPI)
-    }
-
-    @Bean
-    fun multipleAuthenticate(): UserBoundary.IMultipleAuthenticate{
-        return MultipleAuthenticate(mongoUserRepository,facebookAPI,googleAPI)
-    }
-
-    @Bean
-    fun submitGame(): GameBoundary.ISubmit {
-        return SubmitGame(mongoGameRepository)
-    }
-
-    @Bean
-    fun ranking(): GameBoundary.IGameRanking{
-        return GameRanking(mongoGameRepository,50)
-    }
-
-    @Bean
-    fun getUserById(): UserBoundary.IUserById{
-        return UserById(mongoUserRepository)
-    }
-
-    @Bean
-    fun getUsersByNameFromLocation(): UserBoundary.IGetUsersByNameUsingLocation{
-        return UsersByNameUsingLocation(mongoUserRepository, 30)
-    }
-
-    @Bean
-    fun getChallengesFromUserById(): UserBoundary.IChallengesFromUserById{
-        return ChallengesFromUserId(mongoUserRepository,challengeHistoryAmount)
-    }
-
-    @Bean
-    fun updateLocationFromUser(): UserBoundary.IUpdateLocation{
-        return UpdateLocation(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateSchoolFromUser(): UserBoundary.IUpdateSchool{
-        return UpdateSchool(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateAge(): UserBoundary.IUpdateAge{
-        return UpdateAge(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateYoutubeChannel(): UserBoundary.IUpdateYoutubeChannel{
-        return UpdateYoutubeChannel(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateInstagramProfile(): UserBoundary.IUpdateInstagramProfile{
-        return UpdateInstagramProfile(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateDescription(): UserBoundary.IUpdateDescription{
-        return UpdateDescription(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateWebsite(): UserBoundary.IUpdateWebsite{
-        return UpdateWebsite(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateProducerToBeFollowed(): UserBoundary.IUpdateProducerToBeFollowed {
-        return UpdateProducerToBeFollowed(mongoUserRepository,mongoActivityRepository)
-    }
-
-    @Bean
-    fun updateProducerToBeUnfollowed(): UserBoundary.IUpdateProducerToBeUnfollowed {
-        return UpdateProducerToBeUnfollowed(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateProfileImage(): UserBoundary.IUpdateProfileImage {
-        return UpdateProfileImage(mongoUserRepository,googleImageBucket)
-    }
-
-    @Bean
-    fun updateFcmToken(): UserBoundary.IUpdateFcmToken {
-        return UpdateFcmToken(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateLastAccess(): UserBoundary.IUpdateLastAccess {
-        return UpdateLastAccess(mongoUserRepository,mongoActivityRepository)
-    }
-
-    @Bean
-    fun updateDesiredCourse(): UserBoundary.IUpdateCourse {
-        return UpdateDesiredCourse (mongoUserRepository)
-    }
-
-    @Bean
-    fun updateTelephoneNumber(): UserBoundary.IUpdateTelephoneNumber {
-        return UpdateTelephoneNumber(mongoUserRepository)
-    }
-
-    @Bean
-    fun updateAddToSavedPosts(): UserBoundary.IUpdatePostToBeSaved {
-        return UpdatePostToBeSaved(mongoUserRepository,mongoPostRepository)
-    }
-
-    @Bean
-    fun updateRemoveFromSavedPosts(): UserBoundary.IUpdateSavedPostToBeRemoved {
-        return UpdatePostSavedToBeRemoved(mongoUserRepository)
-    }
-
-    @Bean
-    fun getPostsSaved(): UserBoundary.IGetSavedPosts {
-        return GetPostsSaved(mongoUserRepository,postSavedAmount)
-    }
-
-    @Bean
-    fun getQuestionById(): QuestionBoundary.IQuestionById{
-        return QuestionById(mongoQuestionRepository)
-    }
-
-    @Bean
-    fun submitReport(): ReportBoundary.ISubmit{
-        return SubmitReport(mongoReportRepository,reportWebhookURL,reportTagsAmount,reportMessageLength,reportParamsAmount)
-    }
-
-    @Bean
-    fun submitTriviaQuestion(): TriviaBoundary.ISubmit{
-        return SubmitTriviaQuestion(mongoTriviaRepository)
-    }
-
-    @Bean
-    fun randomTriviaQuestions(): TriviaBoundary.IRandomQuestions{
-        return TriviaRandomQuestions(mongoTriviaRepository, 5)
-    }
-
-    @Bean
-    fun updateCommentsTrivia(): TriviaBoundary.IUpdateListOfComments {
-        return UpdateCommentsTrivia(mongoTriviaRepository,mongoUserRepository)
-    }
-
-    @Bean
-    fun updateRatingTrivia(): TriviaBoundary.IUpdateRating{
-        return UpdateRating(mongoTriviaRepository)
-    }
-
-    @Bean
-    fun submitChallenge(): ChallengeBoundary.ICreateChallenge{
-        return SubmitChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications,triviaAmount)
-    }
-
-    @Bean
-    fun getChallenge(): ChallengeBoundary.IGetChallenge{
-        return GetChallenge(mongoChallengeRepository,mongoTriviaRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications,triviaAmount)
-    }
-
-    @Bean
-    fun getDirectChallenge(): ChallengeBoundary.IAcceptDirectChallenge{
-        return AcceptDirectChallenge(mongoChallengeRepository,mongoActivityRepository)
-    }
-
-    @Bean
-    fun UpdateAnswers(): ChallengeBoundary.IUpdateAnswers{
-        return UpdateAnswers(mongoChallengeRepository,mongoActivityRepository,mongoUserRepository,firebaseNotifications)
-    }
-
-    @Bean
-    fun textPost(): PostBoundary.ITextPost{
-        return TextPost(mongoPostRepository,mongoUserRepository,postsNumberApproval)
-    }
-
-    @Bean
-    fun imagePost(): PostBoundary.IImagePost{
-        return ImagePost(mongoPostRepository,googleImageBucket,mongoUserRepository,postsNumberApproval)
-    }
-
-    @Bean
-    fun multipleImagesPost(): PostBoundary.IMultipleImagesPosts{
-        return MultipleImagesPost(mongoPostRepository,googleImageBucket,mongoUserRepository,postsNumberApproval)
-    }
-
-    @Bean
-    fun videoPost(): PostBoundary.IVideoPost{
-        return VideoPost(mongoPostRepository,mongoUserRepository,postsNumberApproval)
-    }
-
-    @Bean
-    fun getPosts(): PostBoundary.IGetPosts{
-        return GetPosts(mongoPostRepository,mongoUserRepository,30)
-    }
-
-    @Bean
-    fun getPostsFromUser(): PostBoundary.IGetPostsFromUser{
-        return GetPostsFromUser(mongoPostRepository)
-    }
-
-    @Bean
-    fun getRandomPosts(): PostBoundary.IGetRandomPosts{
-        return GetRandomPosts(mongoPostRepository,20)
-    }
-
-    @Bean
-    fun getPostById(): PostBoundary.IGetPostById {
-        return GetPostById(mongoPostRepository)
-    }
-
-    @Bean
-    fun getPostByDescription(): PostBoundary.IGetPostsByDescription {
-        return GetPostsByDescription(postFinderAmount,elasticSearchFinder)
-    }
-
-    @Bean
-    fun updateComments(): PostBoundary.IUpdateListOfComments {
-        return UpdateComments(mongoPostRepository,mongoUserRepository)
-    }
-
-    @Bean
-    fun updateDocument(): PostBoundary.IUpdateDocument {
-        return UpdateDocument(mongoPostRepository,googleDocumentBucket)
-    }
-
-    @Bean
-    fun updatePostRating(): PostBoundary.IUpdateRating {
-        return UpdatePostRating(mongoPostRepository)
-    }
-
-    @Bean
-    fun deletePost(): PostBoundary.IDeletePost{
-        return DeletePosts(mongoPostRepository)
-    }
-
-    @Bean
-    fun deleteCommentPost(): PostBoundary.IDeleteCommentPost {
-        return DeleteCommentPost(mongoPostRepository)
-    }
-
-    @Bean
-    fun getActivitiesFromUser(): ActivityBoundary.IGetActivitiesFromUser{
-        return GetActivitiesFromUser(mongoActivityRepository,50)
-    }
-
 }
 
 @Component
 class MyTomcatWebServerCustomizer : WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
 
     override fun customize(factory: TomcatServletWebServerFactory) {
-        factory.addConnectorCustomizers(TomcatConnectorCustomizer {
-            connector -> connector.setAttribute("relaxedQueryChars", "[]")
+        factory.addConnectorCustomizers(TomcatConnectorCustomizer { connector ->
+            connector.setAttribute("relaxedQueryChars", "[]")
         })
     }
 }

@@ -14,16 +14,17 @@ import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.index.query.QueryBuilders
 import org.elasticsearch.search.builder.SearchSourceBuilder
 import org.json.JSONObject
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class SearchRepository(
-        private val postRepository: PostBoundary.IRepository,
-        private val restHighLevelClient: RestHighLevelClient
 ): PostBoundary.ISearch {
 
-    val client = restHighLevelClient
-
+    @Autowired
+    lateinit var postRepository: PostBoundary.IRepository
+    @Autowired
+    lateinit var restHighLevelClient: RestHighLevelClient
 
     @HystrixCommand(fallbackMethod = "mongoDbSearchFinder")
     override fun run(descriptionSearched: String, amount: Int): List<Post> {
@@ -35,7 +36,7 @@ class SearchRepository(
                 val searchRequest = SearchRequest()
                 searchRequest.indices("posts")
                 searchRequest.source(sourceBuilder)
-                val search = client.search(searchRequest, RequestOptions.DEFAULT)
+                val search = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT)
 
                 val obj = JSONObject(search)
                 var idsFromSearch : MutableList<String> = arrayListOf()

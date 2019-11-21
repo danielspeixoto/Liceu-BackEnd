@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.query.inValues
 import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
 
-@Repository
 class MongoActivityRepository(
         private val template: MongoTemplate
 ): ActivityBoundary.IRepository {

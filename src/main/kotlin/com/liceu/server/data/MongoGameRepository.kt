@@ -19,7 +19,6 @@ import java.time.YearMonth
 
 
 
-@Repository
 class MongoGameRepository(
         val template: MongoTemplate
 ): GameBoundary.IRepository {

@@ -8,11 +8,9 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.stereotype.Repository
 
 
-
-@Repository
-class MongoReportRepository (
+class MongoReportRepository(
         val template: MongoTemplate
-): ReportBoundary.IRepository {
+) : ReportBoundary.IRepository {
 
     override fun insert(report: ReportToInsert): String {
         val result = template.insert(MongoDatabase.MongoReport(

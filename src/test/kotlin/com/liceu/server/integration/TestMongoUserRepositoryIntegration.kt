@@ -9,7 +9,6 @@ import com.liceu.server.data.UserRepository
 import com.liceu.server.domain.aggregates.Picture
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.user.UserForm
-import org.bson.types.ObjectId
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

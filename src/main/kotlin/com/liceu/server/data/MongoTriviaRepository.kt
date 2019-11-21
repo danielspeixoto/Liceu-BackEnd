@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.query.isEqualTo
 import org.springframework.stereotype.Repository
 
 
-@Repository
 class MongoTriviaRepository(
      val template: MongoTemplate
 ): TriviaBoundary.IRepository {

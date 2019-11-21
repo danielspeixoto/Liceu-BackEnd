@@ -9,7 +9,6 @@ import com.liceu.server.data.QuestionRepository
 import com.liceu.server.domain.global.ItemNotFoundException
 import com.liceu.server.domain.question.Question
 import com.liceu.server.domain.video.Video
-import org.junit.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

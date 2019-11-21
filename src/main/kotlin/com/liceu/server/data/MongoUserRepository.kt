@@ -21,8 +21,6 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint
 import org.springframework.data.mongodb.core.query.*
 import java.util.*
 
-
-@Repository
 class MongoUserRepository(
         val template: MongoTemplate
 ) : UserBoundary.IRepository {

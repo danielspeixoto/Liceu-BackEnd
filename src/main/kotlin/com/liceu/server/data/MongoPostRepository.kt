@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.query.Query.query
 import com.mongodb.BasicDBObject
 
 
-@Repository
 class MongoPostRepository(
         val template: MongoTemplate
 ): PostBoundary.IRepository{

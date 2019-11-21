@@ -3,7 +3,6 @@ package com.liceu.server.system.v2.user
 import com.google.common.truth.Truth
 import com.liceu.server.data.MongoUserRepository
 import com.liceu.server.data.PostRepository
-import com.liceu.server.data.UserRepository
 import com.liceu.server.system.TestSystem
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

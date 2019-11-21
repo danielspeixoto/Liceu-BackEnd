@@ -3,14 +3,11 @@ package com.liceu.server
 import com.liceu.server.data.*
 
 import com.liceu.server.util.JWTAuth
-import khttp.get
 import org.apache.http.HttpHost
 import org.bson.types.ObjectId
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest
 import org.elasticsearch.action.index.IndexRequest
 import org.elasticsearch.client.RequestOptions
 import org.elasticsearch.client.RestClient
-import org.elasticsearch.client.RestClientBuilder
 import org.elasticsearch.client.RestHighLevelClient
 import org.elasticsearch.common.xcontent.XContentFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Component
 import org.springframework.test.context.ContextConfiguration
 import java.time.Instant
 import java.util.*
-import org.json.JSONArray
 
 @Component
 @ContextConfiguration(classes=[TestConfiguration::class])
