@@ -35,9 +35,13 @@ spring:
   mvc.favicon.enabled: false
   main:
     banner-mode: "off"
+  mandatory-file-encoding: UTF-8
+  http.encoding.charset: UTF-8
+  http.encoding.enabled: true
 
 endpoints.health.sensitive : false
 management.endpoint.health.show-details: always
+
 
 
 values:
