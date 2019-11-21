@@ -3,8 +3,8 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.springframework.boot") version "2.2.0.RC1"
-    id("io.spring.dependency-management") version "1.0.8.RELEASE"
+    id("org.springframework.boot") version "2.2.1.RELEASE"
+    id("io.spring.dependency-management") version "1.0.2.RELEASE"
     kotlin("jvm") version "1.3.31"
     kotlin("plugin.spring") version "1.3.31"
 }
@@ -29,7 +29,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom ("org.springframework.cloud:spring-cloud-dependencies:Hoxton.M3")
+        mavenBom ("org.springframework.cloud:spring-cloud-dependencies:Hoxton.RC2")
     }
 }
 
@@ -60,7 +60,7 @@ dependencies {
     runtime("io.jsonwebtoken:jjwt-impl:0.10.5")
     runtime("io.jsonwebtoken:jjwt-jackson:0.10.5")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.+")
-    implementation(group = "org.springframework.security.oauth.boot", name = "spring-security-oauth2-autoconfigure", version = "2.2.0.RC1")
+    implementation(group = "org.springframework.security.oauth.boot", name = "spring-security-oauth2-autoconfigure", version = "2.2.1.RELEASE")
     implementation(group = "com.restfb", name = "restfb", version = "2.21.0")
     implementation(group = "com.maxmind.geoip2", name = "geoip2", version = "2.3.1")
     implementation ("com.google.code.gson:gson:2.8.5")
@@ -68,7 +68,7 @@ dependencies {
     implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.4.2")
     implementation("org.elasticsearch.client:elasticsearch-rest-client:7.4.2")
     implementation("org.elasticsearch:elasticsearch:7.4.2")
-    implementation(group = "org.springframework.cloud", name = "spring-cloud-starter-netflix-hystrix", version = "2.2.0.RC1")
+    implementation(group = "org.springframework.cloud", name = "spring-cloud-starter-netflix-hystrix", version = "2.1.4.RELEASE")
 
 }
 
