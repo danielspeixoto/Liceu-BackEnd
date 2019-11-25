@@ -51,7 +51,7 @@ class ChallengeController(
         }
     }
 
-    @GetMapping
+    @GetMapping(produces=["application/json;charset=UTF-8"])
     fun getChallenge(
             @RequestAttribute(value = "userId") userId: String,
             request: HttpServletRequest
@@ -73,7 +73,7 @@ class ChallengeController(
         }
     }
 
-    @GetMapping("/{challengeId}")
+    @GetMapping("/{challengeId}", produces=["application/json;charset=UTF-8"])
     fun getChallengeById(
             @PathVariable("challengeId") challengeId: String,
             @RequestAttribute("userId") authenticatedUserId: String,

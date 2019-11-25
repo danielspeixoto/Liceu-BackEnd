@@ -73,7 +73,7 @@ class TriviaController(
         }
     }
 
-    @GetMapping
+    @GetMapping(produces=["application/json;charset=UTF-8"])
     fun triviaQuestions(
             @RequestParam(value = "tags", defaultValue = "") tags: List<String>,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,

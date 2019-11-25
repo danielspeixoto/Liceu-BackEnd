@@ -21,7 +21,7 @@ class ExploreController(
     @Autowired
     lateinit var netUtils: NetworkUtils
 
-    @GetMapping
+    @GetMapping(produces=["application/json;charset=UTF-8"])
     fun getRandomPosts(
             @RequestParam("amount") amount: Int,
             request: HttpServletRequest

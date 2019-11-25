@@ -24,7 +24,7 @@ class FeedController(
     @Autowired
     lateinit var netUtils: NetworkUtils
 
-    @GetMapping
+    @GetMapping(produces=["application/json;charset=UTF-8"])
     fun getPostsForFeed(
             @RequestAttribute("userId") userId: String,
             @RequestParam("before") before: String,

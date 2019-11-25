@@ -267,7 +267,7 @@ class PostController(
         }
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/{postId}", produces=["application/json;charset=UTF-8"])
     fun getPostById(
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("postId") postId: String,
@@ -290,7 +290,7 @@ class PostController(
         }
     }
 
-    @GetMapping
+    @GetMapping(produces=["application/json;charset=UTF-8"])
     fun getPostsByDescriptions(
             @RequestAttribute("userId") authenticatedUserId: String,
             @RequestParam("description") description: String,
