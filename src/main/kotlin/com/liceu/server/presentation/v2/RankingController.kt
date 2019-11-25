@@ -24,7 +24,7 @@ class RankingController(
     lateinit var netUtils: NetworkUtils
 
 
-    @GetMapping
+    @GetMapping(produces=["application/json;charset=UTF-8"])
     fun get(
             @RequestParam(value = "month", defaultValue = "") month: Int,
             @RequestParam(value = "year", defaultValue = "") year: Int,

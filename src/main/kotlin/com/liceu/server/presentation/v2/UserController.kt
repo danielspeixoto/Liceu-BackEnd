@@ -75,7 +75,7 @@ class UserController (
         }
     }
 
-    @GetMapping
+    @GetMapping(produces=["application/json;charset=UTF-8"])
     fun getUsersByNameUsingLocation(
             @RequestAttribute("userId") authenticatedUserId: String,
             @RequestParam(value = "name", defaultValue = "") name: String,
@@ -105,7 +105,7 @@ class UserController (
     }
 
 
-    @GetMapping("/{userId}/challenge")
+    @GetMapping("/{userId}/challenge", produces=["application/json;charset=UTF-8"])
     fun getChallengesFromUserById(
             @PathVariable("userId") userId: String,
             @RequestParam(value = "start", defaultValue = "0") start: Int,
@@ -129,7 +129,7 @@ class UserController (
         }
     }
 
-    @GetMapping("/{userId}/posts")
+    @GetMapping("/{userId}/posts", produces=["application/json;charset=UTF-8"])
     fun getPostsFromUser(
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
@@ -155,7 +155,7 @@ class UserController (
     }
 
 
-    @GetMapping ("/{userId}/activities")
+    @GetMapping ("/{userId}/activities", produces=["application/json;charset=UTF-8"])
     fun getActivityFromUser (
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,
@@ -185,7 +185,7 @@ class UserController (
         }
     }
 
-    @GetMapping ("/{userId}/savedPosts")
+    @GetMapping ("/{userId}/savedPosts", produces=["application/json;charset=UTF-8"])
     fun getSavedPosts (
             @RequestAttribute("userId") authenticatedUserId: String,
             @PathVariable("userId") userId: String,

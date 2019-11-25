@@ -28,7 +28,7 @@ class QuestionControllerV2(
     @Autowired
     lateinit var netUtils: NetworkUtils
 
-    @GetMapping
+    @GetMapping(produces=["application/json;charset=UTF-8"])
     fun questions(
             @RequestParam(value = "tags", defaultValue = "") tagNames: List<String>,
             @RequestParam(value = "amount", defaultValue = "0") amount: Int,
@@ -53,7 +53,7 @@ class QuestionControllerV2(
         }
     }
 
-    @GetMapping("/{questionId}/videos")
+    @GetMapping("/{questionId}/videos", produces=["application/json;charset=UTF-8"])
     fun videos(
             @PathVariable("questionId") questionId: String,
             @RequestParam(value = "start", defaultValue = "0") start: Int,
@@ -79,7 +79,7 @@ class QuestionControllerV2(
         }
     }
 
-    @GetMapping("/{questionId}")
+    @GetMapping("/{questionId}", produces=["application/json;charset=UTF-8"])
     fun getVideoById(
             @PathVariable("questionId") questionId: String,
             request: HttpServletRequest
